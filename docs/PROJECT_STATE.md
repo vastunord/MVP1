@@ -62,4 +62,7 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Active branch: phase-01-reference-inventory. UI-parity gate BLOCKED: 17 Studio library cards and one Room Reimagination desktop editor inspected; remaining tools, mobile views, saved screenshots and marketing comparison still required. See STUDIO_INVENTORY.md and REFERENCE_EVIDENCE.md.
 - Owner input if access becomes unavailable: screenshots/recording of each Studio tool, its controls and results, plus desktop/mobile marketing and Studio views. Google asset library link and reuse rights remain pending.
 - No application tests, production changes, uploads or generation. Phase 02 has not started.
-
+## Phase 01A progress — 2026-11-21
+- Continued from `ccf8b06` on `phase-01-reference-inventory`; inspected the next four library tools in order: Virtual Home Staging, Outdoor Visualization, Hardscape Design, Furniture Refresh. Five of 17 tools now have editor-level observations including prior Room Reimagination.
+- Updated the Studio inventory and reference evidence. No durable screenshot files; no upload, generation, destructive action, app source change, or NRide access.
+- Remaining Phase 01 work: 12 tools, mobile layouts, marketing desktop/mobile comparison and durable screenshots. UI-parity gate remains blocked; Phase 02 has not started.

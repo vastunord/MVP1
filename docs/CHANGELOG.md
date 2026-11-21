@@ -30,4 +30,5 @@ Correction to the earlier push-blocked notes: after enabling repository-local pa
 
 ### 2026-11-21 — Phase 01 partial Studio observation
 Public Studio loading completed; observed 17 tool cards, four category filters, and Room Reimagination entry/editor controls. Updated reference, inventory, parity, feature and asset records. UI-parity gate remains BLOCKED pending other tools, mobile views, saved visual evidence and marketing comparison. No application tests or production changes.
-
+### 2026-11-21 — Phase 01A next four Studio tools
+Continued on `phase-01-reference-inventory` from `ccf8b06`. Inspected Virtual Home Staging, Outdoor Visualization, Hardscape Design, and Furniture Refresh editors in library order. Recorded shared editor shell and tool-specific inputs, presets, options, and disabled empty-state actions in `docs/STUDIO_INVENTORY.md`; updated reference evidence, project state and parity matrix. No screenshots saved as durable files; no upload, generation, production changes, or tests.

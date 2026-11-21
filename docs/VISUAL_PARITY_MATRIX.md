@@ -13,4 +13,6 @@ Do not assert parity based on a page title or URL alone. Record desktop/mobile a
 
 ## Phase 01 partial finding
 - Studio library and Room Reimagination desktop editor observed; see STUDIO_INVENTORY.md. Designer/developer marketing comparisons remain based on Phase 00 accessibility snapshots, not full visual parity captures. Mobile, other tools, result states, and durable screenshots remain NOT VISIBLE. UI-parity gate BLOCKED pending inspection.
-
+## Phase 01A update
+- Desktop editor references now observed for Room Reimagination, Virtual Home Staging, Outdoor Visualization, Hardscape Design, and Furniture Refresh. Shared shell and differences are in `docs/STUDIO_INVENTORY.md`.
+- Studio UI parity remains BLOCKED pending 12 tool editors, mobile views, and durable visual captures. Marketing comparisons remain pending.
