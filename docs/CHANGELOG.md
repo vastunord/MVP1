@@ -6,6 +6,9 @@
 
 Use one dated entry per meaningful implementation session: phase, relevant files, tests actually run, blockers and commit SHA. Don't copy full diffs or the entire prompt history.
 
+### 2026-11-21 — Phase 01E-C final design handover and closure
+Closed Phase 01 as a reference/design handover with documented limitations. Added `docs/PHASE01_DESIGN_HANDOVER.md` (marketing target, all 17 Studio configurations, workspace and user journeys, unverified capabilities, brand/design evidence, proposed Phase 02 architecture and implementation order) and `docs/BROKEN_ROUTES_AND_RECONSTRUCTION.md` (six observed branded 404s, route-name-only subject inference, recommendation, priority and owner decisions). Updated `docs/VISUAL_PARITY_MATRIX.md` and `docs/PROJECT_STATE.md`. Documentation handover: PASS WITH DOCUMENTED LIMITATIONS; overall UI-parity remains BLOCKED. No application code, cloud resources, external services, payments, media uploads, deploy, push or NRide resources were touched. No application tests run. Validation: `git diff --check`, trailing-whitespace/final-newline scans and local Markdown-reference checks passed; no Markdown linter configured.
+
 ### 2026-11-21 — v3.1 cloud-only publishing amendment
 Kept original v3 architecture and phases; added authoritative cloud Payload/Postiz setup guide, updated phases 09 and 10 to use Vercel-hosted Payload and managed Postiz, reinforced separate consent and human approval. **No external account was created or connected by this documentation change.**
 

@@ -1,10 +1,10 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 01 reference inventory in progress. Phase 01E-A desktop marketing routes and Phase 01E-B desktop Studio/workspace evidence are documented. Requested tablet/mobile widths were unavailable; no application implementation verified.
+**Status:** Phase 01 design/reference handover closed with documented limitations. Overall UI-parity remains BLOCKED; no application implementation is verified.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 01 reference inventory (01E-B desktop evidence recorded; await owner approval before Phase 01E-C or Phase 02).
+**Active phase:** Await owner approval and a scoped Phase 02 prompt before implementation. Phase 01E-C documentation closure is complete; no Phase 02 work has started.
 **Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. This task continues on `phase-01-reference-inventory` from verified starting commit `94240ec8f9146f849b50f5dcd8d516f976a32dab`; `origin` is `https://github.com/vastunord/MVP1.git`.
-**Next safe task:** Wait for owner approval before Phase 01E-C or Phase 02. Tablet/mobile evidence remains uncollected.
+**Next safe task:** Wait for owner approval before Phase 02. Tablet/mobile evidence remains uncollected; exact parity is not established.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -75,6 +75,12 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Inspected representative editors for all four categories using Room Reimagination, Virtual Home Staging, Outdoor Visualization and Resolution Enhancement. Responsive layout behavior was observable only at approximately 1280×720. The browser exposed no viewport override; 1440px, 768px, 390px and touch interactions remain NOT TESTED. No project-local screenshot export was available.
 - Opening the requested Room Reimagination new-file entry created an empty “Living Room Redesign” item displaying “Saved just now”. No photo or prompt was added. The file was left untouched; whether the reference persists it is UNVERIFIED. See `docs/WORKSPACE_SCREEN_INVENTORY.md`.
 - Updated the responsive audit, workspace inventory, parity matrix, reference evidence and this handoff. The overall Phase 01 UI-parity gate remains BLOCKED; Phase 01E-C and Phase 02 have not started.
+
+## Phase 01E-C — final design handover and Phase 01 closure — 2026-11-21
+- Created `docs/PHASE01_DESIGN_HANDOVER.md` and `docs/BROKEN_ROUTES_AND_RECONSTRUCTION.md`. The handover consolidates the marketing target direction, all 17 Studio configurations, observed workspace sitemap, user journeys, explicitly unverified functionality, design evidence, responsive constraints, owner decisions and a proposed Phase 02 architecture/sequence.
+- Recorded all six exact branded-404 solution routes, route-name-only subject inferences, supporting evidence limits, a temporary remove/defer recommendation, priorities and owner decisions. No original page content was invented.
+- Documentation closure status: PASS WITH DOCUMENTED LIMITATIONS. Overall UI-parity remains BLOCKED, not passed: 1440/768/390 responsive states and touch behavior were unavailable; durable screenshots were not exportable; six route outcomes, CTA/content/asset/legal/commercial decisions and backend behavior remain unresolved.
+- No application source, cloud resources, external services, payments, media uploads, deployment, push or NRide resources were touched. No application tests were run; documentation checks are recorded in the changelog.
 ## Phase 01A progress — 2026-11-21
 - Continued from `ccf8b06` on `phase-01-reference-inventory`; inspected the next four library tools in order: Virtual Home Staging, Outdoor Visualization, Hardscape Design, Furniture Refresh. Five of 17 tools now have editor-level observations including prior Room Reimagination.
 - Updated the Studio inventory and reference evidence. No durable screenshot files; no upload, generation, destructive action, app source change, or NRide access.
