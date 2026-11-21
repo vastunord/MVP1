@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Development and Preview authorization document unavailable
+
+The owner authorized the operations in `prompts/VastuNord_Phase02E3_Dev_Preview_Authorization.md`, but the named file was absent from both the working tree and current Git tree. No cloud operations or application changes were performed. Verified the existing local unit suite (17 passed) and Git whitespace check; the requested scope remains pending the document.
+
 ### Founder-approved marketing design authority
 
 Recorded the finalized Figma file as the primary visual source for marketing pages it contains, with the brand PDF applied throughout. The prior marketing sites are secondary; the Studio prototype remains authoritative for unsuperseded Studio screens. The Figma overview opened, but detailed inspection and export remain unverified. Added the founder-deviation approval and future Figma-to-route parity requirements. No application code or cloud resources changed.
