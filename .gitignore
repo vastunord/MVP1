@@ -26,5 +26,7 @@ Thumbs.db
 # Credentials and private key material
 *.pem
 *.key
+assets/Visuals/
+apps/web/src/generated/prisma/
 credentials/
 secrets/

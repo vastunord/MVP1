@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### 2026-11-21 — Phase 02C local data and private media foundation
+
+Added Prisma app schema and generated initial migration, server-only database/config/health contracts, private-media policy and Vercel Blob adapter, gallery eligibility checks and disabled social interface. Added 727-row metadata-only Visuals manifest, ignored the 4.45 GB source directory, and documented storage, deployment and consent boundaries. No live Neon, Blob or Vercel resource was connected or changed; no Visuals file was moved, uploaded or published. Checks passed: Prisma validate and deterministic offline migration comparison, TypeScript, ESLint, 10 unit tests, 8 browser smoke tests and production build with webpack. The default Turbopack build failed in this local environment while spawning its CSS process; the webpack build required permission to write its generated cache. Cloud integration remains unverified.
+
 ## 2026-11-21 — Planning kit prepared
 - Added a new Codex master specification, phased prompts, permanent instructions and brand PDF.
 - **No website code was changed; no deploy, paid API call or social publication was performed.**

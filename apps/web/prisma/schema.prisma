@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum WorkspaceRole {
+  OWNER
+  MEMBER
+  VIEWER
+}
+enum AssetOrigin {
+  USER
+  COMPANY_DEMO
+}
+enum AssetState {
+  PENDING
+  VALIDATED
+  QUARANTINED
+  DELETED
+}
+enum JobState {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+enum ConsentChannel {
+  GALLERY
+  PINTEREST
+  YOUTUBE
+}
+enum ConsentState {
+  GRANTED
+  REVOKED
+}
+enum ReviewState {
+  PENDING
+  APPROVED
+  REJECTED
+}
+enum GalleryState {
+  DRAFT
+  PUBLISHED
+  WITHDRAWN
+}
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  createdAt DateTime @default(now())
+  memberships Membership[]
+  assets Asset[]
+  consentGrants ConsentGrant[]
+  reviews EditorialReview[]
+}
+
+model Workspace {
+  id String @id @default(cuid())
+  name String
+  createdAt DateTime @default(now())
+  memberships Membership[]
+  projects Project[]
+  assets Asset[]
+  jobs RenderJob[]
+  auditEvents AuditEvent[]
+}
+
+model Membership {
+  userId String
+  workspaceId String
+  role WorkspaceRole @default(VIEWER)
+  user User @relation(fields: [userId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  @@id([userId, workspaceId])
+}
+
+model Project {
+  id String @id @default(cuid())
+  workspaceId String
+  name String
+  createdAt DateTime @default(now())
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  assets Asset[]
+  jobs RenderJob[]
+  @@unique([id, workspaceId])
+  @@index([workspaceId, createdAt])
+}
+
+model Asset {
+  id String @id @default(cuid())
+  workspaceId String
+  projectId String?
+  ownerId String?
+  origin AssetOrigin @default(USER)
+  state AssetState @default(PENDING)
+  privateObjectKey String @unique
+  mimeType String
+  byteSize BigInt
+  sha256 String?
+  width Int?
+  height Int?
+  retentionUntil DateTime?
+  createdAt DateTime @default(now())
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  project Project? @relation(fields: [projectId, workspaceId], references: [id, workspaceId])
+  owner User? @relation(fields: [ownerId], references: [id])
+  versions AssetVersion[]
+  uploadIntent UploadIntent?
+  @@unique([id, workspaceId])
+  @@index([workspaceId, ownerId])
+  @@index([workspaceId, projectId])
+}
+
+model UploadIntent {
+  id String @id @default(cuid())
+  assetId String @unique
+  workspaceId String
+  actorId String
+  expiresAt DateTime
+  completedAt DateTime?
+  asset Asset @relation(fields: [assetId, workspaceId], references: [id, workspaceId])
+  @@unique([assetId, workspaceId])
+  @@index([workspaceId, actorId])
+}
+
+model AssetVersion {
+  id String @id @default(cuid())
+  assetId String
+  workspaceId String
+  version Int
+  privateObjectKey String @unique
+  mimeType String
+  byteSize BigInt
+  sha256 String?
+  createdAt DateTime @default(now())
+  asset Asset @relation(fields: [assetId, workspaceId], references: [id, workspaceId])
+  consents ConsentGrant[]
+  reviews EditorialReview[]
+  galleryItem GalleryItem?
+  @@unique([assetId, version])
+  @@unique([id, workspaceId])
+}
+
+model RenderJob {
+  id String @id @default(cuid())
+  workspaceId String
+  projectId String
+  toolId String
+  state JobState @default(QUEUED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  project Project @relation(fields: [projectId, workspaceId], references: [id, workspaceId])
+  @@index([workspaceId, state, createdAt])
+}
+
+model ConsentGrant {
+  id String @id @default(cuid())
+  assetVersionId String
+  workspaceId String
+  userId String
+  channel ConsentChannel
+  state ConsentState @default(GRANTED)
+  policyVersion String
+  publicName String?
+  grantedAt DateTime @default(now())
+  revokedAt DateTime?
+  assetVersion AssetVersion @relation(fields: [assetVersionId, workspaceId], references: [id, workspaceId])
+  user User @relation(fields: [userId], references: [id])
+  @@index([assetVersionId, channel, state])
+}
+
+model EditorialReview {
+  id String @id @default(cuid())
+  assetVersionId String
+  workspaceId String
+  channel ConsentChannel
+  reviewerId String
+  state ReviewState @default(PENDING)
+  reviewedAt DateTime?
+  assetVersion AssetVersion @relation(fields: [assetVersionId, workspaceId], references: [id, workspaceId])
+  reviewer User @relation(fields: [reviewerId], references: [id])
+  @@index([assetVersionId, channel, state])
+}
+
+model GalleryItem {
+  id String @id @default(cuid())
+  assetVersionId String @unique
+  workspaceId String
+  state GalleryState @default(DRAFT)
+  captionNb String?
+  captionEn String?
+  publishedAt DateTime?
+  assetVersion AssetVersion @relation(fields: [assetVersionId, workspaceId], references: [id, workspaceId])
+  @@unique([assetVersionId, workspaceId])
+  @@index([state, publishedAt])
+}
+
+model AuditEvent {
+  id String @id @default(cuid())
+  workspaceId String
+  actorId String?
+  action String
+  targetType String
+  targetId String
+  occurredAt DateTime @default(now())
+  metadata Json?
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  @@index([workspaceId, occurredAt])
+}

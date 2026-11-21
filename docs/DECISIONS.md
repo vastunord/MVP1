@@ -22,6 +22,11 @@ Owner-directed policies below supersede tentative D-001/D-002 wording: company i
 | D-009 | Preserve observed routes, suppress six broken links, signup/app CTAs, unprefixed nb + /en — PROPOSED | Avoid invented missing pages and conflicting reference targets; redirects need explicit semantic target | Founder approves CTA/locale/route briefs; route tests |
 | D-010 | RPO ≤24h, RTO ≤8h, no extra search/monitoring service initially — PROPOSED | Small initial operational footprint; add infrastructure only when measured need appears | Founder budget/retention approval and restore drill |
 
+### Phase 02C local choices
+
+- D-014 IMPLEMENTED LOCALLY: Prisma 7 app schema and private Vercel Blob adapter behind disabled server boundaries. Neon and Blob remain proposed live providers; no account, plan, region, credential or resource was approved or activated by this implementation. Verify Vastu Nord identity and costs before provisioning.
+- D-015 IMPLEMENTED LOCALLY: exclude `assets/Visuals/` from Git and record metadata/rights/approval in the CSV. Any cloud import or public use requires per-asset rights review and separate authorization. Alternative of checking 4.45 GB of unreviewed media into Git was rejected.
+
 Detailed boundaries and consequences: `docs/ARCHITECTURE.md`, `docs/DATABASE_ARCHITECTURE.md`, `docs/AI_AND_WORKERS.md`, `docs/INTEGRATIONS_AND_ACCESS.md`. All runtime integration state remains PLANNED/UNVERIFIED.
 
 ## Historical ADR v3.1 — SUPERSEDED (not to execute)

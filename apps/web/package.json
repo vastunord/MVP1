@@ -2,31 +2,39 @@
   "name": "@vastunord/web",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "node --experimental-strip-types --test tests/unit.test.ts",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
     "test:smoke": "playwright test"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
     "@vastunord/contracts": "workspace:*",
+    "@vercel/blob": "2.9.0",
     "next": "16.4.6",
+    "pg": "^8.23.1",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.65.1",
     "@tailwindcss/postcss": "4.3.5",
-    "tailwindcss": "4.3.5",
-    "postcss": "8.5.6",
-    "typescript": "5.9.3",
     "@types/node": "^24",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.6",
-    "@playwright/test": "1.65.1"
+    "postcss": "8.5.6",
+    "prisma": "7.10.1",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3"
   },
   "type": "module"
 }

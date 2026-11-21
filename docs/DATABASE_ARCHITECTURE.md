@@ -1,4 +1,10 @@
-# Database architecture — proposed, not migrated
+# Database architecture — Phase 02C local schema, not deployed
+
+## Implemented foundation (2026-11-21)
+
+`apps/web/prisma/schema.prisma` and its versioned initial SQL migration define users, workspaces and memberships, projects, private asset metadata and versions, upload intents, render job state, per-version channel consent, editorial review, gallery items and audit events. Image/video bytes stay in private object storage. Composite asset/project and version/workspace relations prevent cross-workspace attachment at the database level; actor/membership checks still belong in every server operation. Prisma Client uses `@prisma/adapter-pg` with a server-only pooled `DATABASE_URL`; migration configuration uses `DIRECT_DATABASE_URL`. `createDatabase` fails closed without a URL. `/api/health` returns 503 when unconfigured or when its read-only `SELECT 1` fails, and 200 only after a successful query; storage remains separately marked unverified.
+
+The migration was generated and validated offline. It has not run against Neon, and role separation, transactions, connection pooling, backups and restore remain unverified. Auth identities/sessions, full credit ledger, billing, outbox, job retries and CMS are later work. Schema constraints alone do not prove authorization. No production data or credentials were used.
 
 Dedicated Neon app and CMS projects under Vastu Nord; Prisma owns app migrations, Payload PostgreSQL adapter owns CMS migrations. Separate runtime/migration roles; neither deployment has the other's DB credentials. Nonproduction uses synthetic data.
 

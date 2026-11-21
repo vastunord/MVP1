@@ -1,5 +1,9 @@
 # Content, gallery, consent and publishing specification
 
+## Phase 02C model status
+
+The local app schema now separates private user assets from company demos, records version-specific consent by gallery/Pinterest/YouTube channel, and records channel-specific editorial decisions. The pure eligibility check requires validated media, verified rights, no withdrawal, editorial approval, and both gallery plus destination consent for user social distribution. A disabled social-publisher interface has no posting implementation. These are model and isolated test foundations only: there is no public gallery route, moderator workflow, active consent UI, persistence, automated posting or distribution service. Company demo rights and editorial approval must be verified before any publication; the local Visuals files are all unapproved.
+
 ## Non-negotiable separate decisions
 
 - **Default `visibility=private`**, persistent and server enforced.

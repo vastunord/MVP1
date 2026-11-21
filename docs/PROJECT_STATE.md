@@ -1,10 +1,10 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 02B frontend foundation implemented and validated locally. Integrations remain unavailable; exact Phase 01 visual parity remains BLOCKED.
+**Status:** Phase 02C local data and private-media foundations implemented; cloud integrations remain unverified. Exact Phase 01 visual parity remains BLOCKED.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 02B complete; await founder review and separately scoped Phase 02C approval.
-**Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch phase-02b-application-foundation from a854080a936592dc8b88dc45896267dce89abae9. Origin remains https://github.com/vastunord/MVP1.git.
-**Next safe task:** Review local frontend; resolve approved font/logo, specialist translations, unknown control ranges and visual acceptance in a separately authorized Phase 02C. No cloud integration, push or deployment.
+**Active phase:** Phase 02C complete locally; await founder review and separately scoped Phase 02D approval.
+**Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch phase-02c-cloud-data-foundation from 7db5203f3b0d76ca8ad69a40b2276a4ac0cdef50. Origin remains https://github.com/vastunord/MVP1.git.
+**Next safe task:** Review isolated schema, private storage contract and asset metadata; authorize a separately scoped Phase 02D if desired. No live integration, push or deployment.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -18,9 +18,9 @@
 |---|---|---|---|
 | Marketing site | Desktop routes inspected; six linked design routes return branded 404; responsive evidence remains unverified | `docs/MARKETING_REFERENCE_COMPARISON.md` | Owner decision on broken solution links; mobile capture when tooling is available |
 | Existing Studio | All 17 tool editors previously inspected at empty-photo state; four representative category editors and workspace screens inspected at desktop | `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md`, `docs/STUDIO_RESPONSIVE_AUDIT.md`, `docs/WORKSPACE_SCREEN_INVENTORY.md` | Tablet/mobile inspection and durable captures; implementation belongs to a later approved phase |
-| Auth + private projects | Unconfigured; local workspace UI preview only | apps/web; no identity/DB SDK | Authorization and storage in a later approved phase |
+| Auth + private projects | No login or customer data; local Prisma project/membership schema and server repository only | apps/web/prisma, apps/web/src/server | Auth session binding and live authorization tests in an approved later phase |
 | Real image/video generation | Disabled; typed boundary only | packages/contracts | Real provider/capability tests in approved AI phase |
-| Neon, Payload, storage, jobs | Unknown | Owner preference only | Resource isolation and integration test |
+| Neon, Payload, storage, jobs | Prisma migration and private Blob adapter prepared locally; no live resource connected; Payload and workers unimplemented | apps/web/prisma, docs/STORAGE_ARCHITECTURE.md | Vendor identity, resource isolation and authorized integration tests |
 | Public gallery and social publishing | Planned | New requirement | Consent and approval workflow tests |
 | Billing and wallet | Planned/unknown | Prior prompt only | Transaction test |
 
@@ -119,3 +119,10 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Tests passed: install/peer check, TypeScript, ESLint, production build; 6 unit tests and 8 Playwright smoke tests, including all tools and 390/768/1280/1440 layouts. Initial locale HTML bug fixed. New app screenshots saved locally under apps/web/test-results/screenshots; original reference parity still unverified.
 - Known limitations and routes: docs/FRONTEND_FOUNDATION.md. Cloud providers, auth/security enforcement, persistence, real uploads/AI/credits/exports/CMS and publishing are deferred. Registry marks compatible ESLint 9 maintenance release deprecated; upgrade with compatible Next lint plugins later.
 - No Phase 02C, dependency-backed service integration, cloud mutation, deployment, push, user media or NRide changes. Await next scoped approval.
+
+## Phase 02C — cloud/data foundation — 2026-11-21
+
+- Added local Prisma 7 schema/client, initial SQL migration and server-only database access/health contracts. Migration validation is offline; no Neon resource or database was touched. App and CMS databases remain separate by design; no auth, ledger or billing implementation was added.
+- Added private-media upload/download/deletion policy, Prisma repository and Vercel private Blob driver. Uploads default off and no public endpoint exposes the driver. Synthetic tests cover ownership, type/size, file signature and channel consent. Live signed operations, authentication, retention worker, media scanning and cloud account identity remain unverified. See `docs/STORAGE_ARCHITECTURE.md`.
+- Inventoried all 727 local Visuals files in `docs/VISUALS_ASSET_MANIFEST.csv`; about 4.45 GB, all rights and approval unknown, none eligible to publish. The source folder is ignored by Git and untouched. No media was uploaded.
+- Prepared environment and Vercel framework templates, preview/production separation and rollout/rollback checklist. No Vercel link, DNS, Neon, Blob, Payload, paid resource, push, deployment or NRide action occurred. Phase 01 exact visual parity remains blocked.

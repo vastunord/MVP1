@@ -1,4 +1,10 @@
-# Deployment and operations plan — not provisioned
+# Deployment and operations plan — Phase 02C prepared, not provisioned
+
+## Phase 02C readiness checklist
+
+`apps/web/vercel.json` declares the Next.js framework. `apps/web/.env.example` documents `APP_ENV`, pooled `DATABASE_URL`, migration-only `DIRECT_DATABASE_URL`, private Blob store ID and server-only token, with `MEDIA_UPLOADS_ENABLED=false`. Configuration rejects a Vercel environment mismatch and refuses uploads until all required dedicated resources are present. Use separate Vastu Nord Vercel preview/production projects or environment scopes, separate Neon branches/roles and separate private Blob stores; never copy production credentials into previews. Verify the signed-in vendor account belongs to Vastu Nord before provisioning or linking. No Vercel project link, Neon instance or Blob store was created in this phase.
+
+Before any authorized deployment: verify account/project IDs and region; confirm private store access; provide scoped server secrets in the matching Vercel environment; run reviewed migration against an isolated development/preview database first; run the complete CI checks; verify ownership and signed URL expiry with synthetic media; test migration rollback compatibility and an isolated restore; review cost/retention limits; only then enable uploads. Production deployment, DNS and auto-deploy linkage require separate owner approval. Roll back application to the previous compatible deployment if needed; do not destructively roll back the schema, and use a forward migration for data repair.
 
 Propose vastunord-web and vastunord-cms Vercel projects for apps/web and apps/cms. Names are proposals; IDs/accounts/regions unknown. Dedicated Vastu Nord Neon app/CMS projects and roles, isolated private stores and API credentials; never NRide or existing reference deployments. No global credential changes.
 
