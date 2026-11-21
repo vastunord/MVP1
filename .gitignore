@@ -2,6 +2,7 @@
 .env*
 !.env.example
 .vercel/
+.vercel-vastunord-cli/
 .neon/
 
 # Dependencies and generated build output

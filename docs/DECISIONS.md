@@ -35,7 +35,7 @@ Owner-directed policies below supersede tentative D-001/D-002 wording: company i
 ### Phase 02E cloud choices
 
 - D-018 OWNER DIRECTION, PARTIALLY PROVISIONED: Use Vastu Nord-owned Neon for the application database and private Vercel Blob for files; Google Drive is excluded by the latest instruction. Reuse the empty Vastu Nord Frankfurt Neon app project with an isolated development branch and a separate private Frankfurt development Blob store. No app credentials or production access are configured.
-- D-019 BLOCKED: The owner requested a Vercel business project on Hobby and a paid plan after go-live. [Vercel's Hobby policy](https://vercel.com/docs/plans/hobby) restricts commercial use; use a commercial-eligible plan before business launch. Link-only project creation returned 403, so the web project and store connection are pending account permission. No plan change, deployment or payment was made.
+- D-019 PARTIALLY PROVISIONED: The owner requested a Vercel business project on Hobby and a paid plan after go-live. [Vercel's Hobby policy](https://vercel.com/docs/plans/hobby) restricts commercial use; use a commercial-eligible plan before business launch. The connector returned 403, but the Vastu Nord-only CLI created and Git-linked the web project with a temporary build-ignore rule. Blob connection and deployment remain pending. No plan change, deployment or payment was made.
 
 Detailed boundaries and consequences: `docs/ARCHITECTURE.md`, `docs/DATABASE_ARCHITECTURE.md`, `docs/AI_AND_WORKERS.md`, `docs/INTEGRATIONS_AND_ACCESS.md`. All runtime integration state remains PLANNED/UNVERIFIED.
 
