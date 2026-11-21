@@ -1,4 +1,10 @@
-# Database architecture — Phase 02D local schema, not deployed
+# Database architecture — Phase 02E development branch, schema not deployed
+
+## Phase 02E Neon verification
+
+The Vastu Nord Neon organization already had app project `VNMVP1` (`morning-morning-84319525`) in Frankfurt (`aws-eu-central-1`). Its default `production` branch was observed empty and was not changed. Created isolated `development` branch `br-mute-resonance-bhea4dyx`; its `neondb` contains no application tables. A connector `SELECT` returned PostgreSQL 18.7 and a transaction-scoped temporary-table insert/read succeeded without persistent test records. This proves branch connectivity through the connector only; it does not establish application/Prisma connectivity or runtime role isolation.
+
+Both committed migration files were reviewed for drop/truncate/data-delete statements and none were found. The local Prisma CLI reported a schema-engine error; a network probe confirmed DNS resolution of the development endpoint fails from this computer. No migration was applied and `_prisma_migrations` was not created. The production branch remains untouched. Create separate runtime/migration roles and rerun `prisma migrate status` then `migrate deploy` on the named development branch after secure local connectivity is restored; never substitute the default branch URL.
 
 ## Phase 02D extension — prepared, not migrated
 

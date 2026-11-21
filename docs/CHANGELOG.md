@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### 2026-11-21 — Phase 02E isolated cloud resources and verification
+
+Verified GitHub, Neon and Vercel Vastu Nord scopes. Reused the dedicated Frankfurt Neon app project and created an isolated `development` branch; connector read and transaction-scoped synthetic write passed. Created an empty private Frankfurt Vercel Blob development store; no media was uploaded. Link-only Vercel web-project creation returned HTTP 403. Prisma migration status failed before schema changes because the local machine could not resolve the Neon endpoint. No sender or app secret is configured; real authentication, two-user persistence and private-media flows remain blocked. Local TypeScript, lint, Prisma validation, offline SQL generation, 14 unit tests, webpack build and 9 browser smoke tests passed. Documentation now records exact resources, plan/permission blockers and owner actions. No push, deployment, production DB change, DNS change, payment, or NRide action.
+
 ### 2026-11-21 — Phase 02D auth and personal projects
 
 Added Better Auth/Prisma schema and migration, fail-closed email/OAuth configuration, verified-session Studio and API guards, personal workspace/project services, private asset read boundaries, Norwegian/English onboarding/recovery/project screens and owner cloud setup guide. Tests and build results are recorded in the Phase 02D project state. Real Neon, email, OAuth and storage flows remain unverified; no cloud service was changed, no user data was collected, and nothing was pushed or deployed.

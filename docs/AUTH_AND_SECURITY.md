@@ -1,4 +1,10 @@
-# Authentication and security — Phase 02D local implementation
+# Authentication and security — Phase 02E verification status
+
+## Phase 02E connected verification
+
+The dedicated Vastu Nord Neon development branch responds to connector SQL, but its Prisma auth tables have not been migrated: the local Prisma CLI cannot resolve the Neon host. No Vastu Nord verified email sender, signing secret or application database URL is configured. Therefore registration, verification, sign-in, reset, logout/session expiry, protected-route behavior with a real session, and two-user project isolation are **NOT TESTED against cloud resources**. The unconfigured browser smoke test confirms the auth forms/private APIs remain closed; this is not a successful signup test. No test account or customer account was created. Google OAuth remains disabled.
+
+The private Vercel Blob development store is empty and unconnected. No upload/download/ownership test occurred, and `MEDIA_UPLOADS_ENABLED` remains false. Current security gate: keep customer registration and media upload closed until migration, sender, scoped credentials, two-user authorization and retention tests pass.
 
 ## Current implementation and verification status
 

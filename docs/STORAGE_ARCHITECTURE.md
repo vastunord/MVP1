@@ -1,4 +1,6 @@
-# Private media storage — Phase 02C foundation
+# Private media storage — Phase 02E resource status
+
+The owner chose Vercel Blob and explicitly withdrew Google Drive. A Vastu Nord-owned development Blob store `vastunord-development-media` (`store_ejuJXLFGtH1tuh5b`) was created in `fra1` with **private** access. Vercel reports it available, empty (0 objects/0 bytes) and connected to zero projects. No token was printed, stored in Git or configured in the app; no file was uploaded. The Vercel web project could not be created through the connected account (HTTP 403), so store connection, dedicated app credential, signed-access and cross-user tests remain **BLOCKED**. Keep `MEDIA_UPLOADS_ENABLED=false`.
 
 ## Boundary
 

@@ -1,4 +1,8 @@
-# Deployment and operations plan — Phase 02C prepared, not provisioned
+# Deployment and operations plan — Phase 02E resource status
+
+The Vastu Nord Neon development branch and private Frankfurt Blob development store are provisioned, but the Vercel web project is not. A link-only create request for `vastunord-web` under Vastu Nord team `team_XXq1MkmBmNipFuTqB7Ozv6GV`, GitHub `vastunord/MVP1`, root `apps/web`, `deploy:false` returned HTTP 403 (permission denied). No local Vercel CLI fallback is installed. The private store is not connected and no environment variables were set remotely. No preview or production deployment, DNS change or push occurred.
+
+The team currently has a Hobby plan. The owner requested setup there and plans a paid subscription after go-live; [Vercel's Hobby policy](https://vercel.com/docs/plans/hobby) restricts commercial use, so a business launch requires a commercial-eligible plan **before** go-live. Project-create permission and plan decision are owner actions. The local webpack production build and unconfigured browser smoke tests pass; they do not establish preview readiness with live auth/storage.
 
 ## Phase 02C readiness checklist
 

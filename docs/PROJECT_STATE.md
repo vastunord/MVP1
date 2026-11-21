@@ -1,12 +1,16 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 02D local auth/onboarding/project foundations implemented; live integrations remain unverified. Exact Phase 01 visual parity remains BLOCKED.
+**Status:** Phase 02E partially verified: dedicated Vastu Nord Neon development branch and private Vercel Blob store exist; auth, migrations and connected application flows remain blocked. Exact Phase 01 visual parity remains BLOCKED.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 02D complete locally; await founder review and separately scoped Phase 02E approval.
-**Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch phase-02d-auth-projects from d25e83aed8181a50ccfa977ec037a37138ead879. Origin remains https://github.com/vastunord/MVP1.git.
-**Next safe task:** Founder review of auth/project implementation and `docs/OWNER_CLOUD_SETUP.md`; approve a separately scoped isolated development/preview integration if desired. No live integration, push or deployment.
+**Active phase:** Phase 02E scoped integration work; cloud account and local network blockers recorded below. No Phase 02F work.
+**Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch `phase-02e-cloud-auth-integration` from `84956af2fec9f5193099ed6b88630570fb2684a0`. Origin remains https://github.com/vastunord/MVP1.git.
+**Next safe task:** Resolve Vastu Nord Vercel project-creation permission, choose a commercial-eligible plan before business use, configure a verified email sender and secure app credentials, then rerun development migrations and two-user integration tests. No push or deployment.
 
 ## Verified context
+- Phase 02E account isolation: Git origin is `vastunord/MVP1`; Neon organization `Vastu` and Vercel team `VastuNord` use the Vastu Nord connections. The NRide Vercel connection was not used.
+- Neon app project `morning-morning-84319525` (`VNMVP1`) was already present in Frankfurt (`aws-eu-central-1`), with an empty default `production` branch. Created `development` branch `br-mute-resonance-bhea4dyx`; its `neondb` has no app tables. Connector `SELECT` and a transaction-scoped temporary-table write/read passed. No production branch mutation.
+- Vercel team `team_XXq1MkmBmNipFuTqB7Ozv6GV` has no web project. Link-only creation of `vastunord-web` from `vastunord/MVP1` with `deploy:false` returned 403 permission denied; no CLI fallback is configured. No deployment occurred. The user explicitly chose private Vercel Blob over Google Drive; store `store_ejuJXLFGtH1tuh5b` (`vastunord-development-media`) exists in `fra1`, is private, empty and not connected to a project. No Blob token was exposed or configured.
+- Prisma migration status via the local CLI failed before schema changes because this computer cannot resolve the Neon host. Both migration files were reviewed for destructive SQL; no drop/truncate/data-delete statement was found. Signup email sender, signing secret, production/preview origin and scoped runtime credentials are not configured; no live auth or two-user persistence test was possible. See `docs/OWNER_CLOUD_SETUP.md`.
 - Hosting preference: separate Vastu Nord project on Vercel.
 - Database preference: separate Neon PostgreSQL project and Prisma.
 - Editorial preference: Payload CMS with AI-assisted draft and human publication approval.
@@ -20,7 +24,7 @@
 | Existing Studio | All 17 tool editors previously inspected at empty-photo state; four representative category editors and workspace screens inspected at desktop | `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md`, `docs/STUDIO_RESPONSIVE_AUDIT.md`, `docs/WORKSPACE_SCREEN_INVENTORY.md` | Tablet/mobile inspection and durable captures; implementation belongs to a later approved phase |
 | Auth + private projects | Better Auth and personal-project routes/UI implemented locally; all cloud-backed flows unverified and closed without credentials | apps/web/src/server, apps/web/src/app/api, docs/AUTH_AND_SECURITY.md | Isolated Neon/email/session and two-user browser integration tests |
 | Real image/video generation | Disabled; typed boundary only | packages/contracts | Real provider/capability tests in approved AI phase |
-| Neon, Payload, storage, jobs | Two Prisma migrations and private Blob adapter prepared locally; no live resource connected; Payload and workers unimplemented | apps/web/prisma, docs/STORAGE_ARCHITECTURE.md | Vendor identity, resource isolation and authorized integration tests |
+| Neon, Payload, storage, jobs | Existing dedicated Vastu Nord Neon project plus new isolated development branch; connector read/write probe passes, but Prisma migrations remain unapplied. New private Vastu Nord development Blob store is empty and unconnected; Payload and workers unimplemented | apps/web/prisma, docs/STORAGE_ARCHITECTURE.md | Local DNS/DB connection, migrations, project link, scoped credentials and synthetic media tests |
 | Public gallery and social publishing | Planned | New requirement | Consent and approval workflow tests |
 | Billing and wallet | Planned/unknown | Prior prompt only | Transaction test |
 
@@ -134,3 +138,11 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Local policy tests cover invalid sessions, configuration, duplicate creation and cross-user denial. Real registration/email/cookies/OAuth, database persistence and browser authorization with two accounts are IMPLEMENTED BUT UNVERIFIED / BLOCKED BY CLOUD CONFIGURATION. No customer data was collected.
 - Default Turbopack production build passes with normal local process permissions; retained webpack fallback. Phase 01 exact visual parity remains blocked. No push, deploy, production cloud mutation, paid service, media upload or NRide action.
 - Validation: Prisma schema valid; Phase 02D SQL matches the offline schema diff from Phase 02C; TypeScript, ESLint, 14 unit tests, 9 browser smoke tests and both Turbopack/webpack production builds passed. The local Docker daemon is unavailable, so no database-backed registration, migration or cross-user browser test was run. Documentation and Git checks are recorded in the commit handoff.
+
+## Phase 02E — cloud development integration, partial — 2026-11-21
+
+- Verified Vastu Nord account scope; reused its dedicated empty Frankfurt Neon app project, created isolated development branch, and proved connector read plus transaction-scoped synthetic write/read. No production database changes, app schema migration or persistent test data.
+- Created private, empty Frankfurt Vercel Blob development store. The user confirmed Vercel Blob, not Google Drive. No app credentials, object upload, signed access or store/project connection.
+- Vercel link-only web-project creation failed with HTTP 403; no CLI fallback is installed. The team is on Hobby, which Vercel restricts to noncommercial use. Owner must resolve create permission and adopt a commercial-eligible plan before business use. No deployment or push.
+- Local Prisma migration status failed before applying changes because the Neon endpoint is not DNS-resolvable from this computer. Email sender and auth secrets are absent. Live registration, reset, sessions, two-user project isolation and Blob authorization are **BLOCKED / NOT TESTED**, not passed.
+- Local validation: TypeScript, ESLint, Prisma schema validation, offline schema SQL generation, 14 unit tests, webpack production build and 9 browser smoke tests passed. The first sandboxed build hit a generated-cache permission error; the authorized local build passed. The first browser run stalled in the sandbox; an authorized local run passed. `git diff --check` and documentation checks are recorded in the Phase 02E commit.

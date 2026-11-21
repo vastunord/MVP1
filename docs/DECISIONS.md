@@ -32,6 +32,11 @@ Owner-directed policies below supersede tentative D-001/D-002 wording: company i
 - D-016 IMPLEMENTED LOCALLY, NOT PRODUCTION VERIFIED: use Better Auth 1.7.27 with the existing Prisma 7 app database; require verified email, database-backed rate limiting and server session checks. Resend is a disabled-by-default delivery adapter, not an approved vendor account or cost commitment. Google OAuth stays hidden without a Vastu Nord-owned credential pair and tested consent/callback configuration.
 - D-017 IMPLEMENTED LOCALLY: start with one personal workspace per verified user, owner-scoped projects and soft deletion; defer team sharing and physical media deletion to explicit retention design. No browser-supplied user/workspace ID can grant access.
 
+### Phase 02E cloud choices
+
+- D-018 OWNER DIRECTION, PARTIALLY PROVISIONED: Use Vastu Nord-owned Neon for the application database and private Vercel Blob for files; Google Drive is excluded by the latest instruction. Reuse the empty Vastu Nord Frankfurt Neon app project with an isolated development branch and a separate private Frankfurt development Blob store. No app credentials or production access are configured.
+- D-019 BLOCKED: The owner requested a Vercel business project on Hobby and a paid plan after go-live. [Vercel's Hobby policy](https://vercel.com/docs/plans/hobby) restricts commercial use; use a commercial-eligible plan before business launch. Link-only project creation returned 403, so the web project and store connection are pending account permission. No plan change, deployment or payment was made.
+
 Detailed boundaries and consequences: `docs/ARCHITECTURE.md`, `docs/DATABASE_ARCHITECTURE.md`, `docs/AI_AND_WORKERS.md`, `docs/INTEGRATIONS_AND_ACCESS.md`. All runtime integration state remains PLANNED/UNVERIFIED.
 
 ## Historical ADR v3.1 — SUPERSEDED (not to execute)
