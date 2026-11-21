@@ -1,20 +1,9 @@
-# Data and API contract draft
+# Data and API contract index
 
-**Core entities (scope, do not migrate until designed and approved):** `User`, `AuthIdentity`, `Session`, `Workspace`, `Membership`, `Project`, `Room`, `SourceAsset`, `GeneratedAsset`, `AssetVersion`, `RenderJob`, `PromptVersion`, `CreditWallet`, `CreditGrant`, `CreditReservation`, `LedgerEntry`, `PaymentEvent`, `Subscription`, `UsageRecord`, `ConsentGrant`, `PublicationRequest`, `ModerationDecision`, `PublicGalleryItem`, `PinterestPost`, `YouTubePublication`, `KnowledgeArticle`, `KnowledgeSource`, `EditorialReview`, `AuditEvent`.
+The earlier combined draft was reconciled in Phase 02A. Canonical planned contracts now live in:
 
-**Required audit fields:** unique ID; owner/workspace ID; created/updated timestamp; visibility; source and provenance; model/provider ID where AI-generated; consent snapshot; content version; publish and rollback IDs; job/correlation IDs.
+- [DATABASE_ARCHITECTURE.md](DATABASE_ARCHITECTURE.md): entities, ownership, transactional credits, migration and recovery.
+- [API_CONTRACTS.md](API_CONTRACTS.md): endpoints, DTO rules, errors, permissions and validation.
+- [AI_AND_WORKERS.md](AI_AND_WORKERS.md): asynchronous provider/job contracts and failure recovery.
 
-**Key APIs** (make typed contracts before implementation):
-- `POST /api/projects` — create private project;
-- `POST /api/assets/uploads` — issue scoped upload URL, validate file type/size;
-- `POST /api/jobs/quote` — deterministic credit quote;
-- `POST /api/jobs` — idempotent credit reservation + job;
-- `GET /api/jobs/:id` — authorized status/result;
-- `GET /api/projects/:id/assets` — scoped library;
-- `POST /api/assets/:id/publication-request` — separate channel consents;
-- `POST /api/publications/:id/revoke` — stop public display, request takedown;
-- `GET /api/gallery` — only approved public assets;
-- `POST /api/billing/checkout` + signed webhook — controlled payments;
-- `POST /api/prana` — authenticated, scoped 3-tab assistant retrieval.
-
-Use database transactions for credit reserve/consume/release. Tests must enforce two users cannot view each other's original images or create publications on another user's behalf. External idempotent jobs need partner request/response IDs and retry histories.
+These replace the previous draft without creating a second contract definition. No schema or endpoint is implemented.

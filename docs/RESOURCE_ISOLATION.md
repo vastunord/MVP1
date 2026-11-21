@@ -4,8 +4,8 @@
 
 | Resource | Current planned state | Verified identifier (never secret) | Gate |
 |---|---|---|---|
-| New GitHub private repo | Owner to create as PRIVATE; suggested `vastunord-platform` | URL not supplied | Phase 00 bootstrap |
-| Git local project root | `C:\Users\VN\Documents\ChatGPT\VastuNord` confirmed; `.git` absent pending bootstrap | No remote/branch yet | Phase 00 |
+| Vastu Nord GitHub repo | Owner made Public in Phase 00; no privacy change in Phase 02A | https://github.com/vastunord/MVP1.git; local origin rechecked | Push requires separate authorization |
+| Git local project root | C:\Users\VN\Documents\ChatGPT\VastuNord; Git present | phase-02a-architecture from 7718710 | Phase 02A docs only |
 | Vercel web project | NEW, under Vastu Nord account | UNKNOWN | Phase 03+ after source builds |
 | Vercel Payload CMS project | NEW, separate app deployment | UNKNOWN | Phase 09 |
 | Vastu Nord Neon application DB | NEW project/database/user | UNKNOWN | Phase 03 |
@@ -26,3 +26,6 @@ For any cloud/API change: confirm current account, project ID, target environmen
 - Verified in the signed-in Vastu Nord GitHub session: `vastunord/MVP1` is owned by Vastu Nord and Public. It was empty before upload; local `origin` matches `https://github.com/vastunord/MVP1.git`.
 - Local branch `main` has the reviewed planning-kit commits. The first push attempt using the host-wide credential was rejected; repository-local path-scoped authentication then pushed the commits successfully. The public GitHub page now shows commit `faabaad` and the repository files. A later read-only remote query encountered DNS failure after the push was already visible.
 - Global credentials were not changed; no NRide resource was modified.
+## Phase 02A reconciliation
+
+Local root, origin and base commit verified; new local branch phase-02a-architecture. Historical Phase 00 cloud rows remain planned, not configured. No vendor login, API secret, region, quota or cloud resource ID was verified in this task. Proposed resource names are not real identifiers. No account switching or global configuration occurred. See docs/INTEGRATIONS_AND_ACCESS.md for readiness and docs/DEPLOYMENT_PLAN.md for provisioning gates.

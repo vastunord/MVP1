@@ -1,10 +1,10 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 01 design/reference handover closed with documented limitations. Overall UI-parity remains BLOCKED; no application implementation is verified.
+**Status:** Phase 02A architecture planning complete; all integration configuration remains PLANNED/UNVERIFIED. Phase 01 visual-parity gate remains BLOCKED.
 **Last updated:** 2026-11-21
-**Active phase:** Await owner approval and a scoped Phase 02 prompt before implementation. Phase 01E-C documentation closure is complete; no Phase 02 work has started.
-**Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. This task continues on `phase-01-reference-inventory` from verified starting commit `94240ec8f9146f849b50f5dcd8d516f976a32dab`; `origin` is `https://github.com/vastunord/MVP1.git`.
-**Next safe task:** Wait for owner approval before Phase 02. Tablet/mobile evidence remains uncollected; exact parity is not established.
+**Active phase:** Phase 02A documentation complete. Await approval for the exact Phase 02B foundation scope.
+**Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch phase-02a-architecture, based on 771871067668ce99c42a782fed4c9e3e4c7f7e1b. Verified local origin: https://github.com/vastunord/MVP1.git.
+**Next safe task:** Owner review of proposed architecture/provider decisions, then separately approve Phase 02B in docs/PHASE02_IMPLEMENTATION_PLAN.md. No provisioning or deployment authorized.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -100,3 +100,12 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Continued on `phase-01-reference-inventory` from `830b014`. Inspected Spa & Pool Redesign, Sky Transformation, Seasonal Transformation and Object Placement entry pages/editors; all 17 of 17 Studio tools now have empty-photo editor observations.
 - Added the final tool observations and created `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md` for all 17 tools. Dependent option states were revealed in Spa & Pool, Sky and Seasonal Transformation without uploads or generation. Two comparison/default mismatches are recorded for review.
 - Screenshot views were captured in the browser but no durable screenshot file could be saved. No media upload, generation, paid action, source-code change, deployment, push or NRide access. Mobile and marketing parity evidence remain. UI-parity gate BLOCKED; Phase 01E and Phase 02 have not started.
+
+## Phase 02A — architecture and foundation planning — 2026-11-21
+
+- Defined two-app Next.js/Payload boundary, isolated Neon/ORM ownership, typed Studio configuration for all 17 tools, private media/auth, durable jobs/transactional credits, CMS consent and manual social workflows.
+- Canonical details: docs/ARCHITECTURE.md, docs/DATABASE_ARCHITECTURE.md, docs/API_CONTRACTS.md, docs/AI_AND_WORKERS.md, docs/AUTH_AND_SECURITY.md, docs/DEPLOYMENT_PLAN.md and docs/PHASE02_IMPLEMENTATION_PLAN.md. Older combined data/API and AI operations drafts now point to their canonical replacements.
+- docs/INTEGRATIONS_AND_ACCESS.md records provider/account/env/cost/permissions/tests/owner actions. Cloud identities, IDs, credentials, model availability and rates remain unverified. Better Auth, private Blob, Workflow and Stripe are proposals, not approved integrations.
+- Founder decisions remain: provider choices, regions/retention/budget, CTA/locale route choices, six broken routes, legal/commercial claims, authorized assets and exact brand values. Existing isolation/privacy/manual-social requirements are accepted; no original-team access required.
+- Phase 02B proposal is local workspace/shell/contracts/locale/theme scaffolding with integrations disabled; no automatic start. No dependencies, features, cloud resources, upload, payment, push, deploy or NRide changes.
+- Documentation validation and commit are recorded in the changelog; no runtime tests exist or were run for this planning task.
