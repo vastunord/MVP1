@@ -1,10 +1,10 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 01 reference inventory in progress. Phase 01E-A comparison is documented for inspected routes; six linked design solution routes and mobile evidence remain open. No application implementation verified.
+**Status:** Phase 01 reference inventory in progress. Phase 01E-A desktop marketing-route inspection is complete; six linked design solution URLs were observed to return the branded 404 fallback. No application implementation verified.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 01 reference inventory (01E-A partial; await owner direction before resuming the remaining route inspection or starting another batch/phase).
-**Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. This task is on `phase-01-reference-inventory`; verified starting commit was `ce1498b002e2683a031ab1282b351be62ee922e2`; `origin` is `https://github.com/vastunord/MVP1.git`.
-**Next safe task:** Wait for owner approval before starting another Phase 01 batch or Phase 02.
+**Active phase:** Phase 01 reference inventory (01E-A complete; await owner approval before Phase 01E-B or another phase).
+**Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. This task continues on `phase-01-reference-inventory` from verified starting commit `c6bdbdad8756eb2e630281b12a56641bbbfe1665`; `origin` is `https://github.com/vastunord/MVP1.git`.
+**Next safe task:** Wait for owner approval before starting Phase 01E-B or Phase 02.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -16,7 +16,7 @@
 ## Current implementation status
 | Area | Actual status | Evidence/URL | Next test |
 |---|---|---|---|
-| Marketing site | Desktop marketing routes compared; source unavailable and not required for greenfield; mobile/durable screenshots remain unverified | `docs/MARKETING_REFERENCE_COMPARISON.md` | Owner mobile captures and confirm open marketing/content questions |
+| Marketing site | Requested desktop routes inspected; six linked design routes return branded 404; mobile/durable screenshots remain unverified | `docs/MARKETING_REFERENCE_COMPARISON.md` | Phase 01E-B mobile evidence; owner decision on broken solution links |
 | Existing Studio | All 17 tool editors inspected at empty-photo UI state | `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md` | Verify remaining mobile/marketing evidence; implementation belongs to a later approved phase |
 | Auth + private projects | Unknown | No verified repo | Check code and auth config |
 | Real image/video generation | Unknown | No verified API keys | Capability matrix, contract test |
@@ -29,7 +29,7 @@
 
 ## Blockers / owner requests
 - The host-wide GitHub credential was initially rejected. Repository-local path-scoped authentication succeeded; GitHub visibly shows the pushed Vastu Nord commits and files on the public `main` branch. No global credentials were changed.
-- Current inventory covers all 17 Studio editors at empty-photo state. Marketing comparison is documented in `docs/MARKETING_REFERENCE_COMPARISON.md`; mobile states and durable screenshots remain outstanding; backend behavior is unverified.
+- Current inventory covers all 17 Studio editors at empty-photo state. Desktop marketing route inventory and six custom-404 limitations are documented in `docs/MARKETING_REFERENCE_COMPARISON.md`; mobile states and durable screenshots remain outstanding; backend behavior is unverified. Overall Phase 01 UI-parity gate remains BLOCKED.
 - Provide open-access Google image-library URL/ID, asset rights and mapping when phase 04 begins.
 - Configure new Vastu Nord cloud resources only during their corresponding phases; former developers' Git/Vercel/Neon access is not required.
 
@@ -63,12 +63,12 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Owner input if access becomes unavailable: screenshots/recording of each Studio tool, its controls and results, plus desktop/mobile marketing and Studio views. Google asset library link and reuse rights remain pending.
 - No application tests, production changes, uploads or generation. Phase 02 has not started.
 
-## Phase 01E-A — marketing reference comparison — 2026-11-21
+## Phase 01E-A — marketing reference comparison complete — 2026-11-21
 - Inspected the design prototype's public marketing, auth, four linked solution, and five article routes, and the development reference's six primary marketing routes at desktop. The design `/features` is a feature overview while developer `/features` is a living-room solution page; important CTA/footer destinations also conflict. Detailed route/page comparison, shared components, recommendations and owner questions are in `docs/MARKETING_REFERENCE_COMPARISON.md`.
 - The brand PDF remains the visual identity authority. Existing 36-page review confirms logo treatments, six palette swatches and Zalando Sans Expanded; exact values were not sampled in this task. Marketing visual direction appears aligned at a qualitative level only.
-- The in-app browser showed both home pages and Resources indexes, but exposed no durable project-local screenshot export; mobile was not inspectable with available browser controls. Six additional solution routes are linked but not inspected. No application code, NRide resources, external service, deployment or push was touched.
-- The requested exhaustive marketing-route inspection remains PARTIAL because the six linked design solution routes listed in the comparison were not opened. Mobile evidence and durable screenshots are also unavailable. No application code, NRide resources, external service, deployment or push was touched.
-- No application tests were run. `git diff --check`, trailing-whitespace and final-newline checks passed. Await owner direction before resuming the remaining route inspection or starting another batch/phase.
+- The six linked design solution routes were all opened and returned the same branded custom 404; the kitchen route was retried once in a fresh tab and again returned 404. No corresponding developer routes appeared in the previously inspected navigation, so none were guessed. The fallback header, footer and Back to home link were observed; missing solution content remains NOT ACCESSIBLE.
+- The in-app browser exposed no durable project-local screenshot export; mobile is reserved for Phase 01E-B. No application code, NRide resources, external service, deployment or push was touched. Overall Phase 01 UI-parity remains BLOCKED and is not marked passed.
+- No application tests were run. `git diff --check`, trailing-whitespace and final-newline checks passed. Await owner approval before Phase 01E-B or Phase 02.
 ## Phase 01A progress — 2026-11-21
 - Continued from `ccf8b06` on `phase-01-reference-inventory`; inspected the next four library tools in order: Virtual Home Staging, Outdoor Visualization, Hardscape Design, Furniture Refresh. Five of 17 tools now have editor-level observations including prior Room Reimagination.
 - Updated the Studio inventory and reference evidence. No durable screenshot files; no upload, generation, destructive action, app source change, or NRide access.

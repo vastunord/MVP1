@@ -6,10 +6,25 @@
 
 | Reference | Routes inspected | Notes |
 |---|---|---|
-| Design prototype (primary UX) | `/`, `/features`, `/about`, `/pricing`, `/resources`, `/contact`, `/login`, `/forgot-password`, `/signup`; `/solutions/living-room-design`, `/solutions/virtual-staging`, `/solutions/living-room-scandinavian-design`, `/solutions/backyard-design`; five article routes listed below | Primary nav, footer routes, auth forms, four linked solutions, and all five resource cards were followed. No credentials, form submission, upload, or account action. |
+| Design prototype (primary UX) | `/`, `/features`, `/about`, `/pricing`, `/resources`, `/contact`, `/login`, `/forgot-password`, `/signup`; four accessible solution pages; six additional linked solution routes listed below; five article routes listed below | Primary nav, footer routes, auth forms, four solution pages, five articles, and six additional exact links inspected. The six additional URLs resolve to the site's custom 404 page, confirmed by a fresh-tab retry for the kitchen route. No credentials, form submission, upload, or account action. |
 | Development site (secondary content) | `/`, `/features`, `/about`, `/pricing`, `/resources`, `/contact` | Public nav and visible content inspected. Its `/features` displays a living-room solution page, unlike the general feature overview on the design site. |
 
-Design article routes inspected: `/resources/visualize-a-renovation-before-you-build`, `/resources/virtual-staging-vs-traditional-staging`, `/resources/choosing-the-right-interior-style`, `/resources/ai-for-homeowners`, `/resources/design-trends`. Other solution URLs appeared as related links but their pages were not opened: `/solutions/kitchen-remodel-visualizer`, `/solutions/office-redesign`, `/solutions/retail-space-visualization`, `/solutions/property-visualization`, `/solutions/living-room-renovation`, `/solutions/garden-renovation`. They are **linked, not inspected**. No separate Privacy or Terms pages were exposed; those footer links resolve to `/contact` on both sites.
+Design article routes inspected: `/resources/visualize-a-renovation-before-you-build`, `/resources/virtual-staging-vs-traditional-staging`, `/resources/choosing-the-right-interior-style`, `/resources/ai-for-homeowners`, `/resources/design-trends`.
+
+### Six additional linked solution routes
+
+Each exact URL loaded the branded custom 404 page: heading “This space doesn't exist — yet.”, explanation “The page you were looking for has moved or was never built. Everything else is still where you left it.”, and a “Back to home” link. Kitchen was reopened once in a fresh tab and returned the same result. These routes are therefore **OBSERVED** as 404 responses; intended page content is **NOT ACCESSIBLE**. Developer-site counterpart links were **NOT TESTED** because no corresponding routes appeared in its previously inspected navigation; alternate paths were not guessed. Solution-specific media and claims are therefore **UNVERIFIED**.
+
+| Exact design URL | Result | Visible fallback and navigation | Page content, media and claims |
+|---|---|---|---|
+| `/solutions/kitchen-remodel-visualizer` | Custom 404; fresh-tab retry also 404 | Shared header, Sign In, Visualize My Space; fallback Back to home; shared footer | No page-specific headings/sections, imagery, video, or interactive component visible. Testimonials, prices and solution claims: NOT PRESENT on fallback. |
+| `/solutions/office-redesign` | Custom 404 | Same fallback header/footer and Back to home | Same; content NOT ACCESSIBLE. |
+| `/solutions/retail-space-visualization` | Custom 404 | Same fallback header/footer and Back to home | Same; content NOT ACCESSIBLE. |
+| `/solutions/property-visualization` | Custom 404 | Same fallback header/footer and Back to home | Same; content NOT ACCESSIBLE. |
+| `/solutions/living-room-renovation` | Custom 404 | Same fallback header/footer and Back to home | Same; content NOT ACCESSIBLE. |
+| `/solutions/garden-renovation` | Custom 404 | Same fallback header/footer and Back to home | Same; content NOT ACCESSIBLE. |
+
+Fallback header/footer links match the previously recorded design-site shell. No unique page interaction was available. These routes are linked from previously inspected marketing content, but the intended solution content cannot be inferred. No corresponding developer-site route was exposed by its inspected navigation or existing observations; no candidate URL was guessed. No separate Privacy or Terms pages were exposed; those footer links resolve to `/contact` on both sites.
 
 ## 2. Navigation comparison
 
@@ -28,7 +43,7 @@ Footer labels are similar, but destinations differ. The design footer links the 
 | Resources | Resource Center search and category filters, five linked articles, topic buttons and newsletter form. Selecting Renovation filter changed visible articles. | Similar heading/categories and five article teasers, topic area and newsletter. Cards were not exposed as links in the inspected accessibility tree. | Prefer design's observable linked-card/filter behavior. Verify article routes and newsletter destination before implementation. |
 | Contact | Support/sales/partnership/feedback choices; Name, Email, Subject (Product Support default), Message, Send Message; FAQ and CTA. | Similar content/form; CTA routes to Pricing, while design routes to signup-oriented flow. | Reuse the design structure; submit only after service and privacy destination are defined. Form delivery unverified. |
 | Auth | Design exposes Login, Forgot Password, and Signup forms with email/password fields and sign-up terms checkbox. | No login route surfaced; Sign In points to Contact. | Treat design forms as reference UI only; auth, recovery, terms/privacy destination and session behavior are unverified. |
-| Solutions | Four linked routes inspected, using a shared long-form template: hero and empty live-preview shell; problem, possibility examples, use cases, benefits, four-step workflow, audiences, gallery, FAQs, related links, CTA. Empty preview action was disabled until an image is provided. | `/features` supplies a similar living-room narrative, but its CTA and related links route to `/pricing` or `/resources`, not corresponding solutions. | Use observed design solution template for those confirmed pages. Do not claim generation from the empty preview. Other linked solution routes remain uninspected. |
+| Solutions | Four linked routes inspected using shared long-form template. Six additional exact linked routes each resolve to a branded custom 404. | Developer `/features` overlaps a living-room solution narrative but no corresponding route for the six 404s was exposed in inspected navigation. | Build only from four observed pages; treat six routes as missing/unavailable until owner confirms whether to repair, redirect or remove links. No preview generation claim. |
 | Resource articles | Five articles inspected. Shared article structure: category/read-time, title and summary, sectioned text, related reading, CTA, footer. | Article detail pages were not exposed by accessible links in the inspected developer Resources view. | Design article layout is observed; content accuracy, authorship, dates and claim review remain open. |
 
 ## 4. Visual component inventory
@@ -56,7 +71,7 @@ The supplied 36-page brand PDF is the authority. The existing visual review reco
 ## 7. Open questions and owner actions
 
 - Provide mobile screenshots or recordings at 390×844 (or 375×812) for the homepage, menu, Features, About, Pricing, Resources, Contact, one solution and one article. The available browser exposed desktop only and did not offer a durable repository screenshot export.
-- Confirm whether the six linked but uninspected solution routes should be part of the MVP sitemap.
+- Confirm whether the six linked routes that currently return 404 should be built, redirected, or removed from links; intended content is unknown.
 - Confirm approved prices, plan entitlements, metrics/testimonials, marketing claims, CTA destinations, and whether the preview is intentionally a mock/disabled shell.
 - Provide actual Privacy and Terms destinations, contact form delivery requirements, and approved article copy/ownership.
 - Provide authorized image-library URL/ID and rights/mapping before asset replacement.
@@ -64,9 +79,9 @@ The supplied 36-page brand PDF is the authority. The existing visual review reco
 
 ## 8. Evidence and capture limitations
 
-Inspection used the in-app browser's rendered page and accessibility view at desktop viewport 1280×720. Screens were visible in the session for both home pages and the two Resources indexes; the browser tool did not expose a durable project-local screenshot-save action. No screenshot file is claimed or included. Other route details were recorded from visible rendered content/accessibility trees. Mobile behavior, hidden states, source code, APIs, account flows, newsletter delivery, form submission, billing and generation remain unverified.
+Inspection used the in-app browser's rendered page and accessibility view at desktop viewport 1280×720. Screens were visible in the session for both home pages, two Resources indexes, and the six branded 404 fallbacks; the browser tool did not expose a durable project-local screenshot-save action. No screenshot file is claimed or included. Other route details were recorded from visible rendered content/accessibility trees. Mobile behavior, hidden states, source code, APIs, account flows, newsletter delivery, form submission, billing and generation remain unverified.
 
-Manual screenshot checklist for owner: capture each route in the inventory at desktop and mobile; include homepage carousel/selector, comparison drag, feature method tabs, pricing annual and monthly, resource search and Renovation filter, contact subject selector, login password visibility, one solution empty preview, article body/footer, and open mobile navigation. Save URL and viewport with each image.
+Manual screenshot checklist for owner: capture each accessible route at desktop; include homepage carousel/selector, comparison drag, feature method tabs, pricing annual and monthly, resource search and Renovation filter, contact subject selector, login password visibility, one working solution empty preview, article body/footer, and the six linked-route 404s if they need design review. Phase 01E-B handles mobile navigation and responsive states. Save URL and viewport with each image.
 
 ## Evidence references
 

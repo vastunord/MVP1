@@ -43,7 +43,7 @@ The desktop rendered marketing experiences at both public references were compar
 - Account pages: `/login`, `/forgot-password`, `/signup` (forms viewed without credentials or submission).
 - Linked solution pages opened: `/solutions/living-room-design`, `/solutions/virtual-staging`, `/solutions/living-room-scandinavian-design`, `/solutions/backyard-design`.
 - Resource articles opened: `/resources/visualize-a-renovation-before-you-build`, `/resources/virtual-staging-vs-traditional-staging`, `/resources/choosing-the-right-interior-style`, `/resources/ai-for-homeowners`, `/resources/design-trends`.
-- Six additional solution routes were visible as related links, but not opened; details are enumerated in the comparison. Privacy and Terms footer links resolve to `/contact` on both references; separate legal pages were not observed.
+- Six additional solution routes were visible as related links and later inspected in Phase 01E-A completion; all resolve to a branded custom 404. Exact routes and fallback details are below. Privacy and Terms footer links resolve to `/contact` on both references; separate legal pages were not observed.
 
 ### Development reference routes observed
 
@@ -64,3 +64,18 @@ The supplied 36-page brand PDF had been visually reviewed in an earlier pass. Re
 - Four design solution pages showed an empty live-preview area with the primary action disabled before an image. No upload or generation was attempted; backend operation is unverified.
 
 Earlier Phase 00 notes above describe the initial homepage-only/Studio-loading snapshot. They are historical; this Phase 01E-A section and comparison document are the later marketing-route evidence. No original source was recovered.
+
+### Phase 01E-A route completion — six linked solution URLs (2026-11-21)
+
+The six exact links recorded in the comparison were opened in the design reference:
+
+| Route | Result | Evidence classification |
+|---|---|---|
+| `/solutions/kitchen-remodel-visualizer` | Branded 404, heading “This space doesn't exist — yet.”; “Back to home” link. Reopened once in a fresh browser tab with same result. | 404 and shared fallback shell OBSERVED; intended solution page NOT ACCESSIBLE. |
+| `/solutions/office-redesign` | Same branded 404 and fallback shell. | 404 OBSERVED; page content NOT ACCESSIBLE. |
+| `/solutions/retail-space-visualization` | Same branded 404 and fallback shell. | 404 OBSERVED; page content NOT ACCESSIBLE. |
+| `/solutions/property-visualization` | Same branded 404 and fallback shell. | 404 OBSERVED; page content NOT ACCESSIBLE. |
+| `/solutions/living-room-renovation` | Same branded 404 and fallback shell. | 404 OBSERVED; page content NOT ACCESSIBLE. |
+| `/solutions/garden-renovation` | Same branded 404 and fallback shell. | 404 OBSERVED; page content NOT ACCESSIBLE. |
+
+The fallback reused the known design header and footer, with a single Back to home CTA. No page-specific content, image/video, solution interaction, testimonial, price, or product claim was visible. CTA destinations in the common header/footer match the previously logged shell. No matching developer-site routes were present in previously inspected navigation; no routes were guessed. The rendered/accessibility state was observed, but no screenshot file could be saved as a project-local artifact. Desktop marketing route inspection for the identified set is complete with the six custom-404 limitations recorded; mobile is reserved for Phase 01E-B. Overall Phase 01 UI-parity remains BLOCKED by mobile and durable screenshot gaps, not passed.
