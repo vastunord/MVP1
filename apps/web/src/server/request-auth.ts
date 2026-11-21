@@ -1,5 +1,9 @@
 import "server-only";
-import { authReadiness, verifiedSessionUserId } from "./auth-readiness";
+import {
+  authReadiness,
+  isTrustedMutationOrigin,
+  verifiedSessionUserId,
+} from "./auth-readiness";
 import { createDatabase } from "./db";
 import { prismaProjectStore } from "./prisma-project-store";
 import { ProjectError, projectService } from "./projects";
@@ -20,7 +24,7 @@ export async function requestContext(request: Request, mutation = false) {
     };
   if (mutation) {
     const origin = request.headers.get("origin");
-    if (origin !== new URL(request.url).origin)
+    if (!isTrustedMutationOrigin(origin, process.env.BETTER_AUTH_URL))
       return {
         response: Response.json(
           { error: "Invalid request origin" },

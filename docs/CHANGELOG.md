@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2 development signup and projects
+
+With owner approval, verified the scoped development owner connection, Better Auth and Resend settings. Both controlled inboxes verified signup; two synthetic users signed in, created workspaces and passed project creation, rename, archive/restore, cross-user access denial, logout, persistence and browser project-creation checks. Test-only account passwords were replaced directly after the original harness exited, so original signup-password sign-in was not verified. Fixed mutation origin validation to use the configured auth origin and added focused tests; a hostile origin was rejected. Preview/Production database secret targets remain unverified. No deployment or production configuration change was made.
+
 ### Phase 02E-2A new role security check
 
 The owner clarified `VN_Runtime` is a Neon role rather than a variable. Read-only Vastu Nord development checks found it has LOGIN, `neon_superuser` and `pg_read_all_stats` membership, CREATEDB, CREATEROLE, REPLICATION, BYPASSRLS and database CREATE. Runtime activation remains blocked under the owner's policy; the existing limited runtime role remains NOLOGIN. No database role, credential or configuration was changed.

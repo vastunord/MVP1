@@ -1,5 +1,7 @@
 # Founder setup guide — Phase 02E status
 
+For development testing the owner approved the Vastu Nord development `neondb_owner` connection. Live signup verification, authentication and synthetic project isolation passed; see `PROJECT_STATE.md` for test limits. Before public production launch configure and test a restricted runtime role. `DATABASE_URL` is also listed in Preview and Production, but those secret values could not be injected for an identity check. Confirm their targets are environment-appropriate and not the development owner URL without sharing values. Keep the correct `BETTER_AUTH_URL` in each environment.
+
 The owner clarified that `VN_Runtime` is a new Neon role, not a Vercel environment variable. It has administrative privileges, including `neon_superuser`, and must not be used as the application login under the approved policy. The existing limited role remains disabled. Determine a protected way to set its first password; separately review the new administrative role and its credentials before any changes. No role was altered during verification.
 
 The earlier interpretation of `VN_Runtime` as a password variable was incorrect; it is a Neon role. The existing migration role lacks role administration, so a separate protected privileged handoff is still needed to establish the limited role's first password.

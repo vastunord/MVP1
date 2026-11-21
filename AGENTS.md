@@ -1,6 +1,6 @@
 # AGENTS.md — Vastu Nord (v3.3 greenfield)
 
-**Development PostgreSQL permission policy:** The owner accepts existing PUBLIC database CONNECT on `postgres` and `template1`, TEMPORARY on `neondb`, and SELECT on `pg_stat_statements` and `pg_stat_statements_info` for the Vastu Nord development environment. Preserve PUBLIC grants and do not repeatedly block on these accepted defaults. Review new elevated privileges, including superuser, administrative membership, `pg_read_all_stats`, database/schema CREATE, table ownership or unauthorized DDL. Treat unauthorized application-data access as a security failure. User-to-user authorization remains mandatory.
+**Development PostgreSQL permission policy:** The owner temporarily approves the Vastu Nord `neondb_owner` connection on the verified development branch for development testing only. Replace it with a restricted application role before public production launch; do not use that connection in Preview or Production. The owner accepts existing PUBLIC database CONNECT on `postgres` and `template1`, TEMPORARY on `neondb`, and SELECT on `pg_stat_statements` and `pg_stat_statements_info` in development. Preserve PUBLIC grants. Review other elevated roles and privileges. Treat unauthorized application-data access as a security failure. User-to-user authorization remains mandatory.
 
 **Read `docs/PROJECT_STATE.md` and `docs/GREENFIELD_OVERRIDE.md` before each Codex task, then the one current phase prompt. Read `MASTER_CODEX_PROMPT.md` only at project start or when a major decision requires it.**
 

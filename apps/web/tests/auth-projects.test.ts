@@ -6,6 +6,7 @@ import {
 } from "../src/server/auth-email-copy.ts";
 import {
   authReadiness,
+  isTrustedMutationOrigin,
   verifiedSessionUserId,
 } from "../src/server/auth-readiness.ts";
 import {
@@ -17,6 +18,33 @@ import {
 } from "../src/server/projects.ts";
 
 const key = "80c7d7c8-7d98-4c44-9bd8-a2dd5bbfba16";
+
+test("mutations require the configured authentication origin", () => {
+  assert.equal(
+    isTrustedMutationOrigin("http://127.0.0.1:3100", "http://127.0.0.1:3100"),
+    true,
+  );
+  assert.equal(
+    isTrustedMutationOrigin("http://localhost:3100", "http://127.0.0.1:3100"),
+    false,
+  );
+  assert.equal(
+    isTrustedMutationOrigin(
+      "https://attacker.invalid",
+      "http://127.0.0.1:3100",
+    ),
+    false,
+  );
+  assert.equal(isTrustedMutationOrigin(null, "http://127.0.0.1:3100"), false);
+  assert.equal(
+    isTrustedMutationOrigin("http://127.0.0.1:3100", undefined),
+    false,
+  );
+  assert.equal(
+    isTrustedMutationOrigin("http://127.0.0.1:3100", "invalid"),
+    false,
+  );
+});
 
 test("authentication emails respect selected locale and preserve the supplied link", () => {
   const link = "https://example.invalid/verify?token=synthetic";

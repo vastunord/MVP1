@@ -1,5 +1,11 @@
 # Authentication and security — Phase 02E verification status
 
+## Development-only owner connection and live journey
+
+The owner explicitly approved `neondb_owner` for development testing only. Live checks pinned the Vastu Nord development branch/endpoint and database, and verified Better Auth startup. Both controlled inboxes completed email verification; two synthetic users signed in and their projects were isolated for reads, writes and lists. Anonymous access and an old logged-out session were denied. To recover from a test harness exit, the two synthetic account passwords were replaced directly with new generated hashes before sign-in; signup with the original passwords was not verified. No verification requirement was bypassed. Temporary synthetic accounts and projects remain. Password recovery remains untested.
+
+Mutations now check the Origin header against the configured `BETTER_AUTH_URL`, not a framework-reconstructed request URL; missing, malformed or mismatched configuration fails closed. Supply the correct auth origin separately in every environment. Development database-owner credentials must be replaced by a restricted runtime role before public production launch. Preview/Production `DATABASE_URL` variables exist, but Vercel refused to inject their secret values for inspection, so their targets have not been verified; no configuration there was modified.
+
 ## New development role requires security review
 
 The owner clarified that `VN_Runtime` is a Neon role, not a Vercel variable. A read-only catalog check on the Vastu Nord development branch found it has LOGIN, `neon_superuser` and `pg_read_all_stats` membership, CREATEDB, CREATEROLE, REPLICATION, BYPASSRLS and database CREATE. These exceed the approved application-runtime policy. Do not use this role or its credentials for the application. No role or grant was changed during this inspection. `vastunord_dev_runtime` remains NOLOGIN with no administrative membership or database/schema CREATE.

@@ -4,6 +4,22 @@ export type AuthReadiness = {
   googleReady: boolean;
 };
 
+export function isTrustedMutationOrigin(
+  origin: string | null,
+  authUrl: string | undefined,
+): boolean {
+  if (!origin || !authUrl) return false;
+  try {
+    const expected = new URL(authUrl);
+    return (
+      ["http:", "https:"].includes(expected.protocol) &&
+      origin === expected.origin
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function authReadiness(
   env: Record<string, string | undefined> = process.env,
 ): AuthReadiness {
