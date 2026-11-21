@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+### Phase 02E-1B owner decisions
+
+Confirm whether any other environment has applied the original initial migration before editing its checksum. Authorize a development-only snapshot or backup branch and a restore verification when ready. Arrange a protected process-level handoff of the direct development migration URL without chat, command arguments or logs. The migration and any recovery replacement require their own explicit authorization. Database CREATE is not the default proposal.
+
 ### Development migration decision
 
 Execution is blocked. To preserve both SQL files exactly, the owner must decide whether to authorize temporary database-level CREATE on development `neondb` for `vastunord_dev_migrator`, with revocation and verification on success or failure. This permits creation of additional schemas during the grant. Alternatively review a separate change to the unapplied initial SQL. Supply the direct limited-role URL through a protected migration process and establish a recoverable development point. Once these conditions are verified, request separate approval for Prisma to apply only `20261121_phase02c_initial` and `20261121_phase02d_auth_projects` in order.

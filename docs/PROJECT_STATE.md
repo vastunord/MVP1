@@ -1,5 +1,7 @@
 # Vastu Nord — current project handoff (living document)
 
+**Phase 02E-1B assessment:** Development has existing `public` owned by `pg_database_owner`. The migration role has USAGE and CREATE on that schema, with no database CREATE. Removing the first migration's two-line schema-creation operation is proposed, but remains uncommitted pending confirmation that no other environment has recorded its original checksum. Direct credential handoff, end-to-end SQL validation and a verified recovery point remain outstanding. See `docs/DATABASE_ARCHITECTURE.md`.
+
 **Phase 02E-1 recovery assessment:** Execution remains blocked. Besides protected credential injection, the first SQL statement requires database CREATE, which the limited role lacks. The connector lacks scoped Prisma history management. The project snapshot list is empty and a development recovery point remains unverified. Resolve the privilege decision and recovery prerequisites before requesting execution approval. See [database assessment](DATABASE_ARCHITECTURE.md).
 
 **Status:** Phase 02E-1 development target and limited migration role verified; Prisma migration remains blocked by the lack of an approved, non-logging credential handoff to the local CLI. Private Blob and free Resend resources are connected to Development; email delivery and connected application flows remain untested. Exact Phase 01 visual parity remains BLOCKED.

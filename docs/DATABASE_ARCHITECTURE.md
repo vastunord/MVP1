@@ -1,5 +1,13 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
+### Phase 02E-1B least-privilege assessment
+
+Live read-only checks confirmed Frankfurt project `morning-morning-84319525`, child branch `br-mute-resonance-bhea4dyx` named `development`, database `neondb`, and role `vastunord_dev_migrator`. Schema `public` exists, owned by `pg_database_owner`, and the role has USAGE and CREATE there. No Prisma history exists in development. Removing only `-- CreateSchema` and `CREATE SCHEMA IF NOT EXISTS "public";` avoids the database CREATE requirement when `public` already exists. The remaining statements appear compatible with schema-level permissions, but have not run and additional requirements are unverified. The migration file is unchanged because checksum use across all other environments has not been established. Prior records show no Vercel deployment and an initially empty production branch, which do not prove every possible database's history.
+
+Prisma 7.10.1 validation passed and an offline empty-to-schema SQL diff was generated. This does not prove that the two migrations compose to the same schema or that the revised SQL executes successfully. An isolated database test and schema comparison are still needed. `prisma.config.ts` reads `DIRECT_DATABASE_URL` for migrations. The runtime uses separate pooled `DATABASE_URL`. A protected process environment handoff of a direct development-only URL is the intended method, but is not configured or tested.
+
+No snapshots were listed. The connector exposes branch-specific snapshot creation and snapshot restore into a new branch, and can create a child of the explicit development branch. Plan a pre-migration snapshot or backup branch after owner authorization, confirm its source and contents, and verify restore capability before migration. Snapshot availability, limits and restore remain untested. After failure, inspect Prisma history and schema before selecting recovery. Replacing a branch would discard subsequent writes and requires separate authorization.
+
 ### Phase 02E-1 execution assessment
 
 The VastuNord connector supports a SQL transaction scoped to project `morning-morning-84319525`, branch `br-mute-resonance-bhea4dyx`, compute `ep-purple-fog-bhs946ij`, database `neondb` and role `vastunord_dev_migrator`. A failed transaction rolls back its statements. Previously committed transactions survive. The transaction API provides no Prisma checksum or migration-history handling. The connector’s migration preparation creates a temporary branch and exposes neither parent-branch nor role selection. Neither path satisfies the execution requirements.

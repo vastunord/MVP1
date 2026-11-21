@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-1B least-privilege preparation
+
+Verified the development branch is a child, `public` exists with role USAGE/CREATE, and migration history is absent. Proposed removing the redundant initial schema-creation statement. Left the SQL unchanged because use of its checksum in other environments has not been ruled out. Prisma validation and offline schema SQL generation passed, but no composed migration test ran. Recovery and direct secret handoff remain unverified.
+
 ### Phase 02E-1 migration execution assessment
 
 Confirmed the development role, empty schema and absent history through read-only SQL. Identified the initial schema statement’s database CREATE requirement, the connector’s Prisma-history limitation and the absence of project snapshots. Recorded the conditional Prisma path and owner decision. No migration or privilege change ran.
