@@ -38,7 +38,14 @@ try {
     if (-not $CliArguments -or $CliArguments.Count -eq 0) {
         Write-Output 'Verified Vastu Nord CLI context: vastunord@gmail.com / vastu-nord'
     } else {
-        & pnpm dlx $cliVersion @CliArguments --global-config $configDir --scope vastu-nord
+        $separatorIndex = [Array]::IndexOf($CliArguments, '--')
+        if ($separatorIndex -ge 0) {
+            $before = @($CliArguments | Select-Object -First $separatorIndex)
+            $after = @($CliArguments | Select-Object -Skip ($separatorIndex + 1))
+            & pnpm dlx $cliVersion @before --global-config $configDir --scope vastu-nord -- @after
+        } else {
+            & pnpm dlx $cliVersion @CliArguments --global-config $configDir --scope vastu-nord
+        }
         if ($LASTEXITCODE -ne 0) {
             throw "Vastu Nord Vercel CLI command failed with exit code $LASTEXITCODE."
         }

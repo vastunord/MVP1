@@ -1,5 +1,9 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
+## Phase 02E-1G Vercel credential handoff
+
+Owner requested a Vercel Development variable rather than interactive password entry and added `VASTUNORD_DEV_MIGRATOR_PASSWORD` to `vastu-nord/vastunord-web` Development. Its name and process injection were checked without displaying the value. `scripts/vercel-vastunord.ps1` places its fixed isolated account options before the command separator for `env run`. `scripts/prisma-development-deploy.ps1` consumes the variable in process memory, pins the direct development endpoint, strips inherited environment for Prisma, checks exactly two migration directories and hashes, verifies the server identity, baseline and least privileges, and runs Prisma status. `-PreflightOnly` performs no deploy. Its read-only run passed. Actual deployment results are recorded in later entries when available.
+
 ## Phase 02E-1G prompt visibility retry
 
 Following the owner's report that the previous password window was not visible, rechecked Git, migration hashes, Vastu Frankfurt project, development direct endpoint, limited role, empty baseline and ready recovery branch. Recreated the temporary development-pinned deployment procedure with exact migration names/hashes and read-only preflight. Its visible PowerShell process exited with Windows code `-1073741510` before reporting success. No conclusion about password input or Prisma execution can be drawn from that exit code alone. A subsequent read-only query of the verified development endpoint found zero public relations and no `_prisma_migrations`, so neither migration is recorded as applied. The temporary helper was removed to prevent an unattended later execution. Establish an accessible local masked prompt before another guarded attempt. The owner already authorized the two development migrations. Full restore remains untested.

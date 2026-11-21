@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-1G Vercel-injected preflight
+
+Owner selected a Vercel Development environment variable instead of a password prompt. Verified the variable name and injection without displaying the value. Updated the isolated Vercel wrapper to place fixed account options ahead of the child command separator, and prepared a development-pinned migration helper. A read-only direct Prisma preflight passed. Deployment had not yet run at this entry.
+
 ### Phase 02E-1G masked prompt retry
 
 After the owner reported the prompt was not visible, reconfirmed the authorized development target, empty baseline, recovery lineage and migration hashes. The reopened visible PowerShell process exited with code `-1073741510` before reporting success. Subsequent read-only SQL confirmed zero public relations and absent Prisma history. Removed the temporary deployment helper. No migration success is claimed.

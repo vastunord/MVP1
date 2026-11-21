@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Development migration credential injection
+
+The owner selected the Vercel Development variable `VASTUNORD_DEV_MIGRATOR_PASSWORD` in `vastu-nord/vastunord-web`. The isolated CLI can inject it into the pinned development migration helper without writing an environment file. A read-only preflight passed. The variable remains server-side and its value is not documented.
+
 ## Development migration prompt retry
 
 The owner reported the first local prompt was not visible. A reopened window exited with code `-1073741510` without reporting success. A later read-only query still found zero public relations and no Prisma history. The development migration is blocked until a reliably visible masked prompt is available. Do not put the password in chat.
