@@ -1,5 +1,7 @@
 # Vastu Nord architectural decisions
 
+**Founder decision, 2026-11-21 — ACCEPTED:** Finalized Figma is the primary approved visual reference for the marketing pages it contains, with the official brand PDF applied throughout. Earlier marketing sites are secondary; the Studio prototype remains the reference for unsuperseded Studio screens. Preserve approved designs and record proposed deviations for founder approval. Detailed Figma access/export and a Figma-to-route parity matrix are required when marketing implementation begins. This changes design authority only; it does not authorize restarting phases or deploying.
+
 Record only significant decisions. One entry: ID, date, status (`proposed/accepted/rejected/superseded`), evidence, alternatives, impact, dependencies and test/approval. For large decisions use a file under `docs/adr/`.
 
 | ID | Date | Decision | Status | Rationale / link |

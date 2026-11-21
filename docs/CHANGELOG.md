@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Founder-approved marketing design authority
+
+Recorded the finalized Figma file as the primary visual source for marketing pages it contains, with the brand PDF applied throughout. The prior marketing sites are secondary; the Studio prototype remains authoritative for unsuperseded Studio screens. The Figma overview opened, but detailed inspection and export remain unverified. Added the founder-deviation approval and future Figma-to-route parity requirements. No application code or cloud resources changed.
+
 ### Phase 02E-3 private Studio uploads
 
 Added a shared project-associated Studio upload/preview/saved-image/delete flow, authenticated private upload and deletion routes, server-side MIME/size/image decoding checks and Blob/Neon cleanup handling. Live synthetic Development tests passed owner upload/retrieval after login, cross-user denial, invalid file rejection, metadata persistence and deletion; browser tests passed upload, rendered preview, reopening, deletion and drag-and-drop selection. Synthetic blobs were deleted and retired test records remain. Normal failure cleanup and quarantine were fixture-tested; process-crash reconciliation and malware scanning remain unimplemented. Added a nonsecret Preview/Production environment audit; mappings remain unverified and block deployment. No demonstration assets were uploaded.
