@@ -1,5 +1,7 @@
 # Deployment and operations plan — Phase 02E resource status
 
+**Phase 02F demonstration:** Vastu Nord Hobby hosts a personal, noncommercial technical demonstration at https://vastunord-web.vercel.app, deployment dpl_33yRCLi7roqaZAmQSRcbpE8Miz87 from committed source snapshot 2eaf94b. Authentication, projects, uploads, AI and payments remain disabled. Preview is optional. A business release requires an eligible Vercel plan and verified Production dependencies. CLI deployment avoided reliance on Git-triggered builds; the project currently skips automatic builds. Vercel's documented Hobby Git restrictions apply to private organization repositories and require the appropriate owner identity: https://vercel.com/docs/git. No repository visibility or ownership changes were made.
+
 **Direct-release policy v4.1:** Validate locally, commit and merge to the verified Vastu Nord Production branch, then deploy when release gates pass. Preview is optional; contrary older language below is historical. The linked project is vastu-nord/vastunord-web, root apps/web, Production branch main; its current build-ignore command skips automatic builds. No deployment has been made. Business use requires a commercial-eligible Vercel plan. Detailed Figma parity is unverified. Production authentication and uploads remain disabled until the restricted Production database, schema, actual HTTPS auth origin, email and isolation checks pass. See [environment inventory](ENVIRONMENT_VARIABLE_INVENTORY.md).
 
 

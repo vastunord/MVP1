@@ -1,5 +1,7 @@
 # Environment variable inventory
 
+**Phase 02F live demo:** One noncommercial Hobby deployment is running at https://vastunord-web.vercel.app. Production auth, upload and reconciliation flags remain off; live disabled endpoints were verified. DATABASE_URL remains unverified and application schema absent. BETTER_AUTH_URL has not been configured for the deployed site and authentication remains disabled. Preview is optional. No secret values were inspected or added during deployment.
+
 Checked 2026-11-21. Owner: Vastu Nord. Names and statuses only; never record values or complete connection strings. Configuration is distinct from verified end-to-end behavior.
 
 | Name / configuration | Purpose | Development | Preview (optional) | Production |

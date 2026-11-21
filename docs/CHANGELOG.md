@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+## 2026-11-21 — Phase 02F noncommercial demonstration
+
+- Deployed committed snapshot 2eaf94b through the isolated Vastu Nord CLI to https://vastunord-web.vercel.app (deployment dpl_33yRCLi7roqaZAmQSRcbpE8Miz87); Vercel Hobby, noncommercial demo only.
+- Clearly labeled the existing UI as a noncommercial demonstration in Norwegian and English. Fixed positional argument handling in the isolated Vercel wrapper; retained pipeline input support.
+- TypeScript, lint, production build, 23 unit tests and nine local browser tests passed. Live checks covered public routes, language, theme, all 17 editors, responsive library widths and disabled sensitive endpoints. No Production data, migration, paid API or DNS was changed. Approved Figma parity remains unverified.
+
 **Validation:** TypeScript, ESLint, Production build, 23 unit tests (including Production auth gating and authorization fixtures), 9 browser smoke tests (including 17 Studio routes and 390/768/1280/1440 widths), documentation links/whitespace and Git diff checks passed locally. No Production deployment, live Production email, database mapping or media operation was tested.
 
 ## 2026-11-21 — Direct Production credentials and safe gating
