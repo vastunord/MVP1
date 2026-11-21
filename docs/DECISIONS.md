@@ -31,3 +31,9 @@ Detailed boundaries and consequences: `docs/ARCHITECTURE.md`, `docs/DATABASE_ARC
 
 ### ADR v3.2 — Independent ownership and deferred Postiz (supersedes v3.1)
 **Decision:** Two independent vendor accounts and all resources for NRide and Vastu Nord; one unrelated Codex developer account for both codebases. Vastu Nord Payload stays cloud-hosted on its own Vercel/Neon. Postiz is NOT active; manually post via brand-owned native social services after separate consent/editorial approval. Future `SocialPublisherAdapter` remains disabled until authorized. **Reason:** hard operational isolation, avoid extra subscription now, preserve option to automate later. **Status:** APPROVED TARGET DESIGN, NOT IMPLEMENTED. Earlier v3.1 Postiz decision is superseded.
+
+## Phase 02B owner direction — 2026-11-21
+
+- D-011 ACCEPTED: owner explicitly confirmed Norwegian public URLs at / and English at /en; Studio retains /app and saved language preference. This resolves the locale part of D-009 only.
+- D-012 ACCEPTED TASK SCOPE: local Next.js/React/TypeScript/Tailwind frontend, real localization/theme, all 17 shared configuration-driven editors, explicit disabled integrations and tests. No paid/cloud setup or backend/provider approval is implied.
+- D-013 IMPLEMENTATION LIMIT: use source PDF RGB fill operands for palette; system-font fallback and plain text identity until licensed font/approved logo assets are supplied. Spacing and layouts remain provisional; exact reference parity is not claimed.

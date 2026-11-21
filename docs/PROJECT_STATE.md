@@ -1,10 +1,10 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 02A architecture planning complete; all integration configuration remains PLANNED/UNVERIFIED. Phase 01 visual-parity gate remains BLOCKED.
+**Status:** Phase 02B frontend foundation implemented and validated locally. Integrations remain unavailable; exact Phase 01 visual parity remains BLOCKED.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 02A documentation complete. Await approval for the exact Phase 02B foundation scope.
-**Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch phase-02a-architecture, based on 771871067668ce99c42a782fed4c9e3e4c7f7e1b. Verified local origin: https://github.com/vastunord/MVP1.git.
-**Next safe task:** Owner review of proposed architecture/provider decisions, then separately approve Phase 02B in docs/PHASE02_IMPLEMENTATION_PLAN.md. No provisioning or deployment authorized.
+**Active phase:** Phase 02B complete; await founder review and separately scoped Phase 02C approval.
+**Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch phase-02b-application-foundation from a854080a936592dc8b88dc45896267dce89abae9. Origin remains https://github.com/vastunord/MVP1.git.
+**Next safe task:** Review local frontend; resolve approved font/logo, specialist translations, unknown control ranges and visual acceptance in a separately authorized Phase 02C. No cloud integration, push or deployment.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -18,8 +18,8 @@
 |---|---|---|---|
 | Marketing site | Desktop routes inspected; six linked design routes return branded 404; responsive evidence remains unverified | `docs/MARKETING_REFERENCE_COMPARISON.md` | Owner decision on broken solution links; mobile capture when tooling is available |
 | Existing Studio | All 17 tool editors previously inspected at empty-photo state; four representative category editors and workspace screens inspected at desktop | `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md`, `docs/STUDIO_RESPONSIVE_AUDIT.md`, `docs/WORKSPACE_SCREEN_INVENTORY.md` | Tablet/mobile inspection and durable captures; implementation belongs to a later approved phase |
-| Auth + private projects | Unknown | No verified repo | Check code and auth config |
-| Real image/video generation | Unknown | No verified API keys | Capability matrix, contract test |
+| Auth + private projects | Unconfigured; local workspace UI preview only | apps/web; no identity/DB SDK | Authorization and storage in a later approved phase |
+| Real image/video generation | Disabled; typed boundary only | packages/contracts | Real provider/capability tests in approved AI phase |
 | Neon, Payload, storage, jobs | Unknown | Owner preference only | Resource isolation and integration test |
 | Public gallery and social publishing | Planned | New requirement | Consent and approval workflow tests |
 | Billing and wallet | Planned/unknown | Prior prompt only | Transaction test |
@@ -33,7 +33,7 @@
 - Provide open-access Google image-library URL/ID, asset rights and mapping when phase 04 begins.
 - Configure new Vastu Nord cloud resources only during their corresponding phases; former developers' Git/Vercel/Neon access is not required.
 
-## Most recent tests
+## Historical Phase 00 preflight tests (superseded by current phase results)
 - No application tests run; this remains a planning/reference phase.
 - Required root files confirmed present: `AGENTS.md`, `MASTER_CODEX_PROMPT.md`, `docs/PROJECT_STATE.md`, and `prompts/00-SAFE_WORKSPACE_AND_REFERENCES.md`.
 - `.git` and `.gitignore` are absent, as expected before bootstrap; no remote, branch, author, stage, or commit exists. A filename-only scan found no likely credential/config filenames; no file contents or secrets were inspected.
@@ -109,3 +109,13 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Founder decisions remain: provider choices, regions/retention/budget, CTA/locale route choices, six broken routes, legal/commercial claims, authorized assets and exact brand values. Existing isolation/privacy/manual-social requirements are accepted; no original-team access required.
 - Phase 02B proposal is local workspace/shell/contracts/locale/theme scaffolding with integrations disabled; no automatic start. No dependencies, features, cloud resources, upload, payment, push, deploy or NRide changes.
 - Documentation validation and commit are recorded in the changelog; no runtime tests exist or were run for this planning task.
+
+## Phase 02B — frontend implementation — 2026-11-21
+
+- Implemented apps/web plus packages/contracts: one Next.js App Router app, shared marketing/Studio design tokens/components, 17 tool configs, filters/routes/editor shells, local controls and disabled generation/upload/history/billing/service actions. apps/cms is documentation-only. No protected user data or working auth.
+- Norwegian default at /, English /en explicitly approved; Studio /app remembers language. Dictionaries, metadata/HTML language, date/number helpers and light/dark/system cookie preference work. Original English tool names and specialist controls are retained pending translation approval.
+- PDF pages 19/20 visually inspected; palette source RGB operands extracted. No licensed font or standalone logo supplied; documented system fallback and plain text identity. Diagram artwork is a labelled CSS study, not generated media.
+- Dependencies: Next 16.4.6, React 19.3.1, TypeScript 5.9.3, Tailwind 4.3.5/PostCSS, ESLint 9.39.5 with matching Next config, Playwright 1.65.1 and Prettier 3.10.1; versions/lockfile committed. No backend SDKs or credentials.
+- Tests passed: install/peer check, TypeScript, ESLint, production build; 6 unit tests and 8 Playwright smoke tests, including all tools and 390/768/1280/1440 layouts. Initial locale HTML bug fixed. New app screenshots saved locally under apps/web/test-results/screenshots; original reference parity still unverified.
+- Known limitations and routes: docs/FRONTEND_FOUNDATION.md. Cloud providers, auth/security enforcement, persistence, real uploads/AI/credits/exports/CMS and publishing are deferred. Registry marks compatible ESLint 9 maintenance release deprecated; upgrade with compatible Next lint plugins later.
+- No Phase 02C, dependency-backed service integration, cloud mutation, deployment, push, user media or NRide changes. Await next scoped approval.

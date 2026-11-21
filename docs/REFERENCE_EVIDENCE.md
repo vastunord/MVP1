@@ -98,3 +98,9 @@ The in-app browser was limited to about 1280×720 and exposed no viewport resize
 Displayed account, notification, credit, plan, invoice, version/run, output and file data are prototype presentation only; services and persistence are **UNVERIFIED**. The new Room Reimagination flow created a file titled “Living Room Redesign” with “Saved just now” and it appeared in Active Files. This observed UI side effect is documented in the workspace inventory; no image/prompt was added and the file was left in place. No payment, generation, share, download, profile/security change, mark-read, deletion or restore action occurred.
 
 Browser screenshots were visible during inspection but could not be exported to project-local files; none is claimed saved. Manual capture requirements are recorded in `docs/STUDIO_RESPONSIVE_AUDIT.md`. Overall Phase 01 UI-parity remains **BLOCKED** by missing tablet/mobile and durable screenshot evidence, among other unverified behavior. No Phase 01E-C or Phase 02 work was started.
+
+## Phase 02B brand implementation evidence — 2026-11-21
+
+Visually reviewed local brand PDF pages 19 and 20; extracted the six palette vector RGB fill values from page 19 with pypdf. These source-artwork values now back semantic CSS tokens; they are not invented printed HEX specifications. Zalando Sans Expanded remains the authoritative typeface, but no distributable font or standalone logo asset was supplied. Source values and fallback decisions are in docs/FRONTEND_FOUNDATION.md. No reference website reinspection occurred.
+
+Local implementation screenshots were saved by Playwright at 390/768/1280/1440 in apps/web/test-results/screenshots (Git-ignored). These depict the new application, not the original references; desktop home and mobile editor were visually reviewed. Reference screenshot/mobile parity limitations remain.

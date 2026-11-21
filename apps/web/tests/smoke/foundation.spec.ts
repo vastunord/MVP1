@@ -1,0 +1,128 @@
+import { test, expect } from "@playwright/test";
+import { tools } from "@vastunord/contracts/tools";
+test("public route placeholders and system theme", async ({ page }) => {
+  for (const prefix of ["", "/en"]) {
+    for (const route of [
+      "",
+      "/features",
+      "/about",
+      "/pricing",
+      "/resources",
+      "/contact",
+      "/login",
+      "/signup",
+      "/forgot-password",
+    ]) {
+      await page.goto(prefix + route || "/");
+      await expect(page.locator("h1")).toBeVisible();
+      await expect(page.locator("html")).toHaveAttribute(
+        "lang",
+        prefix ? "en" : "nb-NO",
+      );
+    }
+  }
+  await page.getByLabel("Appearance").selectOption("system");
+  await page.emulateMedia({ colorScheme: "light" });
+  const light = await page
+    .locator("body")
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  await page.emulateMedia({ colorScheme: "dark" });
+  const dark = await page
+    .locator("body")
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(light).not.toEqual(dark);
+  await page.screenshot({
+    path: "test-results/screenshots/dark-placeholder.png",
+  });
+});
+test("all 17 routes render shared editors with disabled generation", async ({
+  page,
+}) => {
+  for (const tool of tools) {
+    await page.goto(tool.route);
+    await expect(
+      page.getByRole("heading", { name: tool.name, exact: true }),
+    ).toBeVisible();
+    await expect(page.locator(".primary-action button")).toBeDisabled();
+    await expect(page.locator("input[type=file]")).toHaveCount(0);
+  }
+});
+test("filters, routing, locale and theme persist", async ({ page }) => {
+  await page.goto("/app/library");
+  await expect(page.locator(".tool-card")).toHaveCount(17);
+  await page
+    .getByRole("button", { name: "Bildeforbedring", exact: true })
+    .click();
+  await expect(page.locator(".tool-card")).toHaveCount(3);
+  await page.getByLabel("Språk", { exact: true }).selectOption("en");
+  await expect(
+    page.getByRole("heading", { name: "Tool library" }),
+  ).toBeVisible();
+  await page.getByLabel("Appearance").selectOption("dark");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await page.goto("/");
+  await page.getByLabel("Språk", { exact: true }).selectOption("en");
+  await expect(page).toHaveURL(/\/en$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await page.goto("/solutions/garden-renovation");
+  await expect(page.getByRole("heading")).toContainText(
+    "This page does not exist",
+  );
+});
+test("conditional editor controls, keyboard and dialog", async ({ page }) => {
+  await page.goto("/app/tools/seasonal-transformation");
+  await page.getByLabel("Season", { exact: true }).selectOption("Winter");
+  await expect(page.getByLabel("Snow", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Show it in winter", exact: true }),
+  ).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Om denne forhåndsvisningen" })
+    .click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".skip")).toBeFocused();
+});
+for (const width of [390, 768, 1280, 1440])
+  test("responsive layout " + width, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of [
+      "/",
+      "/app/library",
+      "/app/tools/lighting-reimagination",
+    ]) {
+      await page.goto(route);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      ).toBeTruthy();
+      await page.screenshot({
+        path:
+          "test-results/screenshots/" +
+          width +
+          "-" +
+          (route === "/"
+            ? "home"
+            : route.endsWith("library")
+              ? "library"
+              : "editor") +
+          ".png",
+        fullPage: true,
+      });
+    }
+    if (width < 1100) {
+      await page.getByText("Meny", { exact: true }).click();
+      await expect(page.locator(".mobile-nav nav")).toBeVisible();
+      await page
+        .locator(".mobile-nav")
+        .getByRole("link", { name: "Verktøy", exact: true })
+        .click();
+      await expect(page).toHaveURL(/app\/library$/);
+    }
+  });

@@ -1,6 +1,6 @@
 # Vastu Nord architecture — Phase 02A
 
-**PLANNED, 2026-11-21.** No application or cloud setup verified. Phase 01 documentation passed with limitations; exact visual parity remains BLOCKED. Decisions and approval status: [DECISIONS.md](DECISIONS.md).
+**Target architecture, 2026-11-21.** Phase 02B local frontend is implemented; all cloud/backend setup remains planned and unverified. Phase 01 documentation passed with limitations; exact visual parity remains BLOCKED. Decisions and approval status: [DECISIONS.md](DECISIONS.md).
 
 ## Boundaries
 
@@ -60,3 +60,9 @@ Manual social posting follows [CLOUD_PAYLOAD_AND_MANUAL_SOCIAL.md](CLOUD_PAYLOAD
 ## Canonical details
 
 [DATABASE_ARCHITECTURE.md](DATABASE_ARCHITECTURE.md), [API_CONTRACTS.md](API_CONTRACTS.md), [AI_AND_WORKERS.md](AI_AND_WORKERS.md), [AUTH_AND_SECURITY.md](AUTH_AND_SECURITY.md), [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md), [INTEGRATIONS_AND_ACCESS.md](INTEGRATIONS_AND_ACCESS.md), [PHASE02_IMPLEMENTATION_PLAN.md](PHASE02_IMPLEMENTATION_PLAN.md).
+
+## Phase 02B implemented foundation
+
+The owner authorized frontend scaffolding and all 17 configuration-driven editor shells, expanding the narrower Phase 02A proposal. apps/web and packages/contracts are implemented; apps/cms remains documentation-only. No database, SDK integrations or protected customer records exist. Public workspace previews must gain real server authorization before customer data is connected.
+
+Founder approved Norwegian public routes without a prefix and English under /en; Studio remains /app with a saved language preference. Shared public/Studio theme and source-derived palette are implemented. See [FRONTEND_FOUNDATION.md](FRONTEND_FOUNDATION.md) for working routes, components, provisional controls and tested boundaries. Provider proposals remain unapproved/unconfigured.

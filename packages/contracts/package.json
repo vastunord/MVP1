@@ -1,0 +1,10 @@
+{
+  "name": "@vastunord/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tools": "./src/tools.ts",
+    "./integrations": "./src/integrations.ts"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "vastunord",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev": "pnpm --filter @vastunord/web dev",
+    "build": "pnpm --filter @vastunord/web build",
+    "typecheck": "pnpm --filter @vastunord/web typecheck",
+    "lint": "pnpm --filter @vastunord/web lint",
+    "test": "pnpm --filter @vastunord/web test",
+    "test:smoke": "pnpm --filter @vastunord/web test:smoke"
+  },
+  "devDependencies": {
+    "prettier": "3.10.1"
+  }
+}

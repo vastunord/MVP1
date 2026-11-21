@@ -1,0 +1,660 @@
+export const categories = [
+  "Interior Design",
+  "Exterior & Landscape",
+  "Virtual Staging",
+  "Image Enhancement",
+] as const;
+export type Category = (typeof categories)[number];
+export type Control = {
+  id: string;
+  label: string;
+  kind: "select" | "range" | "toggle" | "action" | "unknown";
+  options?: readonly string[];
+  defaultValue?: string | number | boolean;
+  min?: number;
+  max?: number;
+  unit?: string;
+  when?: { id: string; values: readonly string[] };
+};
+export interface ToolDefinition {
+  id: string;
+  name: string;
+  category: Category;
+  route: string;
+  prompt: string;
+  action: string;
+  reference: boolean;
+  improve: boolean;
+  framing: string;
+  comparison?: readonly [string, string];
+  controls: readonly Control[];
+  configVersion: 1;
+}
+const select = (
+  id: string,
+  label: string,
+  options: readonly string[],
+  defaultValue?: string,
+): Control => ({ id, label, kind: "select", options, defaultValue });
+const toggle = (
+  id: string,
+  label: string,
+  defaultValue?: boolean,
+): Control => ({ id, label, kind: "toggle", defaultValue });
+const action = (id: string, label: string): Control => ({
+  id,
+  label,
+  kind: "action",
+});
+const unknown = (id: string, label: string): Control => ({
+  id,
+  label,
+  kind: "unknown",
+});
+const range = (
+  id: string,
+  label: string,
+  value: number,
+  unit?: string,
+): Control => ({
+  id,
+  label,
+  kind: "range",
+  defaultValue: value,
+  ...(unit === "%" ? { min: 0, max: 100 } : {}),
+  unit,
+});
+const room = select(
+  "room",
+  "Room type",
+  [
+    "Auto-detect",
+    "Living room",
+    "Bedroom",
+    "Kitchen",
+    "Bathroom",
+    "Dining",
+    "Office",
+    "Hallway",
+  ],
+  "Auto-detect",
+);
+const style = select("style", "Room style", [
+  "Scandinavian",
+  "Japandi",
+  "Modern luxury",
+  "Minimalist",
+  "Industrial",
+  "Biophilic",
+]);
+const palette = select(
+  "palette",
+  "Palette",
+  [
+    "Auto",
+    "Pale oak",
+    "Ink & cream",
+    "Ember",
+    "Sea glass",
+    "Clay",
+    "Deep forest",
+  ],
+  "Auto",
+);
+const ratio = select(
+  "ratio",
+  "Output ratio",
+  ["Original", "1:1", "4:3", "3:2", "16:9"],
+  "Original",
+);
+const season = select(
+  "season",
+  "Season",
+  ["Spring", "Summer", "Autumn", "Winter"],
+  "Spring",
+);
+const outside = select("style", "Outdoor style", [
+  "Naturalistic",
+  "Formal",
+  "Mediterranean",
+  "Nordic",
+  "Desert",
+  "Tropical",
+]);
+const outdoors: Control[] = [
+  unknown("time", "Time of day"),
+  outside,
+  range("density", "Lighting density", 30, "%"),
+  unknown("people", "People"),
+  unknown("site", "Site context"),
+  unknown("greenery", "Greenery"),
+  unknown("vehicles", "Vehicles"),
+  select("weather", "Weather", [
+    "As photographed",
+    "Clear",
+    "Overcast",
+    "Hazy",
+    "Rain",
+    "Snow",
+  ]),
+  action("suggest", "VastuNord suggestions · Show"),
+  action("area", "Analyze an area · Select"),
+];
+const tidy: Control[] = [
+  "Mow",
+  "Weed",
+  "Fresh mulch",
+  "Prune",
+  "Clean paving",
+  "Fill gaps",
+].map((label, i) => ({
+  ...toggle("tidy-" + i, label, i < 3),
+  when: { id: "tidy", values: ["true"] },
+}));
+const manual = (c: Control): Control => ({
+  ...c,
+  when: { id: "mode", values: ["Manual controls"] },
+});
+type Seed = Omit<
+  ToolDefinition,
+  "route" | "configVersion" | "framing" | "improve" | "reference"
+> &
+  Partial<Pick<ToolDefinition, "framing" | "improve" | "reference">>;
+const seeds: Seed[] = [
+  {
+    id: "room-reimagination",
+    name: "Room Reimagination",
+    category: "Interior Design",
+    prompt: "Describe the room",
+    action: "Generate room",
+    comparison: ["Today", "Reimagined"],
+    controls: [
+      room,
+      style,
+      palette,
+      ...[
+        "Floor",
+        "Furnishing",
+        "Plants",
+        "Accessories",
+        "Lighting",
+        "Time of day",
+      ].map((x) => unknown(x.toLowerCase(), x)),
+      toggle("safe", "Make it child safe"),
+      unknown("ratio", "Output ratio"),
+    ],
+  },
+  {
+    id: "virtual-home-staging",
+    name: "Virtual Home Staging",
+    category: "Virtual Staging",
+    prompt: "Describe the staging · Anything specific?",
+    action: "Stage this room",
+    comparison: ["Today", "Staged"],
+    controls: [
+      select("buyer", "Buyer profile", [
+        "Family",
+        "Young professional",
+        "Downsizer",
+        "Luxury",
+        "Neutral",
+      ]),
+      toggle("safe", "Make it child safe"),
+    ],
+  },
+  {
+    id: "outdoor-visualization",
+    name: "Outdoor Visualization",
+    category: "Exterior & Landscape",
+    prompt: "Describe the outside",
+    action: "Visualize outside",
+    comparison: ["Today", "Reimagined"],
+    controls: outdoors,
+  },
+  {
+    id: "hardscape-design",
+    name: "Hardscape Design",
+    category: "Exterior & Landscape",
+    prompt: "Anything else? · Anything the surfaces do not say",
+    action: "Design the hardscape",
+    comparison: ["Today", "Hardscaped"],
+    controls: [...outdoors, action("surfaces", "Surfaces · Mark")],
+  },
+  {
+    id: "furniture-refresh",
+    name: "Furniture Refresh",
+    category: "Interior Design",
+    prompt: "What should change?",
+    action: "Refresh furniture",
+    comparison: ["Today", "Refreshed"],
+    controls: [
+      room,
+      style,
+      unknown("time", "Time of day"),
+      action("refresh", "Refresh now"),
+      action("pick", "Pick"),
+      action("place", "Place asset"),
+      action("cleanup", "Clean up room"),
+      toggle("safe", "Make it child safe"),
+    ],
+  },
+  {
+    id: "seasonal-styling",
+    name: "Seasonal Styling",
+    category: "Virtual Staging",
+    prompt: "Describe the seasonal styling",
+    action: "Style for spring",
+    comparison: ["Today", "Summer"],
+    controls: [
+      unknown("room", "Room type"),
+      unknown("style", "Room style"),
+      select("palette", "Palette", ["Spring’s own"], "Spring’s own"),
+      season,
+    ],
+  },
+  {
+    id: "visual-cleanup",
+    name: "Visual Cleanup",
+    category: "Image Enhancement",
+    reference: false,
+    improve: false,
+    prompt: "Describe what to clean up",
+    action: "Clean up image",
+    controls: [
+      select("mode", "Editing mode", ["AI object editing", "Brush & delete"]),
+      ...[
+        "Bins",
+        "Cables",
+        "Cars",
+        "People",
+        "Signs",
+        "Loose clutter",
+        "Power lines",
+        "Reflections",
+      ].map((x, i) => toggle("remove-" + i, x)),
+      action("pick", "Pick things on photo · Pick"),
+    ],
+  },
+  {
+    id: "resolution-enhancement",
+    name: "Resolution Enhancement",
+    category: "Image Enhancement",
+    reference: false,
+    improve: false,
+    prompt: "Describe the enhancement",
+    action: "Enhance image",
+    comparison: ["Today", "Natural · preview"],
+    controls: [
+      select(
+        "mode",
+        "Enhancement mode",
+        ["Auto enhance", "Manual controls"],
+        "Auto enhance",
+      ),
+      ...[
+        "Noise reduction",
+        "Sharpness",
+        "Brightness",
+        "Contrast",
+        "Saturation",
+      ].map((x, i) => manual(range("adjust-" + i, x, 0))),
+      manual(select("upscale", "Upscale", ["Original size", "2×", "4×"])),
+      manual(
+        select("look", "Look", [
+          "None",
+          "Natural",
+          "Warm",
+          "Cool",
+          "Matte",
+          "Mono",
+        ]),
+      ),
+      manual(select("crop", "Crop", ["Original", "1:1", "4:3", "3:2", "16:9"])),
+      manual(range("straighten", "Straighten", 0, "°")),
+      manual(toggle("flip-h", "Flip horizontal")),
+      manual(toggle("flip-v", "Flip vertical")),
+    ],
+  },
+  {
+    id: "perspective-correction",
+    name: "Perspective Correction",
+    category: "Image Enhancement",
+    reference: false,
+    improve: false,
+    prompt: "Describe the correction",
+    action: "Correct perspective",
+    controls: [
+      select(
+        "mode",
+        "Correction mode",
+        ["Fix distortion", "Camera angle"],
+        "Fix distortion",
+      ),
+      {
+        ...range("vertical", "Vertical", 0),
+        when: { id: "mode", values: ["Fix distortion"] },
+      },
+      {
+        ...range("horizontal", "Horizontal", 0),
+        when: { id: "mode", values: ["Fix distortion"] },
+      },
+      action("suggest", "Suggest a correction"),
+      {
+        ...select(
+          "angle",
+          "Camera angle",
+          ["Eye level", "Low", "High", "Straight on"],
+          "Eye level",
+        ),
+        when: { id: "mode", values: ["Camera angle"] },
+      },
+      toggle("guides", "Show guides", true),
+    ],
+  },
+  {
+    id: "decor-redefinition",
+    name: "Decor Re-definition",
+    category: "Interior Design",
+    prompt: "Describe the decor you want",
+    action: "Redefine decor",
+    comparison: ["Today", "Restyled"],
+    controls: [
+      select(
+        "decor",
+        "Decor style",
+        [
+          "Warm minimal",
+          "Gallery",
+          "Layered textile",
+          "Mid-century",
+          "Coastal",
+          "Monochrome",
+        ],
+        "Warm minimal",
+      ),
+      ratio,
+      action("pick", "Spot · Pick"),
+      action("place", "Decor · Place / asset"),
+      toggle("safe", "Make it child safe", false),
+    ],
+  },
+  {
+    id: "material-refinement",
+    name: "Material Refinement",
+    category: "Interior Design",
+    prompt: "Describe the material change",
+    action: "Refine materials",
+    comparison: ["Today", "Refined"],
+    controls: [
+      palette,
+      action("surfaces", "Surfaces · Pick"),
+      toggle("safe", "Make it child safe", false),
+    ],
+  },
+  {
+    id: "lighting-reimagination",
+    name: "Lighting Reimagination",
+    category: "Interior Design",
+    prompt: "Describe the lighting you want",
+    action: "Relight the room",
+    comparison: ["Today", "Evening"],
+    controls: [
+      room,
+      range("temperature", "Temperature", 2700, "K"),
+      range("brightness", "Brightness", 60, "%"),
+      select(
+        "layer",
+        "Layering",
+        ["Ambient only", "Ambient + task", "Fully layered"],
+        "Ambient only",
+      ),
+      toggle("preview", "Preview on my photo", true),
+      select(
+        "fixture",
+        "Fixture",
+        [
+          "Keep existing",
+          "Pendant",
+          "Recessed",
+          "Track",
+          "Sconce",
+          "Floor lamp",
+          "Statement",
+        ],
+        "Keep existing",
+      ),
+      action("lights", "Add lights · Place / assets"),
+    ],
+  },
+  {
+    id: "garden-design",
+    name: "Garden Design",
+    category: "Exterior & Landscape",
+    prompt: "Describe the garden you want",
+    action: "Design the garden",
+    comparison: ["Today", "Redesigned"],
+    controls: [
+      { ...outside, defaultValue: "Naturalistic" },
+      select(
+        "scope",
+        "Garden area",
+        ["Whole garden", "Borders", "Lawn", "Terrace", "Front"],
+        "Whole garden",
+      ),
+      toggle("tidy", "Just tidy it up", false),
+      ...tidy,
+      action("suggest", "AI suggestions · Show"),
+      action("area", "Analyze an area · Select"),
+    ],
+  },
+  {
+    id: "pool-redesign",
+    name: "Spa & Pool Redesign",
+    category: "Exterior & Landscape",
+    prompt: "Describe the pool, spa, or pool and spa",
+    action: "Design the pool",
+    comparison: ["Today", "Natural pool"],
+    controls: [
+      select("mode", "Design", ["Pool", "Spa", "Pool + Spa"], "Pool"),
+      {
+        ...select(
+          "pool",
+          "Pool type",
+          ["Infinity", "Lap", "Plunge", "Natural", "Courtyard"],
+          "Infinity",
+        ),
+        when: { id: "mode", values: ["Pool", "Pool + Spa"] },
+      },
+      ...["Contemporary", "In-ground", "Rectangular", "Tile"].map((x, i) => ({
+        ...select(
+          "pool-option-" + i,
+          ["Pool style", "Installation", "Shape", "Material"][i],
+          [
+            [x, "Natural", "Resort", "Classic"],
+            [x, "Raised", "Partially raised"],
+            [x, "L-shape", "Freeform", "Circular"],
+            [x, "Plaster", "Pebble", "Stone"],
+          ][i],
+          x,
+        ),
+        when: { id: "mode", values: ["Pool", "Pool + Spa"] },
+      })),
+      ...["Hot tub (above ground)", "Round", "Tile"].map((x, i) => ({
+        ...select(
+          "spa-option-" + i,
+          ["Spa type", "Spa shape", "Spa material"][i],
+          [
+            [x, "In-ground spa", "Plunge pool/cold plunge"],
+            [x, "Square", "Rectangular", "Freeform"],
+            [x, "Stone", "Concrete-plaster", "Acrylic", "Wood surround"],
+          ][i],
+          x,
+        ),
+        when: { id: "mode", values: ["Spa", "Pool + Spa"] },
+      })),
+      {
+        ...select(
+          "placement",
+          "Combined placement",
+          ["Attached/spillover", "Next to the pool", "Separate area"],
+          "Attached/spillover",
+        ),
+        when: { id: "mode", values: ["Pool + Spa"] },
+      },
+      ...[
+        "Built-in seating",
+        "Jets",
+        "Waterfall/water feature",
+        "Underwater lighting",
+        "Deck/surround",
+      ].map((x, i) => toggle("feature-" + i, x, false)),
+    ],
+  },
+  {
+    id: "sky-transformation",
+    name: "Sky Transformation",
+    category: "Exterior & Landscape",
+    prompt: "Describe the sky",
+    action: "Change the sky",
+    comparison: ["Today", "Golden hour · preview"],
+    controls: [
+      toggle("preview", "Preview on my photo", true),
+      select(
+        "time",
+        "Time of day",
+        ["Morning", "Midday", "Golden hour", "Blue hour", "Night"],
+        "Morning",
+      ),
+      select(
+        "weather",
+        "Weather",
+        ["Clear", "Overcast", "Hazy", "Rain", "Snow"],
+        "Clear",
+      ),
+      range("clouds", "Cloud intensity", 45, "%"),
+      range("saturation", "Sky saturation", 50, "%"),
+    ],
+  },
+  {
+    id: "seasonal-transformation",
+    name: "Seasonal Transformation",
+    category: "Exterior & Landscape",
+    prompt: "Describe the season",
+    action: "Show it in spring",
+    comparison: ["Today", "Autumn · preview"],
+    controls: [
+      select(
+        "time",
+        "Time of day",
+        [
+          "As photographed",
+          "Morning",
+          "Midday",
+          "Golden hour",
+          "Blue hour",
+          "Night",
+        ],
+        "As photographed",
+      ),
+      season,
+      toggle("preview", "Preview on my photo", true),
+      {
+        ...select(
+          "snow",
+          "Snow",
+          ["None", "Frost", "Light snow", "Heavy snow"],
+          "None",
+        ),
+        when: { id: "season", values: ["Winter"] },
+      },
+      select(
+        "people",
+        "People",
+        ["Keep existing", "None", "A few", "Busy"],
+        "Keep existing",
+      ),
+      select(
+        "vehicles",
+        "Vehicles",
+        ["Keep existing", "None", "Parked", "Passing"],
+        "Keep existing",
+      ),
+    ],
+  },
+  {
+    id: "object-placement",
+    name: "Object Placement",
+    category: "Exterior & Landscape",
+    reference: false,
+    prompt: "Describe how the objects should sit",
+    action: "Place the object",
+    controls: [
+      action("objects", "Required objects · Choose from your objects"),
+      action("place", "Place"),
+      unknown("pins", "Numbered location pins"),
+    ],
+  },
+];
+export const tools: readonly ToolDefinition[] = seeds.map((s) => ({
+  framing:
+    s.category === "Exterior & Landscape"
+      ? "Wide daylight exterior photo"
+      : "Room photo",
+  reference: true,
+  improve: true,
+  ...([
+    "decor-redefinition",
+    "material-refinement",
+    "lighting-reimagination",
+  ].includes(s.id)
+    ? { framing: "Straight-on room photo" }
+    : {}),
+  ...s,
+  route: "/app/tools/" + s.id,
+  configVersion: 1,
+}));
+export function findTool(id: string) {
+  return tools.find((t) => t.id === id);
+}
+export function visibleControls(
+  tool: ToolDefinition,
+  values: Record<string, string | number | boolean>,
+) {
+  return tool.controls
+    .filter(
+      (c) =>
+        !c.when ||
+        c.when.values.includes(
+          String(
+            values[c.when.id] ??
+              tool.controls.find((x) => x.id === c.when?.id)?.defaultValue ??
+              "",
+          ),
+        ),
+    )
+    .map((c) =>
+      tool.id === "pool-redesign" &&
+      c.id === "spa-option-0" &&
+      values.mode === "Pool + Spa"
+        ? { ...c, options: [...(c.options ?? []), "Spillover spa"] }
+        : c,
+    );
+}
+export function primaryAction(
+  tool: ToolDefinition,
+  values: Record<string, string | number | boolean>,
+) {
+  if (tool.id === "resolution-enhancement" && values.mode === "Manual controls")
+    return "Apply adjustments";
+  if (tool.id === "pool-redesign")
+    return values.mode === "Spa"
+      ? "Design the spa"
+      : values.mode === "Pool + Spa"
+        ? "Design the pool and spa"
+        : tool.action;
+  if (tool.id === "seasonal-styling")
+    return "Style for " + String(values.season ?? "Spring").toLowerCase();
+  if (tool.id === "seasonal-transformation")
+    return "Show it in " + String(values.season ?? "Spring").toLowerCase();
+  return tool.action;
+}
