@@ -5,6 +5,7 @@
 - Replaced the public marketing scaffold with bilingual pages based on six inspected Figma boards. Added resource article permalinks, interactive comparisons, a working transformation selector, responsive navigation and the official wordmark.
 - Rebuilt the Studio catalogue and shared editor around the verified 17-tool matrix. Added photo studies, keyboard-accessible comparisons, search, contextual editor controls and explicit availability states.
 - Implemented the dashboard, project studies, albums, gallery and favourites, search, file selection, guided room explorer, knowledge guides, Prana views, sample budget scenarios, and billing/team availability screens. Kept private project and upload flows behind the existing server checks.
+- The first Vercel build stopped because its restored dependencies lacked the generated Prisma client. The release build now generates the client from the committed schema before invoking Next.js. Generation from a clean source export passed without a database connection.
 - Recorded reference priorities, approved local image provenance, page mappings and visual gaps in the [implementation tracker](FIGMA_HTML_IMPLEMENTATION_TRACKER.md).
 
 ## 2026-11-21 — Phase 02F noncommercial demonstration
