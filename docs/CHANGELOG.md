@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-1E authorized recovery clone drill
+
+Created the single approved recovery child `br-round-unit-bhxwl2nc` at LSN `0/1B49CE0` and attached Frankfurt endpoint `ep-spring-paper-bhmd754a` at 0.25 CU on Free. Read-only connector inspection confirmed the expected `neondb` and role, empty public application relations and enums/domains, and absent Prisma history. Branch and parent metadata were verified. This tests cloning, not snapshot restoration or development replacement. No migration ran.
+
 ### Phase 02E-1E development migration readiness
 
 Rechecked the three Vastu Frankfurt branch identities, recovery lineage, development endpoint, limited role, empty baseline and migration checksums. Prepared a specific recovery-child clone drill and development Prisma sequence. Existing development status helper is endpoint-pinned but its live handoff remains untested. No recovery branch was created or restored, and no development migration ran.

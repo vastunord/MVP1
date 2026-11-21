@@ -1,5 +1,13 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
+## Recovery clone drill result
+
+On 2026-11-21, following explicit owner approval, created `recovery-drill-phase02e1e` (`br-round-unit-bhxwl2nc`) in Vastu project `morning-morning-84319525`, Frankfurt. Neon metadata confirmed its parent `br-red-sunset-bhm6pga7` and parent LSN `0/1B49CE0`, matching the recovery branch's development parent point. Read-write endpoint `ep-spring-paper-bhmd754a` belongs to the drill branch, with min/max 0.25 CU and Free-plan default autosuspend. The organization reports Free, with four existing branches before creation and reported current-period compute time 915 seconds. No plan upgrade or payment was made.
+
+A read-only Neon connector query on the drill endpoint as `vastunord_dev_migrator` confirmed branch/endpoint IDs, `neondb`, public schema USAGE/CREATE, zero public tables, partitions, views, materialized views, foreign tables or sequences, zero public enums/domains, and no `_prisma_migrations`. The clone reproduces the previously verified empty application baseline. Post-check metadata confirms the recovery branch still has development as parent and development retains its recorded parent. No recovery, development or production SQL mutation occurred. The drill confirms a recoverable clone, not a tested snapshot restore, endpoint replacement or full restore procedure. The drill branch remains retained.
+
+Development still needs a separately verified direct Prisma credential handoff, a final identity/baseline/checksum check, and explicit owner authorization for migration. Any destructive restore or branch replacement needs separate approval.
+
 ## Phase 02E-1E recovery and development readiness
 
 On 2026-11-21 read-only Neon checks confirmed Vastu project `morning-morning-84319525` in `aws-eu-central-1`. Development `br-mute-resonance-bhea4dyx`, its recovery child `br-red-sunset-bhm6pga7`, and the migrated test child `br-lively-wildflower-bhwpjl4q` are ready. Recovery's parent LSN is `0/1B49CE0`. The Free project reports a six-hour history window and no snapshots. The connector supports creating a child from an explicitly selected parent and restoring a snapshot into a new branch. It also supports resetting a branch to its own parent's current state, which would discard branch changes. These capabilities are not proof of a successful restore or plan availability at execution time.
