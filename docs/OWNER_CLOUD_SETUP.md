@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Isolated migration test completed
+
+Both migrations passed on disposable test branch `br-lively-wildflower-bhwpjl4q`, with matching history checksums and no Prisma schema diff. One synthetic user was created and removed in a single transaction. The development migration and recovery restore remain separate actions requiring authorization. Retain the test and recovery branches until the owner decides otherwise.
+
 ## Test connection check
 
 From the repository root run `pwsh -NoProfile -File scripts/prisma-test-connection.ps1` in a local terminal. In the Vastu Neon console select `migration-test-phase02e1d`, database `neondb` and role `vastunord_dev_migrator`. Enter only its password at the masked prompt. The helper pins the verified direct test endpoint and returns exit code 0 only if Prisma verifies the branch, endpoint, role, database and empty baseline. An empty password cancels. See the [test endpoint verification](DATABASE_ARCHITECTURE.md#test-endpoint-verification).

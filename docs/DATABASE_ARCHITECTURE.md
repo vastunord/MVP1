@@ -1,5 +1,13 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
+## Isolated migration results
+
+On 2026-11-21 the owner authorized Prisma deploy exclusively on test branch `br-lively-wildflower-bhwpjl4q` and endpoint `ep-holy-waterfall-bheg01mu`. Immediately before deployment, read-only checks confirmed `neondb`, `vastunord_dev_migrator`, zero public relations, absent migration history and no database CREATE. Both committed SQL files matched reviewed commit `2b63cd3`. Masked credential entry and a direct endpoint were used. Prisma migrate deploy returned exit code 0.
+
+The Prisma history has exactly two finished entries with no rollback: `20261121_phase02c_initial` checksum `d79088cf6d074033a017e28fe888f22cc65dee7136e9fd9d044de227497c8a3a` and `20261121_phase02d_auth_projects` checksum `0676683c33f1377708ec8e94e8b1b3357c0e686fb190de69dc86b4b4f7d04b31`. Both match local SHA-256 hashes. The schema contains 17 public tables including Prisma history, 44 indexes, 132 constraints and 19 foreign keys. A read-only Prisma migrate diff from the test datasource to `prisma/schema.prisma` returned exit code 0, indicating no differences in Prisma-supported schema features. This is a schema comparison rather than an independent proof of every runtime authorization rule.
+
+A transaction inserted and read one uniquely named synthetic User, deleted that same record and confirmed zero remaining. Database CREATE remained false. Prisma schema validation and TypeScript passed locally. Migration history provides status evidence; a separate `prisma migrate status` command was not run. Recovery branch restore remains untested. Temporary interactive helpers used for deploy and diff were removed after the checks. No production, development or recovery branch SQL was run.
+
 ## Test endpoint verification
 
 Owner approval covered one compute on `migration-test-phase02e1d` (`br-lively-wildflower-bhwpjl4q`) in Vastu's Frankfurt project `VNMVP1` (`morning-morning-84319525`). Its parent is recovery `br-red-sunset-bhm6pga7`, whose parent is development `br-mute-resonance-bhea4dyx`. The endpoint `ep-holy-waterfall-bheg01mu` is read-write, with minimum and maximum 0.25 CU. Provisioning omitted the timeout override to use Free-plan autosuspend. At this size one running hour uses 0.25 of the project's 100 monthly CU-hours. Free compute scales to zero after five idle minutes. [Free plan limits](https://neon.com/blog/neon-free-plan-1-gb-per-project) and [scale to zero](https://neon.com/docs/introduction/scale-to-zero).

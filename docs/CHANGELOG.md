@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-1D isolated Prisma migration test
+
+Applied the two reviewed migrations on owner-authorized test branch `br-lively-wildflower-bhwpjl4q` using a masked direct credential prompt. Both history entries finished with matching local checksums. Prisma schema diff returned no differences. Verified 17 tables, 44 indexes, 132 constraints, 19 foreign keys and no database CREATE privilege. Synthetic User insert/read/delete passed in one transaction. Recovery restore and development migration remain untested.
+
 ### Phase 02E-1D connection recovery
 
 With explicit owner approval, attached a 0.25 CU compute to the existing disposable branch. Verified its endpoint, limited-role session and empty pre-migration baseline through a read-only Neon query. Added a separate test-only direct Prisma connection check and documented the Free-plan compute allowance.

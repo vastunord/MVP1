@@ -1,5 +1,7 @@
 # Vastu Nord — current project handoff (living document)
 
+**Phase 02E-1D isolated migration test PASS.** Owner authorized the two migrations on `br-lively-wildflower-bhwpjl4q`. Both completed with matching checksums and Prisma schema comparison returned no differences. A synthetic user insert/read/delete passed in a transaction. The role had no database CREATE. Recovery restore and migration of development remain separate, unauthorized and untested. See `docs/DATABASE_ARCHITECTURE.md`.
+
 **Phase 02E-1D connection recovery.** The disposable test branch now has a verified 0.25 CU read-write endpoint in Frankfurt. A read-only Neon query returned the expected branch, endpoint, role and database, zero public relations and no Prisma history. See [current verification](DATABASE_ARCHITECTURE.md#test-endpoint-verification).
 
 **Phase 02E-1D:** Recovery metadata confirms `br-red-sunset-bhm6pga7` in Frankfurt, parent development at LSN `0/1B49CE0`, with no compute. Owner explicitly authorized disposable test branch `migration-test-phase02e1d`. Creation with fixed compute settings returned INVALID_ARGUMENT. Created `br-lively-wildflower-bhwpjl4q` without compute from recovery at the same LSN. No SQL was executed because protected direct credential handoff remains unavailable. Migration history, schema comparison, read/write and restore tests remain BLOCKED / NOT TESTED. The helper is fixed to development and must not be used for test-branch execution. No migration ran.
