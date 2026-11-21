@@ -1,5 +1,18 @@
 # Development change log (compact)
 
+**Validation:** TypeScript, ESLint, Production build, 23 unit tests (including Production auth gating and authorization fixtures), 9 browser smoke tests (including 17 Studio routes and 390/768/1280/1440 widths), documentation links/whitespace and Git diff checks passed locally. No Production deployment, live Production email, database mapping or media operation was tested.
+
+## 2026-11-21 — Direct Production credentials and safe gating
+
+- Adopted the founder's direct Production policy and created a canonical environment inventory and consolidated checklist.
+- Created a restricted Production Neon runtime role, separate private Blob store, strong auth secret and domain-scoped Resend key. Removed the development migration secret from Preview and Production. Production database mapping remains unverified; no schema migration occurred.
+- Added a fail-closed Production auth switch and health check; uploads, reconciliation and OAuth remain disabled. Preserved tested Development uploads and Preview/reconciliation work. No deployment or paid upgrade.
+
+
+### Phase 02E-3 Development and protected Preview follow-up
+
+Enabled and verified Development uploads with a fresh synthetic two-user live Blob/Neon test. Created isolated Frankfurt Preview Neon branch `br-summer-night-bh70tetr`, 0.25 CU endpoint `ep-frosty-violet-bhh19hyh`, restricted `vastunord_preview_runtime` role, and separate private Preview Blob store `store_FqCkmEg47WkbeoRZ`. The owner confirmed setting the matching pooled Preview `DATABASE_URL`; Vercel does not expose the Secret for independent local verification. Configured separate Preview auth secret, approved sender and shared Development email credential; Preview auth uses the validated Vercel deployment origin. Added guarded, bounded cleanup for stale records and orphaned objects, with fixture tests and synthetic Blob repeated-deletion verification; scheduling remains pending. Automatic review rejected a plaintext terminal credential handoff and a direct synthetic Preview SQL transaction; neither action ran. No Preview or Production deployment occurred.
+
 ### Development and Preview authorization document unavailable
 
 The owner authorized the operations in `prompts/VastuNord_Phase02E3_Dev_Preview_Authorization.md`, but the named file was absent from both the working tree and current Git tree. No cloud operations or application changes were performed. Verified the existing local unit suite (17 passed) and Git whitespace check; the requested scope remains pending the document.

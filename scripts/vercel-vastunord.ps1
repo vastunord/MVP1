@@ -1,9 +1,13 @@
 param(
     [Parameter(ValueFromRemainingArguments = $true)]
-    [string[]] $CliArguments
+    [string[]] $CliArguments,
+    [Parameter(ValueFromPipeline = $true)]
+    [AllowEmptyString()]
+    [string] $ForwardedInput
 )
 
 $ErrorActionPreference = 'Stop'
+$hasForwardedInput = $PSBoundParameters.ContainsKey('ForwardedInput')
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 $configDir = Join-Path $repoRoot '.vercel-vastunord-cli'
 $cliVersion = 'vercel@66.5.0'
@@ -44,7 +48,11 @@ try {
             $after = @($CliArguments | Select-Object -Skip ($separatorIndex + 1))
             & pnpm dlx $cliVersion @before --global-config $configDir --scope vastu-nord -- @after
         } else {
-            & pnpm dlx $cliVersion @CliArguments --global-config $configDir --scope vastu-nord
+            if ($hasForwardedInput) {
+                $ForwardedInput | & pnpm dlx $cliVersion @CliArguments --global-config $configDir --scope vastu-nord
+            } else {
+                & pnpm dlx $cliVersion @CliArguments --global-config $configDir --scope vastu-nord
+            }
         }
         if ($LASTEXITCODE -ne 0) {
             throw "Vastu Nord Vercel CLI command failed with exit code $LASTEXITCODE."

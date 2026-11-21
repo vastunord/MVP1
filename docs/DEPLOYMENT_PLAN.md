@@ -1,14 +1,17 @@
 # Deployment and operations plan — Phase 02E resource status
 
+**Direct-release policy v4.1:** Validate locally, commit and merge to the verified Vastu Nord Production branch, then deploy when release gates pass. Preview is optional; contrary older language below is historical. The linked project is vastu-nord/vastunord-web, root apps/web, Production branch main; its current build-ignore command skips automatic builds. No deployment has been made. Business use requires a commercial-eligible Vercel plan. Detailed Figma parity is unverified. Production authentication and uploads remain disabled until the restricted Production database, schema, actual HTTPS auth origin, email and isolation checks pass. See [environment inventory](ENVIRONMENT_VARIABLE_INVENTORY.md).
+
+
 ## Phase 02E-3 database environment audit
 
 | Environment | Neon branch | Database | Role | Status |
 | --- | --- | --- | --- | --- |
 | Development | `development` (`br-mute-resonance-bhea4dyx`) | `neondb` | `neondb_owner` | Verified in prior live checks; owner role permitted for development testing only. |
-| Preview | Unknown | Unknown | Unknown | `DATABASE_URL` is listed, but Vercel will not inject its protected value into local CLI checks. UNVERIFIED. |
+| Preview | `vastunord-preview-02e3` (`br-summer-night-bh70tetr`) | `neondb` | `vastunord_preview_runtime` | Provider metadata and read-only role connection verified; owner confirmed the pooled URL was saved in Preview. Vercel Secret cannot be inspected locally, so the actual Vercel mapping and write access remain UNVERIFIED. |
 | Production | Unknown | Unknown | Unknown | `DATABASE_URL` is listed, but Vercel will not inject its protected value into local CLI checks. UNVERIFIED. |
 
-Do not deploy or enable automatic deployment while Preview or Production mapping is unknown. The owner should identify each target from the secure source used when configured. If unavailable, propose replacing the affected variables with known, separate environment-specific Neon connections only after owner approval of the exact changes. Never share connection strings or passwords. Before public launch replace the temporary development owner connection with a restricted application role.
+The owner authorized one protected Preview deployment after independently verifying its database, storage and auth configuration; Production uncertainty does not block Development work. Vercel Authentication is configured for previews, Git builds are skipped, Preview has its own private Blob store and auth secret, and the owner confirmed the intended Preview URL. Actual Vercel-to-Neon connectivity and the restricted role's write access have not been independently verified, so the Preview deployment gate remains blocked. A direct synthetic INSERT/read/DELETE test was rejected by automatic review pending explicit approval of that exact transaction. Do not deploy Production while its mapping is unknown. Never share connection strings or passwords. Before public launch replace temporary owner credentials with a restricted application role.
 
 The Vastu Nord Neon development branch, private Frankfurt Blob development store and Vercel web project are provisioned. A connector link-only create request initially returned HTTP 403; the official CLI authenticated separately as `vastunord@gmail.com` (team OWNER) then created `vastunord-web` (`prj_LyZA1xMnM4efg5U8SIAfGD4GIDc0`), set root `apps/web`, Next.js and temporary build-ignore command `exit 0`, and linked GitHub `vastunord/MVP1` (production branch `main`). The isolated CLI's deployment list was empty after linking. The private store is not connected and no environment variables were set remotely. No preview or production deployment, DNS change or push occurred. `scripts/vercel-vastunord.ps1` is the account-checked CLI entry point; its auth directory is Git-ignored.
 

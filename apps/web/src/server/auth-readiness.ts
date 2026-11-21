@@ -4,6 +4,21 @@ export type AuthReadiness = {
   googleReady: boolean;
 };
 
+export function authBaseUrl(
+  env: Record<string, string | undefined> = process.env,
+): string | undefined {
+  if (env.APP_ENV === "preview") {
+    if (
+      env.VERCEL_ENV !== "preview" ||
+      !env.VERCEL_URL ||
+      !/^[a-z0-9-]+(?:\.[a-z0-9-]+)*\.vercel\.app$/i.test(env.VERCEL_URL)
+    )
+      return undefined;
+    return `https://${env.VERCEL_URL}`;
+  }
+  return env.BETTER_AUTH_URL;
+}
+
 export function isTrustedMutationOrigin(
   origin: string | null,
   authUrl: string | undefined,
@@ -24,12 +39,15 @@ export function authReadiness(
   env: Record<string, string | undefined> = process.env,
 ): AuthReadiness {
   const missing: string[] = [];
+  if ((env.APP_ENV === "production" || env.VERCEL_ENV === "production") && env.AUTH_ENABLED !== "true") missing.push("AUTH_ENABLED");
   if (!env.DATABASE_URL) missing.push("DATABASE_URL");
   if (!env.BETTER_AUTH_SECRET || env.BETTER_AUTH_SECRET.length < 32)
     missing.push("BETTER_AUTH_SECRET");
   if (env.AUTH_EMAIL_PROVIDER !== "resend") missing.push("AUTH_EMAIL_PROVIDER");
   if (!env.RESEND_API_KEY) missing.push("RESEND_API_KEY");
   if (!env.AUTH_EMAIL_FROM) missing.push("AUTH_EMAIL_FROM");
+  if (env.APP_ENV === "preview" && !authBaseUrl(env))
+    missing.push("VERCEL_URL");
   if (
     env.APP_ENV === "production" &&
     !env.BETTER_AUTH_URL?.startsWith("https://")

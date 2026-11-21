@@ -3,6 +3,9 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createDatabase } from "./db";
 import { sendAuthEmail } from "./auth-email";
+import { authBaseUrl } from "./auth-readiness";
+
+const baseURL = authBaseUrl();
 
 const google =
   process.env.GOOGLE_OAUTH_ENABLED === "true" &&
@@ -20,7 +23,7 @@ const google =
 export const auth = betterAuth({
   database: prismaAdapter(createDatabase(), { provider: "postgresql" }),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL,
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -52,7 +55,5 @@ export const auth = betterAuth({
     window: 60,
     max: 30,
   },
-  trustedOrigins: process.env.BETTER_AUTH_URL
-    ? [process.env.BETTER_AUTH_URL]
-    : [],
+  trustedOrigins: baseURL ? [baseURL] : [],
 });

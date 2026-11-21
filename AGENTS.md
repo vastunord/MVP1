@@ -1,8 +1,13 @@
 # AGENTS.md — Vastu Nord (v3.3 greenfield)
 
+**Direct Production policy v4.1:** The founder authorizes validated direct releases to the Vastu Nord Production project; Preview is optional. Business release requires a commercial-eligible Vercel plan, approved Figma evidence and safe public features. Production authentication, database and media remain disabled until separately verified; never use development owner or migration credentials in the public runtime. Avoid unexpected paid costs. Consult docs/ENVIRONMENT_VARIABLE_INVENTORY.md and consolidate genuinely necessary owner actions.
+
+
 **Development PostgreSQL permission policy:** The owner temporarily approves the Vastu Nord `neondb_owner` connection on the verified development branch for development testing only. Replace it with a restricted application role before public production launch; do not use that connection in Preview or Production. The owner accepts existing PUBLIC database CONNECT on `postgres` and `template1`, TEMPORARY on `neondb`, and SELECT on `pg_stat_statements` and `pg_stat_statements_info` in development. Preserve PUBLIC grants. Review other elevated roles and privileges. Treat unauthorized application-data access as a security failure. User-to-user authorization remains mandatory.
 
 **Read `docs/PROJECT_STATE.md` and `docs/GREENFIELD_OVERRIDE.md` before each Codex task, then the one current phase prompt. Read `MASTER_CODEX_PROMPT.md` only at project start or when a major decision requires it.**
+
+**Owner involvement:** Carry out authorized work autonomously and minimize owner involvement. Complete independent and reversible work without repeated confirmations; request input only when an essential decision, missing access, explicit approval requirement or security boundary makes it necessary. Never bypass an approval rejection or exceed the owner's authorized scope.
 
 1. **Greenfield, not a migration.** The original handover contained three public URLs and no old Git, Vercel, APIs, or source. The founder has since supplied a finalized Figma design. Build the NEW Vastu Nord-owned application; visual references do not supply backend source code. Never wait for inaccessible old credentials.
 2. **Identity isolation.** Vastu Nord operator: `vastunord@gmail.com`. NRide is `nride@gmail.com` and OUT OF SCOPE. Codex development subscription is a third login. Confirm local project directory, Git remote/branch and connected cloud scope before modifications. Never read or reuse NRide secrets, files, databases or accounts. Separate local folders alone are not a full security boundary.

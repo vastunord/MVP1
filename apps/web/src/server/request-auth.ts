@@ -1,6 +1,7 @@
 import "server-only";
 import {
   authReadiness,
+  authBaseUrl,
   isTrustedMutationOrigin,
   verifiedSessionUserId,
 } from "./auth-readiness";
@@ -24,7 +25,7 @@ export async function requestContext(request: Request, mutation = false) {
     };
   if (mutation) {
     const origin = request.headers.get("origin");
-    if (!isTrustedMutationOrigin(origin, process.env.BETTER_AUTH_URL))
+    if (!isTrustedMutationOrigin(origin, authBaseUrl()))
       return {
         response: Response.json(
           { error: "Invalid request origin" },

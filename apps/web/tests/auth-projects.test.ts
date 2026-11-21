@@ -6,6 +6,7 @@ import {
 } from "../src/server/auth-email-copy.ts";
 import {
   authReadiness,
+  authBaseUrl,
   isTrustedMutationOrigin,
   verifiedSessionUserId,
 } from "../src/server/auth-readiness.ts";
@@ -18,6 +19,37 @@ import {
 } from "../src/server/projects.ts";
 
 const key = "80c7d7c8-7d98-4c44-9bd8-a2dd5bbfba16";
+
+test("preview authentication uses only the platform-provided deployment origin", () => {
+  const preview = {
+    APP_ENV: "preview",
+    VERCEL_ENV: "preview",
+    VERCEL_URL: "vastu-test.vercel.app",
+  };
+  assert.equal(authBaseUrl(preview), "https://vastu-test.vercel.app");
+  assert.equal(
+    authBaseUrl({ ...preview, VERCEL_URL: "attacker.invalid" }),
+    undefined,
+  );
+  assert.equal(
+    authBaseUrl({
+      ...preview,
+      VERCEL_URL: "vastu-test.vercel.app.attacker.invalid",
+    }),
+    undefined,
+  );
+  assert.equal(
+    authBaseUrl({ ...preview, VERCEL_ENV: "production" }),
+    undefined,
+  );
+  assert.equal(
+    authBaseUrl({
+      APP_ENV: "development",
+      BETTER_AUTH_URL: "http://127.0.0.1:3100",
+    }),
+    "http://127.0.0.1:3100",
+  );
+});
 
 test("mutations require the configured authentication origin", () => {
   assert.equal(
@@ -176,6 +208,14 @@ test("authentication is closed without database, secret and email delivery", () 
     verifiedSessionUserId({ user: { id: "u1", emailVerified: true } }),
     "u1",
   );
+});
+
+test("production authentication stays closed until explicitly enabled", () => {
+  const production={APP_ENV:'production',VERCEL_ENV:'production',DATABASE_URL:'postgresql://test',BETTER_AUTH_SECRET:'x'.repeat(32),BETTER_AUTH_URL:'https://example.vercel.app',AUTH_EMAIL_PROVIDER:'resend',RESEND_API_KEY:'test',AUTH_EMAIL_FROM:'test@example.test'};
+  assert.equal(authReadiness(production).ready,false);
+  assert.equal(authReadiness({...production,AUTH_ENABLED:'false'}).ready,false);
+  assert.equal(authReadiness({...production,AUTH_ENABLED:'true'}).ready,true);
+  assert.equal(authReadiness({...production,APP_ENV:undefined}).ready,false);
 });
 
 test("personal workspace creation is repeat-safe and cross-user projects are denied", async () => {
