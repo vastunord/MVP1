@@ -1,8 +1,8 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 00 complete. Greenfield planning kit and reference review are committed and pushed to the Vastu Nord-owned public repository; no application implementation verified.
+**Status:** Phase 01 in progress. Greenfield planning kit and reference review are committed and pushed to the Vastu Nord-owned public repository; no application implementation verified.
 **Last updated:** 2026-11-21
-**Active phase:** 00 complete — awaiting owner approval before Phase 01.
+**Active phase:** Phase 01 reference inventory (01B complete; awaiting approval before Phase 01C).
 **Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. Local Git is initialized on `main`; `origin` is `https://github.com/vastunord/MVP1.git`.
 **Next safe task:** Wait for owner approval before starting Phase 01.
 
@@ -17,7 +17,7 @@
 | Area | Actual status | Evidence/URL | Next test |
 |---|---|---|---|
 | Marketing site | Public reference pages observed; source unavailable and not required for greenfield | `docs/REFERENCE_EVIDENCE.md` | Capture detailed parity evidence in Phase 01 |
-| Existing Studio | Opens to user-context loading screen; tool inventory not yet visible | `docs/REFERENCE_EVIDENCE.md` | Revisit; request screenshots/recording if loading persists |
+| Existing Studio | 17 tool cards observed; 9 tool editors inspected at empty-photo UI state | `docs/STUDIO_INVENTORY.md` | Inspect remaining eight tools and outstanding mobile/marketing evidence |
 | Auth + private projects | Unknown | No verified repo | Check code and auth config |
 | Real image/video generation | Unknown | No verified API keys | Capability matrix, contract test |
 | Neon, Payload, storage, jobs | Unknown | Owner preference only | Resource isolation and integration test |
@@ -66,3 +66,8 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Continued from `ccf8b06` on `phase-01-reference-inventory`; inspected the next four library tools in order: Virtual Home Staging, Outdoor Visualization, Hardscape Design, Furniture Refresh. Five of 17 tools now have editor-level observations including prior Room Reimagination.
 - Updated the Studio inventory and reference evidence. No durable screenshot files; no upload, generation, destructive action, app source change, or NRide access.
 - Remaining Phase 01 work: 12 tools, mobile layouts, marketing desktop/mobile comparison and durable screenshots. UI-parity gate remains blocked; Phase 02 has not started.
+## Phase 01B progress — 2026-11-21
+- Continued from `b488fb0` on `phase-01-reference-inventory`. Completed empty-photo editor inspections for Seasonal Styling, Visual Cleanup, Resolution Enhancement and Perspective Correction. Nine of 17 tools now have editor-level observations.
+- Documented shared shell only once and added unique controls/modes, visible file requirements, empty-state actions and disabled states to `docs/STUDIO_INVENTORY.md`. Resolution Enhancement manual adjustments and Perspective Correction camera-angle choices were observed by switching local UI modes only.
+- A browser screenshot of Perspective Correction was visually inspected; no durable screenshot file was available to save. No photo uploads, generation, paid actions, code changes, cloud changes, deployment, or NRide access occurred.
+- Remaining Phase 01 work: eight tool editors, mobile layouts, durable screenshot captures and marketing comparison. UI-parity gate remains BLOCKED. No Phase 01C or Phase 02 work has started.
