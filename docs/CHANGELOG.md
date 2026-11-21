@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E finalization
+
+Registered a new synthetic development user at the owner's controlled inbox; owner verified the email and first sign-in succeeded using the original in-memory signup password. The temporary test harness raised a readline shutdown error after the successful HTTP 200, so its process exited nonzero; no account password was reset. Vercel lists `DATABASE_URL` in Development, Preview and Production; Development targets the expected owner/dev endpoint. Vercel would not inject Preview or Production Secret values, leaving their targets unverified and deployment blocked. The development Blob store ID and OIDC token are present with uploads disabled. No Blob test, deployment or environment change occurred.
+
 ### Phase 02E-2 development signup and projects
 
 With owner approval, verified the scoped development owner connection, Better Auth and Resend settings. Both controlled inboxes verified signup; two synthetic users signed in, created workspaces and passed project creation, rename, archive/restore, cross-user access denial, logout, persistence and browser project-creation checks. Test-only account passwords were replaced directly after the original harness exited, so original signup-password sign-in was not verified. Fixed mutation origin validation to use the configured auth origin and added focused tests; a hostile origin was rejected. Preview/Production database secret targets remain unverified. No deployment or production configuration change was made.
