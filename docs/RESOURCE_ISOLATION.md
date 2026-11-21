@@ -22,14 +22,7 @@
 
 For any cloud/API change: confirm current account, project ID, target environment and cost/irreversibility first. Secrets remain outside Git; `.vercel/` and `.env*` ignored. Avoid changing shared/global CLI credentials or NRide accounts.
 
-## Phase 00 workspace and repository check (2026-11-21)
-- The owner-designated Vastu Nord folder is the current directory; it contains the project planning kit and is separate from NRide.
-- `.git` was absent before bootstrap; local Git is now initialized on `main`. `.gitignore` excludes environment files, Vercel config, build output, logs, and credential/key files. A filename-only scan found no likely sensitive/config filenames.
-- Verified in the signed-in Vastu Nord GitHub session: `vastunord/MVP1` is owned by Vastu Nord, already Public, and empty before upload. Local `origin` matches `https://github.com/vastunord/MVP1.git`.
-- Local root commit `ec5c2a7` contains the reviewed planning kit and brand PDF. Push using the host-wide GitHub credential was denied because it resolved outside Vastu Nord. A repository-local path-scoped retry could not resolve `github.com`; no files were transferred and no upstream branch was created. Do not switch accounts implicitly. Retry after Vastu Nord-scoped CLI authentication and network access are available.
-- Original development/design teams' GitHub and Vercel projects are reference-only and not required. New Vercel, Neon, media, OAuth, AI, payment, and social resources remain planned for later phases; no IDs or credentials were created or changed.
-
-## GitHub bootstrap result (2026-11-21)
-- Verified in the signed-in Vastu Nord GitHub session: `vastunord/MVP1` is owned by Vastu Nord, already Public, and empty before upload. Local `origin` matches `https://github.com/vastunord/MVP1.git`.
-- Local branch `main` has root commit `ec5c2a7` containing the reviewed planning kit and `.gitignore`.
-- Push was rejected by GitHub because the Git CLI credential resolved to an account outside Vastu Nord. No files were transferred. Do not switch accounts implicitly; retry after Vastu Nord-scoped Git CLI authentication is configured.
+## Phase 00 GitHub bootstrap result (2026-11-21)
+- Verified in the signed-in Vastu Nord GitHub session: `vastunord/MVP1` is owned by Vastu Nord and Public. It was empty before upload; local `origin` matches `https://github.com/vastunord/MVP1.git`.
+- Local branch `main` has the reviewed planning-kit commits. The first push attempt using the host-wide credential was rejected; repository-local path-scoped authentication then pushed the commits successfully. The public GitHub page now shows commit `faabaad` and the repository files. A later read-only remote query encountered DNS failure after the push was already visible.
+- Global credentials were not changed; no NRide resource was modified.

@@ -24,3 +24,6 @@ Initialized the Vastu Nord workspace on local branch `main`, added a protective 
 
 ### 2026-11-21 — Push retry blocked by network resolution
 Enabled repository-local path-scoped Git authentication and retried the requested push. The Git client could not resolve `github.com`; no files were transferred and no upstream branch was created. The earlier host-wide credential attempt was rejected because it resolved outside Vastu Nord. No account switching or global credential changes were made. Phase 00 remains blocked until Vastu Nord-scoped Git CLI authentication and network/DNS access are available.
+
+### 2026-11-21 — Phase 00 push verified and completed
+Correction to the earlier push-blocked notes: after enabling repository-local path-scoped Git authentication, the push succeeded. The public GitHub page verifies the Vastu Nord `main` branch, the planning-kit files, and commits `ec5c2a7` and `faabaad`. The host-wide credential attempt was rejected; no global credentials were changed. The later DNS error came from a read-only remote query after the successful push. Phase 00 is complete; Phase 01 has not started and awaits owner approval.
