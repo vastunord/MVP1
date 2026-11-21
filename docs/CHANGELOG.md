@@ -27,3 +27,7 @@ Enabled repository-local path-scoped Git authentication and retried the requeste
 
 ### 2026-11-21 — Phase 00 push verified and completed
 Correction to the earlier push-blocked notes: after enabling repository-local path-scoped Git authentication, the push succeeded. The public GitHub page verifies the Vastu Nord `main` branch, the planning-kit files, and commits `ec5c2a7` and `faabaad`. The host-wide credential attempt was rejected; no global credentials were changed. The later DNS error came from a read-only remote query after the successful push. Phase 00 is complete; Phase 01 has not started and awaits owner approval.
+
+### 2026-11-21 — Phase 01 partial Studio observation
+Public Studio loading completed; observed 17 tool cards, four category filters, and Room Reimagination entry/editor controls. Updated reference, inventory, parity, feature and asset records. UI-parity gate remains BLOCKED pending other tools, mobile views, saved visual evidence and marketing comparison. No application tests or production changes.
+

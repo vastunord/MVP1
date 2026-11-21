@@ -22,3 +22,8 @@ Status values: `NOT AUDITED`, `DESIGN`, `MOCK`, `PARTIAL`, `BLOCKED`, `VERIFIED`
 | Deterministic budget planner | Staged | DESIGN | - | 12 |
 | Billing/payments | Controlled launch | BLOCKED contract/credentials | - | 07 |
 | Privacy / security / SEO / analytics | Yes | NOT AUDITED | - | 13–14 |
+
+## Phase 01 reference update
+- Studio: 17 library cards and one editor observed; exhaustive inventory BLOCKED. These are prototype reference observations, not verified implemented capabilities. See STUDIO_INVENTORY.md.
+- Marketing: Phase 00 observed comparable section structure; desktop/mobile visual comparison and source conflict analysis remain pending.
+

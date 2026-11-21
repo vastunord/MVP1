@@ -13,3 +13,6 @@ Rendered all 36 pages into a contact sheet for visual review. The deck visibly i
 ## Scope and limits
 
 These are public rendered references, not source repositories. No source code was recovered. The site content is evidence of what rendered during this session; product claims, rights, and hidden functionality remain unverified.
+
+## Phase 01 desktop inspection — 2026-11-21
+The `/app` loading transition completed. The visible Tools link opened `/app/library` with four category filters and 17 tool cards. Room Reimagination opened a tool entry and then a new-file editor. A browser screenshot of the editor was visually inspected but not saved as a durable file. Other 16 workflows, mobile layouts, and marketing desktop/mobile captures remain uninspected in this phase. No uploads or generation were performed. The editor presents a sample comparison and credits; neither demonstrates real generation or wallet functionality. Its geometry-preservation wording is an unverified prototype claim.

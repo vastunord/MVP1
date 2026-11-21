@@ -10,3 +10,7 @@
 | Knowledge Hub and gallery | New requested scope | N/A | Unknown | Payload editorial + public gallery | Consent tests | PLANNED |
 
 Do not assert parity based on a page title or URL alone. Record desktop/mobile and all relevant interaction states with concrete screenshot references.
+
+## Phase 01 partial finding
+- Studio library and Room Reimagination desktop editor observed; see STUDIO_INVENTORY.md. Designer/developer marketing comparisons remain based on Phase 00 accessibility snapshots, not full visual parity captures. Mobile, other tools, result states, and durable screenshots remain NOT VISIBLE. UI-parity gate BLOCKED pending inspection.
+

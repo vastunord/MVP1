@@ -57,3 +57,9 @@
 
 ## v3.2 authorized boundary — not provisioned
 Two independent business resource stacks: NRide under `nride@gmail.com` and Vastu Nord under `vastunord@gmail.com`, subject to verification in each vendor dashboard. A third Codex account is used for software development only. Payload CMS retained on Vastu Nord's own Vercel cloud project; Postiz removed from current stack. Social publication is manual through separate Vastu Nord platform accounts, with distinct gallery/channel consents, editorial review and logged URLs. No new cloud resources or services have been created by this document. `docs/TWO_COMPANY_ISOLATION.md` and `docs/CLOUD_PAYLOAD_AND_MANUAL_SOCIAL.md` are authoritative.
+
+## Phase 01 partial progress — 2026-11-21
+- Active branch: phase-01-reference-inventory. UI-parity gate BLOCKED: 17 Studio library cards and one Room Reimagination desktop editor inspected; remaining tools, mobile views, saved screenshots and marketing comparison still required. See STUDIO_INVENTORY.md and REFERENCE_EVIDENCE.md.
+- Owner input if access becomes unavailable: screenshots/recording of each Studio tool, its controls and results, plus desktop/mobile marketing and Studio views. Google asset library link and reuse rights remain pending.
+- No application tests, production changes, uploads or generation. Phase 02 has not started.
+

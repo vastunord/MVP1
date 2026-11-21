@@ -7,3 +7,7 @@
 | Tool inventory pending | Unknown | USER LINK REQUIRED | Not yet verified | TBD | Blocked until inventory/source |
 
 Use actual tool IDs from `STUDIO_INVENTORY.md`. Don't reuse an unrelated image merely to fill a slot; request missing subject-specific imagery.
+
+## Phase 01 observed image slots
+- Room Reimagination: Today/Reimagined sample comparison and optional user-supplied style-reference image. Source ownership, permissions, replacement mapping, crop and alt text remain unverified. No reference imagery is authorized for reuse. Other 16 tool thumbnails and editor slots need individual inspection; Google library URL and rights remain owner inputs.
+
