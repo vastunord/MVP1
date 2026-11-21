@@ -1,0 +1,171 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import {
+  authReadiness,
+  verifiedSessionUserId,
+} from "../src/server/auth-readiness.ts";
+import {
+  projectService,
+  ProjectError,
+  type ProjectRow,
+  type ProjectStore,
+  type PersonalWorkspace,
+} from "../src/server/projects.ts";
+
+const key = "80c7d7c8-7d98-4c44-9bd8-a2dd5bbfba16";
+function fixture() {
+  const spaces = new Map<string, PersonalWorkspace>();
+  const projects: ProjectRow[] = [];
+  const store: ProjectStore = {
+    async workspaceFor(userId) {
+      return spaces.get(userId) ?? null;
+    },
+    async createWorkspace(userId, name) {
+      const row = { id: `space-${userId}`, name, personalOwnerId: userId };
+      spaces.set(userId, row);
+      return row;
+    },
+    async list(workspaceId, archived) {
+      return projects.filter(
+        (row) =>
+          row.workspaceId === workspaceId &&
+          Boolean(row.archivedAt) === archived,
+      );
+    },
+    async find(workspaceId, id) {
+      return (
+        projects.find(
+          (row) => row.workspaceId === workspaceId && row.id === id,
+        ) ?? null
+      );
+    },
+    async findByKey(workspaceId, requestKey) {
+      return (
+        projects.find(
+          (row) =>
+            row.workspaceId === workspaceId && row.creationKey === requestKey,
+        ) ?? null
+      );
+    },
+    async create(workspaceId, name, detail, requestKey) {
+      const row = {
+        id: `project-${projects.length}`,
+        workspaceId,
+        name,
+        description: detail,
+        creationKey: requestKey,
+        archivedAt: null,
+        deletedAt: null,
+      };
+      projects.push(row);
+      return row;
+    },
+    async update(workspaceId, id, values) {
+      const row = projects.find(
+        (item) => item.workspaceId === workspaceId && item.id === id,
+      );
+      if (!row) throw new Error("not found");
+      Object.assign(row, values);
+      return row;
+    },
+  };
+  return { service: projectService(store), projects };
+}
+
+test("authentication is closed without database, secret and email delivery", () => {
+  assert.equal(authReadiness({}).ready, false);
+  assert.equal(
+    authReadiness({
+      DATABASE_URL: "postgresql://test",
+      BETTER_AUTH_SECRET: "x".repeat(32),
+      AUTH_EMAIL_PROVIDER: "resend",
+      RESEND_API_KEY: "test",
+      AUTH_EMAIL_FROM: "test@example.test",
+    }).ready,
+    true,
+  );
+  assert.equal(authReadiness({ GOOGLE_CLIENT_ID: "one" }).googleReady, false);
+  assert.equal(
+    authReadiness({ GOOGLE_CLIENT_ID: "one", GOOGLE_CLIENT_SECRET: "two" })
+      .googleReady,
+    false,
+  );
+  assert.equal(
+    authReadiness({
+      GOOGLE_OAUTH_ENABLED: "true",
+      GOOGLE_CLIENT_ID: "one",
+      GOOGLE_CLIENT_SECRET: "two",
+    }).googleReady,
+    true,
+  );
+  assert.equal(verifiedSessionUserId(null), null);
+  assert.equal(
+    verifiedSessionUserId({ user: { id: "u1", emailVerified: false } }),
+    null,
+  );
+  assert.equal(
+    verifiedSessionUserId({ user: { id: "u1", emailVerified: true } }),
+    "u1",
+  );
+});
+
+test("personal workspace creation is repeat-safe and cross-user projects are denied", async () => {
+  const { service } = fixture();
+  const one = await service.createWorkspace("alice", "Alice home");
+  assert.deepEqual(await service.createWorkspace("alice", "Other name"), one);
+  await service.createWorkspace("bob", "Bob home");
+  const project = await service.create("alice", "Living room", null, key);
+  assert.equal((await service.list("alice")).length, 1);
+  assert.equal((await service.list("bob")).length, 0);
+  await assert.rejects(
+    service.get("bob", project.id),
+    (error: unknown) => error instanceof ProjectError && error.status === 404,
+  );
+  await assert.rejects(
+    service.update("bob", project.id, { name: "Stolen" }),
+    /Project not found/,
+  );
+  await assert.rejects(service.archive("bob", project.id), /Project not found/);
+  await assert.rejects(
+    service.remove("bob", project.id, project.name),
+    /Project not found/,
+  );
+});
+
+test("duplicate creation returns the same project and rejects changed payload", async () => {
+  const { service, projects } = fixture();
+  await service.createWorkspace("alice", "Alice home");
+  const first = await service.create("alice", "Garden", "Ideas", key);
+  const retry = await service.create("alice", "Garden", "Ideas", key);
+  assert.deepEqual(retry, first);
+  assert.equal(projects.length, 1);
+  await assert.rejects(
+    service.create("alice", "Different name", "Ideas", key),
+    /Request key already used/,
+  );
+  await assert.rejects(
+    service.create("alice", "x", null, key),
+    /Invalid project name/,
+  );
+});
+
+test("archive, restore, metadata and deletion require owner and confirmation", async () => {
+  const { service } = fixture();
+  await service.createWorkspace("alice", "Alice home");
+  const row = await service.create("alice", "Bedroom", null, key);
+  assert.equal(
+    (await service.update("alice", row.id, { description: "Warm materials" }))
+      .description,
+    "Warm materials",
+  );
+  await service.archive("alice", row.id);
+  assert.equal((await service.list("alice")).length, 0);
+  assert.equal((await service.list("alice", true)).length, 1);
+  await service.restore("alice", row.id);
+  await assert.rejects(
+    service.remove("alice", row.id, "wrong"),
+    /confirmation required/,
+  );
+  await service.remove("alice", row.id, "Bedroom");
+  await assert.rejects(service.get("alice", row.id), /Project not found/);
+});

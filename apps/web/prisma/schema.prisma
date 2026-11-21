@@ -51,9 +51,17 @@ enum GalleryState {
 
 model User {
   id String @id @default(cuid())
+  name String @default("Vastu Nord member")
   email String @unique
+  emailVerified Boolean @default(false)
+  image String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  deletionRequestedAt DateTime?
+  sessions Session[]
+  accounts Account[]
   memberships Membership[]
+  personalWorkspace Workspace?
   assets Asset[]
   consentGrants ConsentGrant[]
   reviews EditorialReview[]
@@ -62,7 +70,9 @@ model User {
 model Workspace {
   id String @id @default(cuid())
   name String
+  personalOwnerId String? @unique
   createdAt DateTime @default(now())
+  personalOwner User? @relation(fields: [personalOwnerId], references: [id])
   memberships Membership[]
   projects Project[]
   assets Asset[]
@@ -83,12 +93,68 @@ model Project {
   id String @id @default(cuid())
   workspaceId String
   name String
+  description String?
+  creationKey String?
+  archivedAt DateTime?
+  deletedAt DateTime?
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   workspace Workspace @relation(fields: [workspaceId], references: [id])
   assets Asset[]
   jobs RenderJob[]
   @@unique([id, workspaceId])
+  @@unique([workspaceId, creationKey])
   @@index([workspaceId, createdAt])
+}
+
+// Better Auth 1.7.27 core tables, generated schema reviewed and merged into
+// the existing User model. Auth secrets/tokens never enter application logs.
+model Session {
+  id String @id
+  expiresAt DateTime
+  token String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+}
+
+model Account {
+  id String @id
+  accountId String
+  providerId String
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken String?
+  refreshToken String?
+  idToken String?
+  accessTokenExpiresAt DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope String?
+  password String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([userId])
+}
+
+model Verification {
+  id String @id
+  identifier String
+  value String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([identifier])
+}
+
+model RateLimit {
+  id String @id
+  key String @unique
+  count Int
+  lastRequest BigInt
 }
 
 model Asset {

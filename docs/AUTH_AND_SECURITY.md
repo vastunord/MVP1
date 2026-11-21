@@ -1,4 +1,16 @@
-# Authentication and security — proposed
+# Authentication and security — Phase 02D local implementation
+
+## Current implementation and verification status
+
+Better Auth 1.7.27 with its Prisma adapter is installed against Next.js 16.4.6 and Prisma 7.10.1. The generated Better Auth core models were reviewed and merged into the app schema: `User`, `Session`, `Account`, `Verification`, `RateLimit`. A versioned SQL migration is prepared but has not run. The `/api/auth/[...all]` handler fails closed with 503 until the app database, a signing secret of at least 32 characters and an approved email delivery configuration are present. No real account, session or email has been created in this task.
+
+Configured behavior: password signup (minimum 12 characters), required email verification before email/password sign-in, sign-out, password reset with session revocation, short-lived verification/reset tokens managed by Better Auth, database-backed rate limiting, and same-origin request checks for project/account mutations. Google OAuth is present only when an explicit enable flag and a full Vastu Nord-owned client ID/secret pair are configured; implicit account linking is disabled and Google must report a verified email. OAuth callbacks, consent screen and emails are **unverified**. An optional Resend HTTP sender sends verification/reset links only when configured; presence of credentials is not proof of delivery. No secrets or tokens are logged by application code.
+
+The web app checks a verified session and personal workspace on every Studio page before exposing account-backed content. Project/account API handlers check the session again, take the user ID only from the server session, restrict queries to the user's personal workspace, reject cross-origin writes and return 401/403/404/503 without private record details. The personal workspace model creates one owner membership transactionally. Project creation uses a per-workspace idempotency key; rename, description, archive, restore and confirmed soft deletion are implemented. Private asset listing is restricted to the owner and project; signed download still requires the owner and a configured private store. Public/gallery/social mutation routes remain absent. Isolated policy tests pass; real database transactions, session cookies, email links, OAuth and cross-user browser flows await an isolated live database and provider tests.
+
+Account deletion is a **request**, not immediate erasure: the server records one timestamp and audit event, leaving media/retention review to a later approved workflow. Passwords are hashed by Better Auth; do not claim a particular hash was verified in this environment. A privacy notice appears in both languages, but production privacy terms and retention policy require founder/legal review before collecting customer data.
+
+Owner setup and verification steps: [OWNER_CLOUD_SETUP.md](OWNER_CLOUD_SETUP.md).
 
 Recommend Better Auth with Prisma adapter and DB sessions inside web, initially verified email/password. Founder approval and email provider setup needed. [Official adapter documentation source](https://github.com/better-auth/better-auth/blob/main/docs/content/docs/adapters/prisma.mdx) establishes the integration option, not installed compatibility or working login. Optional Google OAuth is deferred pending a Vastu Nord-owned client/consent screen/callbacks; no implicit linking by unverified email.
 

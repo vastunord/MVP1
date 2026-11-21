@@ -27,6 +27,11 @@ Owner-directed policies below supersede tentative D-001/D-002 wording: company i
 - D-014 IMPLEMENTED LOCALLY: Prisma 7 app schema and private Vercel Blob adapter behind disabled server boundaries. Neon and Blob remain proposed live providers; no account, plan, region, credential or resource was approved or activated by this implementation. Verify Vastu Nord identity and costs before provisioning.
 - D-015 IMPLEMENTED LOCALLY: exclude `assets/Visuals/` from Git and record metadata/rights/approval in the CSV. Any cloud import or public use requires per-asset rights review and separate authorization. Alternative of checking 4.45 GB of unreviewed media into Git was rejected.
 
+### Phase 02D local choices
+
+- D-016 IMPLEMENTED LOCALLY, NOT PRODUCTION VERIFIED: use Better Auth 1.7.27 with the existing Prisma 7 app database; require verified email, database-backed rate limiting and server session checks. Resend is a disabled-by-default delivery adapter, not an approved vendor account or cost commitment. Google OAuth stays hidden without a Vastu Nord-owned credential pair and tested consent/callback configuration.
+- D-017 IMPLEMENTED LOCALLY: start with one personal workspace per verified user, owner-scoped projects and soft deletion; defer team sharing and physical media deletion to explicit retention design. No browser-supplied user/workspace ID can grant access.
+
 Detailed boundaries and consequences: `docs/ARCHITECTURE.md`, `docs/DATABASE_ARCHITECTURE.md`, `docs/AI_AND_WORKERS.md`, `docs/INTEGRATIONS_AND_ACCESS.md`. All runtime integration state remains PLANNED/UNVERIFIED.
 
 ## Historical ADR v3.1 — SUPERSEDED (not to execute)

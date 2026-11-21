@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
+import { cookies, headers } from "next/headers";
 import { Header } from "@/components/header";
 import { StudioShell } from "@/components/workspace";
 import { Library } from "@/components/library";
@@ -8,6 +8,9 @@ import { messages, type MessageKey } from "@/lib/i18n";
 import { savedLocale } from "@/lib/locale-server";
 import { findTool } from "@vastunord/contracts/tools";
 import Link from "next/link";
+import { authReadiness } from "@/server/auth-readiness";
+import { createDatabase } from "@/server/db";
+import { ProjectsScreen, AccountScreen } from "@/components/project-screens";
 export const metadata = { title: "Studio" };
 export default async function Page({
   params,
@@ -19,6 +22,19 @@ export default async function Page({
     t = messages(locale);
   const pref = (await cookies()).get("vn-theme")?.value;
   const theme = pref === "light" || pref === "dark" ? pref : "system";
+  const authEnabled = authReadiness().ready;
+  if (authEnabled) {
+    const { auth } = await import("@/server/auth");
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user?.emailVerified) redirect("/login");
+    const db = createDatabase();
+    const personal = await db.workspace.findUnique({
+      where: { personalOwnerId: session.user.id },
+      select: { id: true },
+    });
+    await db.$disconnect();
+    if (!personal) redirect("/onboarding");
+  }
   let content;
   if (path[0] === "tools" && path.length === 2) {
     const tool = findTool(path[1]);
@@ -26,6 +42,20 @@ export default async function Page({
     content = <Editor key={tool.id} tool={tool} locale={locale} />;
   } else if (path[0] === "library" && path.length === 1)
     content = <Library locale={locale} />;
+  else if (path[0] === "projects" && path.length <= 2)
+    content = (
+      <ProjectsScreen
+        locale={locale}
+        projectId={path[1]}
+        enabled={authEnabled}
+      />
+    );
+  else if (
+    path[0] === "settings" &&
+    (path.length === 1 ||
+      (path.length === 2 && ["profile", "security"].includes(path[1])))
+  )
+    content = <AccountScreen locale={locale} enabled={authEnabled} />;
   else if (path.length === 0)
     content = (
       <>
@@ -35,6 +65,9 @@ export default async function Page({
         <Link className="button primary" href="/app/library">
           {t.explore} ↗
         </Link>
+        <p>
+          <Link href="/app/projects">{t.projects} →</Link>
+        </p>
         <section className="empty-section">
           <h2>{t.projects}</h2>
           <p>{t.emptyBody}</p>
@@ -67,7 +100,7 @@ export default async function Page({
   else notFound();
   return (
     <>
-      <Header locale={locale} theme={theme} workspace />
+      <Header locale={locale} theme={theme} workspace authReady={authEnabled} />
       <StudioShell locale={locale}>{content}</StudioShell>
     </>
   );

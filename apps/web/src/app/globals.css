@@ -61,6 +61,12 @@ select,
 textarea {
   font: inherit;
 }
+.auth-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 440px); gap: clamp(2rem, 5vw, 6rem); align-items: start; }
+.auth-panel { padding: clamp(1.25rem, 3vw, 2.5rem); border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.auth-form, .auth-form label { display: grid; gap: .6rem; }
+.auth-form { gap: 1.25rem; margin: 1.5rem 0; }
+.auth-panel [role="alert"] { color: var(--orange); }
+@media (max-width: 768px) { .auth-layout { grid-template-columns: 1fr; } }
 button,
 a,
 select,

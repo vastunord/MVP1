@@ -5,6 +5,7 @@
     "postinstall": "prisma generate",
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
+    "build:webpack": "next build --webpack",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -12,10 +13,12 @@
     "test:smoke": "playwright test"
   },
   "dependencies": {
+    "@better-auth/prisma-adapter": "1.7.27",
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
     "@vastunord/contracts": "workspace:*",
     "@vercel/blob": "2.9.0",
+    "better-auth": "1.7.27",
     "next": "16.4.6",
     "pg": "^8.23.1",
     "react": "19.3.1",

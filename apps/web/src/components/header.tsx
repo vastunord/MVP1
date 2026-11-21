@@ -14,10 +14,12 @@ export function Header({
   locale,
   theme,
   workspace = false,
+  authReady = false,
 }: {
   locale: Locale;
   theme: Theme;
   workspace?: boolean;
+  authReady?: boolean;
 }) {
   const t = messages(locale),
     router = useRouter(),
@@ -126,7 +128,13 @@ export function Header({
       <div className="notice">
         <span>{t.foundation}</span>
         <Dialog label={t.info} close={t.close}>
-          <p>{t.status}</p>
+          <p>
+            {authReady
+              ? locale === "en"
+                ? "Account and project features are in test. Upload and AI generation remain unavailable."
+                : "Konto og prosjekter er under testing. Opplasting og AI-generering er fortsatt utilgjengelig."
+              : t.status}
+          </p>
           <p>{t.privacy}</p>
         </Dialog>
       </div>

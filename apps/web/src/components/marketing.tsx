@@ -9,13 +9,18 @@ export const publicPages = [
   "login",
   "signup",
   "forgot-password",
+  "reset-password",
+  "verify-email",
+  "onboarding",
 ] as const;
 export function Marketing({
   locale,
   page = "",
+  authReady = false,
 }: {
   locale: Locale;
   page?: string;
+  authReady?: boolean;
 }) {
   const t = messages(locale);
   if (page)
@@ -40,7 +45,10 @@ export function Marketing({
           <p className="eyebrow">VASTU NORD / {t.foundation}</p>
           <h1>{t.title}</h1>
           <p className="lede">{t.intro}</p>
-          <Link className="button primary" href="/app/library">
+          <Link
+            className="button primary"
+            href={authReady ? publicHref("/signup", locale) : "/app/library"}
+          >
             {t.explore}
             <span aria-hidden="true">↗</span>
           </Link>
@@ -100,7 +108,13 @@ export function Marketing({
             </div>
           ))}
         </div>
-        <p className="small">{t.status}</p>
+        <p className="small">
+          {authReady
+            ? locale === "en"
+              ? "Private account and project features are in test; generation remains unavailable."
+              : "Privat konto og prosjekter er under testing; generering er fortsatt utilgjengelig."
+            : t.status}
+        </p>
       </section>
     </main>
   );

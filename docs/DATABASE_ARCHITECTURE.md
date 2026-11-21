@@ -1,4 +1,8 @@
-# Database architecture — Phase 02C local schema, not deployed
+# Database architecture — Phase 02D local schema, not deployed
+
+## Phase 02D extension — prepared, not migrated
+
+The second migration adds Better Auth user fields and the generated `Session`, `Account`, `Verification` and database rate-limit tables. It adds `Workspace.personalOwnerId` (unique), transactional owner membership, project description, idempotency key, archive and soft-delete timestamps. The migration uses non-null defaults for added user name/update time and project update time so an existing Phase 02C table with rows can be upgraded. No live migration or rollback test has occurred. All project reads and writes use the authenticated personal owner's workspace; UI-supplied user/workspace IDs are ignored. A deleted project is hidden, while linked media remains subject to separate retention and ownership rules. The full ledger, billing, CMS schema and general team workspaces remain deferred.
 
 ## Implemented foundation (2026-11-21)
 

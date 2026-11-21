@@ -1,5 +1,28 @@
 import { test, expect } from "@playwright/test";
 import { tools } from "@vastunord/contracts/tools";
+test("unconfigured account forms and private APIs stay closed", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/signup");
+  await expect(
+    page.getByRole("heading", { name: "Opprett konto" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Opprett konto" }),
+  ).toBeDisabled();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.goto("/en/login");
+  await expect(page.getByRole("button", { name: "Sign in" })).toBeDisabled();
+  const projects = await page.request.get("/api/projects");
+  expect(projects.status()).toBe(503);
+  const auth = await page.request.get("/api/auth/get-session");
+  expect(auth.status()).toBe(503);
+});
 test("public route placeholders and system theme", async ({ page }) => {
   for (const prefix of ["", "/en"]) {
     for (const route of [
