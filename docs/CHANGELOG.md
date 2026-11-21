@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### 2026-11-21 — Phase 02E Resend DNS records prepared, save blocked
+
+Verified the owner-supplied Domeneshop/Resend screens and the signed-in pages for `vastu.no`. Resend lists Pending TXT `resend._domainkey` and CNAMEs `rsend`/`send`; the full DKIM public key was visible in the Resend control, while the screenshot shortened it. Domeneshop shows the domain's existing nameservers, apex SPF and DMARC. Prepared the DKIM row without changing any existing record. Automatic approval review rejected its Add action because this exact Domeneshop DNS change lacked explicit user authorization; did not retry or bypass. No DNS mutation, sender verification or test email occurred. Updated the owner setup handoff; no application code, cloud database, deployment, push or NRide change.
+
 ### 2026-11-21 — Phase 02E Resend resource, sender still onboarding
 
 After the owner approved Resend and accepted Vercel Marketplace terms, the Vastu Nord-only CLI provisioned the free Resend resource `ir_wZk3Y3lUDXamTWlV` for `vastu.no` in the EU region and connected it to `vastunord-web` Development only. Verified Vercel lists `RESEND_API_KEY` and `RESEND_EMAIL_DOMAIN` for Development; no value was retrieved or printed. The resource reports Onboarding, and Vercel does not manage `vastu.no` DNS under this team. Domain verification, email delivery and real auth tests remain blocked until exact Resend records are added at the actual DNS host. No deployment, DNS change, migration, push, production setting, customer message or NRide action.
