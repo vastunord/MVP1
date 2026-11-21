@@ -65,4 +65,5 @@ test('cloud configuration remains closed without dedicated resources', () => {
   assert.equal(readServerConfig({ APP_ENV: 'preview', MEDIA_UPLOADS_ENABLED: 'false' }).uploadsEnabled, false);
   assert.throws(() => readServerConfig({ APP_ENV: 'production', MEDIA_UPLOADS_ENABLED: 'true' }), /dedicated database/);
   assert.throws(() => readServerConfig({ APP_ENV: 'production', DATABASE_URL: 'not-a-url' }), /Invalid URL/);
+  assert.equal(readServerConfig({ APP_ENV: 'development', DATABASE_URL: 'postgresql://runtime@dev.example/neondb', BLOB_STORE_ID: 'store_dev', VERCEL_OIDC_TOKEN: 'test-oidc-token', MEDIA_UPLOADS_ENABLED: 'true' }).uploadsEnabled, true);
 });

@@ -10,7 +10,7 @@ export async function GET(request: Request, context: Context) {
   if ("response" in ctx) return ctx.response;
   try {
     const config = readServerConfig();
-    if (!config.uploadsEnabled || !process.env.BLOB_READ_WRITE_TOKEN)
+    if (!config.uploadsEnabled)
       return Response.json(
         { error: "Private media is unavailable" },
         { status: 503 },

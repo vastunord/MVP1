@@ -3,8 +3,8 @@ import { issueSignedToken,presignUrl,head,get,del } from '@vercel/blob';
 import type { PrivateMediaDriver } from './media';
 
 // Instantiate only after confirming a dedicated Vastu Nord private store.
-export function createVercelPrivateDriver(token:string):PrivateMediaDriver {
-  if(!token) throw new Error('Private storage credential is missing');
+export function createVercelPrivateDriver(token?:string):PrivateMediaDriver {
+  if(!token && !process.env.VERCEL_OIDC_TOKEN) throw new Error('Private storage credential is missing');
   return {
     async signPut(pathname,contentType,byteSize,expiresAt) {
       const scope=await issueSignedToken({pathname,operations:['put'],validUntil:expiresAt.getTime(),allowedContentTypes:[contentType],maximumSizeInBytes:byteSize,token});
