@@ -123,3 +123,33 @@ All four entry pages and empty-photo editors loaded in the designer reference. T
 
 ### Remaining tools
 Four of 17 tools remain without editor inspection: Spa & Pool Redesign, Sky Transformation, Seasonal Transformation, Object Placement. Mobile interactions, durable screenshots and marketing comparison remain outstanding. No inference is made about hidden controls, AI services, credit accounting, or export behavior.
+## Phase 01D — final four Studio editors (2026-11-21)
+All four entry pages and new-file editors loaded from the visible library routes. Shared shell matched the previously documented shell. “40 credits” appeared in each editor header; this does not verify an actual wallet. No photo was uploaded or generation triggered.
+
+### 14. Spa & Pool Redesign — COMPLETE / OBSERVED
+- Entry `/app/tools/pool-redesign` (Exterior & Landscape); new file `/app/new?tool=pool-redesign`; editor `/app/editor/file-mwqbf7rp-1`. Entry had no prior files.
+- Wide photo in daylight, JPEG/PNG/WEBP up to 20 MB; browse assets; optional “Add a place you like” style-reference image/asset. Prompt `Describe the pool` (Pool), `Describe the spa` (Spa), or `Describe the pool and spa` (combined); Improve, 1,000-character limit, “Anything to avoid?”.
+- “What are you designing?” defaults Pool; Spa; Pool + Spa. Pool type defaults Infinity; Lap, Plunge, Natural, Courtyard. Pool configuration defaults Contemporary style, In-ground construction, Rectangular shape, Tile lining; alternatives Natural/Resort/Classic, Raised/Partially raised, L-shape/Freeform/Circular, and Plaster/Pebble/Stone.
+- Spa mode type defaults Hot tub (above ground); In-ground spa, Plunge pool/cold plunge. Spa config defaults Round, Tile; alternatives Square/Rectangular/Freeform and Stone/Concrete-plaster/Acrylic/Wood surround. Optional features: Built-in seating, Jets, Waterfall/water feature, Underwater lighting, Deck/surround (unchecked by default). Combined mode adds Spillover spa type and placement radios Attached/spillover (default), Next to the pool, Separate area. Inline plan caption states “Plan, not to scale.”
+- Sample Today/Natural pool, slider 46. Steps Add your photo / Specify the pool / Generate (changes to specify spa or pool and spa in those modes). Primary action defaults `Design the pool`, disabled before photo. No layout plan or generation behavior was verified.
+
+### 15. Sky Transformation — COMPLETE / OBSERVED
+- Entry `/app/tools/sky-transformation` (Exterior & Landscape); new file `/app/new?tool=sky-transformation`; editor `/app/editor/file-mwqbfrkq-1`. Entry showed one existing file, “Villa exterior — golden hour”; it was not opened.
+- Wide photo in daylight, JPEG/PNG/WEBP up to 20 MB; browse assets; optional “Add a place you like” style-reference photo/asset. Prompt `Describe the sky`, Improve, 1,000-character limit, “Anything to avoid?”.
+- “Preview on my photo” defaults on; copy describes a free/instant wash and says it is not a render. Time of day defaults Morning; Midday, Golden hour, Blue hour, Night. Weather defaults Clear; Overcast, Hazy, Rain, Snow. Cloud intensity defaults 45% (Broken); Sky saturation defaults 50% (Natural).
+- Initial preview text read “Morning sky, clear, 45% cloud, 50% saturation” while the comparison label read Today/Golden hour · preview, slider 42. This visible mismatch is recorded, not reconciled by inference. Steps Add your photo / Set the sky / Generate. `Change the sky` disabled before photo. Preview/render behavior unverified.
+
+### 16. Seasonal Transformation — COMPLETE / OBSERVED
+- Entry `/app/tools/seasonal-transformation` (Exterior & Landscape); new file `/app/new?tool=seasonal-transformation`; editor `/app/editor/file-mwqbg2j1-1`. Entry had no prior files.
+- Wide photo in daylight, JPEG/PNG/WEBP up to 20 MB; browse assets; optional “Add a place you like” style-reference photo/asset. Prompt `Describe the season`, Improve, 1,000-character limit, “Anything to avoid?”.
+- Time of day defaults As photographed; Morning, Midday, Golden hour, Blue hour, Night. Season defaults Spring (Blossom, fresh green, soft light); Summer (Full canopy, deep shade, long days), Autumn (Turning leaves, leaf litter, low sun), Winter (Bare branches, frost or snow, pale light). Winter selection exposes Snow cover radios: None default, Frost, Light snow, Heavy snow. “Preview on my photo” defaults on; copy calls it a free/instant quick grade, not a render.
+- Scene elements: People defaults Keep existing; None, A few, Busy. Vehicles defaults Keep existing; None, Parked, Passing. Sample label Today/Autumn · preview, slider 42, while the selected/default season was Spring; record as a visible label/state mismatch. Steps Add your photo / Choose the season / Generate. Action `Show it in spring` disabled before photo; target label follows selected season. Preview/render behavior unverified.
+
+### 17. Object Placement — COMPLETE / OBSERVED
+- Entry `/app/tools/object-placement` (Exterior & Landscape); new file `/app/new?tool=object-placement`; editor `/app/editor/file-mwqbgif6-1`. Entry had no prior files.
+- Base input: wide photo in daylight, JPEG/PNG/WEBP up to 20 MB; browse assets. Prompt `Describe how the objects should sit`, Improve, 1,000-character limit, “Anything to avoid?”. No separate style-reference field was visible.
+- Objects section is marked Required. Copy says choose an existing asset or upload its photo, then tap where it goes. In the empty editor only `Place` and `Choose from your objects` were visible and both disabled; no separate object-photo upload input was visible. Object selection, pin placement and multi-object behavior therefore remain unverified.
+- Sample is a backyard with numbered Stone planter and Timber bench pins; caption HOW IT WORKS. No Today/result comparison label or slider was observed. Steps Add your photo / Place the objects / Generate. Primary `Place the object` disabled before photo. The shared header displays 40 credits; no wallet/generation evidence.
+
+### Phase 01D coverage result
+All 17 of 17 listed Studio tool editors have been observed at the empty-photo UI level. Upload-to-result flows, AI/model behavior, credit accounting, persistence, exports, mobile interactions, durable screenshot captures and marketing desktop/mobile comparison remain UNVERIFIED or NOT VISIBLE. Do not interpret visible controls or displayed prototype copy as verified capabilities.

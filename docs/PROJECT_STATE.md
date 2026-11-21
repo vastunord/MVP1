@@ -2,9 +2,9 @@
 
 **Status:** Phase 01 in progress. Greenfield planning kit and reference review are committed and pushed to the Vastu Nord-owned public repository; no application implementation verified.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 01 reference inventory (01C complete; awaiting owner approval before Phase 01D).
+**Active phase:** Phase 01 reference inventory (01D complete; awaiting owner approval before Phase 01E).
 **Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. Local Git is initialized on `main`; `origin` is `https://github.com/vastunord/MVP1.git`.
-**Next safe task:** Wait for owner approval before starting Phase 01D.
+**Next safe task:** Wait for owner approval before starting Phase 01E.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -17,7 +17,7 @@
 | Area | Actual status | Evidence/URL | Next test |
 |---|---|---|---|
 | Marketing site | Public reference pages observed; source unavailable and not required for greenfield | `docs/REFERENCE_EVIDENCE.md` | Capture detailed parity evidence in Phase 01 |
-| Existing Studio | 17 tool cards observed; 13 tool editors inspected at empty-photo UI state | `docs/STUDIO_INVENTORY.md` | Inspect remaining four tools and outstanding mobile/marketing evidence |
+| Existing Studio | All 17 tool editors inspected at empty-photo UI state | `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md` | Verify remaining mobile/marketing evidence; implementation belongs to a later approved phase |
 | Auth + private projects | Unknown | No verified repo | Check code and auth config |
 | Real image/video generation | Unknown | No verified API keys | Capability matrix, contract test |
 | Neon, Payload, storage, jobs | Unknown | Owner preference only | Resource isolation and integration test |
@@ -29,7 +29,7 @@
 
 ## Blockers / owner requests
 - The host-wide GitHub credential was initially rejected. Repository-local path-scoped authentication succeeded; GitHub visibly shows the pushed Vastu Nord commits and files on the public `main` branch. No global credentials were changed.
-- The earlier Studio `/app` loading state cleared; current inventory covers 13 of 17 tool editors, with four remaining and mobile/marketing evidence outstanding.
+- Current inventory covers all 17 Studio editors at empty-photo state. Mobile states, durable screenshots, and marketing comparison remain outstanding; backend behavior is unverified.
 - Provide open-access Google image-library URL/ID, asset rights and mapping when phase 04 begins.
 - Configure new Vastu Nord cloud resources only during their corresponding phases; former developers' Git/Vercel/Neon access is not required.
 
@@ -77,3 +77,7 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Continued on `phase-01-reference-inventory` from `c317b99`. Inspected Decor Re-definition, Material Refinement, Lighting Reimagination and Garden Design entry pages and empty-photo editors. Thirteen of 17 Studio tools now have editor-level observations.
 - Recorded tool-specific defaults, options, upload/reference inputs and disabled states. Garden Design’s touch-up mode was inspected by toggling the switch on, then restored to default off. No upload, generation, paid action, source-code change, deployment or NRide access occurred.
 - A Garden Design browser screenshot was viewed but could not be saved as a durable project file. Four editors, mobile layouts, durable screenshot evidence and marketing comparison remain. Parity gate BLOCKED; Phase 01D and Phase 02 have not started.
+## Phase 01D progress — 2026-11-21
+- Continued on `phase-01-reference-inventory` from `830b014`. Inspected Spa & Pool Redesign, Sky Transformation, Seasonal Transformation and Object Placement entry pages/editors; all 17 of 17 Studio tools now have empty-photo editor observations.
+- Added the final tool observations and created `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md` for all 17 tools. Dependent option states were revealed in Spa & Pool, Sky and Seasonal Transformation without uploads or generation. Two comparison/default mismatches are recorded for review.
+- Screenshot views were captured in the browser but no durable screenshot file could be saved. No media upload, generation, paid action, source-code change, deployment, push or NRide access. Mobile and marketing parity evidence remain. UI-parity gate BLOCKED; Phase 01E and Phase 02 have not started.

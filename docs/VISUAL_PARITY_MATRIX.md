@@ -24,3 +24,6 @@ Do not assert parity based on a page title or URL alone. Record desktop/mobile a
 ## Phase 01C update
 - Editor-level desktop observations now cover 13 of 17 Studio tools. Phase 01C added Decor Re-definition, Material Refinement, Lighting Reimagination and Garden Design; see `docs/STUDIO_INVENTORY.md`.
 - Those four inspections are COMPLETE at the empty-photo UI level. No AI, wallet, export or result behavior was verified. UI parity remains BLOCKED pending four remaining editors, mobile evidence, durable captures and marketing comparison.
+## Phase 01D update
+- Editor-level desktop observation covers all 17 of 17 Studio tools at empty-photo state. The final four are recorded in `docs/STUDIO_INVENTORY.md`; the implementation-oriented field summary is `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md`.
+- Empty-state UI coverage is COMPLETE for listed tools. UI parity remains BLOCKED by uninspected mobile states, unavailable durable screenshot files, and incomplete desktop/mobile marketing comparison. AI, wallet, result, and export behavior remain unverified.
