@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-3 private Studio uploads
+
+Added a shared project-associated Studio upload/preview/saved-image/delete flow, authenticated private upload and deletion routes, server-side MIME/size/image decoding checks and Blob/Neon cleanup handling. Live synthetic Development tests passed owner upload/retrieval after login, cross-user denial, invalid file rejection, metadata persistence and deletion; browser tests passed upload, rendered preview, reopening, deletion and drag-and-drop selection. Synthetic blobs were deleted and retired test records remain. Normal failure cleanup and quarantine were fixture-tested; process-crash reconciliation and malware scanning remain unimplemented. Added a nonsecret Preview/Production environment audit; mappings remain unverified and block deployment. No demonstration assets were uploaded.
+
 ### Phase 02E finalization
 
 Registered a new synthetic development user at the owner's controlled inbox; owner verified the email and first sign-in succeeded using the original in-memory signup password. The temporary test harness raised a readline shutdown error after the successful HTTP 200, so its process exited nonzero; no account password was reset. Vercel lists `DATABASE_URL` in Development, Preview and Production; Development targets the expected owner/dev endpoint. Vercel would not inject Preview or Production Secret values, leaving their targets unverified and deployment blocked. The development Blob store ID and OIDC token are present with uploads disabled. No Blob test, deployment or environment change occurred.

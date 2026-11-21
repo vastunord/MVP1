@@ -9,6 +9,7 @@ import {
 } from "@vastunord/contracts/tools";
 import { messages, type Locale } from "@/lib/i18n";
 import { Button } from "./ui";
+import { PrivateUpload } from "./private-upload";
 function Field({
   control,
   value,
@@ -103,9 +104,11 @@ function Field({
 export function Editor({
   tool,
   locale,
+  uploadsEnabled,
 }: {
   tool: ToolDefinition;
   locale: Locale;
+  uploadsEnabled: boolean;
 }) {
   const t = messages(locale);
   const [values, setValues] = useState<
@@ -118,6 +121,7 @@ export function Editor({
     ),
   );
   const [prompt, setPrompt] = useState("");
+  const [preview, setPreview] = useState("");
   return (
     <>
       <div className="editor-heading">
@@ -133,15 +137,11 @@ export function Editor({
       <p className="small">{t.previewNote}</p>
       <div className="editor">
         <section className="editor-panel" aria-label={t.controls}>
-          <div className="upload-box">
-            <span aria-hidden="true">＋</span>
-            <h2>{t.upload}</h2>
-            <p>{t.uploadHelp}</p>
-            <p className="small" lang="en">
-              {tool.framing}
-            </p>
-            <Button disabled>{t.upload}</Button>
-          </div>
+          <PrivateUpload
+            locale={locale}
+            enabled={uploadsEnabled}
+            onPreview={setPreview}
+          />
           {tool.reference && <Button disabled>{t.reference}</Button>}
           <div className="field">
             <label htmlFor="prompt">{t.prompt}</label>
@@ -191,18 +191,38 @@ export function Editor({
         </section>
         <section className="canvas" aria-label={t.canvas}>
           <div className="canvas-inner">
-            <div className="canvas-icon" aria-hidden="true">
-              ＋
-            </div>
-            <h2>{t.canvas}</h2>
-            <p>{t.canvasBody}</p>
-            {tool.comparison && (
-              <div className="comparison-labels" lang="en">
-                <span>{tool.comparison[0]}</span>
-                <span>{tool.comparison[1]}</span>
-              </div>
+            {preview ? (
+              // Images are either local previews or authorized private-media endpoints.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={preview}
+                alt={
+                  locale === "en"
+                    ? "Selected project image"
+                    : "Valgt prosjektbilde"
+                }
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "60vh",
+                  objectFit: "contain",
+                }}
+              />
+            ) : (
+              <>
+                <div className="canvas-icon" aria-hidden="true">
+                  ＋
+                </div>
+                <h2>{t.canvas}</h2>
+                <p>{t.canvasBody}</p>
+                {tool.comparison && (
+                  <div className="comparison-labels" lang="en">
+                    <span>{tool.comparison[0]}</span>
+                    <span>{tool.comparison[1]}</span>
+                  </div>
+                )}
+                <p className="small">{t.empty}</p>
+              </>
             )}
-            <p className="small">{t.empty}</p>
           </div>
           <ol className="canvas-steps">
             <li>{t.step1}</li>

@@ -1,5 +1,15 @@
 # Deployment and operations plan — Phase 02E resource status
 
+## Phase 02E-3 database environment audit
+
+| Environment | Neon branch | Database | Role | Status |
+| --- | --- | --- | --- | --- |
+| Development | `development` (`br-mute-resonance-bhea4dyx`) | `neondb` | `neondb_owner` | Verified in prior live checks; owner role permitted for development testing only. |
+| Preview | Unknown | Unknown | Unknown | `DATABASE_URL` is listed, but Vercel will not inject its protected value into local CLI checks. UNVERIFIED. |
+| Production | Unknown | Unknown | Unknown | `DATABASE_URL` is listed, but Vercel will not inject its protected value into local CLI checks. UNVERIFIED. |
+
+Do not deploy or enable automatic deployment while Preview or Production mapping is unknown. The owner should identify each target from the secure source used when configured. If unavailable, propose replacing the affected variables with known, separate environment-specific Neon connections only after owner approval of the exact changes. Never share connection strings or passwords. Before public launch replace the temporary development owner connection with a restricted application role.
+
 The Vastu Nord Neon development branch, private Frankfurt Blob development store and Vercel web project are provisioned. A connector link-only create request initially returned HTTP 403; the official CLI authenticated separately as `vastunord@gmail.com` (team OWNER) then created `vastunord-web` (`prj_LyZA1xMnM4efg5U8SIAfGD4GIDc0`), set root `apps/web`, Next.js and temporary build-ignore command `exit 0`, and linked GitHub `vastunord/MVP1` (production branch `main`). The isolated CLI's deployment list was empty after linking. The private store is not connected and no environment variables were set remotely. No preview or production deployment, DNS change or push occurred. `scripts/vercel-vastunord.ps1` is the account-checked CLI entry point; its auth directory is Git-ignored.
 
 The team currently has a Hobby plan. The owner requested setup there and plans a paid subscription after go-live; [Vercel's Hobby policy](https://vercel.com/docs/plans/hobby) restricts commercial use, so a business launch requires a commercial-eligible plan **before** go-live. Plan choice is an owner action. The local webpack production build and unconfigured browser smoke tests pass; they do not establish preview readiness with live auth/storage. Remove the temporary build-ignore rule only after the next explicitly approved deployment plan and complete environment checks.

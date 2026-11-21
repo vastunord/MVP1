@@ -11,6 +11,7 @@ import Link from "next/link";
 import { authReadiness } from "@/server/auth-readiness";
 import { createDatabase } from "@/server/db";
 import { ProjectsScreen, AccountScreen } from "@/components/project-screens";
+import { readServerConfig } from "@/server/config";
 export const metadata = { title: "Studio" };
 export default async function Page({
   params,
@@ -39,7 +40,14 @@ export default async function Page({
   if (path[0] === "tools" && path.length === 2) {
     const tool = findTool(path[1]);
     if (!tool) notFound();
-    content = <Editor key={tool.id} tool={tool} locale={locale} />;
+    content = (
+      <Editor
+        key={tool.id}
+        tool={tool}
+        locale={locale}
+        uploadsEnabled={authEnabled && readServerConfig().uploadsEnabled}
+      />
+    );
   } else if (path[0] === "library" && path.length === 1)
     content = <Library locale={locale} />;
   else if (path[0] === "projects" && path.length <= 2)
