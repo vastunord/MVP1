@@ -1,5 +1,9 @@
 # Authentication and security — Phase 02E verification status
 
+## Runtime first-password limitation
+
+The owner reported that Neon Console rejected a password reset for the development runtime role because it has no password. The documented SQL alternative requires a protected privileged session and secret handling that must not expose credentials in tool arguments or logs. Such a handoff has not been verified. Keep runtime activation blocked until it is available and verify the role's unchanged permissions and target before enabling LOGIN.
+
 ## Approved development privilege policy
 
 The owner accepted PUBLIC CONNECT on `postgres` and `template1`, TEMPORARY on `neondb`, and SELECT on `pg_stat_statements` and `pg_stat_statements_info` in development. Do not change PUBLIC grants globally. Administrative membership, including `pg_read_all_stats`, database/schema CREATE, unauthorized DDL and unauthorized application-data access remain disallowed; user-to-user authorization remains required. Read-only catalog checks confirmed no such administrative or DDL privileges and the expected application-table grants. The runtime role remains NOLOGIN pending protected credentials; real runtime and two-user authorization remain untested.

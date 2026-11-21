@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2A Neon first-password blocker
+
+The owner attempted the development runtime role's Neon Console reset; the UI reported `cannot update password for role without password`. Reviewed Neon's documented SQL alternative; a protected privileged handoff without password exposure remains unverified. No database role, password, Vercel configuration or application runtime was changed.
+
 ### Phase 02E-2A approved development privilege policy
 
 Recorded owner acceptance of specific PostgreSQL PUBLIC defaults and statistics-view access. Read-only checks found no runtime administrative membership, database/schema CREATE or application-table ownership; table grants match the documented matrix. Activation remains blocked pending protected runtime credential and URL configuration. Migration credential absence was reconfirmed. Prisma validation, TypeScript, ESLint, 15 local tests and webpack build passed. No account or email was created.

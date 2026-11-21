@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Runtime first-password blocker
+
+Neon Console rejected Reset password for `vastunord_dev_runtime` on development with `cannot update password for role without password`. Reset does not establish its first password. [Neon's role documentation](https://neon.com/docs/manage/roles#manage-roles-with-sql) describes setting a chosen password with SQL; a safe, appropriately privileged connection and non-logging secret handoff remain to be verified. Do not recreate the role through the ordinary administrative role flow or put a privileged database credential into the normal application environment. The user requested Vercel variable handling instead of password-entry prompts.
+
 ## Current runtime activation action
 
 The owner accepted the specified development PUBLIC and statistics-view privileges. The limited runtime role passed read-only permission checks but remains NOLOGIN. Set its unique password through a protected Neon workflow and configure its pooled `neondb` URL as the `vastunord-web` Development-only server-side `DATABASE_URL`; keep both values out of chat, logs and Git. Verify the exact target before enabling login and testing startup. Preserve migration credential isolation.
