@@ -2,9 +2,13 @@
 
 ## V7 Phase 00 · 22 November 2026
 
+**Live noncommercial demo.** Vercel marked application commit `a550e02` READY and assigned it to [vastunord-web.vercel.app](https://vastunord-web.vercel.app). The [deployment record](https://vercel.com/vastu-nord/vastunord-web/Gdmdz94uY1kK9PE8e1Yo6GCpbVtR) identifies the existing Vastu Nord project and Production alias.
+
+Anonymous live checks passed for all 12 marketing URLs and 17 editor routes. The primary photo filled 390, 768, 1280 and 1440 CSS pixels in both themes, and the browser rendered the headline in Zalando Sans Expanded. The sample-to-editor journey persisted across refresh and tool selection. Five private/service endpoints stayed closed. [Before and after screenshots](evidence/v7-brand-entry/README.md)
+
 The shared marketing and Studio header now uses the guide’s exact horizontal lockups, direct EN/NO and Light/Dark controls, persistent Prana access and a keyboard-accessible compact menu. The homepage preserves the finalized Figma headline, main actions and transformation chooser. The founder’s wider image treatment spans the viewport. Visitors can adjust a same-photo tonal comparison, try three brand studies in the corresponding editors and continue to a different tool with the selected photo. A private upload retains its fixed destination through sign-in when the service is enabled.
 
-Current source and staged-release evidence are in the [v7 go-live record](go-live/GO_LIVE_STATE.md), [brand record](BRAND_PARITY.md) and [Figma route matrix](FIGMA_TO_ROUTE_MATRIX.md). The 723 local media files have a refreshed rights-aware [manifest](VISUALS_ASSET_MANIFEST.csv). The candidate fjord image is awaiting scoped publication approval. Next design task is the approved homepage photo and crop. [Consolidated owner inputs](OWNER_ACTIONS_ONE_LIST.md)
+Release evidence is in the [v7 go-live record](go-live/GO_LIVE_STATE.md), [brand record](BRAND_PARITY.md) and [Figma route matrix](FIGMA_TO_ROUTE_MATRIX.md). The 723 local media files have a refreshed rights-aware [manifest](VISUALS_ASSET_MANIFEST.csv). The candidate fjord image is awaiting scoped publication approval. Next design task is the approved homepage photo and crop. [Consolidated owner inputs](OWNER_ACTIONS_ONE_LIST.md)
 
 ### Previous demonstration release
 

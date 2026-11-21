@@ -2,6 +2,8 @@
 
 ## 22 November 2026 · v7 brand, navigation and photo entry
 
+- Released `a550e02` to [the noncommercial public demo](https://vastunord-web.vercel.app). Vercel deployment `dpl_Gdmdz94uY1kK9PE8e1Yo6GCpbVtR` reached READY. TypeScript, lint, production build, 23 unit tests and 28 browser tests passed.
+- Verified the public alias across 12 marketing URLs, 17 tool routes and five closed service endpoints. Saved four previous home views, eight new size/theme views, the mobile menu and a Studio sample handoff. [Responsive screenshot index](evidence/v7-brand-entry/README.md)
 - Replaced the shared header and browser icon with exact guide artwork. Added the approved typeface, direct language and theme buttons and a permanent Prana link across marketing and Studio.
 - Expanded the homepage photo to the viewport width. The editor action and three sample entries use real routes. The first study compares the source photo with an illustrative evening tone. Authenticated upload entry preserves its destination through sign-in and onboarding.
 - Aligned public upload guidance with the server’s 4 MiB limit. Re-indexed the reorganized Visuals collection by signature, dimensions and SHA-256. Kept each file’s publication eligibility separate from its visual suitability.

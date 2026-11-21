@@ -1,6 +1,10 @@
 # Vastu Nord v7 release state
 
-The current increment covers the brand baseline, shared header and homepage-to-Studio entry. The existing Vercel Hobby project serves a personal, noncommercial demonstration at [vastunord-web.vercel.app](https://vastunord-web.vercel.app). The latest build and live inspection are recorded in [project state](../PROJECT_STATE.md).
+Application commit `a550e02` on `feat/v7-brand-photo-entry` is live on the existing Vastu Nord Hobby project. The release covers the brand baseline, shared header and homepage-to-Studio entry. Vercel reported READY for `dpl_Gdmdz94uY1kK9PE8e1Yo6GCpbVtR`. [Noncommercial demonstration](https://vastunord-web.vercel.app)
+
+TypeScript, ESLint, the production build, 23 unit tests and 28 Playwright tests passed locally. A separate synthetic auth-configured process verified anonymous sample access, protected private routes and the return destination after login. The mobile comparison handle was checked after a visual correction. The source-media manifest reproduced byte-for-byte on a second scan. [Browser evidence](../evidence/v7-brand-entry/README.md)
+
+On the public alias, all 12 marketing URLs and 17 tool routes passed. Browser testing verified sample navigation, focus and keyboard comparison, persistent preferences, loaded brand typography, responsive image widths in both themes, and five closed service endpoints. No uncaught browser exception occurred in the tested journey. [Live route matrix](../FIGMA_TO_ROUTE_MATRIX.md)
 
 | Journey | Status and boundary |
 |---|---|

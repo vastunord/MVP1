@@ -11,4 +11,6 @@ The guest canvas shows six desktop/mobile pairs. On 22 November 2026 the Home pa
 | Resources | `/resources` · `/en/resources` | Existing topic filters, reading cards and localized article links. | Verify cover choices and final editorial copy. |
 | Contact | `/contact` · `/en/contact` | Existing contact and help navigation. | Verify approved contact artwork and fields before enabling any collection. |
 
+**Deployment verification.** All 12 URLs in the table returned HTTP 200 on the public alias. An anonymous browser confirmed one main heading, the active language, both visible theme buttons and the permanent Prana destination on every route.
+
 **Recorded design decisions.** The approved Home frame places its photo to the right of the desktop hero copy. The v7 instruction gives the photo 85–100% of the available width, so the implementation extends the photo behind the copy while preserving its headline, action hierarchy and next transformation section. The new global controls respond to the same founder brief. Precise parity remains open on all six pairs. [Earlier route inspection](FIGMA_HTML_IMPLEMENTATION_TRACKER.md) · [Brand verification](BRAND_PARITY.md) · [Homepage screenshot evidence](evidence/v7-brand-entry/README.md)
