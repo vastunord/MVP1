@@ -1,0 +1,27 @@
+# Local environment and cloud-link configuration
+.env*
+!.env.example
+.vercel/
+.neon/
+
+# Dependencies and generated build output
+node_modules/
+.next/
+dist/
+build/
+coverage/
+out/
+
+# Runtime artifacts, logs, and local tooling
+*.log
+logs/
+tmp/
+temp/
+.DS_Store
+Thumbs.db
+
+# Credentials and private key material
+*.pem
+*.key
+credentials/
+secrets/
