@@ -21,3 +21,6 @@ Applied the owner clarification that prior developer repositories and hosting ac
 
 ### 2026-11-21 — Local repository bootstrap; push blocked by auth scope
 Initialized the Vastu Nord workspace on local branch `main`, added a protective `.gitignore`, configured repo-local author identity, and committed the reviewed planning kit as `ec5c2a7` (`chore: initialize Vastu Nord greenfield project`). Verified in the Vastu Nord signed-in GitHub session that `vastunord/MVP1` is the correct owner, already Public, and empty. A push attempt was rejected because Git CLI authentication resolved to an account outside Vastu Nord; **no files were transferred**. No global credentials were changed, and no NRide resource was modified. Phase 00 remains blocked until Vastu Nord-scoped Git CLI auth is available.
+
+### 2026-11-21 — Push retry blocked by network resolution
+Enabled repository-local path-scoped Git authentication and retried the requested push. The Git client could not resolve `github.com`; no files were transferred and no upstream branch was created. The earlier host-wide credential attempt was rejected because it resolved outside Vastu Nord. No account switching or global credential changes were made. Phase 00 remains blocked until Vastu Nord-scoped Git CLI authentication and network/DNS access are available.

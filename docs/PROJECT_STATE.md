@@ -1,10 +1,10 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 00 documentation/reference review and local Git bootstrap done; BLOCKED pending Vastu Nord GitHub CLI authentication for push. Greenfield planning kit only; no application implementation verified.
+**Status:** Phase 00 documentation/reference review and local Git bootstrap done; BLOCKED pending Vastu Nord-scoped GitHub authentication and working network access for push. Greenfield planning kit only; no application implementation verified.
 **Last updated:** 2026-11-21
 **Active phase:** 00 — Greenfield workspace and repository bootstrap (push blocked).
 **Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. Local Git is initialized on `main`; `origin` is `https://github.com/vastunord/MVP1.git`.
-**Next safe task:** Authenticate Git CLI to the Vastu Nord GitHub account using repository-scoped credentials, then retry the already-authorized push to the verified public `vastunord/MVP1` repository.
+**Next safe task:** Restore GitHub network/DNS access and ensure repository-scoped CLI authentication is Vastu Nord; then retry the already-authorized push to the verified public `vastunord/MVP1` repository.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -28,7 +28,7 @@
 - Owner-directed v3.3 greenfield scope has been documented; no new cloud access or integrations provisioned. See `docs/DECISIONS.md`.
 
 ## Blockers / owner requests
-- GitHub CLI credentials currently resolve to an account outside Vastu Nord; push was denied. Owner must sign in/configure repository-scoped GitHub auth for Vastu Nord.
+- A push using the existing host-wide GitHub credential was denied because it resolved outside Vastu Nord. Repository-local path-scoped authentication is now enabled, but the retry could not resolve `github.com`. Owner must ensure Vastu Nord-scoped CLI authentication and network/DNS access.
 - Studio's public `/app` remained on a “Getting things ready” user-context screen; provide a screenshot/recording if it cannot be inspected in a later pass.
 - Provide open-access Google image-library URL/ID, asset rights and mapping when phase 04 begins.
 - Configure new Vastu Nord cloud resources only during their corresponding phases; former developers' Git/Vercel/Neon access is not required.
@@ -49,11 +49,11 @@
 - Corrected the earlier interpretation: this is a new Vastu Nord project, so former developers' Git/Vercel/Neon resources are not required. The named workspace is unambiguous and separate from NRide.
 - Confirmed no likely sensitive/config filenames. Initialized local Git on `main`, configured repo-local author identity, added the verified `origin`, and created root commit `ec5c2a7`. The GitHub page showed `vastunord/MVP1` owned by Vastu Nord and already Public/empty.
 - Recorded observations for all three public URLs and visually reviewed all 36 pages of the brand PDF; see `docs/REFERENCE_EVIDENCE.md`.
-- Push is blocked: Git CLI authentication resolved outside Vastu Nord, and GitHub rejected the write. No files were transferred; do not switch accounts or retry until Vastu Nord-scoped CLI authentication is available. Studio screenshot/recording if loading continues; Google library link/rights later in Phase 04.
+- Push remains blocked: the host-wide credential was rejected; the path-scoped retry failed DNS resolution before upload. No files were transferred and no upstream branch was created. Do not switch accounts or use an alternate account. Studio screenshot/recording if loading continues; Google library link/rights later in Phase 04.
 - No deployment, paid service, cloud mutation, NRide access, or production change occurred.
 
 ## Phase 00 exit criterion
-- Documentation/reference review and local commit are complete. Overall Phase 00 remains blocked until a Vastu Nord-scoped GitHub credential can push to the verified `origin`. No Phase 01 work until Phase 00 is complete and owner approves.
+- Documentation/reference review and local commits are complete. Overall Phase 00 remains blocked until the verified public `origin` accepts a push using Vastu Nord-scoped auth and working network access. No Phase 01 work until Phase 00 is complete and owner approves.
 
 ## v3.2 authorized boundary — not provisioned
 Two independent business resource stacks: NRide under `nride@gmail.com` and Vastu Nord under `vastunord@gmail.com`, subject to verification in each vendor dashboard. A third Codex account is used for software development only. Payload CMS retained on Vastu Nord's own Vercel cloud project; Postiz removed from current stack. Social publication is manual through separate Vastu Nord platform accounts, with distinct gallery/channel consents, editorial review and logged URLs. No new cloud resources or services have been created by this document. `docs/TWO_COMPANY_ISOLATION.md` and `docs/CLOUD_PAYLOAD_AND_MANUAL_SOCIAL.md` are authoritative.

@@ -26,7 +26,7 @@ For any cloud/API change: confirm current account, project ID, target environmen
 - The owner-designated Vastu Nord folder is the current directory; it contains the project planning kit and is separate from NRide.
 - `.git` was absent before bootstrap; local Git is now initialized on `main`. `.gitignore` excludes environment files, Vercel config, build output, logs, and credential/key files. A filename-only scan found no likely sensitive/config filenames.
 - Verified in the signed-in Vastu Nord GitHub session: `vastunord/MVP1` is owned by Vastu Nord, already Public, and empty before upload. Local `origin` matches `https://github.com/vastunord/MVP1.git`.
-- Local root commit `ec5c2a7` contains the reviewed planning kit and brand PDF. Push was denied because Git CLI authentication resolved outside Vastu Nord; no files were transferred. Do not switch accounts implicitly. Retry after Vastu Nord-scoped CLI authentication is available.
+- Local root commit `ec5c2a7` contains the reviewed planning kit and brand PDF. Push using the host-wide GitHub credential was denied because it resolved outside Vastu Nord. A repository-local path-scoped retry could not resolve `github.com`; no files were transferred and no upstream branch was created. Do not switch accounts implicitly. Retry after Vastu Nord-scoped CLI authentication and network access are available.
 - Original development/design teams' GitHub and Vercel projects are reference-only and not required. New Vercel, Neon, media, OAuth, AI, payment, and social resources remain planned for later phases; no IDs or credentials were created or changed.
 
 ## GitHub bootstrap result (2026-11-21)
