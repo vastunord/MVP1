@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### 2026-11-21 — Phase 02E sender domain verified
+
+After the owner added the three Resend records in Domeneshop, authoritative `ns1.hyp.net` returned both expected CNAME targets and the exact 218-character DKIM TXT value. Resend's signed-in `vastu.no` page marked the domain and all records Verified, with sending Ready; the Vastu Nord Vercel resource became Available. Using only the isolated Vastu Nord CLI, added nonsecret `AUTH_EMAIL_PROVIDER=resend` and `AUTH_EMAIL_FROM=no-reply@vastu.no` to `vastunord-web` Development and confirmed their scope alongside the existing Development-only Resend variables. No API key was read, no email was sent, and registration/recovery delivery remains untested because the app database/auth prerequisites are incomplete. Codex made no DNS, production, deployment, push or NRide change.
+
 ### 2026-11-21 — Phase 02E Resend DNS records prepared, save blocked
 
 Verified the owner-supplied Domeneshop/Resend screens and the signed-in pages for `vastu.no`. Resend lists Pending TXT `resend._domainkey` and CNAMEs `rsend`/`send`; the full DKIM public key was visible in the Resend control, while the screenshot shortened it. Domeneshop shows the domain's existing nameservers, apex SPF and DMARC. Prepared the DKIM row without changing any existing record. Automatic approval review rejected its Add action because this exact Domeneshop DNS change lacked explicit user authorization; did not retry or bypass. No DNS mutation, sender verification or test email occurred. Updated the owner setup handoff; no application code, cloud database, deployment, push or NRide change.
