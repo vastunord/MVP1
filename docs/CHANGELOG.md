@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2A runtime activation stopped on additional PUBLIC view access
+
+Owner accepted PostgreSQL PUBLIC database CONNECT/TEMPORARY. Read-only development catalog checks confirmed the restricted role lacks administrative memberships, CREATE, application table ownership and extra table DDL privileges. An additional catalog check found PUBLIC SELECT on `postgres.public.pg_stat_statements` and `postgres.public.pg_stat_statements_info`, beyond the explicitly accepted database-level defaults. Per owner instruction, stopped activation with the role still NOLOGIN and no DATABASE_URL or runtime password configured. Migration credential absence, Better Auth config and Resend config were verified by boolean checks. Prisma validation, TypeScript, ESLint, 15 local tests and webpack build passed. No account or email was created.
+
 ### Phase 02E-2A credential separation and runtime gate
 
 With owner authorization, transferred the development migration credential to an ignored Windows current-user DPAPI-protected file. The preserved migration helper passed read-only development identity/status checks using that file before and after removing the Vercel Development copy. An ordinary Development process confirmed the migration variable absent. Runtime catalog checks found inherited PUBLIC CONNECT on two system databases and TEMPORARY on `neondb`; the role remains NOLOGIN, with no runtime URL configured. Better Auth and Resend configuration presence was verified by boolean checks. Prisma validation, TypeScript, ESLint, 15 local tests and production webpack build passed. No migration, account, email or application runtime test ran.

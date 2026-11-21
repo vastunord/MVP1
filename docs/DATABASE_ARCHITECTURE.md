@@ -1,5 +1,11 @@
 # Database architecture — Phase 02E development branch
 
+## Phase 02E-2A final runtime permission assessment
+
+Vastu Nord development `neondb` role `vastunord_dev_runtime` remains NOLOGIN. Metadata confirms no memberships, neon_superuser, database/schema CREATE, role ownership of application relations or extra relation DDL privileges. Previously approved per-table DML grants are unchanged. The owner accepted inherited PUBLIC CONNECT and TEMPORARY.
+
+In the same development branch's `postgres` database, read-only catalog inspection found effective PUBLIC SELECT on extension views `public.pg_stat_statements` and `public.pg_stat_statements_info`. This is separate from the accepted database-level CONNECT permission. `template1` exposed no non-system relations to the role. No view contents were queried and no privileges changed. Runtime activation and password configuration remain blocked pending resolution of the additional view access under the owner's stop condition.
+
 ## Phase 02E-2A completion privilege verification
 
 On development `br-mute-resonance-bhea4dyx`, catalog checks reconfirmed `vastunord_dev_runtime` has NOLOGIN, CONNECT on `neondb`, public USAGE, no database or schema CREATE, no `neon_superuser` membership, and no superuser, create-database, create-role or replication attributes. The earlier table-grant matrix was rechecked. Other application tables including `_prisma_migrations` remain ungranted. No public sequences grant runtime USAGE or UPDATE.

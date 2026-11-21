@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Phase 02E-2A final activation decision
+
+Owner accepted the documented PostgreSQL PUBLIC CONNECT and TEMPORARY defaults. Subsequent read-only catalog checks on the Vastu Nord development branch discovered PUBLIC SELECT on `postgres.public.pg_stat_statements` and `postgres.public.pg_stat_statements_info`, reachable by the runtime role through the accepted database CONNECT and schema USAGE. No view contents were read. The owner instructed stopping on other unexpected privileges, so `vastunord_dev_runtime` remains NOLOGIN. Select an acceptable isolation approach or explicitly resolve this additional view access before role activation. Do not modify shared PUBLIC permissions or system databases without separate authorization. After resolution, establish a strong runtime password through a protected method, enable LOGIN and configure pooled `DATABASE_URL` in `vastunord-web` Development. No runtime password or URL exists yet.
+
 ## Phase 02E-2A completion status
 
 The migration password was transferred into a Windows current-user DPAPI-protected, Git-ignored file at `credentials/vastunord-dev-migrator.dpapi`. The preserved helper via `scripts/run-development-migration.ps1 -VerifyOnly` successfully used it for read-only development identity and Prisma status before and after the Vercel Development variable was removed. `scripts/store-development-migration-credential.ps1` is a one-time importer that refuses overwrites. The file is bound to this Windows user profile. A lost profile requires an approved recovery process. The existing deploy helper retains its original initial-migration guards and requires review for future migrations. No migration ran.
