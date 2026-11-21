@@ -1,5 +1,7 @@
 # AGENTS.md — Vastu Nord (v3.3 greenfield)
 
+Use the official brand PDF for identity, the finalized Figma frames for marketing layouts, and the observed Studio prototype with its 17-tool configuration matrix for editors. Use `docs/references/vastunord-html-demo/` as supplementary evidence for workspace screens and interactions. Preserve verified service integrations and keep illustrative studies distinct from personal projects, generated outputs and paid operations.
+
 **Phase 02F demonstration:** The owner authorizes the current Vercel Hobby site solely for personal, noncommercial demonstration and technical testing. Keep customer onboarding, real payments, commercial lead collection, private uploads and unverified production services disabled. A commercial release still requires an eligible plan and separately verified production dependencies.
 
 **Direct Production policy v4.1:** The founder authorizes validated direct releases to the Vastu Nord Production project; Preview is optional. Business release requires a commercial-eligible Vercel plan, approved Figma evidence and safe public features. Production authentication, database and media remain disabled until separately verified; never use development owner or migration credentials in the public runtime. Avoid unexpected paid costs. Consult docs/ENVIRONMENT_VARIABLE_INVENTORY.md and consolidate genuinely necessary owner actions.

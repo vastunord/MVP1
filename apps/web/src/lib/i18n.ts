@@ -26,7 +26,7 @@ export const dictionaries = {
     skip: "Gå til innhold",
     foundation: "Ikke-kommersiell demonstrasjon · under utvikling",
     status:
-      "Dette er et lokalt grensesnitt under utvikling. Innlogging, opplasting, generering og lagring er ikke tilgjengelig.",
+      "Utforsk verktøyene og bildestudiene i demonstrasjonen. Innlogging, opplasting, generering og lagring er deaktivert her.",
     explore: "Utforsk verktøyene",
     title: "Se rommet ditt med nye øyne.",
     intro:
@@ -99,7 +99,7 @@ export const dictionaries = {
     skip: "Skip to content",
     foundation: "Noncommercial demonstration · in development",
     status:
-      "This is a local interface in development. Sign-in, upload, generation and saving are unavailable.",
+      "Explore the tools and image studies in the demonstration. Sign-in, uploads, generation and saving are disabled here.",
     explore: "Explore the tools",
     title: "See your space in a new light.",
     intro:

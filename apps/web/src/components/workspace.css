@@ -1,0 +1,531 @@
+.vn-workspace {
+  --vn-line: color-mix(in srgb, var(--text) 18%, var(--bg));
+  --vn-tint: color-mix(in srgb, var(--sage) 17%, var(--bg));
+  --vn-panel: color-mix(in srgb, var(--paper) 5%, var(--bg));
+  grid-template-columns: 218px minmax(0, 1fr);
+}
+.vn-side.sidebar {
+  padding: 22px 14px;
+  background: var(--vn-tint);
+  border-right: 1px solid var(--vn-line);
+}
+.vn-nav-group + .vn-nav-group {
+  border-top: 1px solid var(--vn-line);
+  margin-top: 14px;
+  padding-top: 14px;
+}
+.vn-side nav {
+  display: block;
+}
+.vn-nav-group h2,
+.vn-pagehead .eyebrow {
+  font-size: 0.69rem;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 650;
+}
+.vn-nav-group h2 {
+  margin: 5px 12px 7px;
+  color: var(--muted);
+}
+.vn-side.sidebar .vn-nav-group a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 11px;
+  min-height: 39px;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.vn-side.sidebar .vn-nav-group a:hover,
+.vn-side.sidebar a[aria-current="page"] {
+  background: color-mix(in srgb, var(--sage) 38%, var(--bg));
+  text-decoration: none;
+}
+.vn-side.sidebar a[aria-current="page"] {
+  box-shadow: inset 3px 0 var(--focus);
+  font-weight: 750;
+}
+.vn-main {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+}
+.vn-workspace-bar,
+.vn-section-title,
+.vn-related {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.vn-workspace-bar {
+  border-bottom: 1px solid var(--vn-line);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.vn-search-button,
+.vn-section-title button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--vn-line);
+  background: var(--vn-panel);
+  color: var(--text);
+  border-radius: 8px;
+  min-height: 40px;
+  padding: 5px 12px;
+}
+.vn-search-button kbd {
+  font: inherit;
+  font-size: 0.7rem;
+  padding: 1px 5px;
+  border: 1px solid var(--vn-line);
+  border-radius: 4px;
+}
+.vn-pagehead {
+  margin: 0 0 24px;
+}
+.vn-pagehead h1 {
+  font-size: clamp(2.05rem, 3.45vw, 3.65rem);
+  line-height: 1.02;
+  letter-spacing: -0.052em;
+  max-width: 23ch;
+  margin: 7px 0 12px;
+}
+.vn-pagehead p,
+.vn-discover p {
+  color: var(--muted);
+  max-width: 65ch;
+}
+.vn-pagehead .eyebrow {
+  margin: 0;
+}
+.vn-atelier-hero {
+  border-radius: 16px;
+  min-height: clamp(270px, 26vw, 420px);
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(22px, 3.5vw, 52px);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 36, 48, 0.94) 0%,
+      rgba(0, 44, 54, 0.74) 36%,
+      rgba(0, 44, 54, 0.15) 79%
+    ),
+    url("/reference/soft.webp") center 54% / cover;
+  color: var(--paper);
+}
+.vn-atelier-hero h2 {
+  font-size: clamp(2rem, 3.35vw, 3.75rem);
+  color: inherit;
+  max-width: 14ch;
+  letter-spacing: -0.055em;
+  line-height: 1.03;
+  margin: 0 0 14px;
+}
+.vn-atelier-hero p {
+  max-width: 34ch;
+  line-height: 1.45;
+  color: var(--paper);
+  margin: 0 0 17px;
+}
+.vn-hero-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 9px 16px;
+  background: var(--paper);
+  border-radius: 7px;
+  color: var(--navy);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+.vn-shortcuts,
+.vn-study-grid,
+.vn-discover {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.vn-shortcuts {
+  margin: 18px 0 36px;
+}
+.vn-shortcuts > a,
+.vn-study,
+.vn-discover > a,
+.vn-empty,
+.vn-settings {
+  background: var(--vn-panel);
+  border: 1px solid var(--vn-line);
+  border-radius: 12px;
+}
+.vn-shortcuts > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  text-decoration: none;
+}
+.vn-shortcuts svg {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.vn-shortcuts small,
+.vn-study-text small,
+.vn-study-text p,
+.vn-muted {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.vn-shortcuts strong,
+.vn-shortcuts small {
+  display: block;
+}
+.vn-shortcuts strong {
+  font-size: 0.95rem;
+}
+.vn-shortcuts a > span:last-child {
+  margin-left: auto;
+}
+.vn-section-title {
+  margin: 30px 0 16px;
+}
+.vn-section-title h2,
+.vn-section-heading {
+  font-size: clamp(1.3rem, 2vw, 1.85rem);
+  line-height: 1.18;
+  margin: 0;
+  letter-spacing: -0.035em;
+}
+.vn-section-heading {
+  margin: 24px 0 16px;
+}
+.vn-section-title a,
+.vn-related a {
+  font-size: 0.88rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.vn-study {
+  min-width: 0;
+  overflow: hidden;
+  display: block;
+}
+.vn-study-text {
+  display: block;
+  padding: 15px 17px;
+}
+.vn-study-text h3,
+.vn-study-text strong {
+  display: block;
+  font-size: 1.08rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  margin: 4px 0;
+}
+.vn-study-text h3 span {
+  float: right;
+}
+.vn-study-text p {
+  margin: 0;
+}
+.vn-photo,
+.vn-study-cover,
+.vn-dialog-photo {
+  display: block;
+  position: relative;
+}
+.vn-photo {
+  aspect-ratio: 1.65;
+}
+.vn-photo img,
+.vn-study-cover img {
+  object-fit: cover;
+}
+.vn-study-cover {
+  width: 100%;
+  aspect-ratio: 2.8;
+  min-height: 210px;
+  max-height: 390px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.vn-discover > a {
+  padding: 22px;
+  position: relative;
+}
+.vn-discover > a > span {
+  position: absolute;
+  top: 15px;
+  right: 19px;
+}
+.vn-discover h3 {
+  font-size: 1.05rem;
+  line-height: 1.22;
+  margin: 12px 0 5px;
+}
+.vn-discover p {
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.45;
+}
+.vn-gallery-tools,
+.vn-related,
+.vn-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.vn-related {
+  margin-top: 20px;
+  justify-content: flex-start;
+  gap: 22px;
+}
+.vn-gallery-tools {
+  margin: 17px 0 22px;
+}
+.vn-gallery-tools input {
+  width: clamp(145px, 15vw, 215px);
+}
+.vn-gallery-tools select,
+.vn-gallery-tools input,
+.vn-pills button {
+  font-size: 0.82rem;
+}
+.vn-pills button,
+.vn-directory input {
+  background: var(--vn-panel);
+  color: var(--text);
+  border: 1px solid var(--vn-line);
+  border-radius: 8px;
+  min-height: 44px;
+  padding: 8px 13px;
+}
+.vn-pills button[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--bg);
+  border-color: transparent;
+}
+.vn-collection .vn-tile {
+  position: relative;
+}
+.vn-tile-open {
+  display: block;
+  text-align: left;
+  width: 100%;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  padding: 0;
+}
+.vn-favourite {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--navy);
+  width: 44px;
+  height: 44px;
+  line-height: 1;
+  font-size: 1.65rem;
+}
+.vn-favourite[aria-pressed="true"] {
+  background: var(--navy);
+  color: var(--paper);
+}
+.vn-empty,
+.vn-settings {
+  padding: clamp(20px, 3vw, 40px);
+}
+.vn-empty h2,
+.vn-settings h2 {
+  font-size: 1.55rem;
+  margin: 6px 0 14px;
+}
+.vn-search-dialog,
+.vn-scene-dialog {
+  margin: auto;
+  width: min(92vw, 640px);
+  max-height: 86vh;
+  padding: 20px;
+  border-radius: 14px;
+  overflow: auto;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.vn-scene-dialog {
+  width: min(94vw, 860px);
+}
+.vn-search-dialog .vn-section-title,
+.vn-scene-dialog .vn-section-title {
+  margin: 0 0 16px;
+}
+.vn-dialog-photo {
+  aspect-ratio: 1.6;
+  background: var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vn-dialog-photo img {
+  object-fit: contain;
+}
+.vn-search-dialog::backdrop,
+.vn-scene-dialog::backdrop {
+  background: rgba(7, 20, 22, 0.66);
+}
+.vn-directory label {
+  display: grid;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+.vn-directory input {
+  width: 100%;
+  background: var(--bg);
+}
+.vn-search-results {
+  display: grid;
+  gap: 4px;
+}
+.vn-search-results a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 12px;
+  min-height: 44px;
+  border-bottom: 1px solid var(--vn-line);
+}
+.vn-search-results a:hover {
+  background: var(--vn-tint);
+}
+.vn-search-results small {
+  color: var(--muted);
+}
+.vn-settings {
+  margin-top: 20px;
+}
+@media (max-width: 1100px) {
+  .vn-workspace {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+  .vn-shortcuts > a {
+    padding: 13px 10px;
+    gap: 8px;
+  }
+  .vn-shortcuts svg {
+    display: none;
+  }
+}
+@media (max-width: 800px) {
+  .vn-workspace {
+    display: block;
+  }
+  .vn-side.sidebar {
+    display: none;
+  }
+  .vn-atelier-hero {
+    min-height: 285px;
+  }
+  .vn-workspace-bar {
+    margin-bottom: 18px;
+  }
+}
+@media (max-width: 640px) {
+  .vn-study-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .vn-study-text {
+    padding: 11px;
+  }
+  .vn-study-text h3,
+  .vn-study-text strong {
+    font-size: 1rem;
+  }
+  .vn-shortcuts,
+  .vn-discover {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .vn-shortcuts svg {
+    display: block;
+  }
+  .vn-atelier-hero {
+    background-image:
+      linear-gradient(90deg, rgba(0, 36, 48, 0.91), rgba(0, 44, 54, 0.42)),
+      url("/reference/soft.webp");
+  }
+  .vn-discover > a {
+    padding: 14px 18px;
+  }
+  .vn-favourite {
+    width: 38px;
+    height: 38px;
+    font-size: 1.25rem;
+  }
+  .vn-search-button kbd {
+    display: none;
+  }
+}
+.vn-private-files {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  align-items: start;
+  margin-bottom: 2rem;
+}
+.vn-private-files img {
+  width: 100%;
+  max-height: 440px;
+  object-fit: contain;
+}
+.vn-app-header.header {
+  min-height: 68px;
+  padding-block: 10px;
+}
+.vn-app-header .identity img {
+  width: clamp(104px, 11vw, 150px);
+  height: auto;
+}
+.vn-app-header .identity .mk-brand-dark {
+  display: none;
+}
+.vn-app-header .identity-note {
+  margin: 5px 0 0 1px;
+  letter-spacing: 0.25em;
+}
+.vn-app-header .desktop-nav {
+  justify-content: flex-end;
+}
+[data-theme="dark"] .vn-app-header .identity .mk-brand-light {
+  display: none;
+}
+[data-theme="dark"] .vn-app-header .identity .mk-brand-dark {
+  display: block;
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] .vn-app-header .identity .mk-brand-light {
+    display: none;
+  }
+  [data-theme="system"] .vn-app-header .identity .mk-brand-dark {
+    display: block;
+  }
+}
+.vn-app-header .mobile-nav nav {
+  max-height: calc(100dvh - 90px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

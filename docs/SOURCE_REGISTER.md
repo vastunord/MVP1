@@ -3,10 +3,11 @@
 | Source | Location | Authority | Access assumption |
 |---|---|---|---|
 | Brand guidelines PDF | `assets/brand/Brand Guidelines Document.pdf` | Visual identity, permitted logo, palette, typography | Local file supplied; all 36 pages visually reviewed (see REFERENCE_EVIDENCE.md) |
-| Finalized marketing Figma | https://www.figma.com/design/yLScUtnuv6HLK0NDL8I9WE/Finalised-Marketing-Website-Screens--Dev-?node-id=0-1 | **Primary approved visual reference** for marketing pages it contains | Founder-supplied; canvas overview opened. Detailed inspection and asset export unverified; viewer displayed sign-up prompt for inspection. Obtain sufficient access or exported frames/assets for implementation. |
+| Finalized marketing Figma | https://www.figma.com/design/yLScUtnuv6HLK0NDL8I9WE/Finalised-Marketing-Website-Screens--Dev-?node-id=0-1 | **Primary approved visual reference** for marketing pages it contains | Founder-supplied. The rebuild inspected six desktop/mobile board pairs at readable zoom. Exact measurements, full-scale frame exports, and original photos remain outstanding. See the [implementation tracker](FIGMA_HTML_IMPLEMENTATION_TRACKER.md). |
 | Design-team marketing | https://vastu-nord-design-prototype.vercel.app/ | **Secondary** historical public-site visual/interaction reference | Public URL loaded; rendered homepage observed. No original source |
 | Development-team marketing | https://vastunord.vercel.app/ | **Secondary** public-site copy/observable function reference | Public URL loaded; rendered homepage observed. No original source or old account access |
 | Studio design | https://vastu-nord-design-prototype.vercel.app/app | Primary Studio visual and tool-workflow reference where not superseded by approved Figma designs | All 17 tool editors were inspected in earlier Phase 01 batches; see STUDIO_INVENTORY.md. |
+| Recovered HTML demo | `docs/references/vastunord-html-demo/` | Supplementary source for workspace navigation, interactions and example states | Founder-supplied local reference. Selected brand assets are mapped in the [asset manifest](ASSET_MANIFEST.md). |
 | Old product prompt | `references/OLD_MASTER_PROMPT_2026.md` (if present) | Historical feature requirements | Use for product needs, **not** repo/account assumptions |
 | Greenfield master | `MASTER_CODEX_PROMPT.md` | Canonical requested product scope and working rules | This v3.3 updated spec |
 | Approved Google image library | OWNER LINK REQUIRED | Replacement tool thumbnails and editorial media | No link supplied; provenance/rights must be verified |

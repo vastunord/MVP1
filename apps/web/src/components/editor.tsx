@@ -10,6 +10,8 @@ import {
 import { messages, type Locale } from "@/lib/i18n";
 import { Button } from "./ui";
 import { PrivateUpload } from "./private-upload";
+import { StudioCanvas } from "./studio-canvas";
+import "./studio-tools.css";
 function Field({
   control,
   value,
@@ -74,6 +76,28 @@ function Field({
     );
   const options =
     control.kind === "toggle" ? ["On", "Off"] : (control.options ?? []);
+  if (
+    control.kind === "select" &&
+    ["style", "palette"].includes(control.id) &&
+    options.length > 1
+  )
+    return (
+      <div className="field">
+        <strong id={id}>{control.label}</strong>
+        <div className="preset-options" role="group" aria-labelledby={id}>
+          {options.map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={value === option}
+              onClick={() => onChange(option)}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   return (
     <div className="field">
       <label htmlFor={id}>{control.label}</label>
@@ -122,115 +146,117 @@ export function Editor({
   );
   const [prompt, setPrompt] = useState("");
   const [preview, setPreview] = useState("");
+  const english = locale === "en";
   return (
-    <>
-      <div className="editor-heading">
-        <div>
-          <Link href="/app/library">← {t.back}</Link>
-          <h1>{tool.name}</h1>
-        </div>
+    <div className="studio-editor">
+      <div className="editor-topbar">
+        <Link href="/app/library">← {t.back}</Link>
         <div className="row">
           <Button disabled>{t.history}</Button>
           <Button disabled>{t.export}</Button>
         </div>
       </div>
-      <p className="small">{t.previewNote}</p>
-      <div className="editor">
-        <section className="editor-panel" aria-label={t.controls}>
-          <PrivateUpload
-            locale={locale}
-            enabled={uploadsEnabled}
-            onPreview={setPreview}
-          />
-          {tool.reference && <Button disabled>{t.reference}</Button>}
-          <div className="field">
-            <label htmlFor="prompt">{t.prompt}</label>
-            <p className="small" lang="en">
-              {tool.prompt}
-            </p>
-            <textarea
-              id="prompt"
-              maxLength={1000}
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              rows={4}
-            />
-            <span className="small">{prompt.length} / 1000</span>
-            {tool.improve && <Button disabled>{t.improve}</Button>}
-          </div>
-          <div className="field">
-            <label htmlFor="avoid">{t.avoid}</label>
-            <textarea id="avoid" rows={2} maxLength={1000} />
-          </div>
-          <h2>{t.controls}</h2>
-          {visibleControls(tool, values).map((c) => (
-            <fieldset
-              key={c.id}
-              disabled={
-                tool.id === "garden-design" &&
-                values.tidy === true &&
-                ["style", "scope"].includes(c.id)
-              }
-            >
-              <Field
-                control={c}
-                value={values[c.id]}
-                unknown={t.unknown}
-                onChange={(v) => setValues((prev) => ({ ...prev, [c.id]: v }))}
+      <div className="studio-workbench">
+        <div className="inspector">
+          <div
+            className="inspector-scroll"
+            role="region"
+            tabIndex={0}
+            aria-label={t.controls}
+          >
+            <section className="inspector-group">
+              <h2>{english ? "Source image" : "Kildebilde"}</h2>
+              <div className={uploadsEnabled ? "" : "source-unavailable"}>
+                {!uploadsEnabled && (
+                  <>
+                    <span className="upload-glyph" aria-hidden="true">
+                      ↑
+                    </span>
+                    <strong>{t.upload}</strong>
+                  </>
+                )}
+                <PrivateUpload
+                  locale={locale}
+                  enabled={uploadsEnabled}
+                  onPreview={setPreview}
+                />
+              </div>
+              {tool.reference && (
+                <Button className="reference-slot" disabled>
+                  ＋ {t.reference}
+                </Button>
+              )}
+            </section>
+            <section className="inspector-group">
+              <label className="studio-kicker" htmlFor="prompt">
+                {t.prompt}
+              </label>
+              <p className="inspector-help" lang="en">
+                {tool.prompt}
+              </p>
+              <textarea
+                id="prompt"
+                maxLength={1000}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                rows={3}
               />
-            </fieldset>
-          ))}
+              <div className="prompt-tools">
+                {tool.improve && <Button disabled>{t.improve}</Button>}
+                <small>{prompt.length} / 1000</small>
+              </div>
+              {tool.improve && (
+                <details className="avoid-detail">
+                  <summary>{english ? "Writing tips" : "Skrivetips"}</summary>
+                  <p className="inspector-help">
+                    {english
+                      ? "Name the part of the scene to change. Describe the materials and the light. Specify any features that should stay as they are."
+                      : "Angi hvilken del av motivet du vil endre. Beskriv materialene og lyset. Ta med detaljer som skal beholdes."}
+                  </p>
+                </details>
+              )}
+              <details className="avoid-detail">
+                <summary>{t.avoid}</summary>
+                <textarea aria-label={t.avoid} rows={2} maxLength={1000} />
+              </details>
+            </section>
+            <section className="inspector-group">
+              <h2>{t.controls}</h2>
+              {visibleControls(tool, values).map((c) => (
+                <fieldset
+                  key={c.id}
+                  disabled={
+                    tool.id === "garden-design" &&
+                    values.tidy === true &&
+                    ["style", "scope"].includes(c.id)
+                  }
+                >
+                  <Field
+                    control={c}
+                    value={values[c.id]}
+                    unknown={t.unknown}
+                    onChange={(v) =>
+                      setValues((prev) => ({ ...prev, [c.id]: v }))
+                    }
+                  />
+                </fieldset>
+              ))}
+            </section>
+          </div>
           <div className="primary-action">
             <Button className="primary" disabled aria-describedby="action-help">
               {primaryAction(tool, values)}
             </Button>
-            <p id="action-help" className="small">
-              {t.actionHelp}
-            </p>
+            <p id="action-help">{t.actionHelp}</p>
           </div>
-        </section>
-        <section className="canvas" aria-label={t.canvas}>
-          <div className="canvas-inner">
-            {preview ? (
-              // Images are either local previews or authorized private-media endpoints.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={preview}
-                alt={
-                  locale === "en"
-                    ? "Selected project image"
-                    : "Valgt prosjektbilde"
-                }
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "60vh",
-                  objectFit: "contain",
-                }}
-              />
-            ) : (
-              <>
-                <div className="canvas-icon" aria-hidden="true">
-                  ＋
-                </div>
-                <h2>{t.canvas}</h2>
-                <p>{t.canvasBody}</p>
-                {tool.comparison && (
-                  <div className="comparison-labels" lang="en">
-                    <span>{tool.comparison[0]}</span>
-                    <span>{tool.comparison[1]}</span>
-                  </div>
-                )}
-                <p className="small">{t.empty}</p>
-              </>
-            )}
-          </div>
-          <ol className="canvas-steps">
-            <li>{t.step1}</li>
-            <li>{t.step2}</li>
-            <li>{t.step3}</li>
-          </ol>
-        </section>
+        </div>
+        <StudioCanvas
+          tool={tool}
+          locale={locale}
+          preview={preview}
+          guides={values.guides === true}
+        />
       </div>
-    </>
+    </div>
   );
 }

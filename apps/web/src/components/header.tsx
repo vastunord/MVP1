@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -9,6 +10,7 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { Dialog } from "./ui";
+import { destinations, translated } from "@/lib/workspace-catalog";
 export type Theme = "light" | "dark" | "system";
 export function Header({
   locale,
@@ -27,7 +29,11 @@ export function Header({
   const [selection, setSelection] = useState(theme);
   useEffect(() => {
     document.documentElement.lang = locale;
-  }, [locale]);
+    if (!workspace) {
+      document.cookie =
+        "vn-locale=" + locale + ";path=/;max-age=31536000;samesite=lax";
+    }
+  }, [locale, workspace]);
   const links = workspace
     ? (["home", "tools", "files", "projects", "shared", "settings"] as const)
     : (["features", "about", "pricing", "resources", "contact"] as const);
@@ -44,18 +50,34 @@ export function Header({
       <a className="skip" href="#main">
         {t.skip}
       </a>
-      <header className="header">
+      <header
+        className={workspace ? "header vn-app-header" : "header mk-header"}
+      >
         <Link
           href={workspace ? "/app" : publicHref("/", locale)}
           className="identity"
           aria-label="Vastu Nord"
         >
-          Vastu Nord
-          <span className="identity-note">
-            {workspace ? "STUDIO" : "DESIGN · KNOWLEDGE"}
-          </span>
+          {["teal", "ivory"].map((tone, i) => (
+            <Image
+              unoptimized
+              key={tone}
+              className={i ? "mk-brand-dark" : "mk-brand-light"}
+              src={"/reference/logo-" + tone + ".png"}
+              alt=""
+              width={170}
+              height={16}
+            />
+          ))}
+          {workspace && <span className="identity-note">STUDIO</span>}
         </Link>
         <nav className="desktop-nav" aria-label={t.menu}>
+          {workspace && (
+            <Link href={publicHref("/", locale)}>
+              {locale === "en" ? "Vastu Nord website" : "Vastu Nords nettsted"}{" "}
+              ↗
+            </Link>
+          )}
           {!workspace &&
             links.map((k) => (
               <Link
@@ -67,6 +89,18 @@ export function Header({
               </Link>
             ))}
         </nav>
+        {!workspace && (
+          <>
+            <Link className="mk-head-login" href={publicHref("/login", locale)}>
+              {t.login}
+            </Link>
+            <Link className="mk-head-cta" href="/app/library">
+              {locale === "en"
+                ? "Visualize my space"
+                : "Visualiser rommet mitt"}
+            </Link>
+          </>
+        )}
         <div className="preferences">
           <label className="sr-only" htmlFor="language">
             {t.language}
@@ -108,20 +142,35 @@ export function Header({
         <details className="mobile-nav">
           <summary>{t.menu}</summary>
           <nav aria-label={t.menu}>
-            {links.map((k) => (
+            {(workspace
+              ? destinations.map((d) => ({
+                  url: d.href,
+                  label: translated(d.title, locale),
+                }))
+              : links.map((k) => ({ url: href(k), label: t[k] }))
+            ).map(({ url, label }) => (
               <Link
-                key={k}
-                href={href(k)}
+                key={url}
+                href={url}
                 onClick={(e) =>
                   e.currentTarget.closest("details")?.removeAttribute("open")
                 }
               >
-                {t[k]}
+                {label}
               </Link>
             ))}
-            <Link href={workspace ? publicHref("/", locale) : "/app/library"}>
-              {workspace ? t.home : "Studio"}
-            </Link>
+            {!workspace && <Link href="/app/library">Studio</Link>}
+            {workspace && (
+              <Link href={publicHref("/", locale)}>
+                {locale === "en"
+                  ? "Vastu Nord website"
+                  : "Vastu Nords nettsted"}{" "}
+                ↗
+              </Link>
+            )}
+            {!workspace && (
+              <Link href={publicHref("/login", locale)}>{t.login}</Link>
+            )}
           </nav>
         </details>
       </header>
@@ -131,8 +180,8 @@ export function Header({
           <p>
             {authReady
               ? locale === "en"
-                ? "Account and project features are in test. Upload and AI generation remain unavailable."
-                : "Konto og prosjekter er under testing. Opplasting og AI-generering er fortsatt utilgjengelig."
+                ? "Accounts and private projects are available for testing. AI generation is disabled."
+                : "Kontoer og private prosjekter er tilgjengelige for testing. AI-generering er deaktivert."
               : t.status}
           </p>
           <p>{t.privacy}</p>

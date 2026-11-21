@@ -1,0 +1,433 @@
+.xp-workspace {
+  max-width: 92rem;
+  margin-inline: auto;
+  width: 100%;
+  min-width: 0;
+}
+.xp-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.xp-heading h1 {
+  font-size: clamp(2rem, 3.6vw, 3.6rem);
+  margin: 0 0 0.55rem;
+  max-width: none;
+}
+.xp-heading p,
+.xp-small,
+.xp-panel > p,
+.xp-field,
+.xp-filters label {
+  color: var(--muted);
+}
+.xp-heading p,
+.xp-room figure,
+.xp-room-caption p {
+  margin: 0;
+}
+.xp-workspace h2 {
+  font-size: clamp(1.35rem, 2.2vw, 2.25rem);
+  margin-bottom: 0.75rem;
+}
+.xp-photo {
+  object-fit: cover;
+}
+.xp-room-layout,
+.xp-account,
+.xp-prana {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  grid-template-columns: minmax(0, 2.25fr) minmax(230px, 1fr);
+}
+.xp-panel,
+.xp-guide,
+.xp-prana,
+.xp-account-card,
+.xp-scenarios button {
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: 15px;
+  background: var(--surface);
+}
+.xp-panel,
+.xp-account-card {
+  padding: clamp(1.15rem, 2vw, 2rem);
+}
+.xp-room {
+  position: relative;
+  isolation: isolate;
+  min-height: 28rem;
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--navy);
+  color: white;
+}
+.xp-room .xp-photo {
+  z-index: -2;
+}
+.xp-room::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(7 17 20 / 0.13) 25%,
+    transparent 48%,
+    rgb(7 17 20 / 0.83) 100%
+  );
+  pointer-events: none;
+}
+.xp-room.xp-season-1 .xp-photo {
+  filter: saturate(1.25) sepia(0.17);
+}
+.xp-room.xp-season-2 .xp-photo {
+  filter: saturate(0.54) hue-rotate(10deg) brightness(1.12);
+}
+.xp-room.xp-evening::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(21 27 57 / 0.46);
+}
+.xp-room-caption {
+  position: absolute;
+  inset: auto 1.5rem 1.5rem;
+}
+.xp-room-caption h2 {
+  font-size: clamp(2rem, 3vw, 3rem);
+  margin: 0.15rem 0;
+  color: white;
+}
+.xp-room-caption small {
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.xp-room-caption .xp-glass {
+  margin-top: 0.85rem;
+}
+.xp-glass,
+.xp-hotspot {
+  min-height: 44px;
+  color: white;
+  background: rgb(10 31 36 / 0.84);
+  border: 1px solid rgb(255 255 255 / 0.65);
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+}
+.xp-time {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.xp-hotspot {
+  position: absolute;
+  inset: 31% auto auto 48%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.65rem;
+  line-height: 1;
+  padding: 0;
+  box-shadow: 0 0 0 0.4rem rgb(255 255 255 / 0.32);
+}
+.xp-note {
+  position: absolute;
+  left: 8%;
+  top: 11%;
+  max-width: 66%;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 0.65rem;
+  padding: 0.5rem 0.85rem;
+}
+.xp-note p {
+  font-size: 0.85rem;
+  margin: 0;
+}
+.xp-plan {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+  padding: 5px;
+  background: var(--sage);
+  border-radius: 4px;
+}
+.xp-plan button {
+  padding: 0.4rem 0.1rem;
+  min-height: 3rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--navy);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+.xp-plan button:nth-child(1),
+.xp-plan button:nth-child(4) {
+  grid-column: span 4;
+}
+.xp-plan button:nth-child(2),
+.xp-plan button:nth-child(3) {
+  grid-column: span 3;
+}
+.xp-plan button[aria-pressed="true"] {
+  background: var(--navy);
+  color: var(--paper);
+}
+.xp-small {
+  font-size: 0.77rem;
+  margin: 0.5rem 0 1rem;
+}
+.xp-workspace fieldset {
+  border: none;
+  padding: 0;
+  margin: 1.2rem 0 0;
+  min-width: 0;
+}
+.xp-workspace legend,
+.xp-field,
+.xp-filters label {
+  font-weight: 600;
+  font-size: 0.84rem;
+}
+.xp-workspace legend {
+  margin-bottom: 0.55rem;
+}
+.xp-pills,
+.xp-swatches,
+.xp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.xp-pills button,
+.xp-scenarios button {
+  padding: 0.35rem 0.8rem;
+  min-height: 44px;
+  font-size: 0.84rem;
+  color: var(--text);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 999px;
+}
+.xp-pills button[aria-pressed="true"] {
+  background: var(--navy);
+  color: var(--paper);
+  border-color: var(--sage);
+  box-shadow: inset 0 0 0 1px var(--sage);
+}
+.xp-swatches button {
+  min-width: 44px;
+  height: 44px;
+  border-radius: 100%;
+  border: 4px solid var(--surface);
+  outline: 1px solid var(--border);
+}
+.xp-swatches button[aria-pressed="true"] {
+  outline: 2px solid var(--text);
+}
+.xp-plan-panel fieldset p {
+  margin: 0.6rem 0 0;
+  font-size: 0.84rem;
+}
+.xp-workspace :focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.xp-room :focus-visible,
+.xp-account-card :focus-visible {
+  outline-color: white;
+}
+.xp-filters {
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.2rem;
+}
+.xp-field,
+.xp-filters label {
+  display: grid;
+  gap: 0.3rem;
+}
+.xp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 1.1rem;
+  align-items: start;
+}
+.xp-guide {
+  overflow: clip;
+}
+.xp-guide summary {
+  display: block;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 1rem;
+  list-style: none;
+}
+.xp-guide summary:focus-visible {
+  outline-offset: -4px;
+}
+.xp-guide summary::-webkit-details-marker {
+  display: none;
+}
+.xp-thumb {
+  display: block;
+  position: relative;
+  isolation: isolate;
+  height: clamp(8rem, 14vw, 11rem);
+  background: var(--sage);
+}
+.xp-guide-label {
+  display: block;
+  padding: 1rem 1rem 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.xp-guide-title {
+  display: block;
+  margin: 0 2.75rem 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 650;
+  line-height: 1.28;
+}
+.xp-guide-toggle {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.8rem;
+  font-size: 1.5rem;
+}
+.xp-guide[open] .xp-guide-toggle {
+  transform: rotate(45deg);
+}
+.xp-guide p {
+  margin: 0;
+  padding: 0 1rem 1.2rem;
+}
+.xp-prana {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  overflow: hidden;
+  gap: 0;
+}
+.xp-prana-picture {
+  position: relative;
+  min-height: 23rem;
+}
+.xp-prana-content {
+  padding: clamp(1.3rem, 3.3vw, 3.5rem);
+}
+.xp-prana-content section {
+  margin-top: 2.4rem;
+}
+.xp-field {
+  margin-bottom: 1.2rem;
+}
+.xp-text-link,
+.xp-account-card a {
+  display: inline-flex;
+  padding: 0.7rem 0;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.xp-scenarios {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+.xp-scenarios button {
+  border-radius: 12px;
+  text-align: left;
+  padding: 1.25rem;
+}
+.xp-scenarios button[aria-pressed="true"] {
+  border-color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--text);
+  background: color-mix(in srgb, var(--sage) 18%, var(--surface));
+}
+.xp-scenarios strong {
+  display: block;
+  font-size: clamp(1.15rem, 2.2vw, 2rem);
+  line-height: 1.3;
+  margin-top: 0.5rem;
+}
+.xp-budget {
+  max-width: 55rem;
+}
+.xp-category {
+  margin-bottom: 1rem;
+}
+.xp-category div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+.xp-category meter {
+  display: block;
+  width: 100%;
+  accent-color: var(--navy);
+  height: 0.9rem;
+}
+.xp-category meter::-webkit-meter-optimum-value {
+  background: var(--navy);
+}
+.xp-category meter::-webkit-meter-bar {
+  background: var(--sage);
+  border: 0;
+}
+.xp-account {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.xp-account-card {
+  background: var(--navy);
+  color: var(--paper);
+}
+.xp-account-card h2 {
+  margin: 0.7rem 0;
+  color: var(--paper);
+}
+.xp-empty {
+  padding-top: 1rem;
+}
+@media (max-width: 900px) {
+  .xp-room-layout {
+    grid-template-columns: 1fr;
+  }
+  .xp-room {
+    min-height: 25rem;
+  }
+}
+@media (max-width: 700px) {
+  .xp-prana,
+  .xp-account,
+  .xp-scenarios {
+    grid-template-columns: 1fr;
+  }
+  .xp-prana-picture {
+    min-height: 13rem;
+  }
+  .xp-scenarios button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  .xp-scenarios strong {
+    margin: 0;
+  }
+  .xp-filters label {
+    flex: 1 1 10rem;
+    min-width: 0;
+  }
+  .xp-room-caption {
+    inset-inline: 1rem;
+  }
+}

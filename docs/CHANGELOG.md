@@ -1,5 +1,12 @@
 # Development change log (compact)
 
+## High-fidelity rebuild of the noncommercial demo
+
+- Replaced the public marketing scaffold with bilingual pages based on six inspected Figma boards. Added resource article permalinks, interactive comparisons, a working transformation selector, responsive navigation and the official wordmark.
+- Rebuilt the Studio catalogue and shared editor around the verified 17-tool matrix. Added photo studies, keyboard-accessible comparisons, search, contextual editor controls and explicit availability states.
+- Implemented the dashboard, project studies, albums, gallery and favourites, search, file selection, guided room explorer, knowledge guides, Prana views, sample budget scenarios, and billing/team availability screens. Kept private project and upload flows behind the existing server checks.
+- Recorded reference priorities, approved local image provenance, page mappings and visual gaps in the [implementation tracker](FIGMA_HTML_IMPLEMENTATION_TRACKER.md).
+
 ## 2026-11-21 — Phase 02F noncommercial demonstration
 
 - Deployed committed snapshot 2eaf94b through the isolated Vastu Nord CLI to https://vastunord-web.vercel.app (deployment dpl_33yRCLi7roqaZAmQSRcbpE8Miz87); Vercel Hobby, noncommercial demo only.

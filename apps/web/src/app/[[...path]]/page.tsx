@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { marketingResources } from "@/lib/marketing-resources";
 import { cookies, headers } from "next/headers";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
@@ -15,9 +16,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, segments } = resolve((await params).path);
   const page = segments[0];
   const t = messages(locale);
+  const article =
+    page === "resources" && segments.length === 2
+      ? marketingResources(locale).articles.find(
+          (item) => item.id === segments[1],
+        )
+      : undefined;
   return {
-    title: page && page in t ? t[page as MessageKey] : "Vastu Nord",
-    description: t.intro,
+    title:
+      article?.name ??
+      (page && page in t ? t[page as MessageKey] : "Vastu Nord"),
+    description: article?.intro ?? t.intro,
     alternates: {
       languages: {
         "nb-NO": publicHref("/" + segments.join("/"), "nb-NO"),
@@ -28,8 +37,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 export default async function Page({ params }: Props) {
   const { locale, segments } = resolve((await params).path);
+  if (segments.join("/") === "solutions/living-room-design")
+    redirect(publicHref("/features", locale));
+  const supportedArticle =
+    segments.length === 2 &&
+    segments[0] === "resources" &&
+    marketingResources(locale).articles.some((item) => item.id === segments[1]);
   if (
-    segments.length > 1 ||
+    (segments.length > 1 && !supportedArticle) ||
     (segments[0] &&
       !publicPages.includes(segments[0] as (typeof publicPages)[number]))
   )
@@ -67,7 +82,7 @@ export default async function Page({ params }: Props) {
       ) : (
         <Marketing
           locale={locale}
-          page={segments[0]}
+          page={segments.join("/")}
           authReady={authState.ready}
         />
       )}
