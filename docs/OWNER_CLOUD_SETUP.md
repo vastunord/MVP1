@@ -1,6 +1,8 @@
 # Founder setup guide — Phase 02E status
 
-The owner reports creating `VN_Runtime` as the new runtime password. The isolated CLI did not find it in `vastu-nord/vastunord-web` Development; confirm the exact project, spelling and scope without sharing its value. The existing migration role lacks role administration, so a separate protected privileged handoff is still needed to establish the first password.
+The owner clarified that `VN_Runtime` is a new Neon role, not a Vercel environment variable. It has administrative privileges, including `neon_superuser`, and must not be used as the application login under the approved policy. The existing limited role remains disabled. Determine a protected way to set its first password; separately review the new administrative role and its credentials before any changes. No role was altered during verification.
+
+The earlier interpretation of `VN_Runtime` as a password variable was incorrect; it is a Neon role. The existing migration role lacks role administration, so a separate protected privileged handoff is still needed to establish the limited role's first password.
 
 ## Runtime first-password blocker
 

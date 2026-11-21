@@ -1,6 +1,10 @@
 # Authentication and security — Phase 02E verification status
 
-Read-only development catalog checks confirm neither `vastunord_dev_migrator` nor `vastunord_dev_runtime` has CREATEROLE, superuser or `neon_superuser` membership; runtime remains NOLOGIN. The owner's reported `VN_Runtime` variable was not listed in the expected Vercel project and Development environment at inspection. No value was retrieved. A separate protected and authorized privileged connection is required to set the runtime role's first password.
+## New development role requires security review
+
+The owner clarified that `VN_Runtime` is a Neon role, not a Vercel variable. A read-only catalog check on the Vastu Nord development branch found it has LOGIN, `neon_superuser` and `pg_read_all_stats` membership, CREATEDB, CREATEROLE, REPLICATION, BYPASSRLS and database CREATE. These exceed the approved application-runtime policy. Do not use this role or its credentials for the application. No role or grant was changed during this inspection. `vastunord_dev_runtime` remains NOLOGIN with no administrative membership or database/schema CREATE.
+
+Read-only development catalog checks confirm neither `vastunord_dev_migrator` nor `vastunord_dev_runtime` has CREATEROLE, superuser or `neon_superuser` membership; runtime remains NOLOGIN. The earlier interpretation of `VN_Runtime` as a variable was incorrect; it is a role. A separate protected and authorized privileged connection is required to set the limited runtime role's first password.
 
 ## Runtime first-password limitation
 

@@ -1,8 +1,12 @@
 # Development change log (compact)
 
+### Phase 02E-2A new role security check
+
+The owner clarified `VN_Runtime` is a Neon role rather than a variable. Read-only Vastu Nord development checks found it has LOGIN, `neon_superuser` and `pg_read_all_stats` membership, CREATEDB, CREATEROLE, REPLICATION, BYPASSRLS and database CREATE. Runtime activation remains blocked under the owner's policy; the existing limited runtime role remains NOLOGIN. No database role, credential or configuration was changed.
+
 ### Phase 02E-2A runtime password handoff check
 
-The owner reported a new runtime password variable named `VN_Runtime`. It was not listed in the expected Vastu Nord web project Development scope. Read-only Neon role checks confirmed the migration role has no role-administration privileges and runtime remains NOLOGIN. No credentials or database settings were changed.
+`VN_Runtime` was initially mistaken for a runtime password variable; the owner later clarified it is a Neon role. Read-only Neon role checks confirmed the migration role has no role-administration privileges and the original runtime role remains NOLOGIN. No credentials or database settings were changed.
 
 ### Phase 02E-2A Neon first-password blocker
 
