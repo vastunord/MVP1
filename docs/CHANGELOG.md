@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### 2026-11-21 — Phase 02E-1 Neon migration readiness, blocked
+
+Reconfirmed the Vastu Nord Frankfurt Neon project, nondefault development branch, `neondb`, direct compute and limited migration role through read-only metadata/SQL. The branch has zero app tables and no Prisma history. Reviewed both existing migration files: no DROP, TRUNCATE or data DELETE/UPDATE. Elevated read-only DNS resolved the direct endpoint. The available connector returned a pooled password-bearing URL, and no approved non-logging handoff to Prisma was available; no URL/password was printed, saved or supplied to a command. No migration or persistent synthetic write occurred. Prisma validation, TypeScript and eight local database/auth policy tests passed. Updated the database handoff and recovery limitation; no production, NRide, email, Blob, push or deployment change.
+
 ### 2026-11-21 — Phase 02E sender domain verified
 
 After the owner added the three Resend records in Domeneshop, authoritative `ns1.hyp.net` returned both expected CNAME targets and the exact 218-character DKIM TXT value. Resend's signed-in `vastu.no` page marked the domain and all records Verified, with sending Ready; the Vastu Nord Vercel resource became Available. Using only the isolated Vastu Nord CLI, added nonsecret `AUTH_EMAIL_PROVIDER=resend` and `AUTH_EMAIL_FROM=no-reply@vastu.no` to `vastunord-web` Development and confirmed their scope alongside the existing Development-only Resend variables. No API key was read, no email was sent, and registration/recovery delivery remains untested because the app database/auth prerequisites are incomplete. Codex made no DNS, production, deployment, push or NRide change.
