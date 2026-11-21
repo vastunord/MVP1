@@ -1,5 +1,11 @@
 # Founder setup guide — Phase 02E status
 
+## Phase 02E-2A current owner decisions
+
+A development runtime role and table-specific grants now exist, but the role is `NOLOGIN` because default PUBLIC CONNECT applies to `postgres` and `template1` within the development branch. The owner was asked to pause the runtime password and `DATABASE_URL` setup. Work with Neon to establish an acceptable isolation method before enabling the role. Revoking PUBLIC on shared system databases may affect other roles and requires a separately reviewed plan and owner approval.
+
+The owner chose to keep `VASTUNORD_DEV_MIGRATOR_PASSWORD` in the web project's Development environment for now. Any `vercel env run` app process inherits it, so application startup with real credentials remains blocked. Approve a restricted migration-only secret context and later removal/rotation if desired. The existing helper is preserved. `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` are now present only in Vercel Development. Resend settings are present, but no message has been sent.
+
 ## Phase 02E-2 owner setup needed
 
 Neon development migrations are current, but `vastunord_dev_migrator` and the owner role are the only listed roles. Establish a separate limited development runtime login and grants for the auth and project tables. Grant no database or schema CREATE and no role administration. Add its pooled URL as `DATABASE_URL` in the Vastu Nord project's Development-only server-side configuration. Add a unique `BETTER_AUTH_SECRET` of at least 32 characters and `BETTER_AUTH_URL` for the exact local test origin. Never put secret values in chat or Git. Keep Google OAuth disabled.

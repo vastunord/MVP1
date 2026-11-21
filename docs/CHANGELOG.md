@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2A runtime role and bilingual email preparation
+
+With owner approval created `vastunord_dev_runtime` on Neon development and granted targeted auth/project table privileges. Catalog checks found inherited PUBLIC CONNECT to `postgres` and `template1`, so set the role NOLOGIN pending an isolation solution. Owner chose to keep the migration password in Vercel Development, leaving process isolation blocked. Generated a new high-entropy Better Auth secret and configured the local auth origin in Vercel Development. Implemented Norwegian/English verification and reset email copy with request language selection and Norwegian fallback. Prisma validation, TypeScript, ESLint, 15 local tests, webpack build and focused unconfigured-account smoke test passed. No real account, email or migration was run.
+
 ### Phase 02E-2 authentication integration blocked by runtime setup
 
 Verified Vastu Nord development migrations via connector and Prisma status. Listed only the development migration and owner database roles. Vercel Development lacks `DATABASE_URL`, `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Boolean checks confirmed Resend provider/sender/key presence and Google OAuth disabled, while revealing that project Development environment injection also passes the migration credential to ordinary processes. Owner supplied controlled inboxes. No emails, accounts or cloud-backed authentication/project tests ran. Prisma validation, TypeScript, ESLint, 14 local unit tests, production webpack build and nine unconfigured browser smoke tests passed. The first sandboxed build hit an existing `.next` permission error and the browser run stalled; both passed when rerun with appropriate permissions.

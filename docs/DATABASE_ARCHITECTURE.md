@@ -1,5 +1,11 @@
 # Database architecture — Phase 02E development branch
 
+## Phase 02E-2A restricted runtime role
+
+Owner approved a development-only runtime role. Created `vastunord_dev_runtime` on branch `br-mute-resonance-bhea4dyx` without supplying a password in SQL. Granted CONNECT on `neondb`, public schema USAGE and only the auth/project table privileges recorded in `docs/AUTH_AND_SECURITY.md`. Catalog checks confirmed the intended table privileges, no database/schema CREATE, no role administration, no superuser or replication, and zero public sequences. No production database was touched.
+
+The role also inherits PUBLIC CONNECT to the development branch's `postgres` and `template1` system databases. Those database defaults affect other roles, and changing them requires separate assessment and owner approval. The runtime role is set `NOLOGIN`, with no application URL configured. No real runtime connection or mutation test has run. Re-enable LOGIN and configure a password/pooled `DATABASE_URL` only after an approved isolation solution and migration-credential separation are in place.
+
 ## Phase 02E-1G successful development migration
 
 The owner authorized `20261121_phase02c_initial` and `20261121_phase02d_auth_projects` on Vastu Nord Frankfurt development `br-mute-resonance-bhea4dyx` only. The owner selected Vercel variable injection instead of interactive password entry and configured `VASTUNORD_DEV_MIGRATOR_PASSWORD` for `vastu-nord/vastunord-web` Development. The isolated Vercel wrapper injected it into the guarded helper without writing a secret file or displaying the value. Before deployment the working tree was clean at `396847c`, the recovery branch was ready, the fixed direct endpoint was `ep-purple-fog-bhs946ij`, the limited role was `vastunord_dev_migrator`, and a direct Prisma preflight confirmed empty public relations, absent history, role privileges, the two pending migration names and their tested hashes. Prisma migrate deploy returned exit code 0.

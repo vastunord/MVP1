@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  authEmailCopy,
+  authEmailLocale,
+} from "../src/server/auth-email-copy.ts";
+import {
   authReadiness,
   verifiedSessionUserId,
 } from "../src/server/auth-readiness.ts";
@@ -13,6 +17,43 @@ import {
 } from "../src/server/projects.ts";
 
 const key = "80c7d7c8-7d98-4c44-9bd8-a2dd5bbfba16";
+
+test("authentication emails respect selected locale and preserve the supplied link", () => {
+  const link = "https://example.invalid/verify?token=synthetic";
+  assert.equal(authEmailLocale(), "nb-NO");
+  assert.equal(
+    authEmailLocale(
+      new Request("https://example.invalid", {
+        headers: { cookie: "other=1; vn-locale=en" },
+      }),
+    ),
+    "en",
+  );
+  assert.equal(
+    authEmailLocale(
+      new Request("https://example.invalid", {
+        headers: { cookie: "vn-locale=en", "x-vn-locale": "nb-NO" },
+      }),
+    ),
+    "nb-NO",
+  );
+  assert.equal(
+    authEmailLocale(
+      new Request("https://example.invalid", {
+        headers: { "x-vn-locale": "en" },
+      }),
+    ),
+    "en",
+  );
+  for (const kind of ["verification", "password-reset"] as const) {
+    const norwegian = authEmailCopy(kind, "nb-NO", link);
+    const english = authEmailCopy(kind, "en", link);
+    assert.notEqual(norwegian.subject, english.subject);
+    assert.ok(norwegian.text.includes(link));
+    assert.ok(english.text.includes(link));
+  }
+});
+
 function fixture() {
   const spaces = new Map<string, PersonalWorkspace>();
   const projects: ProjectRow[] = [];

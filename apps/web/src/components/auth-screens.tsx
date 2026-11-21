@@ -49,6 +49,7 @@ export function AuthScreen({
           email: address,
           password,
           callbackURL: href("/login?verified=1"),
+          fetchOptions: { headers: { "x-vn-locale": locale } },
         });
         if (result.error) throw new Error(result.error.message);
         setMessage(
@@ -68,6 +69,7 @@ export function AuthScreen({
         await authClient.requestPasswordReset({
           email: address,
           redirectTo: window.location.origin + href("/reset-password"),
+          fetchOptions: { headers: { "x-vn-locale": locale } },
         });
         setMessage(
           en
@@ -96,6 +98,7 @@ export function AuthScreen({
         const result = await authClient.sendVerificationEmail({
           email: address,
           callbackURL: href("/login?verified=1"),
+          fetchOptions: { headers: { "x-vn-locale": locale } },
         });
         if (result.error) throw new Error(result.error.message);
         setMessage(

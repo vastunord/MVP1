@@ -28,13 +28,13 @@ export const auth = betterAuth({
     minPasswordLength: 12,
     maxPasswordLength: 128,
     revokeSessionsOnPasswordReset: true,
-    sendResetPassword: async ({ user, url }) =>
-      sendAuthEmail(user.email, "Vastu Nord — reset your password", url),
+    sendResetPassword: async ({ user, url }, request) =>
+      sendAuthEmail(user.email, "password-reset", url, request),
   },
   emailVerification: {
     sendOnSignUp: true,
-    sendVerificationEmail: async ({ user, url }) =>
-      sendAuthEmail(user.email, "Vastu Nord — verify your email", url),
+    sendVerificationEmail: async ({ user, url }, request) =>
+      sendAuthEmail(user.email, "verification", url, request),
   },
   socialProviders: google,
   user: { modelName: "User" },
