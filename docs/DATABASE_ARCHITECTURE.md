@@ -1,4 +1,12 @@
-# Database architecture — Phase 02E development branch, schema not deployed
+# Database architecture — Phase 02E development branch
+
+## Phase 02E-1G successful development migration
+
+The owner authorized `20261121_phase02c_initial` and `20261121_phase02d_auth_projects` on Vastu Nord Frankfurt development `br-mute-resonance-bhea4dyx` only. The owner selected Vercel variable injection instead of interactive password entry and configured `VASTUNORD_DEV_MIGRATOR_PASSWORD` for `vastu-nord/vastunord-web` Development. The isolated Vercel wrapper injected it into the guarded helper without writing a secret file or displaying the value. Before deployment the working tree was clean at `396847c`, the recovery branch was ready, the fixed direct endpoint was `ep-purple-fog-bhs946ij`, the limited role was `vastunord_dev_migrator`, and a direct Prisma preflight confirmed empty public relations, absent history, role privileges, the two pending migration names and their tested hashes. Prisma migrate deploy returned exit code 0.
+
+Prisma history contains two completed, non-rolled-back migrations in order. Initial checksum `d79088cf6d074033a017e28fe888f22cc65dee7136e9fd9d044de227497c8a3a` and auth/projects checksum `0676683c33f1377708ec8e94e8b1b3357c0e686fb190de69dc86b4b4f7d04b31` match the isolated test and current files. `prisma migrate status` reported up to date and a direct `prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code` returned 0. The database has 17 public tables including Prisma history, 44 indexes, 132 constraints and 19 foreign keys, matching the test branch counts. Prisma's diff covers supported schema features.
+
+A synthetic User insert/read/delete and zero-remaining check passed within one transaction. The migration role had no database CREATE and no `neon_superuser` membership after deployment. Read-only branch metadata showed the recovery, recovery drill and test branches ready with their recorded parent/LSN relationships. That check does not compare every object on other branches. No operations targeted them. Recovery clone verification previously passed; full snapshot restore or development replacement remains untested. Prisma schema validation, TypeScript and all 14 local unit tests passed. No email, authentication or Blob integration testing was initiated.
 
 ## Phase 02E-1G Vercel credential handoff
 

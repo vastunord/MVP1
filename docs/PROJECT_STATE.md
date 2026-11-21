@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+**Phase 02E-1G development migration PASS.** On 2026-11-21 the owner-authorized migrations were deployed to development `br-mute-resonance-bhea4dyx` using the owner's Vercel Development credential variable. Both Prisma history entries finished with the tested checksums. Prisma status is up to date, schema comparison found no supported differences, and a synthetic User insert/read/delete passed. The limited role did not need database CREATE. Full recovery restoration remains untested. Email, authentication and Blob integration tests have not been started.
+
+Earlier phase entries below are historical and describe the state at the time of each check.
+
 **Phase 02E-1G Vercel credential preflight passed.** The owner requested Vercel Development variable injection instead of a password prompt. The Vastu Nord wrapper injects `VASTUNORD_DEV_MIGRATOR_PASSWORD` into the development-pinned helper without printing or saving it. A read-only Prisma preflight verified the development identity, empty baseline, expected pending migrations and checksums. Migration execution remains pending.
 
 **Phase 02E-1G prompt retry BLOCKED.** After the owner reported the earlier window was not visible, reopened the authorized development migration prompt. The child window exited with Windows code `-1073741510` before reporting preflight or deploy success. Read-only Neon SQL subsequently confirmed no public application relations and no Prisma history. No migration success is claimed. Development still requires an accessible masked local prompt and a repeated guarded preflight.
@@ -22,7 +26,7 @@
 
 **Phase 02E-1 recovery assessment:** Execution remains blocked. Besides protected credential injection, the first SQL statement requires database CREATE, which the limited role lacks. The connector lacks scoped Prisma history management. The project snapshot list is empty and a development recovery point remains unverified. Resolve the privilege decision and recovery prerequisites before requesting execution approval. See [database assessment](DATABASE_ARCHITECTURE.md).
 
-**Status:** The disposable test compute and its empty database baseline are verified through Neon. Test migrations and recovery restoration still need separate verification. Private Blob and Resend are connected to Development. Email delivery, connected application flows and exact Phase 01 visual parity remain unverified.
+**Status:** Development and isolated test migrations are verified. A recovery clone drill passed, while full restore remains untested. Private Blob and Resend are connected to Development. Email delivery, connected application flows and exact Phase 01 visual parity remain unverified.
 **Last updated:** 2026-11-21
 **Active phase:** Phase 02E scoped integration work; cloud account and local network blockers recorded below. No Phase 02F work.
 **Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch `phase-02e-cloud-auth-integration` from `84956af2fec9f5193099ed6b88630570fb2684a0`. Origin remains https://github.com/vastunord/MVP1.git.
