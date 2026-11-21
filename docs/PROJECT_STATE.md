@@ -1,5 +1,7 @@
 # Vastu Nord — current project handoff (living document)
 
+**Phase 02E-1E readiness:** The three Vastu Nord Frankfurt branches and development baseline were rechecked. Both migration hashes match the successful disposable test. The development role has public USAGE/CREATE without database CREATE or superuser membership. Its direct endpoint matches the status helper. Recovery clone verification and the development-specific protected credential handoff remain untested. No development migration is authorized by this phase. See `docs/DATABASE_ARCHITECTURE.md`.
+
 **Phase 02E-1D isolated migration test PASS.** Owner authorized the two migrations on `br-lively-wildflower-bhwpjl4q`. Both completed with matching checksums and Prisma schema comparison returned no differences. A synthetic user insert/read/delete passed in a transaction. The role had no database CREATE. Recovery restore and migration of development remain separate, unauthorized and untested. See `docs/DATABASE_ARCHITECTURE.md`.
 
 **Phase 02E-1D connection recovery.** The disposable test branch now has a verified 0.25 CU read-write endpoint in Frankfurt. A read-only Neon query returned the expected branch, endpoint, role and database, zero public relations and no Prisma history. See [current verification](DATABASE_ARCHITECTURE.md#test-endpoint-verification).

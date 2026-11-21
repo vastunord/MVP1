@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Phase 02E-1E owner actions
+
+Development is empty and the tested migration hashes match. Approve creation of a single disposable recovery-drill branch named `recovery-drill-phase02e1e`, parent `br-red-sunset-bhm6pga7`, with a small Free-plan read-write compute for read-only content verification. This verifies cloning only. A separate development direct-credential check and explicit development migration approval remain necessary. No branch may be reset or replaced as part of this drill.
+
 ## Isolated migration test completed
 
 Both migrations passed on disposable test branch `br-lively-wildflower-bhwpjl4q`, with matching history checksums and no Prisma schema diff. One synthetic user was created and removed in a single transaction. The development migration and recovery restore remain separate actions requiring authorization. Retain the test and recovery branches until the owner decides otherwise.
