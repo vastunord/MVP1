@@ -1,6 +1,12 @@
 # Founder setup guide — Phase 02E status
 
-### Phase 02E-1D remaining setup
+## Test connection check
+
+From the repository root run `pwsh -NoProfile -File scripts/prisma-test-connection.ps1` in a local terminal. In the Vastu Neon console select `migration-test-phase02e1d`, database `neondb` and role `vastunord_dev_migrator`. Enter only its password at the masked prompt. The helper pins the verified direct test endpoint and returns exit code 0 only if Prisma verifies the branch, endpoint, role, database and empty baseline. An empty password cancels. See the [test endpoint verification](DATABASE_ARCHITECTURE.md#test-endpoint-verification).
+
+The local test completed successfully. Next, the owner may authorize applying the reviewed initial and auth/project migrations to `br-lively-wildflower-bhwpjl4q` only. The connection check contains only its fixed read-only query.
+
+### Phase 02E-1D setup before compute provisioning
 
 The owner approved test branch creation during this task. `migration-test-phase02e1d` now exists as `br-lively-wildflower-bhwpjl4q`, copied from recovery `br-red-sunset-bhm6pga7` at LSN `0/1B49CE0`. Fixed compute settings were rejected by the connector, so the created branch has no compute. Before testing, establish an authorized test compute with verified limits, and a direct test-specific credential handoff. The existing helper is pinned to development and is limited to status. It must not be used to deploy to the disposable branch. Local hidden credential entry remains required and has not happened. Obtain explicit migration execution and disposable recovery-test approval after connectivity is verified. No deletion is authorized.
 

@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+### Phase 02E-1D connection recovery
+
+With explicit owner approval, attached a 0.25 CU compute to the existing disposable branch. Verified its endpoint, limited-role session and empty pre-migration baseline through a read-only Neon query. Added a separate test-only direct Prisma connection check and documented the Free-plan compute allowance.
+
+The protected interactive handoff and direct Prisma check also passed locally. The fixed read-only transaction asserted the test branch, endpoint, role, database, empty schema baseline and absent migration history.
+
 ### Phase 02E-1D isolated test preparation blocked
 
 Verified recovery identity, Frankfurt region, development parent/LSN and absent compute using metadata. Reviewed the fixed-development credential helper and validated its syntax. Owner authorized one disposable test branch. Fixed compute creation returned INVALID_ARGUMENT; a branch lookup confirmed no match. Creation without compute succeeded as `br-lively-wildflower-bhwpjl4q` from recovery at LSN `0/1B49CE0`. Protected test-specific credential access and compute remain unavailable. No SQL, migration, synthetic write or restore test ran. Prisma validation and TypeScript passed locally. Recorded exact limits of recovery and migration evidence.

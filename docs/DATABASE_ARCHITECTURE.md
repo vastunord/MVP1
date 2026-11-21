@@ -1,6 +1,16 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
-### Phase 02E-1D verification outcome
+## Test endpoint verification
+
+Owner approval covered one compute on `migration-test-phase02e1d` (`br-lively-wildflower-bhwpjl4q`) in Vastu's Frankfurt project `VNMVP1` (`morning-morning-84319525`). Its parent is recovery `br-red-sunset-bhm6pga7`, whose parent is development `br-mute-resonance-bhea4dyx`. The endpoint `ep-holy-waterfall-bheg01mu` is read-write, with minimum and maximum 0.25 CU. Provisioning omitted the timeout override to use Free-plan autosuspend. At this size one running hour uses 0.25 of the project's 100 monthly CU-hours. Free compute scales to zero after five idle minutes. [Free plan limits](https://neon.com/blog/neon-free-plan-1-gb-per-project) and [scale to zero](https://neon.com/docs/introduction/scale-to-zero).
+
+A read-only connector query returned `neon.branch_id=br-lively-wildflower-bhwpjl4q`, `neon.endpoint_id=ep-holy-waterfall-bheg01mu`, database `neondb` and role `vastunord_dev_migrator`. The current schema was `public`, with zero table, view, materialized view, sequence or foreign table relations. `_prisma_migrations` was absent and database-level CREATE was false. Recovery and migration execution remain untested.
+
+The pinned direct host is `ep-holy-waterfall-bheg01mu.c-10.eu-central-1.aws.neon.tech`. The test helper accepts a masked local password, constructs the child process environment from an allowlist and uses the repository's Prisma config. Its fixed SQL checks the server-reported identity and expected baseline within a read-only transaction. Raw diagnostics are suppressed. The helper accepts no URL, SQL or target parameter.
+
+The local PowerShell 7 helper completed with exit code 0 following masked entry. The installed Prisma CLI used its direct connection configuration and passed all identity and baseline assertions. The interactive handoff is verified for this check. Future executions require fresh credential input. No migration, write test or restore was part of this verification.
+
+### Phase 02E-1D verification outcome (before compute provisioning)
 
 Recovery branch `br-red-sunset-bhm6pga7` remains ready in project `morning-morning-84319525` / Frankfurt `aws-eu-central-1`, parent `br-mute-resonance-bhea4dyx`, parent LSN `0/1B49CE0`, timestamp `2026-11-21T16:35:01Z`. Its compute list is empty. Schema/history queries were inaccessible without provisioning compute. Branch metadata supports reconstruction through an isolated child, but contents and restoration remain untested. The six-hour history setting alone is not accepted as recovery verification.
 

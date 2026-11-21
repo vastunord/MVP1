@@ -1,16 +1,18 @@
 # Vastu Nord — current project handoff (living document)
 
+**Phase 02E-1D connection recovery.** The disposable test branch now has a verified 0.25 CU read-write endpoint in Frankfurt. A read-only Neon query returned the expected branch, endpoint, role and database, zero public relations and no Prisma history. See [current verification](DATABASE_ARCHITECTURE.md#test-endpoint-verification).
+
 **Phase 02E-1D:** Recovery metadata confirms `br-red-sunset-bhm6pga7` in Frankfurt, parent development at LSN `0/1B49CE0`, with no compute. Owner explicitly authorized disposable test branch `migration-test-phase02e1d`. Creation with fixed compute settings returned INVALID_ARGUMENT. Created `br-lively-wildflower-bhwpjl4q` without compute from recovery at the same LSN. No SQL was executed because protected direct credential handoff remains unavailable. Migration history, schema comparison, read/write and restore tests remain BLOCKED / NOT TESTED. The helper is fixed to development and must not be used for test-branch execution. No migration ran.
 
 **Phase 02E-1C readiness:** Owner explicitly confirmed the initial migration has never been applied anywhere. Removed only its schema-creation operation and accompanying comment/blank line. Recovery child `br-red-sunset-bhm6pga7` is ready from development at LSN `0/1B49CE0`, without compute. Added a hidden-password, direct-connection Prisma status helper. Schema validation and helper syntax passed. Live credential use, recovery contents/restore and composed migration execution remain unverified. Execution still requires separate approval. See `docs/DATABASE_ARCHITECTURE.md`.
 
 **Phase 02E-1 recovery assessment:** Execution remains blocked. Besides protected credential injection, the first SQL statement requires database CREATE, which the limited role lacks. The connector lacks scoped Prisma history management. The project snapshot list is empty and a development recovery point remains unverified. Resolve the privilege decision and recovery prerequisites before requesting execution approval. See [database assessment](DATABASE_ARCHITECTURE.md).
 
-**Status:** Phase 02E-1 development target and limited migration role verified; Prisma migration remains blocked by the lack of an approved, non-logging credential handoff to the local CLI. Private Blob and free Resend resources are connected to Development; email delivery and connected application flows remain untested. Exact Phase 01 visual parity remains BLOCKED.
+**Status:** The disposable test compute and its empty database baseline are verified through Neon. Test migrations and recovery restoration still need separate verification. Private Blob and Resend are connected to Development. Email delivery, connected application flows and exact Phase 01 visual parity remain unverified.
 **Last updated:** 2026-11-21
 **Active phase:** Phase 02E scoped integration work; cloud account and local network blockers recorded below. No Phase 02F work.
 **Working directory:** C:\Users\VN\Documents\ChatGPT\VastuNord. Branch `phase-02e-cloud-auth-integration` from `84956af2fec9f5193099ed6b88630570fb2684a0`. Origin remains https://github.com/vastunord/MVP1.git.
-**Next safe task:** Provide a reviewed secret-injection path for the limited development migration credential, verify a direct connection and recovery point, then run Prisma status/deploy on the named development branch. Email, auth and Blob tests are separate later tasks. Choose a commercial-eligible Vercel plan before business use. No push or deployment.
+**Direct connection passed.** The masked local prompt handed the limited-role password to Prisma for one process. Prisma's fixed read-only baseline check exited 0 on the test endpoint. Next approval is to apply the two reviewed migrations to this disposable test branch only.
 
 ## Verified context
 - Phase 02E account isolation: Git origin is `vastunord/MVP1`; Neon organization `Vastu` and Vercel team `VastuNord` use the Vastu Nord connections. The NRide Vercel connection was not used.
