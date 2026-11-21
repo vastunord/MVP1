@@ -1,5 +1,13 @@
 # Authentication and security — Phase 02E verification status
 
+## Phase 02E-2A migration credential isolation
+
+The owner approved moving the migration secret and removing the Vercel copy after verification. Imported it through the isolated Vastu Nord CLI into an ignored Windows current-user DPAPI-protected local file. The migration launcher supplied it to the preserved helper in a process environment. A read-only Prisma identity/status check passed before and after the Vercel Development variable was removed. An ordinary Vercel Development child process then confirmed the migration credential was absent. No secret or connection string was printed or committed. DPAPI is bound to the Windows user profile and does not protect against malicious processes running as the same user. Removal does not rotate the database password. Rotate only after separately approved assessment of exposure.
+
+The owner directed preserving PostgreSQL PUBLIC defaults and stopping runtime activation on excess effective privileges. Catalog checks confirmed `vastunord_dev_runtime` has NOLOGIN, no superuser, create-role, create-database, replication, database CREATE or public-schema CREATE. Table grants remain as previously recorded. PUBLIC nevertheless grants CONNECT to `postgres` and `template1` and TEMPORARY on `neondb`. A role-specific revoke cannot override PUBLIC. The role remains disabled and `DATABASE_URL` unconfigured. No application runtime or auth startup was tested against this role. See PostgreSQL's [REVOKE semantics](https://www.postgresql.org/docs/current/sql-revoke.html).
+
+Boolean checks confirmed the normal Vercel Development environment lacked the migration credential, the Better Auth secret had at least 32 characters, the origin matched `http://127.0.0.1:3100`, the Resend provider/sender/key settings were present and Google OAuth was disabled. No delivery was tested.
+
 ## Phase 02E-2A runtime configuration and email preparation
 
 With explicit owner approval, created `vastunord_dev_runtime` on Vastu project `morning-morning-84319525`, development branch `br-mute-resonance-bhea4dyx`. It has CONNECT on `neondb`, USAGE on public, and SELECT/INSERT/UPDATE/DELETE on User, Session, Account, Verification, RateLimit, Workspace, Membership and Project. Asset has SELECT only, AuditEvent has SELECT/INSERT, and other app tables including `_prisma_migrations` have no grants. There are no public sequences. Metadata checks found no superuser, database/schema CREATE, create-role, create-database or replication privileges.

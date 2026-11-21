@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2A credential separation and runtime gate
+
+With owner authorization, transferred the development migration credential to an ignored Windows current-user DPAPI-protected file. The preserved migration helper passed read-only development identity/status checks using that file before and after removing the Vercel Development copy. An ordinary Development process confirmed the migration variable absent. Runtime catalog checks found inherited PUBLIC CONNECT on two system databases and TEMPORARY on `neondb`; the role remains NOLOGIN, with no runtime URL configured. Better Auth and Resend configuration presence was verified by boolean checks. Prisma validation, TypeScript, ESLint, 15 local tests and production webpack build passed. No migration, account, email or application runtime test ran.
+
 ### Phase 02E-2A runtime role and bilingual email preparation
 
 With owner approval created `vastunord_dev_runtime` on Neon development and granted targeted auth/project table privileges. Catalog checks found inherited PUBLIC CONNECT to `postgres` and `template1`, so set the role NOLOGIN pending an isolation solution. Owner chose to keep the migration password in Vercel Development, leaving process isolation blocked. Generated a new high-entropy Better Auth secret and configured the local auth origin in Vercel Development. Implemented Norwegian/English verification and reset email copy with request language selection and Norwegian fallback. Prisma validation, TypeScript, ESLint, 15 local tests, webpack build and focused unconfigured-account smoke test passed. No real account, email or migration was run.

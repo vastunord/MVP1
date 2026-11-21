@@ -1,5 +1,11 @@
 # Database architecture — Phase 02E development branch
 
+## Phase 02E-2A completion privilege verification
+
+On development `br-mute-resonance-bhea4dyx`, catalog checks reconfirmed `vastunord_dev_runtime` has NOLOGIN, CONNECT on `neondb`, public USAGE, no database or schema CREATE, no `neon_superuser` membership, and no superuser, create-database, create-role or replication attributes. The earlier table-grant matrix was rechecked. Other application tables including `_prisma_migrations` remain ungranted. No public sequences grant runtime USAGE or UPDATE.
+
+The runtime role also inherits PUBLIC CONNECT on `postgres` and `template1`, and PUBLIC TEMPORARY on `neondb`, permitting temporary table creation if login were enabled. These effective privileges exceed the requested constraints. The role remains NOLOGIN, no runtime password or pooled URL was configured, and PUBLIC grants were preserved. Review another isolation boundary or obtain a revised owner decision before activation.
+
 ## Phase 02E-2A restricted runtime role
 
 Owner approved a development-only runtime role. Created `vastunord_dev_runtime` on branch `br-mute-resonance-bhea4dyx` without supplying a password in SQL. Granted CONNECT on `neondb`, public schema USAGE and only the auth/project table privileges recorded in `docs/AUTH_AND_SECURITY.md`. Catalog checks confirmed the intended table privileges, no database/schema CREATE, no role administration, no superuser or replication, and zero public sequences. No production database was touched.

@@ -1,7 +1,7 @@
 #requires -Version 7.0
 # Owner-authorized deployment of two reviewed migrations to development only.
 [CmdletBinding()]
-param([switch] $PreflightOnly)
+param([switch] $PreflightOnly, [switch] $CredentialCheckOnly)
 $ErrorActionPreference = 'Stop'
 $migrationRoot = Join-Path $PSScriptRoot '../apps/web/prisma/migrations'
 $allowed = @('20261121_phase02c_initial', '20261121_phase02d_auth_projects')
@@ -48,9 +48,24 @@ END;
 $verify$;
 ROLLBACK;
 '@
+if ($CredentialCheckOnly) {
+    $query = @'
+BEGIN READ ONLY;
+DO $verify$
+BEGIN
+    IF current_database() <> 'neondb' OR current_user <> 'vastunord_dev_migrator'
+       OR current_setting('neon.branch_id', true) IS DISTINCT FROM 'br-mute-resonance-bhea4dyx'
+       OR current_setting('neon.endpoint_id', true) IS DISTINCT FROM 'ep-purple-fog-bhs946ij'
+    THEN RAISE EXCEPTION 'Unexpected database identity';
+    END IF;
+END;
+$verify$;
+ROLLBACK;
+'@
+}
 
 Write-Host 'Vastu Nord | authorized development migration'
-Write-Host 'Credential is supplied through the Vastu Nord Development environment.'
+Write-Host 'Credential is supplied through the migration-only process environment.'
 $password = [Environment]::GetEnvironmentVariable('VASTUNORD_DEV_MIGRATOR_PASSWORD', 'Process')
 [Environment]::SetEnvironmentVariable('VASTUNORD_DEV_MIGRATOR_PASSWORD', $null, 'Process')
 $child = $null
@@ -83,6 +98,12 @@ try {
         throw 'Status timed out'
     }
     $message = $stdout.GetAwaiter().GetResult() + $stderr.GetAwaiter().GetResult()
+    if ($CredentialCheckOnly) {
+        if ($child.ExitCode -eq 0 -and $message -match '(?i)up to date' -and $message -notmatch '(?i)(error:|P[0-9]{4})') {
+            $status = 0
+        } else { $status = 1 }
+        if ($status -ne 0) { throw 'Credential verification failed' }
+    } else {
     if ($message -match '(?i)(have not yet been applied|not yet been applied|no migration found in database)' -and $message -notmatch '(?i)(error:|P[0-9]{4})') {
         $status = 0
     } else { $status = 1 }
@@ -90,7 +111,8 @@ try {
     foreach ($name in $allowed) {
         if (-not $message.Contains($name)) { throw 'Expected pending migration missing' }
     }
-    if (-not $PreflightOnly) {
+    }
+    if (-not $PreflightOnly -and -not $CredentialCheckOnly) {
         $child.Dispose()
         $child = $null
         $start.ArgumentList.Clear()
@@ -117,7 +139,8 @@ try {
     $password = $null
     $encoded = $null
 }
-if ($status -eq 0 -and $PreflightOnly) { Write-Host 'Development migration preflight passed.' }
+if ($status -eq 0 -and $CredentialCheckOnly) { Write-Host 'Development migration credential check passed.' }
+elseif ($status -eq 0 -and $PreflightOnly) { Write-Host 'Development migration preflight passed.' }
 elseif ($status -eq 0) { Write-Host 'Development Prisma migration deploy passed.' }
 else { Write-Host 'Preflight or deploy did not pass. Stop and contact Codex before retrying.' }
 exit $status

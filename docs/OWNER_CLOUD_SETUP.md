@@ -1,5 +1,11 @@
 # Founder setup guide — Phase 02E status
 
+## Phase 02E-2A completion status
+
+The migration password was transferred into a Windows current-user DPAPI-protected, Git-ignored file at `credentials/vastunord-dev-migrator.dpapi`. The preserved helper via `scripts/run-development-migration.ps1 -VerifyOnly` successfully used it for read-only development identity and Prisma status before and after the Vercel Development variable was removed. `scripts/store-development-migration-credential.ps1` is a one-time importer that refuses overwrites. The file is bound to this Windows user profile. A lost profile requires an approved recovery process. The existing deploy helper retains its original initial-migration guards and requires review for future migrations. No migration ran.
+
+The owner directed preservation of PUBLIC grants and stopping if effective permissions are broader than needed. Catalog checks found inherited CONNECT to `postgres` and `template1`, and TEMPORARY on `neondb`. The runtime role remains NOLOGIN and `DATABASE_URL` is absent. Review an isolation method that preserves PUBLIC or obtain a revised owner decision before enabling LOGIN, assigning a password and configuring the pooled URL. Better Auth secret, local origin and Resend configuration are present in Development.
+
 ## Phase 02E-2A current owner decisions
 
 A development runtime role and table-specific grants now exist, but the role is `NOLOGIN` because default PUBLIC CONNECT applies to `postgres` and `template1` within the development branch. The owner was asked to pause the runtime password and `DATABASE_URL` setup. Work with Neon to establish an acceptable isolation method before enabling the role. Revoking PUBLIC on shared system databases may affect other roles and requires a separately reviewed plan and owner approval.
