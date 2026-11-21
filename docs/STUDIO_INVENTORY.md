@@ -53,7 +53,9 @@ Category: Interior Design. Prompt “What should change?” / “Describe the fu
 ### Disabled, unverified and not inspected
 All generation/edit buttons were disabled in the no-upload state; this establishes only the visible disabled state. Uploads, asset browsing, masks/selection, resulting output, job progress, errors, export, resolution settings, history contents, wallet actions, and mobile layouts were not exercised or visible. Durable screenshot files were not saved; evidence is the browser accessibility snapshots and observed editor UI. Do not infer these functions are absent.
 
-Remaining tools in library order after this batch: Seasonal Styling; Visual Cleanup; Resolution Enhancement; Perspective Correction; Decor Re-definition; Material Refinement; Lighting Reimagination; Garden Design; Spa & Pool Redesign; Sky Transformation; Seasonal Transformation; Object Placement.
+Remaining tools after Phase 01A: Seasonal Styling; Visual Cleanup; Resolution Enhancement; Perspective Correction; Decor Re-definition; Material Refinement; Lighting Reimagination; Garden Design; Spa & Pool Redesign; Sky Transformation; Seasonal Transformation; Object Placement.
+
+
 ## Phase 01B — four additional Studio editors (2026-11-21)
 These observations continue the existing 17-card inventory in library order. All controls below are frontend observations only. No photo was uploaded and no generation or paid action was triggered. The previously documented Phase 01A shared editor shell was present with no observed difference; tool-specific deltas follow. The displayed credit count and sample previews do not verify wallet or backend behavior.
 
@@ -85,4 +87,39 @@ These observations continue the existing 17-card inventory in library order. All
 - `Show guides` switch is on; accompanying text says guides are screen-only. Sample shows a house facade with perspective grid guides and `HOW IT WORKS · LINE THE WALLS UP WITH THE GUIDES`. Steps Add your photo / Set the correction / Reprocess. Primary `Correct perspective` is disabled before upload. No result/reprocess state was exercised.
 
 ### Empty-state controls and remaining tools
-Disabled means only disabled in the observed no-photo state; it does not establish post-upload behavior. The radio modes above were changed only to reveal their visible local controls; no photo, generation, or paid action was used. Eight tools remain without editor inspection: Decor Re-definition, Material Refinement, Lighting Reimagination, Garden Design, Spa & Pool Redesign, Sky Transformation, Seasonal Transformation, Object Placement. Mobile interactions and durable screenshot files remain unverified.
+Disabled means only disabled in the observed no-photo state; it does not establish post-upload behavior. The radio modes above were changed only to reveal their visible local controls; no photo, generation, or paid action was used. Four tools remain without editor inspection: Spa & Pool Redesign, Sky Transformation, Seasonal Transformation, Object Placement. Mobile interactions and durable screenshot files remain unverified.
+
+
+## Phase 01C — next four Studio editors (2026-11-21)
+All four entry pages and empty-photo editors loaded in the designer reference. The shared editor shell described in Phase 01A was present without an observed deviation. These are frontend observations only: no photo upload, generation, or backend action was performed. Empty-state disabled controls do not establish post-upload functionality.
+
+### 10. Decor Re-definition — COMPLETE / OBSERVED
+- Entry `/app/tools/decor-redefinition` (Interior Design); new-file flow `/app/new?tool=decor-redefinition`; editor `/app/editor/file-mwqb8iho-1`. Entry had no prior files. Copy says furniture remains while decor changes; this is a reference claim, not verified behavior.
+- Input: straight-on room photo, JPEG/PNG/WEBP up to 20 MB, browse assets; optional room style-reference photo/asset. Prompt “How should it feel?” / `Describe the decor you want`, Improve, 1,000-character limit, “Anything to avoid?”.
+- Decor style radios, default Warm minimal: Warm minimal (Linen · oak · stoneware), Gallery (Framed art · plinths · bare shelves), Layered textile (Throws · rugs · cushions), Mid-century (Teak · ceramics · graphic prints), Coastal (Rattan · linen · driftwood), Monochrome (Black frames · glass · stone).
+- Aspect ratio default Original; alternatives 1:1, 4:3, 3:2, 16:9. Optional Decor edits: `Restyle or clear a spot` / “Tap a shelf, a wall or a tabletop on the photo”; Pick disabled before photo. Add decor says describe a piece or bring one; Place and Choose from your decor assets are disabled before photo. Make it child safe switch defaults off; its copy explicitly says this is a design direction, not a safety check.
+- Sample comparison Today/Restyled, slider 46. Steps Add your photo / Choose the styling / Generate. `Redefine decor` disabled until a room photo is added. No output/job result observed.
+
+### 11. Material Refinement — COMPLETE / OBSERVED
+- Entry `/app/tools/material-refinement` (Interior Design); new-file flow `/app/new?tool=material-refinement`; editor `/app/editor/file-mwqb8t5s-1`. Entry had no prior files. Copy describes changing surface materials and claims layout is held; unverified.
+- Input: straight-on room photo, JPEG/PNG/WEBP up to 20 MB, browse assets; optional room style-reference photo/asset. Prompt “Which materials?” / `Describe the material change`, Improve, 1,000-character limit, “Anything to avoid?”.
+- Colour palette radios default Auto; alternatives Pale oak, Ink & cream, Ember, Sea glass, Clay, Deep forest.
+- Optional Surfaces section: `Change a surface or object` / “Tap a floor, wall, worktop or sofa on the photo”; Pick disabled before photo. Make it child safe switch defaults off; copy describes wipeable, non-slip and rounded choices and says it is a design direction, not a safety check.
+- Sample comparison Today/Refined, slider 46. Steps Add your photo / Choose materials / Generate. `Refine materials` disabled before photo. No further output controls or result states were observed.
+
+### 12. Lighting Reimagination — COMPLETE / OBSERVED
+- Entry `/app/tools/lighting-reimagination` (Interior Design); new-file flow `/app/new?tool=lighting-reimagination`; editor `/app/editor/file-mwqb920r-1`. Entry showed one existing file, “Lounge — evening light”; no existing file was opened.
+- Input: straight-on room photo, JPEG/PNG/WEBP up to 20 MB, browse assets; optional room style-reference photo/asset. Prompt “How should it feel?” / `Describe the lighting you want`, Improve, 1,000-character limit, “Anything to avoid?”. Room type defaults Auto-detect; alternatives Living room, Bedroom, Kitchen, Bathroom, Dining, Office, Hallway.
+- Lighting settings: Colour temperature 2700K (warm white); Brightness 60%; Layers of light defaults Ambient only, with Ambient + task and Fully layered options. `Preview on my photo` defaults on. Its copy describes a free instant tint preview and says generation is for the “real thing”; preview/generation behavior was not tested.
+- Light fixture style defaults Keep existing; alternatives Pendant, Recessed, Track, Sconce, Floor lamp, Statement. Optional Add lights describes a fixture or user-owned asset; Place and Choose from your lighting assets are disabled before photo.
+- Sample comparison Today/Evening, slider 46. Steps Add your photo / Set the light / Generate. `Relight the room` disabled before photo. No output/job result observed.
+
+### 13. Garden Design — COMPLETE / OBSERVED
+- Entry `/app/tools/garden-design` (Exterior & Landscape); new-file flow `/app/new?tool=garden-design`; editor `/app/editor/file-mwqb9atg-1`. Entry showed one existing file, “Front garden — borders”; it was not opened. Copy claims the house, fences and big trees stay where they are; unverified.
+- Input: wide garden photo in daylight, JPEG/PNG/WEBP up to 20 MB, browse assets; optional place style-reference photo/asset. Prompt “Describe the garden” / `Describe the garden you want`, Improve, 1,000-character limit, “Anything to avoid?”.
+- Outdoor style defaults Naturalistic (Meadow grasses · stone · wildflowers); alternatives Formal (Clipped hedges · gravel · symmetry), Mediterranean (Olive · terracotta · lavender), Nordic (Birch · granite · moss), Desert (Succulents · sand · weathered steel), Tropical (Big leaves · timber · bright blooms). Outdoor area defaults Whole garden; alternatives Borders, Lawn, Terrace, Front.
+- `Just tidy it up` defaults off. When switched on for inspection, style and area choices became disabled and Touch-up tasks appeared: Mow and edge the lawn, Weed the borders, Fresh mulch default checked; Prune and shape, Clean the paving, Fill planting gaps unchecked. Switch was returned to off; no lasting interaction was intended.
+- Optional AI assistance: VastuNord suggestions (“A few directions read from your photo.”) with Show disabled; Analyze an area (“Mark one part of the photo and describe just that.”) with Select disabled before photo. Sample Today/Redesigned, slider 46. Steps Add your photo / Shape the garden / Generate. `Design the garden` disabled before photo. No output/job result observed.
+
+### Remaining tools
+Four of 17 tools remain without editor inspection: Spa & Pool Redesign, Sky Transformation, Seasonal Transformation, Object Placement. Mobile interactions, durable screenshots and marketing comparison remain outstanding. No inference is made about hidden controls, AI services, credit accounting, or export behavior.

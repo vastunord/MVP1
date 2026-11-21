@@ -2,9 +2,9 @@
 
 **Status:** Phase 01 in progress. Greenfield planning kit and reference review are committed and pushed to the Vastu Nord-owned public repository; no application implementation verified.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 01 reference inventory (01B complete; awaiting approval before Phase 01C).
+**Active phase:** Phase 01 reference inventory (01C complete; awaiting owner approval before Phase 01D).
 **Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. Local Git is initialized on `main`; `origin` is `https://github.com/vastunord/MVP1.git`.
-**Next safe task:** Wait for owner approval before starting Phase 01.
+**Next safe task:** Wait for owner approval before starting Phase 01D.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -17,7 +17,7 @@
 | Area | Actual status | Evidence/URL | Next test |
 |---|---|---|---|
 | Marketing site | Public reference pages observed; source unavailable and not required for greenfield | `docs/REFERENCE_EVIDENCE.md` | Capture detailed parity evidence in Phase 01 |
-| Existing Studio | 17 tool cards observed; 9 tool editors inspected at empty-photo UI state | `docs/STUDIO_INVENTORY.md` | Inspect remaining eight tools and outstanding mobile/marketing evidence |
+| Existing Studio | 17 tool cards observed; 13 tool editors inspected at empty-photo UI state | `docs/STUDIO_INVENTORY.md` | Inspect remaining four tools and outstanding mobile/marketing evidence |
 | Auth + private projects | Unknown | No verified repo | Check code and auth config |
 | Real image/video generation | Unknown | No verified API keys | Capability matrix, contract test |
 | Neon, Payload, storage, jobs | Unknown | Owner preference only | Resource isolation and integration test |
@@ -29,7 +29,7 @@
 
 ## Blockers / owner requests
 - The host-wide GitHub credential was initially rejected. Repository-local path-scoped authentication succeeded; GitHub visibly shows the pushed Vastu Nord commits and files on the public `main` branch. No global credentials were changed.
-- Studio's public `/app` remained on a “Getting things ready” user-context screen; provide a screenshot/recording if it cannot be inspected in a later pass.
+- The earlier Studio `/app` loading state cleared; current inventory covers 13 of 17 tool editors, with four remaining and mobile/marketing evidence outstanding.
 - Provide open-access Google image-library URL/ID, asset rights and mapping when phase 04 begins.
 - Configure new Vastu Nord cloud resources only during their corresponding phases; former developers' Git/Vercel/Neon access is not required.
 
@@ -71,3 +71,9 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - Documented shared shell only once and added unique controls/modes, visible file requirements, empty-state actions and disabled states to `docs/STUDIO_INVENTORY.md`. Resolution Enhancement manual adjustments and Perspective Correction camera-angle choices were observed by switching local UI modes only.
 - A browser screenshot of Perspective Correction was visually inspected; no durable screenshot file was available to save. No photo uploads, generation, paid actions, code changes, cloud changes, deployment, or NRide access occurred.
 - Remaining Phase 01 work: eight tool editors, mobile layouts, durable screenshot captures and marketing comparison. UI-parity gate remains BLOCKED. No Phase 01C or Phase 02 work has started.
+
+
+## Phase 01C progress — 2026-11-21
+- Continued on `phase-01-reference-inventory` from `c317b99`. Inspected Decor Re-definition, Material Refinement, Lighting Reimagination and Garden Design entry pages and empty-photo editors. Thirteen of 17 Studio tools now have editor-level observations.
+- Recorded tool-specific defaults, options, upload/reference inputs and disabled states. Garden Design’s touch-up mode was inspected by toggling the switch on, then restored to default off. No upload, generation, paid action, source-code change, deployment or NRide access occurred.
+- A Garden Design browser screenshot was viewed but could not be saved as a durable project file. Four editors, mobile layouts, durable screenshot evidence and marketing comparison remain. Parity gate BLOCKED; Phase 01D and Phase 02 have not started.

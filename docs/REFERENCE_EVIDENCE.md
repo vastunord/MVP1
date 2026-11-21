@@ -22,3 +22,9 @@ Using the visible 17-card library and its recorded order, inspected Virtual Home
 Observed the entry and new-file editor for Seasonal Styling, Visual Cleanup, Resolution Enhancement, and Perspective Correction in the designer prototype. All four routes loaded; editors reached their empty-photo state. Resolution Enhancement’s manual mode and Perspective Correction’s Camera angle mode were selected to reveal their visible options only. No files were uploaded, no generation/pay action was triggered, and no backend functionality was inferred. Exact routes and control observations are recorded in `docs/STUDIO_INVENTORY.md`.
 
 A Perspective Correction editor screenshot was captured and visually inspected in the browser during this pass; browser tooling did not expose a project-local durable screenshot file, so no screenshot artifact is claimed. Evidence retained in the editor accessibility observations and this log. Seasonal Styling and Visual Cleanup were also inspected from the continued batch context; no durable image files were saved. No proprietary page source or hidden API was accessed.
+
+
+## Phase 01C — four Studio editors (2026-11-21)
+From the visible 17-card library order, inspected Decor Re-definition, Material Refinement, Lighting Reimagination and Garden Design. Each tool entry and new-file editor loaded; exact routes, empty-state controls, defaults and visible disabled states are documented in `docs/STUDIO_INVENTORY.md`. The Garden Design `Just tidy it up` switch was toggled to inspect its task list and restored to its default off state. No image was uploaded and no generation action was used.
+
+The supported browser screenshot API displayed the Garden Design editor screenshot for visual inspection but did not provide a durable project-local screenshot artifact; none is claimed saved. No source, hidden API, or backend behavior was accessed or inferred.

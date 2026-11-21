@@ -19,3 +19,8 @@ Do not assert parity based on a page title or URL alone. Record desktop/mobile a
 ## Phase 01B update
 - Editor-level desktop observations now cover 9 of 17 Studio tools: Room Reimagination, Virtual Home Staging, Outdoor Visualization, Hardscape Design, Furniture Refresh, Seasonal Styling, Visual Cleanup, Resolution Enhancement, and Perspective Correction. Tool-specific findings are in `docs/STUDIO_INVENTORY.md`.
 - Seasonal Styling, Visual Cleanup, Resolution Enhancement, and Perspective Correction are COMPLETE at the empty-photo UI inspection level. No output/job-result behavior was tested; mobile and durable screenshot evidence remain unverified. Tool parity remains BLOCKED pending eight remaining editors, mobile views, durable captures, and marketing comparison.
+
+
+## Phase 01C update
+- Editor-level desktop observations now cover 13 of 17 Studio tools. Phase 01C added Decor Re-definition, Material Refinement, Lighting Reimagination and Garden Design; see `docs/STUDIO_INVENTORY.md`.
+- Those four inspections are COMPLETE at the empty-photo UI level. No AI, wallet, export or result behavior was verified. UI parity remains BLOCKED pending four remaining editors, mobile evidence, durable captures and marketing comparison.
