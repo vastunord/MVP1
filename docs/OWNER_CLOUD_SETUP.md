@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+### Phase 02E-1D remaining setup
+
+The owner approved test branch creation during this task. `migration-test-phase02e1d` now exists as `br-lively-wildflower-bhwpjl4q`, copied from recovery `br-red-sunset-bhm6pga7` at LSN `0/1B49CE0`. Fixed compute settings were rejected by the connector, so the created branch has no compute. Before testing, establish an authorized test compute with verified limits, and a direct test-specific credential handoff. The existing helper is pinned to development and is limited to status. It must not be used to deploy to the disposable branch. Local hidden credential entry remains required and has not happened. Obtain explicit migration execution and disposable recovery-test approval after connectivity is verified. No deletion is authorized.
+
 ### Phase 02E-1C immediate owner actions
 
 The owner confirmed universal nonapplication, enabling the committed minimal SQL correction. A development recovery child `br-red-sunset-bhm6pga7` is ready without compute, preserving the source at LSN `0/1B49CE0`. Creation followed the owner's closing authorization checklist. Approve compute-backed content/restore verification and a separate disposable migration test branch before relying on recovery or claiming SQL composition passed. Preserve the recovery copy itself.
