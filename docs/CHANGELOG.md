@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-1G masked prompt retry
+
+After the owner reported the prompt was not visible, reconfirmed the authorized development target, empty baseline, recovery lineage and migration hashes. The reopened visible PowerShell process exited with code `-1073741510` before reporting success. Subsequent read-only SQL confirmed zero public relations and absent Prisma history. Removed the temporary deployment helper. No migration success is claimed.
+
 ### Phase 02E-1G authorized development migration paused
 
 Verified clean Git, authorized migration hashes and directories, Vastu Frankfurt development identity, limited role, empty schema and recovery metadata. Opened a development-pinned masked deployment window. With no local password input during the waiting period, closed the unattended window and removed the temporary helper. A subsequent read-only query confirmed no public relations and no Prisma history. Migration deployment and post-migration tests did not run.

@@ -1,5 +1,9 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
+## Phase 02E-1G prompt visibility retry
+
+Following the owner's report that the previous password window was not visible, rechecked Git, migration hashes, Vastu Frankfurt project, development direct endpoint, limited role, empty baseline and ready recovery branch. Recreated the temporary development-pinned deployment procedure with exact migration names/hashes and read-only preflight. Its visible PowerShell process exited with Windows code `-1073741510` before reporting success. No conclusion about password input or Prisma execution can be drawn from that exit code alone. A subsequent read-only query of the verified development endpoint found zero public relations and no `_prisma_migrations`, so neither migration is recorded as applied. The temporary helper was removed to prevent an unattended later execution. Establish an accessible local masked prompt before another guarded attempt. The owner already authorized the two development migrations. Full restore remains untested.
+
 ## Phase 02E-1G interrupted development deployment
 
 The owner authorized only migrations `20261121_phase02c_initial` and `20261121_phase02d_auth_projects` on Vastu Nord development. Before opening the prompt, the clean Git tree and exact two directory names/hashes matched the isolated test. Neon metadata confirmed project `morning-morning-84319525`, Frankfurt, nondefault branch `br-mute-resonance-bhea4dyx`, direct endpoint `ep-purple-fog-bhs946ij` and recovery `br-red-sunset-bhm6pga7` ready at its recorded parent LSN. Connector SQL as `vastunord_dev_migrator` confirmed `neondb`, empty public relations and no migration history, schema USAGE/CREATE and no database CREATE or superuser membership.
