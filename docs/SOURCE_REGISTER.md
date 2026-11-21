@@ -9,7 +9,7 @@
 | Old product prompt | `references/OLD_MASTER_PROMPT_2026.md` (if present) | Historical feature requirements | Use for product needs, **not** repo/account assumptions |
 | Greenfield master | `MASTER_CODEX_PROMPT.md` | Canonical requested product scope and working rules | This v3.3 updated spec |
 | Approved Google image library | OWNER LINK REQUIRED | Replacement tool thumbnails and editorial media | No link supplied; provenance/rights must be verified |
-| New Vastu Nord GitHub | Owner action: create PRIVATE repo and provide URL | Code version control and permanent implementation memory | Brand-new private repo; URL not yet known |
+| New Vastu Nord GitHub | `https://github.com/vastunord/MVP1` | Code version control and permanent implementation memory | Verified Vastu Nord-owned, Public, empty before upload; local push blocked pending correct CLI auth |
 | New Vastu Nord Vercel | OWNER TO CONFIGURE | Cloud hosting of web and Payload | Brand-new account/projects; no old project access required |
 | NRide | NOT IN SCOPE | None | Must remain untouched |
 
