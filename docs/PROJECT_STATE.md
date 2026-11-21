@@ -1,10 +1,10 @@
 # Vastu Nord — current project handoff (living document)
 
-**Status:** Phase 01 reference inventory in progress. Phase 01E-A desktop marketing-route inspection is complete; six linked design solution URLs were observed to return the branded 404 fallback. No application implementation verified.
+**Status:** Phase 01 reference inventory in progress. Phase 01E-A desktop marketing routes and Phase 01E-B desktop Studio/workspace evidence are documented. Requested tablet/mobile widths were unavailable; no application implementation verified.
 **Last updated:** 2026-11-21
-**Active phase:** Phase 01 reference inventory (01E-A complete; await owner approval before Phase 01E-B or another phase).
-**Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. This task continues on `phase-01-reference-inventory` from verified starting commit `c6bdbdad8756eb2e630281b12a56641bbbfe1665`; `origin` is `https://github.com/vastunord/MVP1.git`.
-**Next safe task:** Wait for owner approval before starting Phase 01E-B or Phase 02.
+**Active phase:** Phase 01 reference inventory (01E-B desktop evidence recorded; await owner approval before Phase 01E-C or Phase 02).
+**Working directory:** `C:\\Users\\VN\\Documents\\ChatGPT\\VastuNord` is the owner-designated Vastu Nord workspace. This task continues on `phase-01-reference-inventory` from verified starting commit `94240ec8f9146f849b50f5dcd8d516f976a32dab`; `origin` is `https://github.com/vastunord/MVP1.git`.
+**Next safe task:** Wait for owner approval before Phase 01E-C or Phase 02. Tablet/mobile evidence remains uncollected.
 
 ## Verified context
 - Hosting preference: separate Vastu Nord project on Vercel.
@@ -16,8 +16,8 @@
 ## Current implementation status
 | Area | Actual status | Evidence/URL | Next test |
 |---|---|---|---|
-| Marketing site | Requested desktop routes inspected; six linked design routes return branded 404; mobile/durable screenshots remain unverified | `docs/MARKETING_REFERENCE_COMPARISON.md` | Phase 01E-B mobile evidence; owner decision on broken solution links |
-| Existing Studio | All 17 tool editors inspected at empty-photo UI state | `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md` | Verify remaining mobile/marketing evidence; implementation belongs to a later approved phase |
+| Marketing site | Desktop routes inspected; six linked design routes return branded 404; responsive evidence remains unverified | `docs/MARKETING_REFERENCE_COMPARISON.md` | Owner decision on broken solution links; mobile capture when tooling is available |
+| Existing Studio | All 17 tool editors previously inspected at empty-photo state; four representative category editors and workspace screens inspected at desktop | `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md`, `docs/STUDIO_RESPONSIVE_AUDIT.md`, `docs/WORKSPACE_SCREEN_INVENTORY.md` | Tablet/mobile inspection and durable captures; implementation belongs to a later approved phase |
 | Auth + private projects | Unknown | No verified repo | Check code and auth config |
 | Real image/video generation | Unknown | No verified API keys | Capability matrix, contract test |
 | Neon, Payload, storage, jobs | Unknown | Owner preference only | Resource isolation and integration test |
@@ -29,7 +29,7 @@
 
 ## Blockers / owner requests
 - The host-wide GitHub credential was initially rejected. Repository-local path-scoped authentication succeeded; GitHub visibly shows the pushed Vastu Nord commits and files on the public `main` branch. No global credentials were changed.
-- Current inventory covers all 17 Studio editors at empty-photo state. Desktop marketing route inventory and six custom-404 limitations are documented in `docs/MARKETING_REFERENCE_COMPARISON.md`; mobile states and durable screenshots remain outstanding; backend behavior is unverified. Overall Phase 01 UI-parity gate remains BLOCKED.
+- Current inventory covers all 17 Studio editors at empty-photo state. Four representative editor categories and workspace surfaces were inspected at about 1280×720; the browser offered no resize override for 1440px, 768px or 390px. No durable project-local screenshots were saved. Backend, wallet, billing, persistence, search results, exports and sharing remain unverified. Overall Phase 01 UI-parity gate remains BLOCKED.
 - Provide open-access Google image-library URL/ID, asset rights and mapping when phase 04 begins.
 - Configure new Vastu Nord cloud resources only during their corresponding phases; former developers' Git/Vercel/Neon access is not required.
 
@@ -69,6 +69,12 @@ Two independent business resource stacks: NRide under `nride@gmail.com` and Vast
 - The six linked design solution routes were all opened and returned the same branded custom 404; the kitchen route was retried once in a fresh tab and again returned 404. No corresponding developer routes appeared in the previously inspected navigation, so none were guessed. The fallback header, footer and Back to home link were observed; missing solution content remains NOT ACCESSIBLE.
 - The in-app browser exposed no durable project-local screenshot export; mobile is reserved for Phase 01E-B. No application code, NRide resources, external service, deployment or push was touched. Overall Phase 01 UI-parity remains BLOCKED and is not marked passed.
 - No application tests were run. `git diff --check`, trailing-whitespace and final-newline checks passed. Await owner approval before Phase 01E-B or Phase 02.
+
+## Phase 01E-B — desktop Studio and workspace inspection — 2026-11-21
+- Inspected the dashboard, 17-card tool library, active/archived/deleted files, projects and one project detail, shared review/download tabs, search, notifications, account, profile/security/notification/export/billing settings, an existing result/version-history/compare view, and Download/Review link/Social export tabs. Read-only actions only; no payment, AI generation, upload, download, share, profile/security change, restore/delete, or notification mutation.
+- Inspected representative editors for all four categories using Room Reimagination, Virtual Home Staging, Outdoor Visualization and Resolution Enhancement. Responsive layout behavior was observable only at approximately 1280×720. The browser exposed no viewport override; 1440px, 768px, 390px and touch interactions remain NOT TESTED. No project-local screenshot export was available.
+- Opening the requested Room Reimagination new-file entry created an empty “Living Room Redesign” item displaying “Saved just now”. No photo or prompt was added. The file was left untouched; whether the reference persists it is UNVERIFIED. See `docs/WORKSPACE_SCREEN_INVENTORY.md`.
+- Updated the responsive audit, workspace inventory, parity matrix, reference evidence and this handoff. The overall Phase 01 UI-parity gate remains BLOCKED; Phase 01E-C and Phase 02 have not started.
 ## Phase 01A progress — 2026-11-21
 - Continued from `ccf8b06` on `phase-01-reference-inventory`; inspected the next four library tools in order: Virtual Home Staging, Outdoor Visualization, Hardscape Design, Furniture Refresh. Five of 17 tools now have editor-level observations including prior Room Reimagination.
 - Updated the Studio inventory and reference evidence. No durable screenshot files; no upload, generation, destructive action, app source change, or NRide access.

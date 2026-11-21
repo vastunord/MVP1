@@ -79,3 +79,22 @@ The six exact links recorded in the comparison were opened in the design referen
 | `/solutions/garden-renovation` | Same branded 404 and fallback shell. | 404 OBSERVED; page content NOT ACCESSIBLE. |
 
 The fallback reused the known design header and footer, with a single Back to home CTA. No page-specific content, image/video, solution interaction, testimonial, price, or product claim was visible. CTA destinations in the common header/footer match the previously logged shell. No matching developer-site routes were present in previously inspected navigation; no routes were guessed. The rendered/accessibility state was observed, but no screenshot file could be saved as a project-local artifact. Desktop marketing route inspection for the identified set is complete with the six custom-404 limitations recorded; mobile is reserved for Phase 01E-B. Overall Phase 01 UI-parity remains BLOCKED by mobile and durable screenshot gaps, not passed.
+
+## Phase 01E-B — responsive Studio and workspace (2026-11-21)
+
+The in-app browser was limited to about 1280×720 and exposed no viewport resize override. The requested 1440px, 768px and 390px widths and touchscreen behavior were **NOT TESTED**. Desktop observations are in `docs/STUDIO_RESPONSIVE_AUDIT.md` and `docs/WORKSPACE_SCREEN_INVENTORY.md`.
+
+### Screens/paths observed
+
+- `/app` dashboard; `/app/library` with collapsed and expanded desktop sidebar.
+- Representative editors: Interior Design `Room Reimagination` (opened from the visible new-file flow), Virtual Staging `Virtual Home Staging`, Exterior & Landscape `Outdoor Visualization`, Image Enhancement `Resolution Enhancement`.
+- `/app/files`, `/app/files?view=archived`, `/app/files?view=deleted`; `/app/projects` and `/app/projects/pr-sodermalm`.
+- `/app/shared` and `/app/shared?tab=downloads`; `/app/search` (pre-listed `kitchen` query remained on a skeleton loading state).
+- Settings `/app/settings`, `/app/settings/profile`, `/app/settings/security`, `/app/settings/notifications`, `/app/settings/exports`, `/app/settings/billing`.
+- Account and Notifications overlays; editor Version history; existing result `/app/editor/ws-kitchen-north`; Share & export Download, Review link and Social tabs.
+
+### Evidence limits and side effects
+
+Displayed account, notification, credit, plan, invoice, version/run, output and file data are prototype presentation only; services and persistence are **UNVERIFIED**. The new Room Reimagination flow created a file titled “Living Room Redesign” with “Saved just now” and it appeared in Active Files. This observed UI side effect is documented in the workspace inventory; no image/prompt was added and the file was left in place. No payment, generation, share, download, profile/security change, mark-read, deletion or restore action occurred.
+
+Browser screenshots were visible during inspection but could not be exported to project-local files; none is claimed saved. Manual capture requirements are recorded in `docs/STUDIO_RESPONSIVE_AUDIT.md`. Overall Phase 01 UI-parity remains **BLOCKED** by missing tablet/mobile and durable screenshot evidence, among other unverified behavior. No Phase 01E-C or Phase 02 work was started.
