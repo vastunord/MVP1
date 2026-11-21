@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-1C migration correction and recovery preparation
+
+Checked available Git history and authorized Neon branch metadata. Development has no app tables or Prisma history. Following explicit owner confirmation that neither migration was applied anywhere, removed only the initial CREATE SCHEMA operation and its comment/blank line. Created and metadata-verified a ready development recovery child `br-red-sunset-bhm6pga7` at LSN `0/1B49CE0`, without compute, using the owner's checklist authorization. Added a hidden-password direct-connection helper limited to Prisma status. Prisma validation, offline SQL generation and helper syntax passed. Live secret handoff, backup contents/restore and composed migration tests remain unverified. No migration execution occurred.
+
 ### Phase 02E-1B least-privilege preparation
 
 Verified the development branch is a child, `public` exists with role USAGE/CREATE, and migration history is absent. Proposed removing the redundant initial schema-creation statement. Left the SQL unchanged because use of its checksum in other environments has not been ruled out. Prisma validation and offline schema SQL generation passed, but no composed migration test ran. Recovery and direct secret handoff remain unverified.

@@ -1,5 +1,11 @@
 # Founder setup guide — Phase 02E status
 
+### Phase 02E-1C immediate owner actions
+
+The owner confirmed universal nonapplication, enabling the committed minimal SQL correction. A development recovery child `br-red-sunset-bhm6pga7` is ready without compute, preserving the source at LSN `0/1B49CE0`. Creation followed the owner's closing authorization checklist. Approve compute-backed content/restore verification and a separate disposable migration test branch before relying on recovery or claiming SQL composition passed. Preserve the recovery copy itself.
+
+The interactive helper `scripts/prisma-development-status.ps1` accepts the limited role password through a hidden prompt, uses the fixed direct development endpoint and passes it in the child environment. Its syntax is validated, but the actual secret handoff and live connection remain untested. The owner must enter the credential locally in an appropriate interactive session. No secret should enter chat or tool arguments. Migration execution, any recovery replacement and any additional resource creation require separate approval. These current actions supersede the older checksum-confirmation and privilege-escalation proposals below.
+
 ### Phase 02E-1B owner decisions
 
 Confirm whether any other environment has applied the original initial migration before editing its checksum. Authorize a development-only snapshot or backup branch and a restore verification when ready. Arrange a protected process-level handoff of the direct development migration URL without chat, command arguments or logs. The migration and any recovery replacement require their own explicit authorization. Database CREATE is not the default proposal.
