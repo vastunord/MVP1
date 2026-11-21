@@ -25,9 +25,13 @@ test("unconfigured account forms and private APIs stay closed", async ({
 });
 test("public route placeholders and system theme", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".notice")).toContainText("Ikke-kommersiell demonstrasjon");
+  await expect(page.locator(".notice")).toContainText(
+    "Ikke-kommersiell demonstrasjon",
+  );
   await page.goto("/en");
-  await expect(page.locator(".notice")).toContainText("Noncommercial demonstration");
+  await expect(page.locator(".notice")).toContainText(
+    "Noncommercial demonstration",
+  );
   for (const prefix of ["", "/en"]) {
     for (const route of [
       "",
@@ -48,7 +52,7 @@ test("public route placeholders and system theme", async ({ page }) => {
       );
     }
   }
-  await page.getByLabel("Appearance").selectOption("system");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "system");
   await page.emulateMedia({ colorScheme: "light" });
   const light = await page
     .locator("body")
@@ -81,16 +85,16 @@ test("filters, routing, locale and theme persist", async ({ page }) => {
     .getByRole("button", { name: "Bildeforbedring", exact: true })
     .click();
   await expect(page.locator(".tool-card")).toHaveCount(3);
-  await page.getByLabel("Språk", { exact: true }).selectOption("en");
+  await page.getByRole("button", { name: "EN – English" }).click();
   await expect(
     page.getByRole("heading", { name: "Tool library" }),
   ).toBeVisible();
-  await page.getByLabel("Appearance").selectOption("dark");
+  await page.getByRole("button", { name: "Dark", exact: true }).click();
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.goto("/");
-  await page.getByLabel("Språk", { exact: true }).selectOption("en");
+  await page.getByRole("button", { name: "EN – English" }).click();
   await expect(page).toHaveURL(/\/en$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.goto("/solutions/garden-renovation");
@@ -144,10 +148,12 @@ for (const width of [390, 768, 1280, 1440])
       });
     }
     if (width < 1100) {
-      await page.getByText("Meny", { exact: true }).click();
-      await expect(page.locator(".mobile-nav nav")).toBeVisible();
+      await page.getByRole("button", { name: "Meny", exact: true }).click();
+      await expect(
+        page.getByRole("navigation", { name: "Meny" }),
+      ).toBeVisible();
       await page
-        .locator(".mobile-nav")
+        .getByRole("navigation", { name: "Meny" })
         .getByRole("link", { name: "Verktøy", exact: true })
         .click();
       await expect(page).toHaveURL(/app\/library$/);

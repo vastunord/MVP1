@@ -1,11 +1,12 @@
 import { notFound, redirect } from "next/navigation";
 import { marketingResources } from "@/lib/marketing-resources";
 import { cookies, headers } from "next/headers";
+import { getSessionCookie } from "better-auth/cookies";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Marketing, Footer, publicPages } from "@/components/marketing";
 import { AuthScreen } from "@/components/auth-screens";
-import { authReadiness } from "@/server/auth-readiness";
+import { authReadiness, verifiedSessionUserId } from "@/server/auth-readiness";
 import { messages, publicHref, type Locale, type MessageKey } from "@/lib/i18n";
 type Props = { params: Promise<{ path?: string[] }> };
 function resolve(path: string[] = []) {
@@ -64,14 +65,25 @@ export default async function Page({ params }: Props) {
     segments[0] && authPages.includes(segments[0] as (typeof authPages)[number])
       ? (segments[0] as (typeof authPages)[number])
       : null;
-  if (authPage === "onboarding" && authState.ready) {
-    const { auth } = await import("@/server/auth");
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user?.emailVerified) redirect(publicHref("/login", locale));
+  let signedIn = false;
+  if (authState.ready) {
+    const requestHeaders = await headers();
+    if (getSessionCookie(requestHeaders)) {
+      const { auth } = await import("@/server/auth");
+      const session = await auth.api.getSession({ headers: requestHeaders });
+      signedIn = Boolean(verifiedSessionUserId(session));
+    }
+    if (authPage === "onboarding" && !signedIn)
+      redirect(publicHref("/login", locale));
   }
   return (
     <>
-      <Header locale={locale} theme={theme} authReady={authState.ready} />
+      <Header
+        locale={locale}
+        theme={theme}
+        authReady={authState.ready}
+        signedIn={signedIn}
+      />
       {authPage ? (
         <AuthScreen
           locale={locale}

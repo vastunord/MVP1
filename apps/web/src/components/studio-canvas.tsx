@@ -3,17 +3,20 @@ import { useState, type CSSProperties } from "react";
 import Image from "next/image";
 import type { ToolDefinition } from "@vastunord/contracts/tools";
 import { messages, type Locale } from "@/lib/i18n";
+import { translated, type StudioSample } from "@/lib/workspace-catalog";
 import { sampleTones, toolDescription } from "./tool-presentation";
 
 export function StudioCanvas({
   tool,
   locale,
   preview,
+  sample,
   guides,
 }: {
   tool: ToolDefinition;
   locale: Locale;
   preview: string;
+  sample?: StudioSample;
   guides: boolean;
 }) {
   const english = locale === "en";
@@ -47,6 +50,16 @@ export function StudioCanvas({
             <img
               src={preview}
               alt={english ? "Selected project image" : "Valgt prosjektbilde"}
+            />
+          </div>
+        ) : sample ? (
+          <div className="sample-stage selected-stage">
+            <Image
+              src={"/reference/" + sample.image}
+              alt={translated(sample.sampleAlt, locale)}
+              fill
+              priority
+              sizes="(max-width: 850px) 95vw, 65vw"
             />
           </div>
         ) : (
@@ -126,12 +139,14 @@ export function StudioCanvas({
               ? english
                 ? "Private project photo"
                 : "Privat prosjektbilde"
-              : english
-                ? "Brand sample"
-                : "Merkevareeksempel"}
+              : sample
+                ? translated(sample.name, locale)
+                : english ? "Brand sample" : "Merkevareeksempel"}
           </span>
           {preview
             ? null
+            : sample
+              ? english ? "Selected source photo" : "Valgt kildebilde"
             : staticExample
               ? tool.id === "visual-cleanup"
                 ? english
@@ -149,7 +164,7 @@ export function StudioCanvas({
                 toneName}
         </figcaption>
       </figure>
-      {!preview && !staticExample && (
+      {!preview && !sample && !staticExample && (
         <div className="studio-variants">
           <div
             role="group"

@@ -30,7 +30,16 @@ export function AuthScreen({
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
-  const href = (path: string) => publicHref(path, locale);
+  const roomUpload = query.get("intent") === "room-upload";
+  const workspaceEntry = roomUpload
+    ? "/app/tools/room-reimagination#source-image"
+    : "/app";
+  const href = (path: string) => {
+    const localized = publicHref(path, locale);
+    return roomUpload
+      ? localized + (path.includes("?") ? "&" : "?") + "intent=room-upload"
+      : localized;
+  };
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -63,7 +72,7 @@ export function AuthScreen({
           password,
         });
         if (result.error) throw new Error(result.error.message);
-        router.push("/app");
+        router.push(workspaceEntry);
         router.refresh();
       } else if (mode === "forgot-password") {
         await authClient.requestPasswordReset({
@@ -118,7 +127,7 @@ export function AuthScreen({
               ? "Workspace could not be created."
               : "Arbeidsrommet kunne ikke opprettes.",
           );
-        router.push("/app");
+        router.push(workspaceEntry);
         router.refresh();
       }
     } catch (failure) {
@@ -275,7 +284,7 @@ export function AuthScreen({
             onClick={async () => {
               await authClient.signIn.social({
                 provider: "google",
-                callbackURL: "/app",
+                callbackURL: workspaceEntry,
               });
             }}
           >

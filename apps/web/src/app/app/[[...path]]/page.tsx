@@ -1,10 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
+import { getSessionCookie } from "better-auth/cookies";
 import { Header } from "@/components/header";
 import { StudioShell, Directory } from "@/components/workspace";
 import { Library } from "@/components/library";
 import { Editor } from "@/components/editor";
-import { studies } from "@/lib/workspace-catalog";
+import { findStudioSample, studies } from "@/lib/workspace-catalog";
 import {
   Dashboard,
   StudyDetail,
@@ -17,9 +18,10 @@ import {
   isExperienceRoute,
 } from "@/components/workspace-experience";
 import { savedLocale } from "@/lib/locale-server";
+import { publicHref } from "@/lib/i18n";
 import { findTool } from "@vastunord/contracts/tools";
 
-import { authReadiness } from "@/server/auth-readiness";
+import { authReadiness, verifiedSessionUserId } from "@/server/auth-readiness";
 import { createDatabase } from "@/server/db";
 import { ProjectsScreen, AccountScreen } from "@/components/project-screens";
 import { readServerConfig } from "@/server/config";
@@ -29,7 +31,10 @@ export default async function Page({
   searchParams,
 }: {
   params: Promise<{ path?: string[] }>;
-  searchParams: Promise<{ album?: string | string[] }>;
+  searchParams: Promise<{
+    album?: string | string[];
+    sample?: string | string[];
+  }>;
 }) {
   const path = (await params).path ?? [],
     locale = await savedLocale();
@@ -40,38 +45,60 @@ export default async function Page({
   const isDashboard =
     path.length === 0 || (path.length === 1 && path[0] === "dashboard");
   let recentProjects: { id: string; name: string }[] = [];
+  const publicGuide = path.length === 1 && path[0] === "prana";
+  const tool =
+    path.length === 2 && path[0] === "tools" ? findTool(path[1]) : undefined;
+  const sample = tool
+    ? findStudioSample((await searchParams).sample)
+    : undefined;
+  const loginIntent =
+    tool?.id === "room-reimagination" && !sample ? "?intent=room-upload" : "";
+  let signedIn = false;
+  let hasWorkspace = false;
   if (authEnabled) {
-    const { auth } = await import("@/server/auth");
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user?.emailVerified) redirect("/login");
-    const db = createDatabase();
-    const personal = await db.workspace
-      .findUnique({
-        where: { personalOwnerId: session.user.id },
-        select: {
-          id: true,
-          projects: isDashboard && {
-            where: { archivedAt: null, deletedAt: null },
-            select: { id: true, name: true },
-            orderBy: { updatedAt: "desc" },
-            take: 3,
+    const requestHeaders = await headers();
+    let userId: string | null = null;
+    if (getSessionCookie(requestHeaders)) {
+      const { auth } = await import("@/server/auth");
+      userId = verifiedSessionUserId(
+        await auth.api.getSession({ headers: requestHeaders }),
+      );
+    }
+    signedIn = Boolean(userId);
+    if (!userId && !publicGuide && !sample)
+      redirect(publicHref("/login" + loginIntent, locale));
+    if (userId && !publicGuide) {
+      const db = createDatabase();
+      const personal = await db.workspace
+        .findUnique({
+          where: { personalOwnerId: userId },
+          select: {
+            id: true,
+            projects: isDashboard && {
+              where: { archivedAt: null, deletedAt: null },
+              select: { id: true, name: true },
+              orderBy: { updatedAt: "desc" },
+              take: 3,
+            },
           },
-        },
-      })
-      .finally(() => db.$disconnect());
-    if (!personal) redirect("/onboarding");
-    if (isDashboard) recentProjects = personal.projects;
+        })
+        .finally(() => db.$disconnect());
+      hasWorkspace = Boolean(personal);
+      if (!personal && !sample)
+        redirect(publicHref("/onboarding" + loginIntent, locale));
+      if (isDashboard && personal) recentProjects = personal.projects;
+    }
   }
   let content;
   if (path[0] === "tools" && path.length === 2) {
-    const tool = findTool(path[1]);
     if (!tool) notFound();
     content = (
       <Editor
-        key={tool.id}
+        key={tool.id + (sample?.id ?? "")}
         tool={tool}
         locale={locale}
-        uploadsEnabled={authEnabled && readServerConfig().uploadsEnabled}
+        sample={sample}
+        uploadsEnabled={hasWorkspace && readServerConfig().uploadsEnabled}
       />
     );
   } else if (isDashboard)
@@ -194,7 +221,13 @@ export default async function Page({
   } else notFound();
   return (
     <>
-      <Header locale={locale} theme={theme} workspace authReady={authEnabled} />
+      <Header
+        locale={locale}
+        theme={theme}
+        workspace
+        authReady={authEnabled}
+        signedIn={signedIn}
+      />
       <StudioShell locale={locale}>{content}</StudioShell>
     </>
   );

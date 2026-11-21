@@ -2,6 +2,8 @@
 
 ## Current implementation evidence
 
+The [v7 Figma-to-route matrix](FIGMA_TO_ROUTE_MATRIX.md) records the current homepage, shared navigation, founder-directed changes and remaining artwork comparisons. The [brand record](BRAND_PARITY.md) supersedes earlier font and logo availability notes.
+
 The [page-by-page implementation tracker](FIGMA_HTML_IMPLEMENTATION_TRACKER.md) maps the six inspected Figma desktop/mobile board pairs and the Studio/workspace rebuild to routes, source screens and gaps. Finalized Figma governs marketing, including the living-room feature board. The existing Studio tool matrix governs the 17 editors. The recovered HTML demonstration supplies dashboard, gallery, navigation, room tour and educational interactions. The older marketing comparison below records historical observations only. Exact crops, typography, frame dimensions and pixel comparisons await approved exports.
 
 Evidence is limited to visible reference UI. Observed controls do not establish backend operation or approved product claims. See `docs/MARKETING_REFERENCE_COMPARISON.md` for page-level details.

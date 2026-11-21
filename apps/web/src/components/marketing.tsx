@@ -3,6 +3,7 @@ import Image from "next/image";
 import { messages, publicHref, type Locale } from "@/lib/i18n";
 import { MarketingHome } from "./marketing-home";
 import { MarketingPages } from "./marketing-pages";
+import { readServerConfig } from "@/server/config";
 import "./marketing-v5.css";
 
 export const publicPages = [
@@ -33,7 +34,10 @@ export function Marketing({
       {page ? (
         <MarketingPages locale={locale} page={page} authReady={authReady} />
       ) : (
-        <MarketingHome locale={locale} authReady={authReady} />
+        <MarketingHome
+          locale={locale}
+          uploadsEnabled={authReady && readServerConfig().uploadsEnabled}
+        />
       )}
     </main>
   );
@@ -72,9 +76,9 @@ export function Footer({ locale }: { locale: Locale }) {
           <div>
             <Image
               unoptimized
-              src="/reference/logo-ivory.png"
-              width={190}
-              height={18}
+              src="/brand/vastunord-primary-ivory.svg"
+              width={217}
+              height={20}
               alt="Vastu Nord"
             />
             <p>{t.foot}</p>

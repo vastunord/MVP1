@@ -1,0 +1,6 @@
+# Phase 02 — Complete approved marketing pages and rich application workspace
+**Reasoning:** Medium; High only for unresolved design conflicts. **Read:** project state, `PHASE01_DESIGN_HANDOVER.md`, Figma route matrix, HTML-demo screen inventory, Studio configuration matrix. Do not replace working backend.
+
+Map each actually approved Figma frame to an implemented Next.js marketing route. Fix broken `/solutions/*` links by building approved pages or removing/redirection; never invent old missing content. Improve current dashboard, Projects, Renders/Files, asset cards, gallery, version comparison, search/filter, useful loading/empty/error states and accessible navigation based on HTML demo as supplementary *functional* reference. Keep all 17 Studio routes/configurations and shared shell, route continuity and actual user/project data. Make professional responsive UX, light/dark, bilingual polished translations, approved logo/fonts and correctly licensed Visuals. Pricing/wallet is coming later, not active.
+
+**Acceptance:** every important CTA reaches a real destination; page-by-page Figma parity evidence and 390/768/1280/1440 Playwright checks; no fake private data or wallet, no regressions to authenticated services. Update docs and commit; release authorized safe UI.

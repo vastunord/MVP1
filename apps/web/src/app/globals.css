@@ -1,4 +1,18 @@
 @import "tailwindcss";
+@font-face {
+  font-family: "Zalando Sans Expanded";
+  src: url("https://fonts.gstatic.com/s/zalandosansexpanded/v3/JTUJjJci8Cy470GaeFwsix1hi3aTmrgRwU-zrEw7.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zalando Sans Expanded";
+  src: url("https://fonts.gstatic.com/s/zalandosansexpanded/v3/JTUHjJci8Cy470GaeFwsix1hi3aTmrgRwU-zqXw5aXo.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}
 /* Brand colors: PDF page 19 RGB fill operands, not screenshot sampling.
    Spacing, radii, breakpoints and type sizes below are provisional UI choices. */
 :root {
@@ -8,6 +22,9 @@
   --sage: rgb(73.7% 80% 78.8%);
   --sand: rgb(91.8% 81.6% 71.4%);
   --orange: rgb(98.4% 37.6% 16.9%);
+  --brand-action: var(--orange);
+  --brand-action-text: var(--ink);
+  --brand-on-teal: var(--paper);
   --bg: var(--paper);
   --text: var(--ink);
   --surface: var(--paper);

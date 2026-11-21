@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { Action, Closing, FAQ, Photo, Section } from "./marketing-elements";
+import { HomePhotoHero } from "./home-photo-hero";
 
 const directions = [
   [
@@ -40,29 +41,6 @@ const directions = [
     "perspective-correction",
     "Perspective Correction",
     "⌗",
-  ],
-] as const;
-const scenes = [
-  [
-    "soft-day",
-    "Interiørstudie",
-    "Interior study",
-    "Et nytt blikk på stuen.",
-    "Reimagine your living room.",
-  ],
-  [
-    "warm",
-    "Materialstudie",
-    "Material study",
-    "Utforsk tekstur og dybde.",
-    "Explore texture and depth.",
-  ],
-  [
-    "cover",
-    "Lysstudie",
-    "Light study",
-    "Se hva lyset gjør med rommet.",
-    "See how light shapes a space.",
   ],
 ] as const;
 const steps = [
@@ -146,143 +124,22 @@ function StudyCompare({ en }: { en: boolean }) {
 
 export function MarketingHome({
   locale,
-  authReady,
+  uploadsEnabled,
 }: {
   locale: Locale;
-  authReady: boolean;
+  uploadsEnabled: boolean;
 }) {
   const en = locale === "en";
   const t = (nb: string, english: string) => (en ? english : nb);
-  const [sceneIndex, setScene] = useState(0);
-  const [heroSplit, setHeroSplit] = useState(46);
   const [direction, setDirection] = useState(0);
   const [step, setStep] = useState(0);
-  const scene = scenes[sceneIndex],
-    item = directions[direction];
+  const item = directions[direction];
   return (
     <>
-      <section className="mk-hero">
-        <div className="mk-wrap">
-          <div className="mk-hero-grid">
-            <div className="mk-hero-text">
-              <p className="mk-label">
-                {t(
-                  "Visuell design og forvandling",
-                  "Visual design & transformation",
-                )}
-              </p>
-              <h1>{t("Se hva som er mulig.", "See what’s possible.")}</h1>
-              <p className="mk-deck">
-                {t(
-                  "Gi ideene dine form. Utforsk rom, prøv nye detaljer og se mulighetene før du tar neste beslutning.",
-                  "Turn your ideas into visuals. Reimagine spaces, transform details, and explore possibilities before deciding what comes next.",
-                )}
-              </p>
-              <div className="mk-actions">
-                <Action href="/app/library">
-                  {t("Begynn å skape", "Start creating")}
-                </Action>
-                <Action href="#workflow" secondary>
-                  {t("Se hvordan det fungerer", "See how it works")}
-                </Action>
-              </div>
-              <div className="mk-breadcrumb">
-                {steps.map((s) => (
-                  <span key={s[0]}>{s[en ? 1 : 0]}</span>
-                ))}
-              </div>
-            </div>
-            <div className="mk-story">
-              <Photo
-                name={scene[0]}
-                alt={t(
-                  "Interiørfotografi fra Vastu Nords bildesamling",
-                  "Interior photograph from the Vastu Nord brand collection",
-                )}
-              />
-              {sceneIndex === 0 && (
-                <>
-                  <div
-                    className="mk-story-wipe"
-                    style={{ clipPath: "inset(0 0 0 " + heroSplit + "%)" }}
-                  >
-                    <Photo name="soft-evening" />
-                  </div>
-                  <div
-                    className="mk-story-grip"
-                    style={{ left: heroSplit + "%" }}
-                  >
-                    <b>↔</b>
-                  </div>
-                  <input
-                    className="mk-story-range"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={heroSplit}
-                    onChange={(e) => setHeroSplit(Number(e.target.value))}
-                    aria-label={t(
-                      "Sammenlign lyset i rommet",
-                      "Compare room lighting",
-                    )}
-                  />
-                </>
-              )}
-              <div className="mk-story-bars">
-                {scenes.map((s, i) => (
-                  <i data-active={i === sceneIndex} key={s[0]} />
-                ))}
-              </div>
-              <div className="mk-story-bottom">
-                <div aria-live="polite">
-                  <small>{scene[en ? 2 : 1]}</small>
-                  <h2>{scene[en ? 4 : 3]}</h2>
-                </div>
-                <div className="mk-story-arrows">
-                  {[-1, 1].map((delta) => (
-                    <button
-                      key={delta}
-                      onClick={() =>
-                        setScene(
-                          (sceneIndex + delta + scenes.length) % scenes.length,
-                        )
-                      }
-                      aria-label={
-                        delta < 0
-                          ? t("Forrige studie", "Previous study")
-                          : t("Neste studie", "Next study")
-                      }
-                    >
-                      {delta < 0 ? "←" : "→"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mk-start">
-            <div>
-              <h2>
-                {t("Hva vil du forvandle?", "What do you want to transform?")}
-              </h2>
-              <div className="mk-start-links">
-                <Link href="/app/assets">
-                  {t("Velg fra bildesamlingen", "Choose from assets")} ↗
-                </Link>
-                {authReady ? (
-                  <Link href="/app/tools/room-reimagination">
-                    {t("Last opp et bilde", "Upload an image")} ↗
-                  </Link>
-                ) : (
-                  <span>
-                    {t(
-                      "Opplasting krever privat tilgang",
-                      "Upload requires private access",
-                    )}
-                  </span>
-                )}
-              </div>
-            </div>
+      <HomePhotoHero locale={locale} uploadsEnabled={uploadsEnabled} />
+      <section className="home-start" aria-labelledby="home-goal">
+        <div className="mk-start">
+          <h2 id="home-goal">{t("Hva vil du forvandle?", "What do you want to transform?")}</h2>
             <div className="mk-quick">
               {directions.map((d, i) => (
                 <a
@@ -295,7 +152,6 @@ export function MarketingHome({
                 </a>
               ))}
             </div>
-          </div>
         </div>
       </section>
       <Section>

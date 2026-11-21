@@ -416,6 +416,30 @@
 .sample-stage img {
   object-fit: cover;
 }
+.sample-stage.selected-stage img {
+  object-fit: contain;
+}
+.selected-study {
+  display: grid;
+  gap: .3rem;
+  padding: .75rem .9rem;
+  border-inline-start: 3px solid var(--orange);
+  background: color-mix(in srgb, var(--sage) 12%, transparent);
+}
+.selected-study > span {
+  font-size: .8rem;
+}
+.selected-study details {
+  margin-top: .35rem;
+}
+.selected-study summary {
+  cursor: pointer;
+}
+.selected-study a {
+  display: block;
+  padding-block: .4rem;
+  text-decoration: underline;
+}
 .sample-stage.private-stage img {
   display: block;
   width: 100%;

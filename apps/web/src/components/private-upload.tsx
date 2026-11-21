@@ -2,10 +2,10 @@
 import { useEffect, useState, type ChangeEvent, type DragEvent } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
+import { IMAGE_TYPES, MAX_IMAGE_BYTES, MAX_IMAGE_MIB } from "@/lib/image-upload-policy";
 
 type Project = { id: string; name: string };
 type Asset = { id: string; createdAt: string };
-const maxBytes = 4 * 1024 * 1024;
 
 export function PrivateUpload({
   locale,
@@ -81,14 +81,14 @@ export function PrivateUpload({
   function choose(next: File | undefined) {
     if (!next) return;
     if (
-      !["image/jpeg", "image/png", "image/webp"].includes(next.type) ||
+      !IMAGE_TYPES.some((type) => type === next.type) ||
       next.size < 1 ||
-      next.size > maxBytes
+      next.size > MAX_IMAGE_BYTES
     ) {
       setStatus(
         en
-          ? "Choose a JPEG, PNG or WebP image up to 4 MB."
-          : "Velg et JPEG-, PNG- eller WebP-bilde på opptil 4 MB.",
+          ? `Choose a JPEG, PNG or WebP image up to ${MAX_IMAGE_MIB} MiB.`
+          : `Velg et JPEG-, PNG- eller WebP-bilde på opptil ${MAX_IMAGE_MIB} MiB.`,
       );
       return;
     }
@@ -214,14 +214,14 @@ export function PrivateUpload({
         {en ? "Choose or drop an image" : "Velg eller slipp et bilde"}
         <input
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept={IMAGE_TYPES.join(",")}
           disabled={busy || !project}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             choose(event.target.files?.[0])
           }
         />
       </label>
-      <p className="small">JPEG, PNG, WebP · 4 MB</p>
+      <p className="small">JPEG, PNG, WebP · {MAX_IMAGE_MIB} MiB</p>
       {file && <p className="small">{file.name}</p>}
       <button
         type="button"

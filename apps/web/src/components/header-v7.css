@@ -1,0 +1,254 @@
+/* The global bar uses the same controls and thumb targets in marketing and Studio. */
+:root {
+  --vg-height: 4.5rem;
+  scroll-padding-block-start: calc(var(--vg-height) + 0.75rem);
+}
+.vg-header {
+  position: sticky;
+  z-index: 15;
+  inset-block-start: 0;
+  isolation: isolate;
+  color: var(--text);
+  background: var(--bg);
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 21%, transparent);
+}
+.vg-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.65rem, 1vw, 1.25rem);
+  width: min(100%, 110rem);
+  min-height: var(--vg-height);
+  padding: 0.48rem clamp(1.15rem, 2.5vw, 3.25rem);
+  margin-inline: auto;
+  font-size: 0.76rem;
+  line-height: 1.25;
+  font-weight: 600;
+}
+.vg-bar a,
+.vg-bar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.vg-brand {
+  flex: none;
+  margin-inline-end: clamp(0.2rem, 0.5vw, 0.65rem);
+}
+.vg-brand img {
+  display: block;
+  width: clamp(9.5rem, 11vw, 13.5rem);
+  height: auto;
+}
+.vg-brand .vg-logo-ivory,
+[data-theme="dark"] .vg-brand .vg-logo-teal {
+  display: none;
+}
+[data-theme="dark"] .vg-brand .vg-logo-ivory {
+  display: block;
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] .vg-brand .vg-logo-teal {
+    display: none;
+  }
+  [data-theme="system"] .vg-brand .vg-logo-ivory {
+    display: block;
+  }
+}
+.vg-primary {
+  flex: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 1vw, 1.2rem);
+}
+.vg-bar nav a:hover,
+.vg-bar nav a[aria-current="page"],
+.vg-account a:hover,
+.vg-account a[aria-current="page"],
+.vg-prana:hover,
+.vg-prana[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 0.37em;
+  text-decoration-thickness: 0.12em;
+}
+.vg-prana {
+  gap: 0.32rem;
+  color: var(--muted);
+}
+.vg-preferences {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.vg-segment {
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  padding: 2px;
+  border: 1px solid color-mix(in srgb, var(--text) 30%, transparent);
+  border-radius: 6px;
+}
+.vg-segment button {
+  min-width: 2.05rem;
+  min-height: 2rem;
+  padding: 0 0.4rem;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.7rem;
+  font-weight: 650;
+}
+.vg-segment button:hover {
+  background: color-mix(in srgb, var(--text) 10%, transparent);
+}
+.vg-segment button[aria-pressed="true"] {
+  color: var(--bg);
+  background: var(--text);
+}
+.vg-bar :focus-visible {
+  position: relative;
+  outline-offset: 2px;
+}
+.vg-create {
+  min-height: 44px;
+  gap: 0.5rem;
+  padding-inline: 0.8rem;
+  border: 1px solid var(--orange);
+  border-radius: 5px;
+  color: var(--ink);
+  background: var(--orange);
+}
+.vg-create:hover {
+  border-color: var(--text);
+}
+.vg-create span {
+  font-size: 1.08rem;
+  line-height: 1;
+}
+.vg-menu-toggle,
+.vg-bar .vg-menu-toggle,
+.vg-panel {
+  display: none;
+}
+.vg-header + .notice {
+  min-height: 30px;
+  padding: 0.08rem clamp(1rem, 2.5vw, 3.25rem);
+  font-size: 0.67rem;
+}
+.vg-header + .notice .button {
+  min-height: 26px;
+  padding: 0.15rem 0.3rem;
+  font-size: inherit;
+}
+
+@media (max-width: 74.999rem) {
+  .vg-primary,
+  .vg-account {
+    display: none;
+  }
+  .vg-brand {
+    margin-inline-end: auto;
+  }
+  .vg-brand img {
+    width: clamp(10rem, 21vw, 13rem);
+  }
+  .vg-bar {
+    gap: clamp(0.6rem, 2vw, 1.3rem);
+    font-size: 0.82rem;
+  }
+  .vg-segment button {
+    min-height: 44px;
+    min-width: 2.5rem;
+  }
+  .vg-bar .vg-menu-toggle {
+    display: inline-flex;
+    gap: 0.37rem;
+    background: transparent;
+    border: 0;
+    padding: 0 0.2rem;
+    color: inherit;
+    font-weight: 650;
+  }
+  .vg-panel:not([hidden]) {
+    position: absolute;
+    inset-inline-end: clamp(1rem, 2.5vw, 3.25rem);
+    inset-block-start: calc(100% + 1px);
+    display: grid;
+    width: min(20rem, calc(100% - 2rem));
+    max-height: calc(100dvh - var(--vg-height) - 1rem);
+    padding: 0.35rem 0.8rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid var(--border);
+    border-top: 0;
+    border-radius: 0 0 0.5rem 0.5rem;
+    background: var(--bg);
+  }
+  .vg-panel a {
+    justify-content: flex-start;
+    padding-inline: 0.45rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--text) 13%, transparent);
+    white-space: normal;
+  }
+  .vg-panel a:last-child {
+    border-bottom: 0;
+  }
+}
+@media (max-width: 44rem) {
+  :root {
+    --vg-height: 7rem;
+  }
+  .vg-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas: "brand prana menu" "prefs prefs create";
+    gap: 0.18rem 0.7rem;
+    padding: 0.3rem max(0.8rem, 3.5vw) 0.45rem;
+  }
+  .vg-brand {
+    grid-area: brand;
+    justify-self: start;
+    margin: 0;
+  }
+  .vg-brand img {
+    width: min(39vw, 11rem);
+  }
+  .vg-prana {
+    grid-area: prana;
+  }
+  .vg-menu-toggle {
+    grid-area: menu;
+    justify-self: end;
+  }
+  .vg-preferences {
+    grid-area: prefs;
+    gap: 0.5rem;
+  }
+  .vg-create {
+    grid-area: create;
+    justify-self: end;
+    font-size: 0.74rem;
+  }
+  .vg-segment button {
+    min-width: 2.18rem;
+    padding-inline: 0.36rem;
+  }
+  .vg-panel:not([hidden]) {
+    inset-inline: 0.7rem;
+    width: auto;
+  }
+}
+@media (max-width: 23rem) {
+  .vg-bar {
+    column-gap: 0.35rem;
+  }
+  .vg-create {
+    padding-inline: 0.45rem;
+    gap: 0.25rem;
+  }
+}

@@ -1,3 +1,4 @@
+import { MAX_IMAGE_MIB } from "./image-upload-policy.ts";
 export type Locale = "nb-NO" | "en";
 export const dictionaries = {
   "nb-NO": {
@@ -46,7 +47,7 @@ export const dictionaries = {
     emptyBody: "Denne delen kobles til en sikker tjeneste i en senere fase.",
     upload: "Legg til bilde",
     uploadHelp:
-      "JPEG, PNG eller WEBP · opptil 20 MB. Opplasting er deaktivert.",
+      `JPEG, PNG eller WebP · opptil ${MAX_IMAGE_MIB} MiB. Opplasting er deaktivert.`,
     reference: "Valgfritt referansebilde",
     prompt: "Beskriv endringen",
     avoid: "Noe du vil unngå?",
@@ -118,7 +119,7 @@ export const dictionaries = {
     empty: "Nothing here yet",
     emptyBody: "This area will connect to a secure service in a later phase.",
     upload: "Add a photo",
-    uploadHelp: "JPEG, PNG or WEBP · up to 20 MB. Upload is disabled.",
+    uploadHelp: `JPEG, PNG or WebP · up to ${MAX_IMAGE_MIB} MiB. Upload is disabled.`,
     reference: "Optional reference image",
     prompt: "Describe the change",
     avoid: "Anything to avoid?",

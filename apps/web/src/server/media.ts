@@ -1,8 +1,6 @@
 import { randomUUID } from "node:crypto";
-
-export const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
-// Leave room under Vercel Functions' 4.5 MB request-body limit.
-export const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
+import { IMAGE_TYPES, MAX_IMAGE_BYTES } from "../lib/image-upload-policy.ts";
+export { IMAGE_TYPES, MAX_IMAGE_BYTES };
 export type Actor = { userId: string; workspaceId: string };
 export type AssetRecord = {
   id: string;

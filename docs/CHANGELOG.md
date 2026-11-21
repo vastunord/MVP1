@@ -1,5 +1,12 @@
 # Development change log (compact)
 
+## 22 November 2026 · v7 brand, navigation and photo entry
+
+- Replaced the shared header and browser icon with exact guide artwork. Added the approved typeface, direct language and theme buttons and a permanent Prana link across marketing and Studio.
+- Expanded the homepage photo to the viewport width. The editor action and three sample entries use real routes. The first study compares the source photo with an illustrative evening tone. Authenticated upload entry preserves its destination through sign-in and onboarding.
+- Aligned public upload guidance with the server’s 4 MiB limit. Re-indexed the reorganized Visuals collection by signature, dimensions and SHA-256. Kept each file’s publication eligibility separate from its visual suitability.
+- Added [design evidence](FIGMA_TO_ROUTE_MATRIX.md), browser regression coverage and the [v7 release record](go-live/GO_LIVE_STATE.md).
+
 ## High-fidelity rebuild of the noncommercial demo
 
 - Replaced the public marketing scaffold with bilingual pages based on six inspected Figma boards. Added resource article permalinks, interactive comparisons, a working transformation selector, responsive navigation and the official wordmark.

@@ -1,5 +1,13 @@
 # Vastu Nord — current project handoff (living document)
 
+## V7 Phase 00 · 22 November 2026
+
+The shared marketing and Studio header now uses the guide’s exact horizontal lockups, direct EN/NO and Light/Dark controls, persistent Prana access and a keyboard-accessible compact menu. The homepage preserves the finalized Figma headline, main actions and transformation chooser. The founder’s wider image treatment spans the viewport. Visitors can adjust a same-photo tonal comparison, try three brand studies in the corresponding editors and continue to a different tool with the selected photo. A private upload retains its fixed destination through sign-in when the service is enabled.
+
+Current source and staged-release evidence are in the [v7 go-live record](go-live/GO_LIVE_STATE.md), [brand record](BRAND_PARITY.md) and [Figma route matrix](FIGMA_TO_ROUTE_MATRIX.md). The 723 local media files have a refreshed rights-aware [manifest](VISUALS_ASSET_MANIFEST.csv). The candidate fjord image is awaiting scoped publication approval. Next design task is the approved homepage photo and crop. [Consolidated owner inputs](OWNER_ACTIONS_ONE_LIST.md)
+
+### Previous demonstration release
+
 **High-fidelity rebuild, Vastu Nord demonstration.** The six finalized marketing boards were legible in the guest Figma canvas at higher zoom, including their mobile compositions. The bilingual application now implements Home, About, the living-room feature, Pricing, Resources and Contact. Five resource articles have stable localized URLs. The homepage has working study navigation, photo comparisons, tool selection and a four-step walkthrough.
 
 The workspace uses the recovered HTML interactions for the dashboard, studies, albums, render gallery, file selection, keyboard search, guided Home Experience, Knowledge, Prana, budget scenarios and account screens. Images and scenarios are identified as illustrative. The designer Studio and the configuration matrix continue to govern all 17 editors. Existing Development authentication, project and private media interfaces retain their provider and authorization checks. Backend-dependent Production actions stay closed.

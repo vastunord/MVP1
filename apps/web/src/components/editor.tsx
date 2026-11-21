@@ -8,6 +8,7 @@ import {
   type Control,
 } from "@vastunord/contracts/tools";
 import { messages, type Locale } from "@/lib/i18n";
+import { studioSampleHref, translated, type StudioSample } from "@/lib/workspace-catalog";
 import { Button } from "./ui";
 import { PrivateUpload } from "./private-upload";
 import { StudioCanvas } from "./studio-canvas";
@@ -129,10 +130,12 @@ export function Editor({
   tool,
   locale,
   uploadsEnabled,
+  sample,
 }: {
   tool: ToolDefinition;
   locale: Locale;
   uploadsEnabled: boolean;
+  sample?: StudioSample;
 }) {
   const t = messages(locale);
   const [values, setValues] = useState<
@@ -164,8 +167,24 @@ export function Editor({
             tabIndex={0}
             aria-label={t.controls}
           >
-            <section className="inspector-group">
+            <section className="inspector-group" id="source-image">
               <h2>{english ? "Source image" : "Kildebilde"}</h2>
+              {sample && !preview && (
+                <div className="selected-study">
+                  <strong>{translated(sample.name, locale)}</strong>
+                  <span>{english ? "Studio sample" : "Studiobilde"}</span>
+                  <details>
+                    <summary>{english ? "Try another tool with this photo" : "Prøv et annet verktøy med dette bildet"}</summary>
+                    {([
+                      ["room-reimagination", "Gi rommet ny form", "Reimagine the room"],
+                      ["material-refinement", "Utforsk materialer", "Explore materials"],
+                      ["lighting-reimagination", "Endre lyset", "Change the lighting"],
+                    ] as const).filter(([id]) => id !== tool.id).map(([id, nb, en]) => (
+                      <Link key={id} href={studioSampleHref(sample, id)}>{english ? en : nb} ↗</Link>
+                    ))}
+                  </details>
+                </div>
+              )}
               <div className={uploadsEnabled ? "" : "source-unavailable"}>
                 {!uploadsEnabled && (
                   <>
@@ -254,6 +273,7 @@ export function Editor({
           tool={tool}
           locale={locale}
           preview={preview}
+          sample={preview ? undefined : sample}
           guides={values.guides === true}
         />
       </div>

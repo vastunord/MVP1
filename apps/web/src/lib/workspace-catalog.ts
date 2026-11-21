@@ -6,6 +6,11 @@ export const studies = [
     name: ["Fjordboligen", "Fjord Residence"],
     location: "Oslo",
     image: "soft.webp",
+    sampleTool: "room-reimagination",
+    sampleAlt: [
+      "En lys stue med vedovn, eikebord og sofa ved vinduet.",
+      "A light-filled living room with a wood stove, an oak table and a sofa by the window.",
+    ],
     rooms: 5,
   },
   {
@@ -13,6 +18,11 @@ export const studies = [
     name: ["Atelierleiligheten", "The Atelier Apartment"],
     location: "Bergen",
     image: "warm.webp",
+    sampleTool: "material-refinement",
+    sampleAlt: [
+      "En loftsstue med mosegrønn sofa, mørk stein og en stol i skinn.",
+      "A loft living room with a moss-green sofa, dark stone and a leather chair.",
+    ],
     rooms: 3,
   },
   {
@@ -20,9 +30,24 @@ export const studies = [
     name: ["Den nordiske hytta", "Nordic Cabin"],
     location: "Lillehammer",
     image: "cover.webp",
+    sampleTool: "lighting-reimagination",
+    sampleAlt: [
+      "En stue med høye skogvendte vinduer, trehimling og peis.",
+      "A living room with tall windows facing the trees, a timber ceiling and a fireplace.",
+    ],
     rooms: 4,
   },
 ] as const;
+
+export type StudioSample = (typeof studies)[number];
+
+export function findStudioSample(value?: string | string[]) {
+  return studies.find((study) => study.id === value);
+}
+
+export function studioSampleHref(sample: StudioSample, tool = sample.sampleTool) {
+  return `/app/tools/${tool}?sample=${sample.id}`;
+}
 
 export const scenes = [
   {

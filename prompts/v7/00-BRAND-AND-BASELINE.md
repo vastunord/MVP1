@@ -1,0 +1,8 @@
+# Phase 00 — Brand-locked baseline + immediate UI fix
+**Reasoning:** High once; Medium for implementation. **Scope:** existing Vastu Nord project only.
+
+Read `AGENTS.md`, `docs/PROJECT_STATE.md`, master v7 sections 0–4, the official 36-page brand PDF, current header/homepage code, and verified Figma exports if available. Do not reread migration history. Confirm local Git latest source vs live deployment safely. Record approved logo/font files, design tokens, current hero image and relevant reorganized `assets/Visuals/` candidates. Validate actual Figma access; ask for one batch of exports if blocked.
+
+**Implement in THIS run:** change the actual global header to use official logo assets where available, visible direct `EN`/`NO` buttons, direct `Light`/`Dark` buttons (no dropdowns), always-accessible Prana entry, functional navigation and responsive header states. Do not fake brand parity if licensed logo or Zalando Sans Expanded files are missing. Make the first concrete hero improvement where approved image/design evidence exists; otherwise identify the exact matching Figma export needed while shipping the supported header change.
+
+**Checks:** keyboard + mobile 390/768 + desktop 1280/1440, locale persistence, theme persistence, routes, brand/logo variant, TS/lint/build, targeted Playwright. Update `docs/BRAND_PARITY.md`, `docs/FIGMA_TO_ROUTE_MATRIX.md`, `docs/PROJECT_STATE.md`, `docs/CHANGELOG.md`. Commit and, if allowed, deploy the validated noncommercial demo UI. Report screenshots and exact pending items. Do NOT create a new app, implement billing or change production data.
