@@ -24,7 +24,7 @@ export const dictionaries = {
     menu: "Meny",
     close: "Lukk",
     skip: "Gå til innhold",
-    foundation: "Forhåndsvisning · under utvikling",
+    foundation: "Ikke-kommersiell demonstrasjon · under utvikling",
     status:
       "Dette er et lokalt grensesnitt under utvikling. Innlogging, opplasting, generering og lagring er ikke tilgjengelig.",
     explore: "Utforsk verktøyene",
@@ -97,7 +97,7 @@ export const dictionaries = {
     menu: "Menu",
     close: "Close",
     skip: "Skip to content",
-    foundation: "Preview · in development",
+    foundation: "Noncommercial demonstration · in development",
     status:
       "This is a local interface in development. Sign-in, upload, generation and saving are unavailable.",
     explore: "Explore the tools",

@@ -24,6 +24,10 @@ test("unconfigured account forms and private APIs stay closed", async ({
   expect(auth.status()).toBe(503);
 });
 test("public route placeholders and system theme", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator(".notice")).toContainText("Ikke-kommersiell demonstrasjon");
+  await page.goto("/en");
+  await expect(page.locator(".notice")).toContainText("Noncommercial demonstration");
   for (const prefix of ["", "/en"]) {
     for (const route of [
       "",
