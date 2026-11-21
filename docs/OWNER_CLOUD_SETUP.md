@@ -1,5 +1,11 @@
 # Founder setup guide — Phase 02E status
 
+## Phase 02E-2 owner setup needed
+
+Neon development migrations are current, but `vastunord_dev_migrator` and the owner role are the only listed roles. Establish a separate limited development runtime login and grants for the auth and project tables. Grant no database or schema CREATE and no role administration. Add its pooled URL as `DATABASE_URL` in the Vastu Nord project's Development-only server-side configuration. Add a unique `BETTER_AUTH_SECRET` of at least 32 characters and `BETTER_AUTH_URL` for the exact local test origin. Never put secret values in chat or Git. Keep Google OAuth disabled.
+
+The Vercel Development project currently provides `VASTUNORD_DEV_MIGRATOR_PASSWORD` to any process started with `vercel env run` for that project. Remove it from normal application runtime after securing a separate restricted migration-only handoff. Verify the runtime role, pooled endpoint and auth settings before real account testing. The owner provided controlled inboxes for later verification and recovery tests. No test messages were sent.
+
 ## Development migration completed
 
 The two authorized migrations were applied to development using the Vastu Nord Vercel Development credential variable. History checksums match the tested files, Prisma status is up to date and the supported schema diff is empty. A synthetic test record was removed in the same transaction. A recovery clone was previously verified; full restore is still untested. Authentication, email and private media integration remain separate work.

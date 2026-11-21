@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2 authentication integration blocked by runtime setup
+
+Verified Vastu Nord development migrations via connector and Prisma status. Listed only the development migration and owner database roles. Vercel Development lacks `DATABASE_URL`, `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Boolean checks confirmed Resend provider/sender/key presence and Google OAuth disabled, while revealing that project Development environment injection also passes the migration credential to ordinary processes. Owner supplied controlled inboxes. No emails, accounts or cloud-backed authentication/project tests ran. Prisma validation, TypeScript, ESLint, 14 local unit tests, production webpack build and nine unconfigured browser smoke tests passed. The first sandboxed build hit an existing `.next` permission error and the browser run stalled; both passed when rerun with appropriate permissions.
+
 ### Phase 02E-1G development migration completed
 
 Used the owner-selected Vercel Development variable for the guarded direct development Prisma workflow. Both authorized migrations finished in order with the tested checksums. Prisma status and schema diff passed. Verified 17 tables, 44 indexes, 132 constraints, 19 foreign keys and no database CREATE or superuser membership for the migration role. A synthetic User insert/read/delete completed in one transaction. Prisma validation, TypeScript and 14 local unit tests passed. Full recovery restore remains untested. No email, authentication or Blob integration tests ran.

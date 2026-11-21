@@ -1,5 +1,7 @@
 # Vastu Nord — current project handoff (living document)
 
+**Phase 02E-2 BLOCKED on runtime setup.** Neon development migration status is up to date, but the only database roles are `neondb_owner` and `vastunord_dev_migrator`. There is no separate application runtime role, and Vercel Development lacks `DATABASE_URL`, `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. Resend provider, sender and API key presence were checked without exposing values. The owner supplied two controlled inboxes, but no test email or real registration was sent. The Vercel Development environment also injects the migration credential into processes using `vercel env run`, so isolate or remove it from ordinary app runtime before testing. Local validation and smoke results are recorded below and in `docs/AUTH_AND_SECURITY.md`.
+
 **Phase 02E-1G development migration PASS.** On 2026-11-21 the owner-authorized migrations were deployed to development `br-mute-resonance-bhea4dyx` using the owner's Vercel Development credential variable. Both Prisma history entries finished with the tested checksums. Prisma status is up to date, schema comparison found no supported differences, and a synthetic User insert/read/delete passed. The limited role did not need database CREATE. Full recovery restoration remains untested. Email, authentication and Blob integration tests have not been started.
 
 Earlier phase entries below are historical and describe the state at the time of each check.
