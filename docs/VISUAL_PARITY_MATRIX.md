@@ -1,29 +1,24 @@
-# Visual / functional parity matrix — to be populated from evidence in Phase 01
+# Visual / functional parity matrix
 
-| Area | Design reference view | Developer reference view | Observed functions | Target in new repo | Evidence / test | Status |
-|---|---|---|---|---|---|---|
-| Header/navigation | Not yet inspected | Not yet inspected | Unknown | Rebuild brand-consistently | Screenshot required | REFERENCE MISSING |
-| Homepage hero / sections | Not yet inspected | Not yet inspected | Unknown | Rebuild brand-consistently | Screenshot required | REFERENCE MISSING |
-| Studio categories and tool controls | `/app`, not yet inspected | N/A | Unknown | Inventory first, then implement | Tool checklist + captures | REFERENCE MISSING |
-| Projects/media library | `/app`, not yet inspected | N/A | Unknown | New implementation | End-to-end tests | PLANNED |
-| Credit/billing UX | `/app`, not yet inspected | N/A | Unknown | New implementation | Ledger test | PLANNED |
-| Knowledge Hub and gallery | New requested scope | N/A | Unknown | Payload editorial + public gallery | Consent tests | PLANNED |
+Evidence is limited to visible reference UI. Observed controls do not establish backend operation or approved product claims. See `docs/MARKETING_REFERENCE_COMPARISON.md` for page-level details.
 
-Do not assert parity based on a page title or URL alone. Record desktop/mobile and all relevant interaction states with concrete screenshot references.
+| Area | Design reference | Development reference | Observed functions/states | Recommended target | Status |
+|---|---|---|---|---|---|
+| Header/navigation | White header, wordmark, Features/About/Pricing/Resources/Contact, Sign In, orange primary CTA | Similar appearance and labels | Link destinations diverge: design Sign In→`/login`, signup path; developer Sign In→`/contact`, primary CTA→`/pricing` | Design visual shell; confirm each target route | Desktop observed; mobile/screenshot blocked |
+| Home hero and sections | “See What’s Possible.”; scene selector, categories, comparison/examples, workflow, audiences, proof, FAQ, CTA/footer | Similar order and narrative; carousel displayed exterior at capture | Story selector changed scene/copy; carousel and comparison controls visible | Design layout; substantiate or omit metrics/testimonials | Desktop observed, visual metrics not measured |
+| Features | General capability overview and Explore/Compare/Decide interaction | `/features` is a living-room solution landing page | Design method cards changed detail panel | Preserve general Features route; resolve developer route/content mismatch | Conflict documented |
+| About | Story/problem, rationale, process, audiences, CTA | Closely matching page and section order | Navigation/CTA destinations differ | Design layout with validated shared copy | Desktop observed |
+| Pricing | Free/Pro, annual/monthly switch, FAQ | Same visible prices/plans, tab-style switch | Annual €19/month billed yearly; monthly €24/month | Confirm entitlements, prices and CTA routes before implementation | Display observed; commercial details unverified |
+| Resources | Search, category filters, linked article cards, topics, newsletter | Similar categories, article teasers, topics, newsletter; cards not exposed as links in accessibility view | Design Renovation filter updates article list | Prefer design's observed navigation/filter; confirm newsletter | Desktop observed; delivery unverified |
+| Contact | Support destination choices, message form, FAQ and CTA | Similar structure/form | Default Product Support subject; no submission; CTA differs | Design layout; confirm form destination and privacy requirements | UI observed; submission unverified |
+| Auth | Login, recovery, signup routes and forms | No login route from visible navigation; Sign In goes to Contact | Fields and password visibility shown; no data entered | Treat design pages as reference only until auth scope is approved | UI observed; auth unverified |
+| Solution pages | Four linked routes opened with shared long-form template and empty live-preview shell | Developer `/features` overlaps one solution narrative but uses broad destinations | Preview action disabled before upload; no upload/generation | Design template for confirmed routes; inspect linked routes before deciding sitemap | Four desktop pages observed; six linked routes not inspected |
+| Resource articles | Five article pages share editorial body, related links, CTA/footer | Detail pages not reached from observed developer resource cards | Visible content only; no authorship or accuracy verification | Design article structure; owner approve copy/claims | Five design articles observed |
+| Brand | PDF is authoritative; visual review identifies logo use, palette swatches, Zalando Sans Expanded | Visually similar dark blue/teal, white and orange palette and expanded display headings | No hex values, font files, contrast or pixel measurements sampled | Verify implementation against PDF; do not redistribute licensed font | Qualitatively aligned; exact parity unverified |
+| Studio | All 17 design editors observed in Phase 01A–01D at empty-photo state | N/A | Tool controls/empty states in Studio inventory; backend/result state remains unverified | Inventory available for later implementation planning | Editor inventory complete; behavior/mobile/screenshot parity blocked |
+| Mobile/responsive | Not inspected with available browser controls | Not inspected | No mobile interaction state captured | Obtain owner screenshots/recordings at 390×844 or 375×812 | BLOCKED pending evidence |
+| Durable screenshot evidence | Screens seen in browser session; no project-local screenshot file saved | Same limitation | Accessibility/rendered observations retained in Markdown | Owner to provide or save route/viewport-labelled captures | BLOCKED for durable captures |
 
-## Phase 01 partial finding
-- Studio library and Room Reimagination desktop editor observed; see STUDIO_INVENTORY.md. Designer/developer marketing comparisons remain based on Phase 00 accessibility snapshots, not full visual parity captures. Mobile, other tools, result states, and durable screenshots remain NOT VISIBLE. UI-parity gate BLOCKED pending inspection.
-## Phase 01A update
-- Desktop editor references now observed for Room Reimagination, Virtual Home Staging, Outdoor Visualization, Hardscape Design, and Furniture Refresh. Shared shell and differences are in `docs/STUDIO_INVENTORY.md`.
-- Studio UI parity remains BLOCKED pending 12 tool editors, mobile views, and durable visual captures. Marketing comparisons remain pending.
-## Phase 01B update
-- Editor-level desktop observations now cover 9 of 17 Studio tools: Room Reimagination, Virtual Home Staging, Outdoor Visualization, Hardscape Design, Furniture Refresh, Seasonal Styling, Visual Cleanup, Resolution Enhancement, and Perspective Correction. Tool-specific findings are in `docs/STUDIO_INVENTORY.md`.
-- Seasonal Styling, Visual Cleanup, Resolution Enhancement, and Perspective Correction are COMPLETE at the empty-photo UI inspection level. No output/job-result behavior was tested; mobile and durable screenshot evidence remain unverified. Tool parity remains BLOCKED pending eight remaining editors, mobile views, durable captures, and marketing comparison.
+## Phase 01E-A outcome
 
-
-## Phase 01C update
-- Editor-level desktop observations now cover 13 of 17 Studio tools. Phase 01C added Decor Re-definition, Material Refinement, Lighting Reimagination and Garden Design; see `docs/STUDIO_INVENTORY.md`.
-- Those four inspections are COMPLETE at the empty-photo UI level. No AI, wallet, export or result behavior was verified. UI parity remains BLOCKED pending four remaining editors, mobile evidence, durable captures and marketing comparison.
-## Phase 01D update
-- Editor-level desktop observation covers all 17 of 17 Studio tools at empty-photo state. The final four are recorded in `docs/STUDIO_INVENTORY.md`; the implementation-oriented field summary is `docs/STUDIO_TOOL_CONFIGURATION_MATRIX.md`.
-- Empty-state UI coverage is COMPLETE for listed tools. UI parity remains BLOCKED by uninspected mobile states, unavailable durable screenshot files, and incomplete desktop/mobile marketing comparison. AI, wallet, result, and export behavior remain unverified.
+Desktop marketing routes and major interaction differences are documented in `docs/MARKETING_REFERENCE_COMPARISON.md`. Marketing comparison is complete for the inspected routes, not an assertion of pixel-perfect parity. Six linked design solution routes remain uninspected; mobile views and durable screenshots remain open evidence gaps. AI, billing, forms, account behavior, hidden states and source implementations remain unverified. Phase 02 has not started.

@@ -32,3 +32,35 @@ The supported browser screenshot API displayed the Garden Design editor screensh
 Inspected Spa & Pool Redesign, Sky Transformation, Seasonal Transformation and Object Placement entry pages and new-file editors from the library. All four loaded in empty-photo state. Spa & Pool’s Spa and Pool + Spa modes and Seasonal Transformation’s Winter mode were selected only to reveal dependent controls, then restored to defaults. No images were uploaded and generation was not triggered.
 
 The supported browser screenshot method displayed the Object Placement editor for inspection; it did not save a durable project-local screenshot. No screenshot artifact is claimed. Visible comparison label/default-selection mismatches in Sky Transformation and Seasonal Transformation are recorded in the inventory. No hidden API, source, or backend behavior was accessed.
+
+## Phase 01E-A — marketing reference comparison (2026-11-21)
+
+The desktop rendered marketing experiences at both public references were compared. Page-by-page findings, route destinations, visual patterns, unresolved conflicts, screenshot limitations and owner questions are recorded in `docs/MARKETING_REFERENCE_COMPARISON.md`.
+
+### Design prototype routes observed
+
+- Primary pages: `/`, `/features`, `/about`, `/pricing`, `/resources`, `/contact`.
+- Account pages: `/login`, `/forgot-password`, `/signup` (forms viewed without credentials or submission).
+- Linked solution pages opened: `/solutions/living-room-design`, `/solutions/virtual-staging`, `/solutions/living-room-scandinavian-design`, `/solutions/backyard-design`.
+- Resource articles opened: `/resources/visualize-a-renovation-before-you-build`, `/resources/virtual-staging-vs-traditional-staging`, `/resources/choosing-the-right-interior-style`, `/resources/ai-for-homeowners`, `/resources/design-trends`.
+- Six additional solution routes were visible as related links, but not opened; details are enumerated in the comparison. Privacy and Terms footer links resolve to `/contact` on both references; separate legal pages were not observed.
+
+### Development reference routes observed
+
+`/`, `/features`, `/about`, `/pricing`, `/resources`, `/contact`. No additional developer-reference routes were opened from its visible marketing navigation. The `/features` mismatch is material: it renders a living-room solution page, whereas design `/features` is a general capabilities overview.
+
+### Visual evidence and limitations
+
+The in-app browser showed both homepage views and both Resources index views at desktop viewport 1280×720. Its supported capture displayed the views in session but did not provide a durable project-local screenshot file; none is claimed. Mobile inspection was not available. Remaining routes were inspected through the rendered page/accessibility view. No source, hidden APIs, form delivery, billing, account behavior, or AI generation was examined.
+
+The supplied 36-page brand PDF had been visually reviewed in an earlier pass. Recorded evidence confirms the logo treatments, six visible palette swatches and Zalando Sans Expanded typography. This comparison did not sample color values or verify exact browser font rendering. The references look directionally consistent with the PDF's dark blue/teal and warm orange identity, but this is a qualitative observation only.
+
+### Interaction evidence
+
+- Design homepage story selector changed the visible scene/label/copy; category tabs and carousel controls were visible.
+- Both pricing pages displayed annual/monthly states of €19/month billed yearly and €24/month, with differing switch semantics; no purchase occurred and commercial truth is unverified.
+- Design Resources' Renovation filter changed the visible article list. Newsletter and contact forms were not submitted.
+- Auth fields and password visibility control were visible; no credentials were entered.
+- Four design solution pages showed an empty live-preview area with the primary action disabled before an image. No upload or generation was attempted; backend operation is unverified.
+
+Earlier Phase 00 notes above describe the initial homepage-only/Studio-loading snapshot. They are historical; this Phase 01E-A section and comparison document are the later marketing-route evidence. No original source was recovered.
