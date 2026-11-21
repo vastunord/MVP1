@@ -29,7 +29,7 @@ Owner-directed policies below supersede tentative D-001/D-002 wording: company i
 
 ### Phase 02D local choices
 
-- D-016 IMPLEMENTED LOCALLY, NOT PRODUCTION VERIFIED: use Better Auth 1.7.27 with the existing Prisma 7 app database; require verified email, database-backed rate limiting and server session checks. Resend is a disabled-by-default delivery adapter, not an approved vendor account or cost commitment. Google OAuth stays hidden without a Vastu Nord-owned credential pair and tested consent/callback configuration.
+- D-016 IMPLEMENTED LOCALLY, NOT PRODUCTION VERIFIED: use Better Auth 1.7.27 with the existing Prisma 7 app database; require verified email, database-backed rate limiting and server session checks. The owner subsequently approved free Resend setup for Development, but sender verification and delivery remain pending. Google OAuth stays hidden without a Vastu Nord-owned credential pair and tested consent/callback configuration.
 - D-017 IMPLEMENTED LOCALLY: start with one personal workspace per verified user, owner-scoped projects and soft deletion; defer team sharing and physical media deletion to explicit retention design. No browser-supplied user/workspace ID can grant access.
 
 ### Phase 02E cloud choices
@@ -38,6 +38,7 @@ Owner-directed policies below supersede tentative D-001/D-002 wording: company i
 - D-019 PARTIALLY PROVISIONED: The owner requested a Vercel business project on Hobby and a paid plan after go-live. [Vercel's Hobby policy](https://vercel.com/docs/plans/hobby) restricts commercial use; use a commercial-eligible plan before business launch. The Vastu Nord-only CLI created and Git-linked the web project with a temporary build-ignore rule. No deployment, plan change or payment was made.
 - D-020 IMPLEMENTED IN DEVELOPMENT, LIVE MEDIA UNVERIFIED: Connect the private Blob store to `vastunord-web` Development only with short-lived OIDC rather than a static read-write token. The SDK and local config accept OIDC; no upload/download/deletion has been tested. Preview/Production connections require separate review.
 - D-021 IMPLEMENTED IN DEVELOPMENT, MIGRATION UNVERIFIED: Use a limited `neondb`/`public` migration role on the named development branch, with schema CREATE but no `neon_superuser` or database-wide CREATE. Do not use the privileged owner password in CLI commands. Safe Prisma secret handoff and DNS access are still required; no migration ran.
+- D-022 OWNER APPROVED, SENDER UNVERIFIED: Use the free Resend email resource connected only to `vastunord-web` Development for account verification and recovery. Owner accepted Marketplace terms; do not enable the app sender or claim delivery until `vastu.no` is verified at its actual DNS host and controlled messages pass.
 
 Detailed boundaries and consequences: `docs/ARCHITECTURE.md`, `docs/DATABASE_ARCHITECTURE.md`, `docs/AI_AND_WORKERS.md`, `docs/INTEGRATIONS_AND_ACCESS.md`. All runtime integration state remains PLANNED/UNVERIFIED.
 
