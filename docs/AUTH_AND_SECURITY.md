@@ -1,5 +1,9 @@
 # Authentication and security — Phase 02E verification status
 
+## Approved development privilege policy
+
+The owner accepted PUBLIC CONNECT on `postgres` and `template1`, TEMPORARY on `neondb`, and SELECT on `pg_stat_statements` and `pg_stat_statements_info` in development. Do not change PUBLIC grants globally. Administrative membership, including `pg_read_all_stats`, database/schema CREATE, unauthorized DDL and unauthorized application-data access remain disallowed; user-to-user authorization remains required. Read-only catalog checks confirmed no such administrative or DDL privileges and the expected application-table grants. The runtime role remains NOLOGIN pending protected credentials; real runtime and two-user authorization remain untested.
+
 ## Phase 02E-2A final activation assessment
 
 Owner accepted standard PostgreSQL PUBLIC database CONNECT and TEMPORARY, while prohibiting unrelated application table access, administrative privileges and global PUBLIC changes. Catalog checks on Vastu Nord development reconfirmed `vastunord_dev_runtime` is NOLOGIN with no role memberships, no `neon_superuser`, no superuser, createdb, createrole, replication or BYPASSRLS, no database/schema CREATE, and no ownership, TRUNCATE, TRIGGER, REFERENCES or MAINTAIN privilege on public application tables. Effective DML grants match the previously documented matrix. No other non-system schema was found in `neondb`.

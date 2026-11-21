@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Current runtime activation action
+
+The owner accepted the specified development PUBLIC and statistics-view privileges. The limited runtime role passed read-only permission checks but remains NOLOGIN. Set its unique password through a protected Neon workflow and configure its pooled `neondb` URL as the `vastunord-web` Development-only server-side `DATABASE_URL`; keep both values out of chat, logs and Git. Verify the exact target before enabling login and testing startup. Preserve migration credential isolation.
+
 ## Phase 02E-2A final activation decision
 
 Owner accepted the documented PostgreSQL PUBLIC CONNECT and TEMPORARY defaults. Subsequent read-only catalog checks on the Vastu Nord development branch discovered PUBLIC SELECT on `postgres.public.pg_stat_statements` and `postgres.public.pg_stat_statements_info`, reachable by the runtime role through the accepted database CONNECT and schema USAGE. No view contents were read. The owner instructed stopping on other unexpected privileges, so `vastunord_dev_runtime` remains NOLOGIN. Select an acceptable isolation approach or explicitly resolve this additional view access before role activation. Do not modify shared PUBLIC permissions or system databases without separate authorization. After resolution, establish a strong runtime password through a protected method, enable LOGIN and configure pooled `DATABASE_URL` in `vastunord-web` Development. No runtime password or URL exists yet.

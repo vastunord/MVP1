@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2A approved development privilege policy
+
+Recorded owner acceptance of specific PostgreSQL PUBLIC defaults and statistics-view access. Read-only checks found no runtime administrative membership, database/schema CREATE or application-table ownership; table grants match the documented matrix. Activation remains blocked pending protected runtime credential and URL configuration. Migration credential absence was reconfirmed. Prisma validation, TypeScript, ESLint, 15 local tests and webpack build passed. No account or email was created.
+
 ### Phase 02E-2A runtime activation stopped on additional PUBLIC view access
 
 Owner accepted PostgreSQL PUBLIC database CONNECT/TEMPORARY. Read-only development catalog checks confirmed the restricted role lacks administrative memberships, CREATE, application table ownership and extra table DDL privileges. An additional catalog check found PUBLIC SELECT on `postgres.public.pg_stat_statements` and `postgres.public.pg_stat_statements_info`, beyond the explicitly accepted database-level defaults. Per owner instruction, stopped activation with the role still NOLOGIN and no DATABASE_URL or runtime password configured. Migration credential absence, Better Auth config and Resend config were verified by boolean checks. Prisma validation, TypeScript, ESLint, 15 local tests and webpack build passed. No account or email was created.
