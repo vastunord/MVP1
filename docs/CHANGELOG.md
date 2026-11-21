@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-1F development direct connection verification
+
+Reconfirmed Vastu Frankfurt development endpoint, role, empty baseline, limited privileges, recovery lineage and tested migration checksums. Added a development-pinned masked credential helper with read-only identity/baseline and Prisma status checks. After an incorrect-password attempt, the owner's second masked entry passed. No migration or database write was performed.
+
 ### Phase 02E-1E authorized recovery clone drill
 
 Created the single approved recovery child `br-round-unit-bhxwl2nc` at LSN `0/1B49CE0` and attached Frankfurt endpoint `ep-spring-paper-bhmd754a` at 0.25 CU on Free. Read-only connector inspection confirmed the expected `neondb` and role, empty public application relations and enums/domains, and absent Prisma history. Branch and parent metadata were verified. This tests cloning, not snapshot restoration or development replacement. No migration ran.

@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Phase 02E-1F development readiness
+
+The masked direct Prisma connection and pending-migration status check passed on development. The migration checksums match the isolated test. The recovery clone test passed; full restore is untested. Authorize the two development migrations separately only when ready. A safe development-only deploy procedure must still be prepared and verified immediately before execution.
+
 ## Phase 02E-1E owner actions
 
 Development is empty and the tested migration hashes match. Approve creation of a single disposable recovery-drill branch named `recovery-drill-phase02e1e`, parent `br-red-sunset-bhm6pga7`, with a small Free-plan read-write compute for read-only content verification. This verifies cloning only. A separate development direct-credential check and explicit development migration approval remain necessary. No branch may be reset or replaced as part of this drill.

@@ -1,5 +1,11 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
+## Phase 02E-1F final development connection
+
+Read-only Neon checks confirmed Vastu project `morning-morning-84319525` in Frankfurt, nondefault development branch `br-mute-resonance-bhea4dyx`, direct read-write endpoint `ep-purple-fog-bhs946ij`, `neondb` and `vastunord_dev_migrator`. Public schema contains zero relevant relations and no Prisma history. The role has schema USAGE/CREATE, no database CREATE and no `neon_superuser` membership. Recovery branch `br-red-sunset-bhm6pga7` remained ready with parent development and LSN `0/1B49CE0`. Its clone drill passed previously. Full snapshot restoration and development replacement remain untested.
+
+Both current migration hashes match the successful isolated test, initial `d79088cf6d074033a017e28fe888f22cc65dee7136e9fd9d044de227497c8a3a` and auth/projects `0676683c33f1377708ec8e94e8b1b3357c0e686fb190de69dc86b4b4f7d04b31`. The development-specific `scripts/prisma-development-verify.ps1` pins the direct hostname and tests server-reported branch/endpoint/role/database and empty baseline before running Prisma migration status. Password entry is masked and supplied in the child environment only. Raw diagnostics are suppressed. The first attempt failed after the owner reported entering an incorrect password. A second masked attempt returned exit code 0, confirming the identity/baseline and pending-migration status. No migration was executed. The verification helper has no deploy operation. A separate reviewed development-only execution helper and explicit owner migration authorization are required for deployment.
+
 ## Recovery clone drill result
 
 On 2026-11-21, following explicit owner approval, created `recovery-drill-phase02e1e` (`br-round-unit-bhxwl2nc`) in Vastu project `morning-morning-84319525`, Frankfurt. Neon metadata confirmed its parent `br-red-sunset-bhm6pga7` and parent LSN `0/1B49CE0`, matching the recovery branch's development parent point. Read-write endpoint `ep-spring-paper-bhmd754a` belongs to the drill branch, with min/max 0.25 CU and Free-plan default autosuspend. The organization reports Free, with four existing branches before creation and reported current-period compute time 915 seconds. No plan upgrade or payment was made.
