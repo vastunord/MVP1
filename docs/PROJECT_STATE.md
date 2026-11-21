@@ -1,5 +1,7 @@
 # Vastu Nord — current project handoff (living document)
 
+**Phase 02E-1 recovery assessment:** Execution remains blocked. Besides protected credential injection, the first SQL statement requires database CREATE, which the limited role lacks. The connector lacks scoped Prisma history management. The project snapshot list is empty and a development recovery point remains unverified. Resolve the privilege decision and recovery prerequisites before requesting execution approval. See [database assessment](DATABASE_ARCHITECTURE.md).
+
 **Status:** Phase 02E-1 development target and limited migration role verified; Prisma migration remains blocked by the lack of an approved, non-logging credential handoff to the local CLI. Private Blob and free Resend resources are connected to Development; email delivery and connected application flows remain untested. Exact Phase 01 visual parity remains BLOCKED.
 **Last updated:** 2026-11-21
 **Active phase:** Phase 02E scoped integration work; cloud account and local network blockers recorded below. No Phase 02F work.

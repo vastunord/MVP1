@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+### Development migration decision
+
+Execution is blocked. To preserve both SQL files exactly, the owner must decide whether to authorize temporary database-level CREATE on development `neondb` for `vastunord_dev_migrator`, with revocation and verification on success or failure. This permits creation of additional schemas during the grant. Alternatively review a separate change to the unapplied initial SQL. Supply the direct limited-role URL through a protected migration process and establish a recoverable development point. Once these conditions are verified, request separate approval for Prisma to apply only `20261121_phase02c_initial` and `20261121_phase02d_auth_projects` in order.
+
 The Vastu Nord Neon development branch, Git-linked Vercel web project and private development Blob store exist. Blob uses short-lived OIDC in Development; the verified Resend domain and API key are also connected to Development. A limited development migration role exists, but application runtime database/auth credentials are not configured. Complete remaining steps under **Vastu Nord's own vendor login**, not NRide or the Codex development account. Never paste secret values into Git, chat or command arguments.
 
 ## Phase 02E verified setup and immediate actions
