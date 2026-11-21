@@ -1,5 +1,9 @@
 # Founder setup guide — Phase 02E status
 
+## Phase 02E-1G execution paused
+
+The owner authorized the two development migrations. The masked local deployment prompt was opened, but remained unattended and was closed to avoid a later unexpected start. Development still has no public relations or Prisma history according to the subsequent read-only check. The next session needs the owner to enter the role password in the masked prompt. Recheck target, recovery availability, exact hashes, pending status and limited privileges immediately before the single deployment attempt. The previous authorization is for the two named development migrations.
+
 ## Phase 02E-1F development readiness
 
 The masked direct Prisma connection and pending-migration status check passed on development. The migration checksums match the isolated test. The recovery clone test passed; full restore is untested. Authorize the two development migrations separately only when ready. A safe development-only deploy procedure must still be prepared and verified immediately before execution.

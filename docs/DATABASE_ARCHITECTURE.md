@@ -1,5 +1,11 @@
 # Database architecture — Phase 02E development branch, schema not deployed
 
+## Phase 02E-1G interrupted development deployment
+
+The owner authorized only migrations `20261121_phase02c_initial` and `20261121_phase02d_auth_projects` on Vastu Nord development. Before opening the prompt, the clean Git tree and exact two directory names/hashes matched the isolated test. Neon metadata confirmed project `morning-morning-84319525`, Frankfurt, nondefault branch `br-mute-resonance-bhea4dyx`, direct endpoint `ep-purple-fog-bhs946ij` and recovery `br-red-sunset-bhm6pga7` ready at its recorded parent LSN. Connector SQL as `vastunord_dev_migrator` confirmed `neondb`, empty public relations and no migration history, schema USAGE/CREATE and no database CREATE or superuser membership.
+
+A temporary development-pinned procedure was prepared to check the fixed branch/endpoint, empty schema, role permissions, pending status, expected migration names and SHA-256 hashes before running Prisma migrate deploy. It used a masked password and child environment, with raw diagnostics suppressed. Its live direct preflight and deploy did not start because the password window remained unanswered. The unattended window was closed and the temporary procedure removed. A subsequent read-only connector query on the same endpoint confirmed zero public relations and absent `_prisma_migrations`. No migration status, deploy, post-migration schema comparison or synthetic write ran in this attempt. The previous direct Prisma check and isolated test remain valid historical results. Recovery clone verification passed previously, but full restore remains untested.
+
 ## Phase 02E-1F final development connection
 
 Read-only Neon checks confirmed Vastu project `morning-morning-84319525` in Frankfurt, nondefault development branch `br-mute-resonance-bhea4dyx`, direct read-write endpoint `ep-purple-fog-bhs946ij`, `neondb` and `vastunord_dev_migrator`. Public schema contains zero relevant relations and no Prisma history. The role has schema USAGE/CREATE, no database CREATE and no `neon_superuser` membership. Recovery branch `br-red-sunset-bhm6pga7` remained ready with parent development and LSN `0/1B49CE0`. Its clone drill passed previously. Full snapshot restoration and development replacement remain untested.
