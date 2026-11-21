@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+### Phase 02E-2A runtime password handoff check
+
+The owner reported a new runtime password variable named `VN_Runtime`. It was not listed in the expected Vastu Nord web project Development scope. Read-only Neon role checks confirmed the migration role has no role-administration privileges and runtime remains NOLOGIN. No credentials or database settings were changed.
+
 ### Phase 02E-2A Neon first-password blocker
 
 The owner attempted the development runtime role's Neon Console reset; the UI reported `cannot update password for role without password`. Reviewed Neon's documented SQL alternative; a protected privileged handoff without password exposure remains unverified. No database role, password, Vercel configuration or application runtime was changed.

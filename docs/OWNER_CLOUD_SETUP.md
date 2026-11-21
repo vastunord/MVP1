@@ -1,5 +1,7 @@
 # Founder setup guide — Phase 02E status
 
+The owner reports creating `VN_Runtime` as the new runtime password. The isolated CLI did not find it in `vastu-nord/vastunord-web` Development; confirm the exact project, spelling and scope without sharing its value. The existing migration role lacks role administration, so a separate protected privileged handoff is still needed to establish the first password.
+
 ## Runtime first-password blocker
 
 Neon Console rejected Reset password for `vastunord_dev_runtime` on development with `cannot update password for role without password`. Reset does not establish its first password. [Neon's role documentation](https://neon.com/docs/manage/roles#manage-roles-with-sql) describes setting a chosen password with SQL; a safe, appropriately privileged connection and non-logging secret handoff remain to be verified. Do not recreate the role through the ordinary administrative role flow or put a privileged database credential into the normal application environment. The user requested Vercel variable handling instead of password-entry prompts.

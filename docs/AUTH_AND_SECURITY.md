@@ -1,5 +1,7 @@
 # Authentication and security — Phase 02E verification status
 
+Read-only development catalog checks confirm neither `vastunord_dev_migrator` nor `vastunord_dev_runtime` has CREATEROLE, superuser or `neon_superuser` membership; runtime remains NOLOGIN. The owner's reported `VN_Runtime` variable was not listed in the expected Vercel project and Development environment at inspection. No value was retrieved. A separate protected and authorized privileged connection is required to set the runtime role's first password.
+
 ## Runtime first-password limitation
 
 The owner reported that Neon Console rejected a password reset for the development runtime role because it has no password. The documented SQL alternative requires a protected privileged session and secret handling that must not expose credentials in tool arguments or logs. Such a handoff has not been verified. Keep runtime activation blocked until it is available and verify the role's unchanged permissions and target before enabling LOGIN.
