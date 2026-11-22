@@ -2,6 +2,8 @@
 
 **V7 Phase 01.** The founder’s updated brief adds direct NO/EN and Light/Dark controls, a fixed Prana panel, a first-visit cookie choice and a newsletter invitation that minimizes to the opposite corner. These interaction requirements apply across the existing marketing structure. The hero offers labeled Before, Compare and After states for its approved lighting study. The intended change from an empty to a furnished Scandinavian room awaits a rights-cleared same-camera pair. [Owner asset request](OWNER_ACTIONS_ONE_LIST.md) · [Interaction record](COOKIE_NEWSLETTER_INTERACTION.md)
 
+The Phase 01 evidence index compares the previous homepage with the released design at four widths and records the cookie, newsletter and Prana states. [Responsive evidence](evidence/v7-phase01/README.md)
+
 The guest canvas shows six desktop/mobile pairs. On 22 November 2026 the Home pair was inspected at higher zoom. The available link opens the board at `0-1`. Individual frame IDs, original artwork exports and measured design geometry are unavailable. [Finalized Figma board](https://www.figma.com/design/yLScUtnuv6HLK0NDL8I9WE/Finalised-Marketing-Website-Screens--Dev-?node-id=0-1)
 
 | Desktop/mobile board | Norwegian · English | Evidence and treatment | Open comparison |

@@ -2,6 +2,8 @@
 
 ## 22 November 2026 · v7 Phase 01 visitor experience
 
+- Released application commit `5d3dcc5` to the existing [Vastu Nord demo](https://vastunord-web.vercel.app). The public alias passed checks for 17 Studio editors, both privacy pages, five private service paths and three closed newsletter operations. TypeScript, lint, Prisma validation, the production build, 30 unit tests, 32 browser tests and one isolated PostgreSQL integration test passed. [Release evidence](evidence/v7-phase01/README.md)
+
 - Added a shared, keyboard-accessible Prana panel, inline cookie notice, editable first-party preferences, bilingual privacy page and a delayed newsletter that minimizes to a persistent lower-left tab.
 - Preserved the official lockups and typography, placed NO before EN, and added direct Before/Compare/After controls and a Studio sample entry to the existing hero. The published image states are explicitly identified as a lighting study.
 - Added gated double opt-in, consent records, localized confirmation and withdrawal, rate limits and duplicate/suppression handling. Public Hobby signup stays closed. [Behavior and service boundaries](COOKIE_NEWSLETTER_INTERACTION.md)

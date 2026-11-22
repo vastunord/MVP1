@@ -31,4 +31,6 @@ The Hobby demonstration shows the invitation design with signup visibly unavaila
 
 ## Behavioral reference
 
+The Phase 01 evidence index records the visitor controls at phone, tablet and desktop widths. [Screenshots and browser checks](evidence/v7-phase01/README.md)
+
 The public NRide homepage exposed NO/EN, a theme control, a cookie settings region with distinct rejection and acceptance, and a newsletter dialog with an unchecked email opt-in. Closing the invitation revealed a control to reopen it. Its precise delay was not measured. Vastu Nord uses the 27-second delay, fixed corner arrangement and artwork specified for this project. [Public reference](https://www.nride.no/)

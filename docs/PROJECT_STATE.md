@@ -2,11 +2,13 @@
 
 ## V7 Phase 01 · visitor experience
 
+Application commit `5d3dcc5` is live on the existing noncommercial demo. Vercel marked deployment `dpl_J6erWY7u52BMMHTC2xLQ8xqBXkqj` READY. On the public alias, all 17 Studio editor routes and both privacy pages opened. Five protected service paths and three newsletter operations rejected anonymous writes or access as expected. [Public demo](https://vastunord-web.vercel.app) · [Responsive evidence](evidence/v7-phase01/README.md)
+
 The updated Phase 01 brief supersedes the earlier homepage-only instructions. The shared navigation, fixed Prana launcher, three-tab panel, bilingual privacy notice, consent settings, delayed marketing invitation and persistent newsletter tab are implemented. The hero includes direct image-state controls alongside its slider. Its approved fallback shows daylight and evening in the same living room. The requested empty and furnished pair still requires scoped publication rights. [Design matrix](FIGMA_TO_ROUTE_MATRIX.md) · [Cookie and newsletter behavior](COOKIE_NEWSLETTER_INTERACTION.md)
 
 Newsletter enrollment is gated to a configured Development context. The Hobby demo keeps collection closed. No database migration or campaign was run on a cloud environment in this increment.
 
-The isolated PostgreSQL and local browser checks passed for confirmation, duplicate handling, simulated delivery failure, retry, withdrawal and suppressed re-enrollment. Sender delivery and newsletter persistence in the actual cloud environment still need a separately authorized test. [Service configuration](ENVIRONMENT_VARIABLE_INVENTORY.md)
+TypeScript, ESLint, Prisma validation, the production build, 30 unit tests, 32 browser tests and the isolated PostgreSQL integration test passed. The newsletter tests covered confirmation, duplicate handling, simulated delivery failure, retry, withdrawal and suppressed re-enrollment. Sender delivery and newsletter persistence in the actual cloud environment still need a separately authorized test. [Service configuration](ENVIRONMENT_VARIABLE_INVENTORY.md)
 
 ## V7 Phase 00 · 22 November 2026
 
