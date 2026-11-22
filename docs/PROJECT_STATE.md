@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · MNML live integration test
+
+The protected Preview requested the two authorized verification emails. The contact test account verified its email and established an authenticated session. The owner reported that the second Gmail address does not exist. The test could not verify the second account and stopped before creating a project or attaching the private synthetic MNML result. No additional provider render was requested. The existing result remains in private Preview Blob. A live owner-project attachment, before/after reopening and second-user denial are still pending.
+
+The first test harness waited for both accounts before exercising either. A continuation needs a working second controlled inbox and a fresh authorized way to authenticate the first test account. Do not set email-verification flags directly or claim that the fake address received mail. New paid submissions remain disabled.
+
 ## 22 November 2026 · Preview MNML persistence attempt
 
 Neon metadata reconfirmed Preview branch `br-summer-night-bh70tetr` and Frankfurt endpoint `ep-frosty-violet-bhh19hyh`. The existing `RenderJob` and `_prisma_migrations` objects are owned by `vastunord_dev_migrator`. The protected Preview build previously verified that the website and Studio use the pinned `vastunord_preview_runtime` application database connection.

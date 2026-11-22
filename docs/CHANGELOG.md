@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 22 November 2026 · MNML Preview account test
+
+- Requested the two owner-authorized test verification messages. The contact account verified and signed in. The owner reported that the second address does not exist; the test timed out before project creation and no new MNML render was requested. Live attachment, comparison and cross-user testing remain incomplete.
+
 ## 22 November 2026 · Preview migration attempt
 
 - Reconfirmed the Preview branch, endpoint and migration-object ownership. Automatic approval rejected the role rename through `neondb_owner`. The owner approved using the existing migrator role for Preview testing. Its protected direct login passed. A pre-migration Preview recovery branch was created, `20261122_studio_mnml` applied through Prisma, and narrow RenderJob grants added for the Preview runtime. Independent MNML, authentication and isolated job-persistence tests passed.
