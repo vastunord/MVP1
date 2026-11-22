@@ -34,7 +34,7 @@ export function Dashboard({
               : "Utforsk materialer, lys og planløsning i Studio."}
           </p>
           <Link className="vn-hero-link" href="/app/tools/room-reimagination">
-            {en ? "Open Studio" : "Åpne Studio"} ↗
+            {en ? "Open Studio" : "Åpne Studio"} <span aria-hidden="true">↗</span>
           </Link>
         </div>
       </div>
@@ -56,8 +56,8 @@ export function Dashboard({
             [
               "tools",
               "/app/library",
-              en ? "Tool library" : "Verktøybibliotek",
-              en ? "Explore all 17 editors" : "Utforsk alle 17 verktøy",
+              en ? "Open Studio" : "Åpne Studio",
+              en ? "Explore all 17 workflows" : "Utforsk alle 17 arbeidsflyter",
             ],
             [
               "image",
@@ -188,7 +188,7 @@ export function StudyDetail({
           {en ? "All projects" : "Alle prosjekter"}
         </Link>
         <Link href="/app/tools/room-reimagination">
-          {en ? "Open Studio" : "Åpne Studio"} ↗
+          {en ? "Open Studio" : "Åpne Studio"} <span aria-hidden="true">↗</span>
         </Link>
       </div>
     </section>

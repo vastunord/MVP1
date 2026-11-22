@@ -7,7 +7,7 @@ export function marketingResources(locale: Locale) {
     t("Oppussing", "Renovation"),
     t("Boligstyling", "Staging"),
     t("Interiør", "Interiors"),
-    t("Verktøy", "Tools"),
+    t("Arbeidsflyt", "Workflow"),
     t("Design", "Design"),
     t("Materialer", "Materials"),
     t("Belysning", "Lighting"),
@@ -67,7 +67,7 @@ export function marketingResources(locale: Locale) {
     },
     {
       id: "ai-for-homeowners",
-      name: t("AI-verktøy for boligeiere", "AI tools for homeowners"),
+      name: t("AI i boligplanlegging", "Using AI for home design"),
       image: "editorial/article-homeowner",
       detailImage: "editorial/article-detail-homeowner",
       tags: [3, 7],
@@ -76,8 +76,8 @@ export function marketingResources(locale: Locale) {
         "Choose a workflow that fits your question.",
       ),
       body: t(
-        "Begynn med oppgaven. Skal du sammenligne belysning, finne en ny fargepalett eller vurdere en møblering? I Studio kan du åpne et verktøy og utforske kontrollene med eksempelbilder.",
-        "Start with the task. Are you comparing lighting, choosing a palette or considering a different arrangement? Open a Studio tool and explore its controls with sample images.",
+        "Begynn med oppgaven. Skal du sammenligne belysning, finne en ny fargepalett eller vurdere en møblering? Velg en arbeidsflyt i Studio og utforsk innstillingene med eksempelbilder.",
+        "Start with the task. Are you comparing lighting, choosing a palette or considering a different arrangement? Choose a workflow in Studio and explore its settings with sample images.",
       ),
     },
     {

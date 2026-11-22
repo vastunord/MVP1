@@ -168,7 +168,7 @@ export function Editor({
   return (
     <div className="studio-editor">
       <div className="editor-topbar">
-        <Link href="/app/library">← {t.back}</Link>
+        <Link href="/app/library"><span aria-hidden="true">← </span>{t.open}</Link>
         <StudioToolSwitcher tool={tool} locale={locale} sample={sample} />
       </div>
       <div className="studio-workbench">
@@ -192,13 +192,13 @@ export function Editor({
           >
             <details className="inspector-group studio-engine room-drawer" open>
               <summary>
-                {english ? "Workflow and engine" : "Arbeidsmåte og motor"}
+                {english ? "Workflow and engine" : "Arbeidsflyt og motor"}
               </summary>
               <div>
                 {(renderMode(tool.id) || enhance) && (
                   <StudioChoices
                     kind="workflow"
-                    label={english ? "Workflow" : "Arbeidsmåte"}
+                    label={english ? "Workflow" : "Arbeidsflyt"}
                     value={workflow}
                     choices={
                       enhance
@@ -297,8 +297,8 @@ export function Editor({
                     <details>
                       <summary>
                         {english
-                          ? "Try another tool with this photo"
-                          : "Prøv et annet verktøy med dette bildet"}
+                          ? "Workflow"
+                          : "Arbeidsflyt"}
                       </summary>
                       {(
                         [

@@ -24,12 +24,12 @@ export function StudioToolSwitcher({
         <span className="switcher-glyph" aria-hidden="true">
           ▦
         </span>
-        <span>{locale === "en" ? "Switch tool" : "Bytt verktøy"}</span>
+        <span>{locale === "en" ? "Workflow" : "Arbeidsflyt"}</span>
         <span className="switcher-current">{tool.name}</span>
       </summary>
       <nav
         aria-label={
-          locale === "en" ? "Studio tool selection" : "Verktøy i Studio"
+          locale === "en" ? "Workflow" : "Arbeidsflyt"
         }
       >
         {categories.map((category) => (

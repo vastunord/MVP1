@@ -74,13 +74,13 @@ export function Footer({ locale }: { locale: Locale }) {
       locale === "en" ? "Solutions" : "Løsninger",
       [
         [t.features, publicHref("/features", locale)],
-        [t.library, "/app/library"],
+        [t.open, "/app/library"],
       ],
     ],
     [
       "Studio",
       [
-        [t.home, "/app"],
+        [locale === "en" ? "Overview" : "Oversikt", "/app"],
         [locale === "en" ? "Gallery" : "Galleri", publicHref("/gallery", locale)],
       ],
     ],

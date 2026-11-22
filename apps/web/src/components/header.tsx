@@ -202,7 +202,7 @@ export function Header({
     : { href: publicHref("/login", locale), label: t.login };
   const compactLinks = workspace
     ? studioLinks.filter((d) => d.href !== account.href)
-    : [...marketingLinks, { href: "/app/library", label: t.library }];
+    : [...marketingLinks, { href: "/app/library", label: t.open }];
   function link(item: HeaderLink) {
     const active =
       path === item.href ||

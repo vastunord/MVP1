@@ -36,7 +36,7 @@ export function Library({ locale }: { locale: Locale }) {
   return (
     <div className="studio-library">
       <div className="section-heading">
-        <Link href="/app">Studio</Link>
+        <Link href="/app">{t.open}</Link>
         <h1>{t.library}</h1>
         <p>
           {locale === "en"
@@ -50,7 +50,7 @@ export function Library({ locale }: { locale: Locale }) {
           <input
             type="search"
             aria-label={t.search}
-            placeholder={locale === "en" ? "Search tools" : "Søk etter verktøy"}
+            placeholder={locale === "en" ? "Search workflows" : "Søk etter arbeidsflyter"}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -70,8 +70,8 @@ export function Library({ locale }: { locale: Locale }) {
       <h2 className="studio-tool-count" role="status">
         {category === "all"
           ? locale === "en"
-            ? "All tools"
-            : "Alle verktøy"
+            ? "All workflows"
+            : "Alle arbeidsflyter"
           : t[category as keyof typeof t]}{" "}
         <span>{formatNumber(shown.length, locale)}</span>
       </h2>

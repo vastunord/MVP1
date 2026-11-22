@@ -194,8 +194,8 @@ export function Gallery({
                 ? "Browse reference files for your Studio studies."
                 : "Se referansefiler til studiene dine i Studio."
               : en
-                ? "Open any of the 50 studies, then choose a Studio tool to work with its photo."
-                : "Åpne en av de 50 bildestudiene og velg et Studio-verktøy for bildet."}
+                ? "Open any of the 50 studies, then choose a workflow for its photo."
+                : "Åpne en av de 50 bildestudiene og velg en arbeidsflyt for bildet."}
         </p>
       </header>
       {!publicCollection && assets && privateFilesEnabled && (
@@ -347,7 +347,7 @@ export function Gallery({
             {en ? "Browse albums" : "Utforsk album"} ↗
           </Link>
           <Link href="/app/tools/room-reimagination">
-            {en ? "Open Studio" : "Åpne Studio"} ↗
+            {en ? "Open Studio" : "Åpne Studio"} <span aria-hidden="true">↗</span>
           </Link>
         </div>
       )}
@@ -386,7 +386,7 @@ export function Gallery({
           <StudioChoices
             kind="tool"
             label={
-              en ? "Use this photo in Studio" : "Bruk dette bildet i Studio"
+              en ? "Workflow" : "Arbeidsflyt"
             }
             value={toolId}
             onChange={setToolId}
@@ -400,7 +400,7 @@ export function Gallery({
             className="button"
             href={"/app/tools/" + toolId + "?sample=" + selected.id}
           >
-            {en ? "Open Studio" : "Åpne Studio"} ↗
+            {en ? "Open Studio" : "Åpne Studio"} <span aria-hidden="true">↗</span>
           </Link>
         </div>
       </dialog>

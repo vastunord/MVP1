@@ -420,7 +420,7 @@ function Features({ locale, t }: PageContext) {
         ]}
       />
       <Section tone="sand">
-        <h2>{t("Relaterte verktøy", "Related tools")}</h2>
+        <h2>{t("Relaterte arbeidsflyter", "Related workflows")}</h2>
         <div className="mp-link-row">
           {tools.slice(1, 4).map(([name, slug]) => (
             <Action key={slug} href={`/app/tools/${slug}`} secondary>
@@ -475,8 +475,8 @@ function Pricing({ locale, t }: PageContext) {
                       "Paid subscriptions will open once prices and terms are approved.",
                     )
                   : t(
-                      "Bli kjent med de 17 verktøyene og utforsk eksempelrom i Studio.",
-                      "Browse the 17 tools and explore sample rooms in Studio.",
+                      "Bli kjent med de 17 arbeidsflytene og utforsk eksempelrom i Studio.",
+                      "Browse the 17 workflows and explore sample rooms in Studio.",
                     )}
               </p>
               {i ? (
@@ -505,7 +505,7 @@ function Pricing({ locale, t }: PageContext) {
           <tbody>
             {[
               [
-                t("Verktøybibliotek", "Tool library"),
+                "Studio",
                 t("Åpent i demo", "Demo access"),
               ],
               [
@@ -578,8 +578,8 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
           "Learn. Explore. Get inspired.",
         )}
         body={t(
-          "Finn en idé, utforsk en stil eller lær å bruke verktøyene.",
-          "Find inspiration, explore a style or learn your way around the tools.",
+          "Finn en idé, utforsk en stil eller lær å bruke Studio.",
+          "Find inspiration, explore a style or learn your way around Studio.",
         )}
         photo="editorial/resources-hero"
       >
@@ -683,8 +683,8 @@ function Contact({ locale, t }: PageContext) {
     [
       t("Produkthjelp", "Product support"),
       t(
-        "Finn hjelp med Studio og verktøyene.",
-        "Find help with Studio and its tools.",
+        "Finn hjelp med arbeidsflytene i Studio.",
+        "Find help with Studio workflows.",
       ),
     ],
     [
@@ -779,10 +779,10 @@ function Contact({ locale, t }: PageContext) {
         title={t("Raske svar", "Quick answers")}
         items={[
           [
-            t("Hvor finner jeg verktøyene?", "Where can I find the tools?"),
+            t("Hvor finner jeg arbeidsflytene?", "Where can I find the workflows?"),
             t(
-              "Åpne Studio fra hovedmenyen. Verktøybiblioteket samler alle de 17 verktøyene.",
-              "Open Studio from the main navigation. The tool library brings together all 17 tools.",
+              "Velg «Åpne Studio» i hovedmenyen for å se alle de 17 arbeidsflytene.",
+              "Choose “Open Studio” in the main navigation to see all 17 workflows.",
             ),
           ],
           [

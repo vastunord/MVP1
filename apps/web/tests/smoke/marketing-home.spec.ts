@@ -235,7 +235,7 @@ test("a selected public study remains the source when reopening or switching too
   await expect(page.locator(".primary-action button")).toBeDisabled();
   await page.reload();
   await expect(source).toBeVisible();
-  await page.getByText("Try another tool with this photo").click();
+  await page.locator(".selected-study").getByText("Workflow", {exact: true}).click();
   await page.getByRole("link", { name: "Change the lighting" }).click();
   await expect(page).toHaveURL(
     /\/app\/tools\/lighting-reimagination\?sample=hero-[\w-]+$/,

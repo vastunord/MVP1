@@ -60,7 +60,7 @@ test("a gallery photo opens with each of the 17 Studio tools and favourites surv
   await page.locator(".vn-tile-open").first().click();
   const dialog = page.locator(".vn-scene-dialog");
   const menu = dialog.getByRole("group", {
-    name: "Bruk dette bildet i Studio",
+    name: "Arbeidsflyt",
   });
   await expect(menu.getByRole("radio")).toHaveCount(17);
   await expect(menu.locator("img")).toHaveCount(17);

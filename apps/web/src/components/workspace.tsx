@@ -66,7 +66,7 @@ export function Directory({
     ...tools.map((tool) => ({
       label: tool.name,
       href: tool.route,
-      caption: en ? "Tool" : "Verktøy",
+      caption: en ? "Workflow" : "Arbeidsflyt",
     })),
   ].filter((d) =>
     (d.label + " " + d.href + " " + d.caption)
@@ -77,7 +77,7 @@ export function Directory({
     <div className="vn-directory">
       <label>
         <span>
-          {en ? "Find a screen or tool" : "Finn en side eller et verktøy"}
+          {en ? "Find a screen or workflow" : "Finn en side eller en arbeidsflyt"}
         </span>
         <input
           type="search"
@@ -114,8 +114,8 @@ export function StudioShell({
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const groups = en
-    ? ["Studio", "Explore", "Account"]
-    : ["Studio", "Utforsk", "Konto"];
+    ? ["Studio", "Resources", "Account"]
+    : ["Studio", "Ressurser", "Konto"];
   const active =
     destinations.find((d) => d.href === path) ??
     (path.startsWith("/app/tools/")
@@ -164,8 +164,8 @@ export function StudioShell({
       <main id="main" className="workspace-main vn-main">
         <div className="vn-workspace-bar">
           <span>
-            <Link href="/app">Studio</Link>
-            {active && <> / {translated(active.title, locale)}</>}
+            <Link href="/app">{en ? "Open Studio" : "Åpne Studio"}</Link>
+            {active && <> / {active.href === "/app/library" ? (en ? "Workflow" : "Arbeidsflyt") : translated(active.title, locale)}</>}
           </span>
           <button
             className="vn-search-button"
