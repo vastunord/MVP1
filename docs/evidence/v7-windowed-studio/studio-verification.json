@@ -1,0 +1,245 @@
+{
+  "origin": "https://vastunord-web.vercel.app",
+  "library": "/app/library",
+  "cards": [
+    {
+      "route": "/app/tools/room-reimagination",
+      "image": "/media/tools/room-reimagination.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/virtual-home-staging",
+      "image": "/media/tools/virtual-home-staging.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/outdoor-visualization",
+      "image": "/media/tools/outdoor-visualization.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/hardscape-design",
+      "image": "/media/tools/hardscape-design.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/furniture-refresh",
+      "image": "/media/tools/furniture-refresh.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/seasonal-styling",
+      "image": "/media/tools/seasonal-styling.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/visual-cleanup",
+      "image": "/media/tools/visual-cleanup.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/resolution-enhancement",
+      "image": "/media/tools/resolution-enhancement.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/perspective-correction",
+      "image": "/media/tools/perspective-correction.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/decor-redefinition",
+      "image": "/media/tools/decor-redefinition.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/material-refinement",
+      "image": "/media/tools/material-refinement.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/lighting-reimagination",
+      "image": "/media/tools/lighting-reimagination.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/garden-design",
+      "image": "/media/tools/garden-design.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/pool-redesign",
+      "image": "/media/tools/pool-redesign.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/sky-transformation",
+      "image": "/media/tools/sky-transformation.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/seasonal-transformation",
+      "image": "/media/tools/seasonal-transformation.webp",
+      "width": 720
+    },
+    {
+      "route": "/app/tools/object-placement",
+      "image": "/media/tools/object-placement.webp",
+      "width": 720
+    }
+  ],
+  "editors": [
+    {
+      "route": "/app/tools/room-reimagination",
+      "image": "/media/canvas/room-reimagination.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/virtual-home-staging",
+      "image": "/media/canvas/virtual-home-staging.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/outdoor-visualization",
+      "image": "/media/canvas/outdoor-visualization.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/hardscape-design",
+      "image": "/media/canvas/hardscape-design.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/furniture-refresh",
+      "image": "/media/canvas/furniture-refresh.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/seasonal-styling",
+      "image": "/media/canvas/seasonal-styling.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/visual-cleanup",
+      "image": "/media/canvas/visual-cleanup.webp",
+      "width": 1100,
+      "tonePhotos": 0,
+      "comparisonSlider": false,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/resolution-enhancement",
+      "image": "/media/canvas/resolution-enhancement.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/perspective-correction",
+      "image": "/media/canvas/perspective-correction.webp",
+      "width": 1100,
+      "tonePhotos": 0,
+      "comparisonSlider": false,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/decor-redefinition",
+      "image": "/media/canvas/decor-redefinition.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/material-refinement",
+      "image": "/media/canvas/material-refinement.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/lighting-reimagination",
+      "image": "/media/canvas/lighting-reimagination.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/garden-design",
+      "image": "/media/canvas/garden-design.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/pool-redesign",
+      "image": "/media/canvas/pool-redesign.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/sky-transformation",
+      "image": "/media/canvas/sky-transformation.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/seasonal-transformation",
+      "image": "/media/canvas/seasonal-transformation.webp",
+      "width": 1100,
+      "tonePhotos": 4,
+      "comparisonSlider": true,
+      "legacyLabels": 0
+    },
+    {
+      "route": "/app/tools/object-placement",
+      "image": "/media/canvas/object-placement.webp",
+      "width": 1100,
+      "tonePhotos": 0,
+      "comparisonSlider": false,
+      "legacyLabels": 0
+    }
+  ],
+  "roomBriefs": [
+    {
+      "image": "/media/briefs/forest-stillness.webp",
+      "width": 240
+    },
+    {
+      "image": "/media/briefs/everyday-rhythm.webp",
+      "width": 240
+    },
+    {
+      "image": "/media/briefs/by-the-hearth.webp",
+      "width": 240
+    }
+  ],
+  "mobileWidth": 390,
+  "mobileOverflow": false
+}

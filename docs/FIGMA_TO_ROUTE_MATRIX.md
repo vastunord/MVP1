@@ -4,6 +4,8 @@
 
 Previous release records preserve the full-bleed treatment, the ticket, Prana, Studio and the earlier lighting study. [Previous screenshots](evidence/v7-visuals-refresh/README.md) · [Earlier Phase 01 evidence](evidence/v7-phase01/README.md)
 
+The live comparison was checked at four viewport widths with the original source pixels. The divider stays within the photo for all 11 pairs. [Windowed release evidence](evidence/v7-windowed-studio/README.md)
+
 The guest canvas shows six desktop/mobile pairs. On 22 November 2026 the Home pair was inspected at higher zoom. The available link opens the board at `0-1`. Individual frame IDs, original artwork exports and measured design geometry are unavailable. [Finalized Figma board](https://www.figma.com/design/yLScUtnuv6HLK0NDL8I9WE/Finalised-Marketing-Website-Screens--Dev-?node-id=0-1)
 
 | Desktop/mobile board | Norwegian · English | Evidence and treatment | Open comparison |

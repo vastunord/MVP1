@@ -2,6 +2,7 @@
 
 ## 22 November 2026 · Windowed homepage and Studio image controls
 
+- Released application commit `7cd700f` to the [Vastu Nord demo](https://vastunord-web.vercel.app). The live browser checks covered all 11 photo pairs, four homepage widths and all 17 editor canvases. [Live screenshots and test results](evidence/v7-windowed-studio/README.md)
 - Moved the comparison beside the headline on desktop and below it on mobile. Removed the tint, scene labels and over-image toolbar. The divider moves slowly until hovered. Image pairs continue rotating independently.
 - Removed the Today/Reimagined footer labels from Studio comparisons. Tone choices show the current scene and Room Reimagination offers three editable, illustrated room briefs.
 - Recorded commercial launch requirements and the evidence needed for each customer-facing service. [Release checklist](go-live/RELEASE_CHECKLIST.md)

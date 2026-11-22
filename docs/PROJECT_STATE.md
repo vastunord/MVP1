@@ -2,11 +2,15 @@
 
 ## Windowed homepage comparison and Studio photographs
 
+Application commit `7cd700f` is live. Vercel marked deployment `dpl_DJ7VrHAcw8SoNvsoYN6SWBRKxHEW` ready and assigned the [Vastu Nord demo](https://vastunord-web.vercel.app). TypeScript, ESLint, the production build, all 30 unit tests and all 38 browser tests passed.
+
 The homepage now follows the approved desktop arrangement with “See what’s possible” beside a large comparison window. The window stacks beneath the introduction on narrow screens. It shows the original photographs at full opacity. All 11 pairs cycle on a 12-second interval. The divider travels about 1.4 percentage points per second and holds its position on hover while the photos continue cycling. Keyboard, touch, reduced-motion and manual playback controls are available. “Try this image” opens the current source in Studio. [Design record](FIGMA_TO_ROUTE_MATRIX.md)
 
 The Studio canvas drops the Today/Reimagined image labels. Scene-specific tone previews and three editable room briefs use photographs from Visuals. Each of the 17 tool cards has a distinct subject image. The placement register now accounts for 180 independent source photographs and 230 WebP derivatives. [Studio configuration](STUDIO_TOOL_CONFIGURATION_MATRIX.md) · [Asset register](ASSET_MANIFEST.md)
 
 The commercial launch checklist separates the first public business release from accounts and private media, real rendering, editorial publishing and optional payments. It records the responsible party, dependencies and evidence required before each feature opens. [Commercial launch checklist](go-live/RELEASE_CHECKLIST.md)
+
+The public alias passed the four-width photo, hover and Studio handoff checks. At a 1440 × 900 desktop viewport the first photo occupies 922 × 521 CSS pixels. All 17 tool images and canvases loaded, with 56 tone thumbnails across the 14 comparison editors. All three static editors and three illustrated room briefs also loaded. Five protected service paths and all three newsletter operations returned the expected unavailable status. [Live screenshots and evidence](evidence/v7-windowed-studio/README.md)
 
 ## Phase 01 revision · Studio, visitor controls and photography
 
