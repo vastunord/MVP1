@@ -2,6 +2,8 @@
 
 ## Phase 01 revision · Studio, visitor controls and photography
 
+The public alias now serves application commit `d1af4d8`, Vercel deployment `dpl_Ens6kjjYL2AiFER8xccFwUCueAEQ`. [Live Vastu Nord demo](https://vastunord-web.vercel.app) · [Release screenshots](evidence/v7-visuals-refresh/README.md)
+
 The founder supplied 22 homepage images and authorized the Visuals selection for the noncommercial demo. All 11 before/after pairs appear in a full-screen comparison. The slider works by touch and keyboard. The sequence blurs between pairs, pauses on demand and offers manual navigation for visitors who prefer reduced motion. “Try this image” carries the displayed before image into Studio.
 
 The render gallery contains 50 individually captioned images. All 17 tool cards have subject-specific thumbnails and independent editor sample images. Original files stay in the local asset collection. Each published derivative has an assigned placement and source checksum. [Media assignments](VISUALS_PLACEMENTS.csv)

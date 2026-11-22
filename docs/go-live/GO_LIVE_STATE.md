@@ -1,10 +1,10 @@
 # Vastu Nord v7 release state
 
-Application commit `5d3dcc5` on `feat/v7-brand-photo-entry` is live on the existing Vastu Nord Hobby project. The release adds bilingual visitor preferences, the newsletter dock, floating Prana and direct controls for the homepage comparison. Vercel reported READY for `dpl_J6erWY7u52BMMHTC2xLQ8xqBXkqj`. [Noncommercial demonstration](https://vastunord-web.vercel.app)
+Application commit `d1af4d8` on `feat/v7-brand-photo-entry` is live on the existing Vastu Nord Hobby project. The release includes 11 homepage comparisons, 50 curated gallery images, subject-specific Studio imagery, compact room design settings, the cinema-ticket newsletter and the cookie preference button. Vercel assigned deployment `dpl_Ens6kjjYL2AiFER8xccFwUCueAEQ` to the [noncommercial demonstration](https://vastunord-web.vercel.app).
 
-TypeScript, ESLint, Prisma validation, the production build, 30 unit tests, 32 Playwright tests and the isolated PostgreSQL newsletter integration test passed locally. Browser coverage includes consent revocation, the 27-second invitation delay, persistent dismissal, keyboard interaction and the sample-to-Studio journey. [Phase 01 browser evidence](../evidence/v7-phase01/README.md)
+TypeScript, ESLint, the production build, 30 unit tests and 36 Playwright tests passed locally. Browser coverage includes a complete carousel loop, reduced motion, the selected photo handoff, editor inputs, gallery search, cookie settings, the 27-second newsletter delay and the persistent dock. The media verifier matched all 177 independent assignments to their locally held source images. [Media register](../VISUALS_PLACEMENTS.csv)
 
-On the public alias, all 17 Studio editors and both localized privacy pages opened. Five protected service paths and all three newsletter write operations returned the expected unavailable status. The browser observed no uncaught exception during these checks. [Design and route matrix](../FIGMA_TO_ROUTE_MATRIX.md)
+On the public alias, all 17 Studio editors and both localized privacy pages opened. The hero completed an 11-pair loop and carried the displayed before image into Studio. The gallery and library showed 50 and 17 unique image cards respectively. Five protected service paths and all three newsletter write operations returned the expected unavailable status. The browser observed no uncaught exception during these checks. [Live screenshots](../evidence/v7-visuals-refresh/README.md)
 
 | Journey | Status and boundary |
 |---|---|
@@ -15,4 +15,4 @@ On the public alias, all 17 Studio editors and both localized privacy pages open
 | Accounts, projects, email and private media | Existing Development integrations. Public customer onboarding, private storage operations and lead collection stay closed on Hobby. |
 | AI images/video, editorial CMS and publishing | Future scoped increments. Activation requires the relevant provider, permissions, rights and verification. |
 
-Next, fit the rights-cleared empty and furnished photographs of the same room to the hero once the owner supplies the pair. The current hero labels its approved daylight and evening lighting study. Live newsletter delivery and consent persistence require a controlled Development verification before activation. [Route matrix](../FIGMA_TO_ROUTE_MATRIX.md) · [Owner actions](../OWNER_ACTIONS_ONE_LIST.md)
+The supplied BeforeAfter folder resolves the previous homepage-image dependency. Exact marketing frame exports, approved Prana films, a controlled Development newsletter delivery and provider authorization for real rendering are still outstanding. [Route matrix](../FIGMA_TO_ROUTE_MATRIX.md) · [Owner actions](../OWNER_ACTIONS_ONE_LIST.md)

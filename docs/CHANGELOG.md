@@ -2,6 +2,8 @@
 
 ## 22 November 2026 · Phase 01 design revision
 
+- Released application commit `d1af4d8` to the existing Vastu Nord noncommercial demo. [Live visual evidence](evidence/v7-visuals-refresh/README.md)
+
 - Replaced the homepage lighting study with 11 supplied image pairs. Added a looping blur transition, pause, reduced-motion controls and a direct handoff of the selected image to Studio.
 - Populated the render gallery with 50 captioned Visuals images. Assigned distinctive imagery to all 17 tool cards, editors and editorial placements. [Placement register](VISUALS_PLACEMENTS.csv)
 - Standardized Studio naming, added the Prana compass emblem and consolidated its two entry points. Updated the language and theme controls, consent card and cinema-ticket newsletter.
