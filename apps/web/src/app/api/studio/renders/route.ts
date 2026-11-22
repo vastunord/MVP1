@@ -48,6 +48,8 @@ async function handle(request: Request, write: boolean) {
         { headers: privateHeaders },
       );
     }
+    if (process.env.MNML_SUBMISSION_ENABLED !== "true")
+      throw new RenderError(503, "New rendering is unavailable");
     const brief = parseRender(input);
     return Response.json(await startJob(ctx.db, provider, actor, brief), {
       status: 202,

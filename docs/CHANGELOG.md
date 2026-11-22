@@ -1,5 +1,10 @@
 # Development change log (compact)
 
+## 22 November 2026 · Preview migration attempt
+
+- Reconfirmed the Preview branch, endpoint and migration-object ownership. Automatic approval rejected the role rename through `neondb_owner`. The owner approved using the existing migrator role for Preview testing. Its protected direct login passed. A pre-migration Preview recovery branch was created, `20261122_studio_mnml` applied through Prisma, and narrow RenderJob grants added for the Preview runtime. Independent MNML, authentication and isolated job-persistence tests passed.
+- Restricted job listing and polling to the project's personal owner, including when a caller supplies another user's workspace ID. New paid submissions require explicit server-side activation; previously saved jobs remain accessible.
+
 ## 22 November 2026 · MNML provider check
 
 - Retested the replacement MNML key successfully. One synthetic v4.5 Fast interior render, job `674349`, succeeded for USD 0.099 and was copied to private Preview Blob. Project persistence requires the Preview-only migration role and narrow grants.

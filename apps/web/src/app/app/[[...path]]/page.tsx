@@ -109,6 +109,7 @@ export default async function Page({
         sample={sample}
         uploadsEnabled={hasWorkspace && readServerConfig().uploadsEnabled}
         renderEnabled={hasWorkspace && renderReady}
+        submissionEnabled={process.env.MNML_SUBMISSION_ENABLED === "true"}
         improveEnabled={Boolean(pranaSettings(process.env))}
       />
     );

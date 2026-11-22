@@ -206,6 +206,11 @@ export async function projectJobs(
       projectId,
       toolId,
       requestHash: { not: null },
+      project: {
+        archivedAt: null,
+        deletedAt: null,
+        workspace: { personalOwnerId: actor.userId },
+      },
     },
     orderBy: { createdAt: "desc" },
     take: 12,
@@ -275,6 +280,11 @@ export async function syncJob(
       projectId,
       workspaceId: actor.workspaceId,
       requestHash: { not: null },
+      project: {
+        archivedAt: null,
+        deletedAt: null,
+        workspace: { personalOwnerId: actor.userId },
+      },
     },
   });
   if (!row) throw new RenderError(404, "Render unavailable");

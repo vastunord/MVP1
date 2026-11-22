@@ -21,6 +21,7 @@ type Props = {
   avoid: string;
   locale: Locale;
   enabled: boolean;
+  submissionEnabled: boolean;
   workflow: StudioWorkflow;
   selection: RenderSelection;
   onResult: (asset: StudioResult | null) => void;
@@ -38,6 +39,7 @@ export function StudioRenderAction({
   avoid,
   locale,
   enabled,
+  submissionEnabled,
   selection,
   onResult,
   workflow,
@@ -63,6 +65,7 @@ export function StudioRenderAction({
       (values.mode === "Manual controls" || !!prompt || !!avoid));
   const ready =
     enabled &&
+    submissionEnabled &&
     consent &&
     projectId &&
     (workflow === "concept"
@@ -255,7 +258,7 @@ export function StudioRenderAction({
               : primaryAction(tool, values)}
       </button>
       <p id="action-help">
-        {!enabled
+        {!enabled || !submissionEnabled
           ? en
             ? "Rendering is unavailable in this environment."
             : "Rendring er utilgjengelig i dette miljøet."

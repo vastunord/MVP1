@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · Preview MNML persistence attempt
+
+Neon metadata reconfirmed Preview branch `br-summer-night-bh70tetr` and Frankfurt endpoint `ep-frosty-violet-bhh19hyh`. The existing `RenderJob` and `_prisma_migrations` objects are owned by `vastunord_dev_migrator`. The protected Preview build previously verified that the website and Studio use the pinned `vastunord_preview_runtime` application database connection.
+
+The requested Preview-only role rename was rejected by automatic approval because the available transaction used `neondb_owner`, a Development owner role restricted on Preview. The owner subsequently approved using `vastunord_dev_migrator` for noncommercial Preview testing. Its protected direct login passed, with the two initial migration checksums verified. A no-compute pre-migration recovery branch `br-purple-king-bh4xu550` was created from Preview. Only `20261122_studio_mnml` was applied with Prisma and its recorded checksum verified. The Preview runtime has the required narrow RenderJob privileges. The role was not renamed. The successful synthetic MNML result remains in private Preview Blob. Isolated PostgreSQL tests cover persistence, idempotency and cross-user access, but live project attachment and reopening remain unverified.
+
 ## 22 November 2026 · MNML provider proof
 
 The owner replaced the key after the initial 401. Account and engine discovery then passed. One authorized synthetic interior job `674349` succeeded at USD 0.099. Its result was written to private Preview Blob, retrieved and decoded successfully. The Preview migration and project association remain blocked by the missing separate Preview migration role. Automated approval rejected using the development-named role on Preview; no migration was attempted. [Provider evidence](MNML_LIVE_RENDER_EVIDENCE.md)

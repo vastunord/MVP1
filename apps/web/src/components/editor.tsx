@@ -115,6 +115,7 @@ export function Editor({
   locale,
   uploadsEnabled,
   renderEnabled,
+  submissionEnabled,
   improveEnabled,
   sample,
 }: {
@@ -122,6 +123,7 @@ export function Editor({
   locale: Locale;
   uploadsEnabled: boolean;
   renderEnabled: boolean;
+  submissionEnabled: boolean;
   improveEnabled: boolean;
   sample?: StudioSample;
 }) {
@@ -448,6 +450,7 @@ export function Editor({
             tool={tool}
             locale={locale}
             enabled={renderEnabled && uploadsEnabled}
+            submissionEnabled={submissionEnabled}
             workflow={workflow}
             selection={selection}
             onResult={setResult}

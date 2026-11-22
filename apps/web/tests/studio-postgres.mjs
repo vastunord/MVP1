@@ -223,6 +223,15 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       await projectJobs(db, other, "pb", "room-reimagination"),
       [],
     );
+    const wrongUser = { workspaceId: "wa", userId: "b" };
+    assert.deepEqual(
+      await projectJobs(db, wrongUser, "pa", "room-reimagination"),
+      [],
+    );
+    await assert.rejects(
+      syncJob(db, "fixture", wrongUser, "pa", input.id, io),
+      /unavailable/,
+    );
     await assert.rejects(
       syncJob(db, "fixture", other, "pb", input.id, io),
       /unavailable/,
