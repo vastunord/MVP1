@@ -2,6 +2,11 @@ import { randomUUID } from "node:crypto";
 import { IMAGE_TYPES, MAX_IMAGE_BYTES } from "../lib/image-upload-policy.ts";
 export { IMAGE_TYPES, MAX_IMAGE_BYTES };
 export type Actor = { userId: string; workspaceId: string };
+export class MediaAccessError extends Error {
+  constructor() {
+    super("Asset access denied");
+  }
+}
 export type AssetRecord = {
   id: string;
   workspaceId: string;
@@ -181,7 +186,7 @@ export function createPrivateMedia(
         !asset.uploadExpiresAt ||
         asset.uploadExpiresAt <= now()
       )
-        throw new Error("Asset access denied");
+        throw new MediaAccessError();
       const actual = await driver.inspect(asset.objectKey);
       if (
         actual.contentType !== asset.mimeType ||
@@ -199,7 +204,7 @@ export function createPrivateMedia(
     async authorizeDownload(actor: Actor, id: string) {
       const asset = await repo.findAsset(id);
       if (!asset || !authorizeAsset(actor, asset))
-        throw new Error("Asset access denied");
+        throw new MediaAccessError();
       return driver.signGet(
         asset.objectKey,
         new Date(now().getTime() + 60_000),

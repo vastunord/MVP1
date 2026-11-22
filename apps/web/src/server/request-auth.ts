@@ -8,8 +8,11 @@ import {
 import { createDatabase } from "./db";
 import { prismaProjectStore } from "./prisma-project-store";
 import { ProjectError, projectService } from "./projects";
+import { MediaAccessError } from "./media";
 
 export function apiError(error: unknown) {
+  if (error instanceof MediaAccessError)
+    return Response.json({ error: "Asset unavailable" }, { status: 404 });
   if (error instanceof ProjectError)
     return Response.json({ error: error.message }, { status: error.status });
   return Response.json({ error: "Service unavailable" }, { status: 503 });
