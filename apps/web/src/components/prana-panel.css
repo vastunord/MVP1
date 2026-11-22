@@ -4,20 +4,6 @@
 .vn-prana-dialog .prana-reader {
   padding: 0.25rem clamp(1rem, 4vw, 1.35rem) 1.25rem;
 }
-.vn-prana-dialog .prana-art {
-  border-radius: 0;
-}
-.prana-art {
-  position: relative;
-  aspect-ratio: 3.6;
-  overflow: hidden;
-  background: var(--navy);
-  border-radius: 0.55rem;
-}
-.prana-art img {
-  object-fit: cover;
-  object-position: center 58%;
-}
 .prana-reader {
   min-width: 0;
 }
@@ -82,42 +68,12 @@
 }
 .prana-action {
   border: 0;
-  background: var(--orange);
-  color: var(--ink);
+  background: var(--brand-action);
+  color: var(--on-brand);
   padding: 0.6rem 1rem;
   border-radius: 0.4rem;
 }
 .prana-text-link {
   color: var(--text);
   text-underline-offset: 0.22rem;
-}
-.prana-full {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0.8rem;
-  overflow: hidden;
-}
-.prana-full .prana-art {
-  min-height: 23rem;
-  aspect-ratio: auto;
-  border-radius: 0;
-}
-.prana-full .prana-reader {
-  padding: clamp(1.2rem, 3vw, 3.5rem);
-}
-@media (max-width: 700px) {
-  .prana-full {
-    grid-template-columns: 1fr;
-  }
-  .prana-full .prana-art {
-    min-height: 0;
-    aspect-ratio: 2.8;
-  }
-}
-@media (max-height: 550px) {
-  .prana-content:not(.prana-full) .prana-art {
-    display: none;
-  }
 }

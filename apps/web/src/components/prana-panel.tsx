@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
@@ -10,13 +9,7 @@ import "./prana-panel.css";
 
 const tabs = ["Prana", "Quick Tips", "Film"] as const;
 
-export function PranaPanel({
-  locale,
-  fullPage = false,
-}: {
-  locale: Locale;
-  fullPage?: boolean;
-}) {
+export function PranaPanel({ locale }: { locale: Locale }) {
   const t = (nb: string, en: string) => (locale === "en" ? en : nb);
   const [tab, setTab] = useState(0);
   const [topic, setTopic] = useState(0);
@@ -40,19 +33,7 @@ export function PranaPanel({
     activate(target);
   }
   return (
-    <div className={fullPage ? "prana-content prana-full" : "prana-content"}>
-      <div className="prana-art">
-        <Image
-          src={`/reference/${tab === 1 ? guide.image : "soft-evening"}.webp`}
-          alt=""
-          fill
-          sizes={
-            fullPage
-              ? "(max-width: 700px) 95vw, 42vw"
-              : "(max-width: 480px) 92vw, 350px"
-          }
-        />
-      </div>
+    <div className="prana-content">
       <div className="prana-reader">
         <div
           role="tablist"

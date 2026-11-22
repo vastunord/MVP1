@@ -8,7 +8,7 @@ export type Category = (typeof categories)[number];
 export type Control = {
   id: string;
   label: string;
-  kind: "select" | "range" | "toggle" | "action" | "unknown";
+  kind: "select" | "range" | "toggle" | "action" | "unknown" | "integer";
   options?: readonly string[];
   defaultValue?: string | number | boolean;
   min?: number;
@@ -79,14 +79,15 @@ const room = select(
   ],
   "Auto-detect",
 );
-const style = select("style", "Room style", [
+const roomStyle = select("style", "Room style", [
+  "Auto",
   "Scandinavian",
   "Japandi",
   "Modern luxury",
   "Minimalist",
   "Industrial",
   "Biophilic",
-]);
+], "Auto");
 const palette = select(
   "palette",
   "Palette",
@@ -107,6 +108,28 @@ const ratio = select(
   ["Original", "1:1", "4:3", "3:2", "16:9"],
   "Original",
 );
+const daylight = select("time", "Daylight", ["As photographed", "Soft daylight", "Direct sun", "Golden hour", "Blue hour", "Night"], "As photographed");
+const familyLayout = toggle("safe", "Child-friendly layout", false);
+const roomDesign: Control[] = [
+  select("medium", "Render style", ["Photography", "Clay model", "Architectural", "Pencil", "Watercolor", "Illustration", "Diagram", "CAD", "Material study"], "Photography"),
+  room, roomStyle, palette,
+  select("camera", "Camera", ["Keep framing", "Reframe"], "Keep framing"),
+  {
+    ...select("viewpoint", "Viewpoint", ["Eye level", "Low angle", "Elevated"], "Eye level"),
+    when: { id: "camera", values: ["Reframe"] },
+  },
+  daylight,
+  select("lighting", "Lighting", ["Auto", "Window light", "Task lighting", "Layered"], "Auto"),
+  select("furnishing", "Furnishing", ["Auto", "Empty", "Minimal", "Balanced", "Full"], "Auto"),
+  select("plants", "Indoor plants", ["Auto", "None", "A few", "Lush"], "Auto"),
+  select("accessories", "Accessories", ["Auto", "None", "Curated"], "Auto"),
+  select("floor", "Floor finish", ["Keep existing", "Pale timber", "Natural stone", "Polished"], "Keep existing"),
+  familyLayout,
+  select("people", "People", ["Auto", "None", "A few", "Many"], "Auto"),
+  select("markings", "Annotations", ["Keep existing", "Remove text"], "Keep existing"),
+  ratio,
+  { id: "seed", label: "Seed", kind: "integer", min: 0, max: 4294967295 },
+];
 const season = select(
   "season",
   "Season",
@@ -168,21 +191,7 @@ const seeds: Seed[] = [
     prompt: "Describe the room",
     action: "Generate room",
     comparison: ["Today", "Reimagined"],
-    controls: [
-      room,
-      style,
-      palette,
-      ...[
-        "Floor",
-        "Furnishing",
-        "Plants",
-        "Accessories",
-        "Lighting",
-        "Time of day",
-      ].map((x) => unknown(x.toLowerCase(), x)),
-      toggle("safe", "Make it child safe"),
-      unknown("ratio", "Output ratio"),
-    ],
+    controls: roomDesign,
   },
   {
     id: "virtual-home-staging",
@@ -199,7 +208,7 @@ const seeds: Seed[] = [
         "Luxury",
         "Neutral",
       ]),
-      toggle("safe", "Make it child safe"),
+      familyLayout,
     ],
   },
   {
@@ -229,13 +238,13 @@ const seeds: Seed[] = [
     comparison: ["Today", "Refreshed"],
     controls: [
       room,
-      style,
-      unknown("time", "Time of day"),
+      roomStyle,
+      daylight,
       action("refresh", "Refresh now"),
       action("pick", "Pick"),
       action("place", "Place asset"),
       action("cleanup", "Clean up room"),
-      toggle("safe", "Make it child safe"),
+      familyLayout,
     ],
   },
   {
@@ -246,8 +255,8 @@ const seeds: Seed[] = [
     action: "Style for spring",
     comparison: ["Today", "Summer"],
     controls: [
-      unknown("room", "Room type"),
-      unknown("style", "Room style"),
+      room,
+      roomStyle,
       select("palette", "Palette", ["Spring’s own"], "Spring’s own"),
       season,
     ],
@@ -375,7 +384,7 @@ const seeds: Seed[] = [
       ratio,
       action("pick", "Spot · Pick"),
       action("place", "Decor · Place / asset"),
-      toggle("safe", "Make it child safe", false),
+      familyLayout,
     ],
   },
   {
@@ -388,7 +397,7 @@ const seeds: Seed[] = [
     controls: [
       palette,
       action("surfaces", "Surfaces · Pick"),
-      toggle("safe", "Make it child safe", false),
+      familyLayout,
     ],
   },
   {

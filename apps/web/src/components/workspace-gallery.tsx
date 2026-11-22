@@ -4,21 +4,20 @@ import Link from "next/link";
 import { PrivateUpload } from "./private-upload";
 import { useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
-import {
-  scenes,
-  studies,
-  translated,
-  type Scene,
-} from "@/lib/workspace-catalog";
+import { studies, translated } from "@/lib/workspace-catalog";
+import { renderGallery, fileExamples, type GalleryScene } from "@/lib/render-gallery";
 
 export function StudyCards({
   locale,
   album = false,
+  overview = false,
 }: {
   locale: Locale;
   album?: boolean;
+  overview?: boolean;
 }) {
   const en = locale === "en";
+  const cover = album ? "album" : overview ? "study" : "projects";
   return (
     <div className="vn-study-grid">
       {studies.map((study) => (
@@ -34,7 +33,7 @@ export function StudyCards({
           <div className="vn-photo">
             <Image
               fill
-              src={"/reference/" + study.image}
+              src={`/reference/editorial/${cover}-${study.id}.webp`}
               sizes="(max-width: 640px) 92vw, 32vw"
               alt=""
             />
@@ -55,7 +54,7 @@ export function StudyCards({
             </h3>
             <small>
               {album
-                ? scenes.filter((s) => s.study === study.id).length +
+                ? renderGallery.filter((s) => s.study === study.id).length +
                   (en ? " images" : " bilder")
                 : study.rooms + (en ? " rooms" : " rom")}
             </small>
@@ -83,9 +82,10 @@ export function Gallery({
   const [album, setAlbum] = useState(initialAlbum || "");
   const [kind, setKind] = useState("all");
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [selected, setSelected] = useState<Scene>(scenes[0]);
+  const collection = assets ? fileExamples : renderGallery;
+  const [selected, setSelected] = useState<GalleryScene>(collection[0]);
   const dialog = useRef<HTMLDialogElement>(null);
-  const shown = scenes.filter(
+  const shown = collection.filter(
     (s) =>
       (!album || s.study === album) &&
       (kind === "all" ||
@@ -114,9 +114,9 @@ export function Gallery({
               : "Bildegalleri"}
         </h1>
         <p>
-          {en
-            ? "Explore the reference images and colour studies from the Vastu Nord demo."
-            : "Utforsk referansebildene og fargestudiene fra Vastu Nord-demoen."}
+          {assets
+            ? en ? "Browse reference files for your Studio studies." : "Se referansefiler til studiene dine i Studio."
+            : en ? "Explore 50 architectural and interior studies from the Vastu Nord collection." : "Utforsk 50 arkitektur- og interiørstudier fra Vastu Nords samling."}
         </p>
       </header>
       {assets && privateFilesEnabled && (
@@ -203,7 +203,8 @@ export function Gallery({
                 >
                   <span className="vn-photo">
                     <Image
-                      src={"/reference/" + scene.image}
+                      src={scene.thumbnail ?? scene.image}
+                      unoptimized
                       fill
                       sizes="(max-width:640px) 92vw, 32vw"
                       alt=""
@@ -260,7 +261,7 @@ export function Gallery({
           {en ? "Browse albums" : "Utforsk album"} ↗
         </Link>
         <Link href="/app/tools/room-reimagination">
-          {en ? "Open room editor" : "Åpne romredigering"} ↗
+          {en ? "Open Studio" : "Åpne Studio"} ↗
         </Link>
       </div>
       <dialog
@@ -280,7 +281,8 @@ export function Gallery({
         <div className="vn-dialog-photo">
           <Image
             fill
-            src={"/reference/" + selected.image}
+            src={selected.image}
+            unoptimized
             sizes="(max-width: 800px) 92vw, 800px"
             alt={translated(selected.title, locale)}
           />

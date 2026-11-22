@@ -1,5 +1,15 @@
 # Vastu Nord — current project handoff (living document)
 
+## Phase 01 revision · Studio, visitor controls and photography
+
+The founder supplied 22 homepage images and authorized the Visuals selection for the noncommercial demo. All 11 before/after pairs appear in a full-screen comparison. The slider works by touch and keyboard. The sequence blurs between pairs, pauses on demand and offers manual navigation for visitors who prefer reduced motion. “Try this image” carries the displayed before image into Studio.
+
+The render gallery contains 50 individually captioned images. All 17 tool cards have subject-specific thumbnails and independent editor sample images. Original files stay in the local asset collection. Each published derivative has an assigned placement and source checksum. [Media assignments](VISUALS_PLACEMENTS.csv)
+
+Studio is the product name in both languages. Room Reimagination opens with nine visual render styles, camera and lighting choices and collapsible room details. Inputs form a design brief. Paid rendering stays closed. The header uses underlined NO/EN choices and a sun/moon button. The two Prana launchers open the same panel. Cookie choices collapse to a cookie icon and the delayed newsletter invitation uses a cinema ticket. [Studio configuration](STUDIO_TOOL_CONFIGURATION_MATRIX.md) · [Visitor controls](COOKIE_NEWSLETTER_INTERACTION.md)
+
+TypeScript, ESLint, production build, 30 unit tests and 36 browser tests passed. The media verifier checked 177 separate source images, including 71 editorial assignments. The gallery also has 50 smaller thumbnails for its grid. The release contains 227 WebP files totaling 14,087,988 bytes. [Asset manifest and repeatable check](ASSET_MANIFEST.md)
+
 ## V7 Phase 01 · visitor experience
 
 Application commit `5d3dcc5` is live on the existing noncommercial demo. Vercel marked deployment `dpl_J6erWY7u52BMMHTC2xLQ8xqBXkqj` READY. On the public alias, all 17 Studio editor routes and both privacy pages opened. Five protected service paths and three newsletter operations rejected anonymous writes or access as expected. [Public demo](https://vastunord-web.vercel.app) · [Responsive evidence](evidence/v7-phase01/README.md)

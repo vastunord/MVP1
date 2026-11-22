@@ -1,5 +1,12 @@
 # Development change log (compact)
 
+## 22 November 2026 · Phase 01 design revision
+
+- Replaced the homepage lighting study with 11 supplied image pairs. Added a looping blur transition, pause, reduced-motion controls and a direct handoff of the selected image to Studio.
+- Populated the render gallery with 50 captioned Visuals images. Assigned distinctive imagery to all 17 tool cards, editors and editorial placements. [Placement register](VISUALS_PLACEMENTS.csv)
+- Standardized Studio naming, added the Prana compass emblem and consolidated its two entry points. Updated the language and theme controls, consent card and cinema-ticket newsletter.
+- Replaced the lengthy room settings with nine medium tiles, editable design directions and grouped camera, light, furnishing and composition controls. [Tool matrix](STUDIO_TOOL_CONFIGURATION_MATRIX.md)
+
 ## 22 November 2026 · v7 Phase 01 visitor experience
 
 - Released application commit `5d3dcc5` to the existing [Vastu Nord demo](https://vastunord-web.vercel.app). The public alias passed checks for 17 Studio editors, both privacy pages, five private service paths and three closed newsletter operations. TypeScript, lint, Prisma validation, the production build, 30 unit tests, 32 browser tests and one isolated PostgreSQL integration test passed. [Release evidence](evidence/v7-phase01/README.md)

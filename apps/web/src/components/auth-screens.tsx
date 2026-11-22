@@ -124,8 +124,8 @@ export function AuthScreen({
         if (!response.ok)
           throw new Error(
             en
-              ? "Workspace could not be created."
-              : "Arbeidsrommet kunne ikke opprettes.",
+              ? "Studio could not be set up."
+              : "Studio kunne ikke opprettes.",
           );
         router.push(workspaceEntry);
         router.refresh();
@@ -150,7 +150,7 @@ export function AuthScreen({
         "forgot-password": "Recover your account",
         "reset-password": "Choose a new password",
         "verify-email": "Verify your email",
-        onboarding: "Create your workspace",
+        onboarding: "Set up Studio",
       }
     : {
         login: "Logg inn",
@@ -158,7 +158,7 @@ export function AuthScreen({
         "forgot-password": "Tilbakestill passord",
         "reset-password": "Velg nytt passord",
         "verify-email": "Bekreft e-post",
-        onboarding: "Opprett arbeidsrom",
+        onboarding: "Opprett Studio",
       };
   return (
     <main id="main" className="container page-pad auth-layout">
@@ -191,8 +191,8 @@ export function AuthScreen({
             <label>
               {mode === "onboarding"
                 ? en
-                  ? "Workspace name"
-                  : "Navn på arbeidsrom"
+                  ? "Studio name"
+                  : "Navn på Studio"
                 : en
                   ? "Your name"
                   : "Ditt navn"}

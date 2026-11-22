@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 };
 export const metadata: Metadata = {
   title: { default: "Vastu Nord", template: "%s · Vastu Nord" },
-  description: "Vastu Nord — Studio foundation",
+  description: "Studio · Vastu Nord",
   robots: { index: false, follow: false },
 };
 export default async function RootLayout({

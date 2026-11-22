@@ -20,7 +20,8 @@ export function marketingResources(locale: Locale) {
         "Visualiser oppussingen før du begynner",
         "Visualize a renovation before you build",
       ),
-      image: "soft",
+      image: "editorial/article-renovation",
+      detailImage: "editorial/article-detail-renovation",
       tags: [0, 7],
       intro: t(
         "Hva vil du forandre, og hva skal bli? Begynn med én avgjørelse.",
@@ -37,7 +38,8 @@ export function marketingResources(locale: Locale) {
         "Digital eller fysisk boligstyling?",
         "Virtual staging or traditional staging?",
       ),
-      image: "warm",
+      image: "editorial/article-staging",
+      detailImage: "editorial/article-detail-staging",
       tags: [1, 2],
       intro: t(
         "To måter å vise hvordan et rom kan brukes.",
@@ -54,7 +56,8 @@ export function marketingResources(locale: Locale) {
         "Finn en stil som passer rommet",
         "Choosing the right interior style",
       ),
-      image: "soft-moss",
+      image: "editorial/article-style",
+      detailImage: "editorial/article-detail-style",
       tags: [2, 4, 5],
       intro: t(
         "La hverdagen og materialene gi retning.",
@@ -65,7 +68,8 @@ export function marketingResources(locale: Locale) {
     {
       id: "ai-for-homeowners",
       name: t("AI-verktøy for boligeiere", "AI tools for homeowners"),
-      image: "soft-day",
+      image: "editorial/article-homeowner",
+      detailImage: "editorial/article-detail-homeowner",
       tags: [3, 7],
       intro: t(
         "Finn en arbeidsflyt som passer spørsmålet ditt.",
@@ -79,7 +83,8 @@ export function marketingResources(locale: Locale) {
     {
       id: "design-trends",
       name: t("Designretninger i dagslys", "Design directions in daylight"),
-      image: "soft-bright",
+      image: "editorial/article-light",
+      detailImage: "editorial/article-detail-light",
       tags: [4, 5, 6],
       intro: t(
         "Utforsk samspillet mellom lys, farger og teksturer.",

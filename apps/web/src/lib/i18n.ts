@@ -31,8 +31,8 @@ export const dictionaries = {
     explore: "Utforsk verktøyene",
     title: "Se rommet ditt med nye øyne.",
     intro:
-      "Utforsk mulighetene for rom, uterom og detaljer. Bli kjent med verktøyene i Vastu Nord Studio.",
-    studio: "Ditt kreative arbeidsrom",
+      "Utforsk mulighetene for rom, uterom og detaljer. Bli kjent med verktøyene i Studio.",
+    studio: "Studio",
     library: "Verktøybibliotek",
     libraryIntro:
       "Velg et verktøy og utforsk innstillingene. Generering blir tilgjengelig i en senere fase.",
@@ -57,7 +57,6 @@ export const dictionaries = {
     canvasBody:
       "Bildet ditt og resultatet vises her når opplasting og generering er tilgjengelig.",
     actionHelp: "Generering er ikke koblet til. Ingen kreditter belastes.",
-    unknown: "Standardvalg eller alternativer er ikke bekreftet",
     history: "Versjonshistorikk",
     export: "Last ned eller del",
     back: "Til verktøyene",
@@ -104,8 +103,8 @@ export const dictionaries = {
     explore: "Explore the tools",
     title: "See your space in a new light.",
     intro:
-      "Explore possibilities for rooms, outdoor spaces and details. Get to know the tools in Vastu Nord Studio.",
-    studio: "Your creative workspace",
+      "Explore possibilities for rooms, outdoor spaces and details. Get to know the tools in Studio.",
+    studio: "Studio",
     library: "Tool library",
     libraryIntro:
       "Choose a tool and explore its settings. Generation will be available in a later phase.",
@@ -129,7 +128,6 @@ export const dictionaries = {
     canvasBody:
       "Your photo and result will appear here when upload and generation become available.",
     actionHelp: "Generation is not connected. No credits will be charged.",
-    unknown: "Default or options are not confirmed",
     history: "Version history",
     export: "Download or share",
     back: "Back to tools",

@@ -84,7 +84,7 @@ export function Directory({
           autoComplete="off"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={en ? "Search the workspace…" : "Søk i arbeidsområdet …"}
+          placeholder={en ? "Search Studio…" : "Søk i Studio …"}
         />
       </label>
       <p className="vn-muted" role="status">
@@ -114,8 +114,8 @@ export function StudioShell({
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const groups = en
-    ? ["Workspace", "Explore", "Account"]
-    : ["Arbeidsområde", "Utforsk", "Konto"];
+    ? ["Studio", "Explore", "Account"]
+    : ["Studio", "Utforsk", "Konto"];
   const active =
     destinations.find((d) => d.href === path) ??
     (path.startsWith("/app/tools/")
@@ -160,12 +160,8 @@ export function StudioShell({
       <main id="main" className="workspace-main vn-main">
         <div className="vn-workspace-bar">
           <span>
-            <Link href="/app">Studio</Link> /{" "}
-            {active
-              ? translated(active.title, locale)
-              : en
-                ? "Workspace"
-                : "Arbeidsområde"}
+            <Link href="/app">Studio</Link>
+            {active && <> / {translated(active.title, locale)}</>}
           </span>
           <button
             className="vn-search-button"
@@ -192,7 +188,7 @@ export function StudioShell({
       >
         <div className="vn-section-title">
           <h2 id="workspace-search-title">
-            {en ? "Workspace search" : "Søk i arbeidsområdet"}
+            {en ? "Search Studio" : "Søk i Studio"}
           </h2>
           <button
             aria-label={en ? "Close" : "Lukk"}

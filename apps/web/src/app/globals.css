@@ -22,9 +22,10 @@
   --sage: rgb(73.7% 80% 78.8%);
   --sand: rgb(91.8% 81.6% 71.4%);
   --orange: rgb(98.4% 37.6% 16.9%);
-  --brand-action: var(--orange);
-  --brand-action-text: var(--ink);
-  --brand-on-teal: var(--paper);
+  --on-brand: #fff;
+  --brand-action: var(--navy);
+  --brand-action-text: var(--on-brand);
+  --brand-on-teal: var(--on-brand);
   --bg: var(--paper);
   --text: var(--ink);
   --surface: var(--paper);
@@ -38,8 +39,8 @@
 [data-theme="dark"] {
   --bg: var(--ink);
   --surface: var(--navy);
-  --text: var(--paper);
-  --muted: var(--sage);
+  --text: var(--on-brand);
+  --muted: var(--on-brand);
   --border: var(--sage);
   --focus: var(--orange);
   --soft: var(--navy);
@@ -49,8 +50,8 @@
   [data-theme="system"] {
     --bg: var(--ink);
     --surface: var(--navy);
-    --text: var(--paper);
-    --muted: var(--sage);
+    --text: var(--on-brand);
+    --muted: var(--on-brand);
     --border: var(--sage);
     --focus: var(--orange);
     --soft: var(--navy);
@@ -82,7 +83,7 @@ textarea {
 .auth-panel { padding: clamp(1.25rem, 3vw, 2.5rem); border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
 .auth-form, .auth-form label { display: grid; gap: .6rem; }
 .auth-form { gap: 1.25rem; margin: 1.5rem 0; }
-.auth-panel [role="alert"] { color: var(--orange); }
+.auth-panel [role="alert"] { color: var(--text); border-inline-start: 3px solid var(--orange); padding-inline-start: .7rem; }
 @media (max-width: 768px) { .auth-layout { grid-template-columns: 1fr; } }
 button,
 a,
@@ -206,9 +207,9 @@ p {
   text-align: center;
 }
 .button.primary {
-  background: var(--orange);
-  color: var(--ink);
-  border-color: var(--orange);
+  background: var(--brand-action);
+  color: var(--brand-action-text);
+  border-color: var(--brand-action);
 }
 .button.quiet {
   background: transparent;
@@ -290,7 +291,7 @@ p {
 }
 .space-study {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
   aspect-ratio: 1.03;
   position: relative;
   padding: 12%;
@@ -484,12 +485,13 @@ p {
 }
 .art-1 {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .art-2 {
   background: var(--sand);
 }
 .art-3 {
+  color: var(--on-brand);
   background: var(--orange);
 }
 .tool-art > span {

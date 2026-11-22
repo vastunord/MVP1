@@ -36,16 +36,18 @@ test("knowledge and Prana offer local reading and accessible empty states", asyn
   await expect(main.locator("details")).toHaveCount(1);
   await main.locator("summary").click();
   await expect(main.getByText(/Legg prøver av tre/)).toBeVisible();
-  await main.getByRole("link", { name: "Åpne Prana" }).click();
-  await main.getByRole("button", { name: "Utforsk tips" }).click();
-  await main
+  await expect(main.getByRole("link", { name: /Prana/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "Åpne Prana-assistenten" }).click();
+  const panel = page.getByRole("dialog", { name: "VastuNord Prana" });
+  await panel.getByRole("button", { name: "Utforsk tips" }).click();
+  await panel
     .getByRole("combobox", { name: "Velg tema", exact: true })
     .selectOption("2");
   await expect(
-    main.getByRole("heading", { name: "Plass til å bevege seg" }),
+    panel.getByRole("heading", { name: "Plass til å bevege seg" }),
   ).toBeVisible();
-  await main.getByRole("tab", { name: "Film", exact: true }).click();
-  await expect(main.getByText(/Ingen filmer er publisert/)).toBeVisible();
+  await panel.getByRole("tab", { name: "Film", exact: true }).click();
+  await expect(panel.getByText(/Ingen filmer er publisert/)).toBeVisible();
 });
 
 test("sample budget and wallet work without payments", async ({ page }) => {

@@ -1,6 +1,6 @@
 # Finalized marketing frames and route parity
 
-**V7 Phase 01.** The founder’s updated brief adds direct NO/EN and Light/Dark controls, a fixed Prana panel, a first-visit cookie choice and a newsletter invitation that minimizes to the opposite corner. These interaction requirements apply across the existing marketing structure. The hero offers labeled Before, Compare and After states for its approved lighting study. The intended change from an empty to a furnished Scandinavian room awaits a rights-cleared same-camera pair. [Owner asset request](OWNER_ACTIONS_ONE_LIST.md) · [Interaction record](COOKIE_NEWSLETTER_INTERACTION.md)
+**V7 Phase 01 revision.** The owner supplied 11 numbered scene pairs for the full-screen homepage, a compass-and-house emblem for Prana and six interaction references. The hero compares each pair with one slider and loops through the collection. The header uses underlined NO/EN choices and a moon/sun theme button. The consent card collapses to a cookie icon, and the newsletter has a detachable-ticket layout. Prana opens from the header beside sign-in or from the bottom-right launcher. [Interaction record](COOKIE_NEWSLETTER_INTERACTION.md)
 
 The Phase 01 evidence index compares the previous homepage with the released design at four widths and records the cookie, newsletter and Prana states. [Responsive evidence](evidence/v7-phase01/README.md)
 

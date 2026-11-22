@@ -4,7 +4,7 @@ import Image from "next/image";
 import type { ToolDefinition } from "@vastunord/contracts/tools";
 import { messages, type Locale } from "@/lib/i18n";
 import { translated, type StudioSample } from "@/lib/workspace-catalog";
-import { sampleTones, toolDescription } from "./tool-presentation";
+import { canvasDescription, sampleTones, toolDescription } from "./tool-presentation";
 
 export function StudioCanvas({
   tool,
@@ -35,6 +35,7 @@ export function StudioCanvas({
   const tone = sampleTones[toneIndex];
   const toneName = english ? tone.en : tone.nb;
   const staticExample = !tool.comparison;
+  const canvasPhoto = `/media/canvas/${tool.id}.webp`;
   return (
     <section className="studio-canvas" aria-label={t.canvas}>
       <div className="canvas-heading">
@@ -55,7 +56,7 @@ export function StudioCanvas({
         ) : sample ? (
           <div className="sample-stage selected-stage">
             <Image
-              src={"/reference/" + sample.image}
+              src={sample.image.startsWith("/") ? sample.image : "/reference/" + sample.image}
               alt={translated(sample.sampleAlt, locale)}
               fill
               priority
@@ -68,12 +69,10 @@ export function StudioCanvas({
             style={{ "--divider": position + "%" } as CSSProperties}
           >
             <Image
-              src={"/reference/" + (staticExample ? "soft" : tone.id) + ".webp"}
-              alt={
-                english
-                  ? "Living room from the Vastu Nord brand guide"
-                  : "Stue fra Vastu Nords merkevarehåndbok"
-              }
+              src={canvasPhoto}
+              unoptimized
+              className={staticExample ? undefined : "tone-" + tone.id}
+              alt={canvasDescription(tool.id, locale)}
               fill
               priority
               sizes="(max-width: 850px) 95vw, 65vw"
@@ -82,7 +81,8 @@ export function StudioCanvas({
               <>
                 <div className="sample-before">
                   <Image
-                    src="/reference/soft.webp"
+                    src={canvasPhoto}
+                    unoptimized
                     alt=""
                     fill
                     sizes="(max-width: 850px) 95vw, 65vw"
@@ -177,12 +177,7 @@ export function StudioCanvas({
                 aria-pressed={toneIndex === i}
                 onClick={() => setToneIndex(i)}
               >
-                <Image
-                  src={"/reference/" + s.id + ".webp"}
-                  alt=""
-                  width={60}
-                  height={40}
-                />
+                <span className={"studio-tone-chip tone-" + s.id} aria-hidden="true" />
                 <span>{english ? s.en : s.nb}</span>
               </button>
             ))}

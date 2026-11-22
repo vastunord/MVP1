@@ -29,9 +29,10 @@ test("living-room directions, pricing and the closed contact form", async ({
     .click();
   await expect(main.locator(".mp-variant img")).toHaveAttribute(
     "src",
-    "/reference/soft-evening.webp",
+    "/reference/editorial/feature-variant.webp",
   );
-  await main.getByRole("link", { name: "Explore the room editor" }).click();
+  await expect(main.locator(".mp-variant img")).toHaveClass(/mk-tone-evening/);
+  await main.locator(".mp-link-row").getByRole("link", { name: "Explore Studio" }).click();
   await expect(page).toHaveURL(/\/app\/tools\/room-reimagination$/);
   await page.goto("/en/pricing");
   await expect(

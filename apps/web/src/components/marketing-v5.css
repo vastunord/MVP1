@@ -32,8 +32,8 @@
   display: block;
 }
 .mk-closing {
-  color: #faf8f3;
-  background-color: #062e3c;
+  color: var(--on-brand);
+  background-color: var(--navy);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -45,7 +45,7 @@
   z-index: -1;
   background:
     linear-gradient(90deg, rgba(3, 36, 47, 0.95), rgba(5, 46, 59, 0.88)),
-    url("/reference/warm.webp") center 45% / cover;
+    var(--closing-photo) center 45% / cover;
 }
 .mk-label {
   text-transform: uppercase;
@@ -56,7 +56,7 @@
   line-height: 1.4;
 }
 .mk-section.dark .mk-label {
-  color: #eeaf8f;
+  color: var(--on-brand);
 }
 .mk-actions {
   display: flex;
@@ -104,9 +104,9 @@
 .mk-start {
   margin-top: clamp(32px, 4vw, 60px);
   padding: clamp(18px, 2vw, 28px);
-  border: 1px solid #72919670;
+  border: 1px solid var(--sage);
   border-radius: 12px;
-  background: #082d37d6;
+  background: color-mix(in srgb, var(--navy) 90%, transparent);
 }
 .mk-start h2 {
   font-size: 1.35rem;
@@ -125,15 +125,15 @@
   align-items: center;
   gap: 11px;
   padding: 0.6rem 0.9rem;
-  border: 1px solid #54747c;
+  border: 1px solid var(--sage);
   border-radius: 6px;
-  background: #1e4651;
+  background: var(--navy);
   color: #fff;
   font-size: 0.83rem;
 }
 .mk-quick b,
 .mk-glyph {
-  color: #ffb891;
+  color: var(--on-brand);
   font-size: 1.25rem;
   line-height: 1;
 }
@@ -259,7 +259,7 @@
 .mk-image-tag {
   position: absolute;
   top: 13px;
-  background: #082b37dc;
+  background: color-mix(in srgb, var(--navy) 90%, transparent);
   color: white;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -285,7 +285,7 @@
   display: grid;
   place-items: center;
   background: #fff;
-  color: #183c44;
+  color: var(--navy);
   border-radius: 50%;
 }
 .mk-variants {
@@ -304,11 +304,15 @@
   min-height: 44px;
   font-size: 0.8rem;
 }
-.mk-variants img {
+.mk-tone-swatch {
   width: 43px;
   height: 30px;
   border-radius: 3px;
+  background: linear-gradient(120deg, #f7f1e7, #c2a98a 55%, #62817a);
 }
+.mk-tone-daylight { filter: brightness(1.12) saturate(.92); }
+.mk-tone-evening { filter: brightness(.78) sepia(.32) saturate(1.15); }
+.mk-tone-moss { filter: sepia(.3) hue-rotate(27deg) saturate(.82); }
 .mk-variants button[aria-pressed="true"] {
   border-color: var(--text);
 }
@@ -319,20 +323,20 @@
   align-items: baseline;
   gap: 1rem;
   padding: 1rem;
-  border: 1px solid #54727a;
+  border: 1px solid var(--sage);
   border-radius: 7px;
 }
 .mk-steps button[aria-pressed="true"] {
-  background: #174554;
-  border-color: #a7bbbd;
+  background: var(--navy);
+  border-color: var(--sage);
 }
 .mk-steps button > span {
-  color: #ffb891;
+  color: var(--on-brand);
   font-size: 0.78rem;
 }
 .mk-steps p {
   margin: 0.3rem 0 0;
-  color: #d6e2e3;
+  color: var(--on-brand);
   font-size: 0.9rem;
 }
 .mk-step-image {
@@ -385,8 +389,8 @@
 }
 .mk-closing::before {
   background:
-    linear-gradient(90deg, #062d3fe8, #062d3f58),
-    url("/reference/soft-evening.webp") center 60% / cover;
+    linear-gradient(90deg, color-mix(in srgb, var(--navy) 92%, transparent), color-mix(in srgb, var(--navy) 36%, transparent)),
+    var(--closing-photo) center 60% / cover;
 }
 .mk-closing h2 {
   max-width: 18ch;
@@ -413,10 +417,10 @@
 }
 .mk-footer small {
   display: block;
-  border-top: 1px solid #47616c;
+  border-top: 1px solid var(--sage);
   margin-top: 2.2rem;
   padding-top: 1rem;
-  color: var(--sage);
+  color: var(--on-brand);
 }
 .header.mk-header {
   min-height: 67px;
@@ -449,7 +453,7 @@
   padding: 0.58rem 0.93rem;
   border-radius: 5px;
   background: var(--orange);
-  color: #161b1c;
+  color: var(--on-brand);
 }
 .mk-header + .notice {
   min-height: 24px;
@@ -522,7 +526,7 @@
     padding: 4px;
     font-size: 0.73rem;
   }
-  .mk-variants img {
+  .mk-tone-swatch {
     width: 30px;
   }
   .mk-footer-main {

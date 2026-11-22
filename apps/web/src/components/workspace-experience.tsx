@@ -4,7 +4,6 @@ import { ExperienceView } from "./workspace-experience-view";
 const sections = [
   "home-experience",
   "knowledge",
-  "prana",
   "budget",
   "billing",
   "credits",

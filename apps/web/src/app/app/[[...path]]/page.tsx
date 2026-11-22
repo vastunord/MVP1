@@ -45,7 +45,8 @@ export default async function Page({
   const isDashboard =
     path.length === 0 || (path.length === 1 && path[0] === "dashboard");
   let recentProjects: { id: string; name: string }[] = [];
-  const publicGuide = path.length === 1 && path[0] === "prana";
+  if (path.length === 1 && path[0] === "prana")
+    redirect(publicHref("/", locale) + "?assistant=prana");
   const tool =
     path.length === 2 && path[0] === "tools" ? findTool(path[1]) : undefined;
   const sample = tool
@@ -65,9 +66,9 @@ export default async function Page({
       );
     }
     signedIn = Boolean(userId);
-    if (!userId && !publicGuide && !sample)
+    if (!userId && !sample)
       redirect(publicHref("/login" + loginIntent, locale));
-    if (userId && !publicGuide) {
+    if (userId) {
       const db = createDatabase();
       const personal = await db.workspace
         .findUnique({
@@ -156,7 +157,7 @@ export default async function Page({
       <>
         <header className="vn-pagehead">
           <p className="eyebrow">
-            {en ? "Studio collection" : "Studiosamling"}
+            {en ? "Studio collection" : "Samling i Studio"}
           </p>
           <h1>Album{en ? "s" : ""}</h1>
           <p>
@@ -174,7 +175,7 @@ export default async function Page({
     content = (
       <>
         <header className="vn-pagehead">
-          <h1>{en ? "Workspace search" : "Søk i arbeidsområdet"}</h1>
+          <h1>{en ? "Search Studio" : "Søk i Studio"}</h1>
         </header>
         <Directory locale={locale} />
       </>

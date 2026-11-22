@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import type { Locale } from "@/lib/i18n";
-import { PranaPanel } from "./prana-panel";
 import type { ExperienceRoute } from "./workspace-experience";
 import {
   guides,
@@ -213,9 +212,6 @@ function Knowledge({ t }: ViewProps) {
           "Explore short sample guides to materials, daylight and the spaces around you.",
         )}
       >
-        <Link className="button" href="/app/prana">
-          {t("Åpne Prana", "Open Prana")} ↗
-        </Link>
       </Heading>
       <div className="xp-filters">
         <label>
@@ -467,20 +463,6 @@ export function ExperienceView({
       break;
     case "knowledge":
       body = <Knowledge t={t} />;
-      break;
-    case "prana":
-      body = (
-        <>
-          <Heading
-            title="Vastu Nord Prana"
-            description={t(
-              "Utforsk hvordan lys, materialer og bevegelse former rommet ditt.",
-              "Explore how light, materials and movement shape your space.",
-            )}
-          />
-          <PranaPanel locale={locale} fullPage />
-        </>
-      );
       break;
     case "budget":
       body = <Budget t={t} locale={locale} />;

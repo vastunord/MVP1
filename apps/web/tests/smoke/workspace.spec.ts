@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { renderGallery } from "../../src/lib/render-gallery";
 
 test("dashboard opens a project study and its album; gallery searches and previews reference images", async ({
   page,
@@ -12,7 +13,7 @@ test("dashboard opens a project study and its album; gallery searches and previe
     page.getByRole("heading", { name: "Fjordboligen" }),
   ).toBeVisible();
   await page.getByRole("link", { name: /Åpne album/ }).click();
-  await expect(page.locator(".vn-tile")).toHaveCount(3);
+  await expect(page.locator(".vn-tile")).toHaveCount(renderGallery.filter((scene) => scene.study === "fjord").length);
   await page
     .getByRole("searchbox", { name: "Søk etter bilder" })
     .fill("Gyllent");
@@ -31,16 +32,23 @@ test("dashboard opens a project study and its album; gallery searches and previe
     page.getByRole("heading", { name: "Ingen filmer i denne samlingen" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Vis samlingen" }).click();
-  await expect(page.locator(".vn-tile")).toHaveCount(6);
+  await expect(page.locator(".vn-tile")).toHaveCount(50);
+  const uniqueUrls = await page.locator(".vn-tile img").evaluateAll((images) =>
+    new Set(images.map((image) => image.getAttribute("src"))).size,
+  );
+  expect(uniqueUrls).toBe(50);
 });
 
 test("workspace command search finds tools and supports keyboard dismissal", async ({
   page,
 }) => {
   await page.goto("/app");
-  await page.keyboard.press("Control+k");
-  const dialog = page.getByRole("dialog", { name: "Søk i arbeidsområdet" });
-  await expect(dialog).toBeVisible();
+  const dialog = page.getByRole("dialog", { name: "Søk i Studio" });
+  // A first navigation may paint the server-rendered page before the shortcut is hydrated.
+  await expect(async () => {
+    if (!(await dialog.isVisible())) await page.keyboard.press("Control+k");
+    await expect(dialog).toBeVisible({timeout: 700});
+  }).toPass({timeout: 5000});
   await dialog.getByRole("searchbox").fill("garden");
   await expect(
     dialog.getByRole("link", { name: /Garden Design/ }),

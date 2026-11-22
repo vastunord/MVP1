@@ -1,352 +1,261 @@
 .photo-hero {
-  --photo-gutter: max(clamp(20px, 5.6vw, 84px), calc((100vw - 1300px) / 2));
-  --photo-shadow: color-mix(in srgb, var(--ink) 74%, var(--navy));
-  --photo-highlight: color-mix(in srgb, var(--paper) 70%, var(--orange));
+  --hero-gutter: clamp(1.2rem, 5vw, 5.5rem);
+  color: var(--on-brand);
   background: var(--navy);
-  color: var(--paper);
 }
 .photo-hero-stage {
-  min-height: clamp(500px, 39vw, 640px);
+  min-height: max(36rem, calc(100svh - var(--vg-height) - 30px));
   position: relative;
   isolation: isolate;
   display: grid;
-  align-items: center;
+  align-items: end;
   overflow: hidden;
-  background: var(--navy);
 }
-.photo-hero-image,
-.photo-hero-tone img {
-  object-fit: cover;
-  object-position: center 59%;
-}
-.photo-hero-stage.scene-atelier .photo-hero-image {
-  object-position: center 58%;
-}
-.photo-hero-stage.scene-cabin .photo-hero-image {
-  object-position: center 57%;
-}
-.photo-hero-tone,
+.hero-images,
+.hero-after,
 .photo-hero-veil {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
-.photo-hero-veil {
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--photo-shadow) 92%, transparent),
-    color-mix(in srgb, var(--photo-shadow) 78%, transparent) 23%,
-    color-mix(in srgb, var(--photo-shadow) 39%, transparent) 46%,
-    transparent 74%
-  );
+.hero-images img {
+  object-fit: cover;
+  object-position: center;
 }
-.photo-hero-copy {
-  position: relative;
-  width: min(calc(100% - 2 * var(--photo-gutter)), 610px);
-  margin-inline-start: var(--photo-gutter);
-  padding-block: clamp(46px, 6vw, 94px);
+.hero-incoming {
+  z-index: 1;
+  animation: hero-reveal 650ms ease-out both;
+}
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+.photo-hero-veil {
+  z-index: 2;
+  background:
+    linear-gradient(0deg, rgb(13 14 14 / 85%), transparent 65%),
+    linear-gradient(75deg, rgb(13 14 14 / 74%), transparent 58%);
+}
+.hero-state {
+  z-index: 2;
+  position: absolute;
+  top: 1.25rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 650;
+  background: var(--navy);
+  color: var(--on-brand);
   pointer-events: none;
 }
-.photo-hero-copy .mk-label,
-.photo-hero-current .mk-label {
-  color: var(--photo-highlight);
-  font-size: 0.69rem;
-  letter-spacing: 0.18em;
-  line-height: 1.45;
+.hero-before-label {
+  left: var(--hero-gutter);
 }
-.photo-hero h1 {
-  color: inherit;
-  font-size: clamp(4.3rem, 6.65vw, 7.4rem);
-  font-weight: 590;
-  max-width: 10.4ch;
-  margin: 0;
-  letter-spacing: -0.075em;
-  line-height: 0.965;
-  text-wrap: balance;
-}
-.photo-hero-deck {
-  max-width: min(42ch, 37vw);
-  color: var(--paper);
-  font-size: clamp(0.98rem, 1.22vw, 1.16rem);
-  margin: 1.35rem 0 1.75rem;
-  line-height: 1.55;
-}
-.photo-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.65rem;
-}
-.photo-hero-actions .mk-action {
-  pointer-events: auto;
-  min-height: 48px;
-}
-.photo-hero-actions .mk-action.secondary {
-  background: color-mix(in srgb, var(--photo-shadow) 65%, transparent);
-  border-color: color-mix(in srgb, var(--paper) 60%, transparent);
-  color: var(--paper);
+.hero-after-label {
+  right: var(--hero-gutter);
 }
 .photo-hero-stage input.photo-hero-range {
   position: absolute;
-  z-index: 1;
   inset: 0;
+  z-index: 3;
   width: 100%;
-  height: 100%;
   max-width: none;
+  height: 100%;
   margin: 0;
   opacity: 0;
   touch-action: pan-y;
   cursor: ew-resize;
 }
-.photo-hero-copy {
-  z-index: 2;
-}
 .photo-hero-line {
   position: absolute;
-  z-index: 1;
-  inset-block: 0;
-  border-left: 1px solid color-mix(in srgb, var(--paper) 78%, transparent);
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  border-left: 1px solid #fffd;
   pointer-events: none;
 }
 .photo-hero-line b {
-  position: absolute;
-  top: 51%;
-  width: 46px;
-  height: 46px;
-  transform: translate(-50%, -50%);
-  border: 1px solid color-mix(in srgb, var(--paper) 86%, transparent);
-  border-radius: 50%;
   display: grid;
-  place-content: center;
-  color: var(--paper);
-  background: color-mix(in srgb, var(--photo-shadow) 68%, transparent);
-  font: 500 20px/1 var(--font-brand);
+  place-items: center;
+  position: absolute;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #fff;
+  color: #fff;
+  background: var(--navy);
+  font: 500 22px/1 var(--font-brand);
 }
 .photo-hero-stage:has(.photo-hero-range:focus-visible) .photo-hero-line b {
-  outline: 3px solid var(--paper);
+  outline: 3px solid white;
   outline-offset: 3px;
 }
-.photo-hero-views {
-  position: absolute;
-  z-index: 3;
-  inset-block-start: clamp(0.85rem, 2vw, 1.8rem);
-  inset-inline-end: var(--photo-gutter);
-  display: inline-flex;
-  max-width: calc(100% - 2 * var(--photo-gutter));
-  padding: 3px;
-  background: color-mix(in srgb, var(--photo-shadow) 94%, transparent);
-  border: 1px solid color-mix(in srgb, var(--paper) 48%, transparent);
-  border-radius: 0.45rem;
+.photo-hero-copy {
+  z-index: 4;
+  position: relative;
+  pointer-events: none;
+  width: min(calc(100% - 2 * var(--hero-gutter)), 44rem);
+  margin: 0 0 0 var(--hero-gutter);
+  padding: 10rem 0 clamp(6.2rem, 8vh, 9rem);
 }
-.photo-hero-views button {
-  min-height: 44px;
-  padding: 0.3rem clamp(0.42rem, 1.1vw, 0.95rem);
-  color: var(--paper);
-  background: transparent;
-  border: 0;
-  border-radius: 0.25rem;
-  font-size: clamp(0.63rem, 1vw, 0.75rem);
-  font-weight: 550;
-  line-height: 1.3;
+.photo-hero-copy .mk-label {
+  color: white;
+  letter-spacing: 0.16em;
+  font-size: 0.7rem;
 }
-.photo-hero-views button:hover {
-  background: color-mix(in srgb, var(--paper) 15%, transparent);
-}
-.photo-hero-views button[aria-pressed="true"] {
-  background: var(--paper);
-  color: var(--ink);
-}
-.photo-hero-rail {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-  padding: 1.08rem var(--photo-gutter);
-  background: linear-gradient(
-    105deg,
-    color-mix(in srgb, var(--navy) 65%, var(--ink)),
-    var(--navy)
-  );
-}
-.photo-hero-current .mk-label {
-  margin: 0 0 0.28rem;
-  font-size: 0.61rem;
-}
-.mk-site .photo-hero-current h2 {
-  font-size: clamp(1.22rem, 1.72vw, 1.9rem);
-  font-weight: 530;
-  line-height: 1.18;
-  letter-spacing: -0.043em;
+.photo-hero h1 {
+  color: white;
+  font-size: clamp(4.1rem, 6.65vw, 7.4rem);
+  font-weight: 590;
+  max-width: 10.4ch;
   margin: 0;
+  letter-spacing: -0.075em;
+  line-height: 0.98;
+  text-wrap: balance;
 }
-.photo-hero-thumbs,
-.photo-hero-nav {
+.photo-hero-deck {
+  color: white;
+  max-width: 42ch;
+  font-size: clamp(0.94rem, 1.22vw, 1.15rem);
+  line-height: 1.5;
+  margin: 1.1rem 0 1.5rem;
+}
+.photo-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.photo-hero-actions .mk-action {
+  pointer-events: auto;
+  background: var(--orange);
+  color: white;
+  min-height: 48px;
+  font-size: 1.19rem;
+  font-weight: 750;
+}
+.photo-hero-actions .mk-action.secondary {
+  background: var(--navy);
+  color: white;
+  font-weight: 550;
+  font-size: 0.9rem;
+  border: 1px solid #fff9;
+}
+.hero-sequence {
+  position: absolute;
+  z-index: 4;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
+  padding-inline: 0.95rem 0.3rem;
+  border: 1px solid #fff6;
+  border-radius: 2rem;
+  background: var(--navy);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 550;
+  pointer-events: none;
 }
-.photo-hero-nav {
-  gap: 0.8rem;
+.hero-counter {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
-.photo-hero-thumbs button {
-  display: block;
+.hero-scene-title {
+  max-width: 30vw;
   overflow: hidden;
-  width: clamp(50px, 4.4vw, 68px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hero-sequence button {
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
   height: 44px;
-  padding: 3px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: transparent;
-}
-.photo-hero-thumbs button[aria-pressed="true"] {
-  border-color: var(--photo-highlight);
-}
-.photo-hero-thumbs img {
-  width: 100%;
-  height: 100%;
-  border-radius: 3px;
-  object-fit: cover;
-}
-.photo-arrow {
-  width: 44px;
-  height: 44px;
-  border: 1px solid color-mix(in srgb, var(--paper) 39%, transparent);
+  font-size: 1.2rem;
+  border: 0;
   border-radius: 50%;
   background: transparent;
-  color: var(--paper);
-  line-height: 1;
-  font-size: 1.25rem;
+  color: white;
+  cursor: pointer;
+}
+.hero-sequence button:hover,
+.hero-sequence button:focus-visible {
+  background: var(--navy);
 }
 .photo-hero button:focus-visible,
 .photo-hero a:focus-visible {
-  outline: 3px solid var(--paper);
-  outline-offset: 3px;
-}
-.photo-arrow:hover,
-.photo-hero-thumbs button:hover {
-  border-color: var(--paper);
+  outline: 3px solid white;
+  outline-offset: 2px;
 }
 .home-start {
-  padding: 0
-    var(
-      --photo-gutter,
-      max(clamp(20px, 5.6vw, 84px), calc((100vw - 1300px) / 2))
-    )
-    1.6rem;
-  color: var(--paper);
-  background: color-mix(in srgb, var(--navy) 65%, var(--ink));
+  padding: 0 clamp(1.2rem, 5vw, 5.5rem) 1.6rem;
+  background: var(--navy);
+  color: white;
 }
 .home-start .mk-start {
-  border: 0;
-  border-top: 1px solid color-mix(in srgb, var(--sage) 45%, transparent);
-  border-radius: 0;
-  background: none;
-  padding: 1.2rem 0 0;
   margin: 0;
+  padding: 1.2rem 0 0;
+  border: 0;
+  background: none;
 }
 .home-start h2 {
   font-size: 1.23rem;
 }
-@media (max-width: 800px) {
+@media (max-width: 700px) {
   .photo-hero-stage {
-    min-height: 480px;
+    min-height: max(34rem, calc(100svh - var(--vg-height) - 30px));
   }
-  .photo-hero h1 {
-    font-size: clamp(3.65rem, 8vw, 5.3rem);
-  }
-  .photo-hero-deck {
-    max-width: 38ch;
-  }
-}
-@media (min-width: 601px) and (max-width: 800px) {
-  .photo-hero-veil {
-    background: linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--photo-shadow) 92%, transparent),
-      color-mix(in srgb, var(--photo-shadow) 75%, transparent) 45%,
-      color-mix(in srgb, var(--photo-shadow) 46%, transparent) 66%,
-      transparent 88%
-    );
-  }
-  .photo-hero-deck {
-    max-width: min(38ch, 55vw);
-  }
-}
-@media (max-width: 600px) {
-  .photo-hero-stage {
-    min-height: 520px;
-    align-items: end;
-  }
-  .photo-hero-image,
-  .photo-hero-tone img {
-    object-position: 64% 52%;
+  .photo-hero-copy {
+    padding-bottom: 5.65rem;
   }
   .photo-hero-veil {
     background: linear-gradient(
       0deg,
-      var(--photo-shadow) 2%,
-      color-mix(in srgb, var(--photo-shadow) 88%, transparent) 31%,
-      color-mix(in srgb, var(--photo-shadow) 69%, transparent) 64%,
-      transparent 90%
+      rgb(13 14 14 / 94%),
+      rgb(13 14 14 / 74%) 38%,
+      transparent 76%
     );
   }
-  .photo-hero-copy {
-    padding: 168px 0 26px;
-  }
-  .photo-hero-copy .mk-label {
-    font-size: 0.6rem;
-    margin-bottom: 0.7rem;
-  }
   .photo-hero h1 {
-    max-width: 10.8ch;
-    font-size: clamp(3.1rem, 13vw, 4.5rem);
+    font-size: clamp(3.05rem, 12vw, 4.8rem);
   }
   .photo-hero-deck {
-    max-width: 39ch;
-    font-size: 0.92rem;
-    line-height: 1.45;
-    margin: 0.8rem 0 1rem;
+    max-width: 36ch;
+    margin: 0.8rem 0 1.1rem;
+    font-size: 0.9rem;
   }
   .photo-hero-actions {
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
   .photo-hero-actions .mk-action {
-    font-size: 0.79rem;
-    min-height: 45px;
-    padding: 0.6rem 0.8rem;
-    gap: 0.5rem;
-  }
-  .photo-hero-line {
-    bottom: 57%;
+    padding: 0.55rem 0.85rem;
   }
   .photo-hero-line b {
-    top: 57%;
+    top: 28%;
   }
-  .photo-hero-stage input.photo-hero-range {
-    height: 43%;
+  .hero-sequence {
+    top: 0.82rem;
+    gap: 0.1rem;
   }
-  .photo-hero-rail {
-    flex-wrap: wrap;
-    padding-block: 0.9rem;
-    gap: 0.65rem;
-  }
-  .photo-hero-current {
-    flex: 1 1 142px;
-  }
-  /* The initial consent notice can place these arrows next to the fixed launcher. */
-  body:has(.vn-cookie-notice) .photo-hero-rail {
-    padding-inline-end: calc(7.3rem + env(safe-area-inset-right));
-  }
-  body:has(.vn-cookie-notice) .photo-hero-current {
-    flex-basis: 6.5rem;
-  }
-  .photo-hero-nav {
-    gap: 0.25rem;
-  }
-  .photo-hero-thumbs {
+  .hero-scene-title {
     display: none;
   }
-  .home-start {
-    padding-bottom: 1.1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-incoming {
+    animation: none;
   }
 }

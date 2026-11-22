@@ -7,14 +7,55 @@ import { IMAGE_TYPES, MAX_IMAGE_BYTES, MAX_IMAGE_MIB } from "@/lib/image-upload-
 type Project = { id: string; name: string };
 type Asset = { id: string; createdAt: string };
 
+export function RoomReferences({ assets, locale, enabled }: { assets: Asset[]; locale: Locale; enabled: boolean }) {
+  const en = locale === "en";
+  const [references, setReferences] = useState(["", ""]);
+  return (
+    <details className="room-drawer room-reference">
+      <summary>{en ? "Reference images" : "Referansebilder"}</summary>
+      <div>
+        <div className="room-reference-pair">
+          {(en ? ["Materials", "Atmosphere"] : ["Materialer", "Stemning"]).map((label, index) => {
+            const id = assets.some(asset => asset.id === references[index]) ? references[index] : "";
+            return <label key={index}>
+              {label}
+              {id && (
+                // This protected asset is served through the existing authenticated endpoint.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={`/api/assets/${encodeURIComponent(id)}/download`} alt="" />
+              )}
+              <select value={id} disabled={!enabled || assets.length === 0}
+                onChange={event => setReferences(previous =>
+                  previous.map((item, slot) => slot === index ? event.target.value : item))}>
+                <option value="">{en ? "None" : "Ingen"}</option>
+                {assets.map((asset, n) => <option key={asset.id} value={asset.id}
+                  disabled={asset.id === references[1 - index]}>
+                  {en ? "Image" : "Bilde"} {n + 1} · {new Date(asset.createdAt).toLocaleDateString(locale)}
+                </option>)}
+              </select>
+            </label>;
+          })}
+        </div>
+        {(!enabled || assets.length === 0) && <p className="inspector-help">
+          {enabled
+            ? (en ? "Save a project image to use it as a reference." : "Lagre et prosjektbilde for å bruke det som referanse.")
+            : (en ? "Private project references are unavailable in this demo." : "Private prosjektreferanser er utilgjengelige i denne demoen.")}
+        </p>}
+      </div>
+    </details>
+  );
+}
+
 export function PrivateUpload({
   locale,
   enabled,
   onPreview,
+  withRoomReferences = false,
 }: {
   locale: Locale;
   enabled: boolean;
   onPreview: (url: string) => void;
+  withRoomReferences?: boolean;
 }) {
   const en = locale === "en";
   const [projects, setProjects] = useState<Project[]>([]);
@@ -276,6 +317,7 @@ export function PrivateUpload({
           {en ? "Delete selected image" : "Slett valgt bilde"}
         </button>
       )}
+      {withRoomReferences && <RoomReferences key={project} assets={assets} locale={locale} enabled />}
     </div>
   );
 }

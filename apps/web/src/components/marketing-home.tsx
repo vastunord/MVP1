@@ -49,28 +49,28 @@ const steps = [
     "Choose",
     "Begynn med et rom og en idé.",
     "Start with a space and an idea.",
-    "cover",
+    "editorial/home-steps-choose",
   ],
   [
     "Skap",
     "Create",
     "Velg verktøy, stil og detaljer i Studio.",
-    "Choose your tool, style and details in the Studio.",
-    "soft-day",
+    "Choose your tool, style and details in Studio.",
+    "editorial/home-steps-create",
   ],
   [
     "Utforsk",
     "Explore",
     "Se varianter ved siden av hverandre.",
     "View alternatives alongside each other.",
-    "soft-moss",
+    "editorial/home-steps-explore",
   ],
   [
     "Bestem",
     "Decide",
     "Ta med den retningen du liker videre.",
     "Carry your preferred direction into the next decision.",
-    "warm",
+    "editorial/home-steps-decide",
   ],
 ] as const;
 
@@ -83,12 +83,12 @@ function StudyCompare({ en }: { en: boolean }) {
   return (
     <div>
       <div className="mk-compare">
-        <Photo name="soft" />
+        <Photo name="editorial/home-tone-comparison" />
         <div
           className="mk-compare-layer"
           style={{ clipPath: "inset(0 0 0 " + split + "%)" }}
         >
-          <Photo name={["soft-bright", "soft-evening", "soft-moss"][variant]} />
+          <Photo name="editorial/home-tone-comparison" className={["mk-tone-daylight", "mk-tone-evening", "mk-tone-moss"][variant]} />
         </div>
         <span className="mk-image-tag left">
           {en ? "Original" : "Original"}
@@ -113,7 +113,7 @@ function StudyCompare({ en }: { en: boolean }) {
             aria-pressed={variant === i}
             onClick={() => setVariant(i)}
           >
-            <Photo name={["soft-bright", "soft-evening", "soft-moss"][i]} />
+            <span aria-hidden="true" className={"mk-tone-swatch " + ["mk-tone-daylight", "mk-tone-evening", "mk-tone-moss"][i]} />
             {name}
           </button>
         ))}
@@ -174,9 +174,9 @@ export function MarketingHome({
             </p>
           </div>
           <div className="mk-mosaic">
-            <Photo name="soft" />
+            <Photo name="editorial/home-mosaic-center" />
             <div>
-              {["soft-day", "soft-evening", "soft-bright", "soft-moss"].map(
+              {["editorial/home-mosaic-light", "editorial/home-mosaic-warm", "editorial/home-mosaic-wood", "editorial/home-mosaic-garden"].map(
                 (n) => (
                   <Photo key={n} name={n} />
                 ),
@@ -210,11 +210,7 @@ export function MarketingHome({
           <div
             className={"mk-direction" + (direction === 1 ? " mk-outdoor" : "")}
           >
-            {direction !== 1 && (
-              <Photo
-                name={["cover", "soft-moss", "warm", "soft-bright"][direction]}
-              />
-            )}
+            <Photo name={["editorial/home-direction-room", "editorial/home-direction-outdoors", "editorial/home-direction-material", "editorial/home-direction-frame"][direction]} />
             <div>
               <p className="mk-label">Studio</p>
               <h3>{item[5]}</h3>
@@ -275,9 +271,9 @@ export function MarketingHome({
         </h2>
         <div className="mk-audiences">
           {[
-            [t("Boligeiere", "Homeowners"), "cover"],
-            [t("Eiendomsfolk", "Property professionals"), "soft-day"],
-            [t("Designere og arkitekter", "Designers & architects"), "warm"],
+            [t("Boligeiere", "Homeowners"), "editorial/home-audience-home"],
+            [t("Eiendomsfolk", "Property professionals"), "editorial/home-audience-property"],
+            [t("Designere og arkitekter", "Designers & architects"), "editorial/home-audience-design"],
           ].map(([name, photo]) => (
             <Link key={name} href="/app/library">
               <Photo name={photo} />
@@ -301,7 +297,7 @@ export function MarketingHome({
             t("Hva kan jeg utforske?", "What can I explore?"),
             t(
               "Åpne Studio for rom, uterom, materialer og bildeforbedring.",
-              "Open the Studio to explore interiors, outdoors, materials and image refinement.",
+              "Open Studio to explore interiors, outdoors, materials and image refinement.",
             ),
           ],
           [
@@ -317,6 +313,7 @@ export function MarketingHome({
         ]}
       />
       <Closing
+        photo="home-close"
         locale={locale}
         title={t(
           "Begynn med en idé. Se hvor den tar deg.",

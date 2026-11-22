@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { Locale } from "@/lib/i18n";
 
 export function Photo({
@@ -16,8 +16,8 @@ export function Photo({
     <Image
       unoptimized
       src={"/reference/" + name + ".webp"}
-      width={name === "cover" ? 825 : 1500}
-      height={name === "cover" ? 1100 : 1000}
+      width={1100}
+      height={733}
       alt={alt}
       className={"mk-photo " + className}
     />
@@ -84,13 +84,13 @@ export function FAQ({
   );
 }
 
-export function Closing({ locale, title }: { locale: Locale; title: string }) {
+export function Closing({ locale, title, photo }: { locale: Locale; title: string; photo: string }) {
   return (
-    <section className="mk-closing">
+    <section className="mk-closing" style={{ "--closing-photo": `url("/reference/editorial/${photo}.webp")` } as CSSProperties}>
       <div className="mk-wrap">
         <h2>{title}</h2>
         <Action href="/app/library">
-          {locale === "en" ? "Explore the Studio" : "Utforsk Studio"}
+          {locale === "en" ? "Explore Studio" : "Utforsk Studio"}
         </Action>
       </div>
     </section>

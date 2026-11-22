@@ -1,6 +1,6 @@
 .mp-hero {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -58,7 +58,7 @@
   line-height: 1.04;
   letter-spacing: -0.055em;
   max-width: 16ch;
-  color: var(--paper);
+  color: var(--on-brand);
   margin: 0 0 1rem;
 }
 .mp-copy > p:not(.mp-kicker) {
@@ -66,7 +66,7 @@
   line-height: 1.55;
   max-width: 49ch;
   margin-bottom: 1.5rem;
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .mp-kicker,
 .mp-read-copy small {
@@ -79,7 +79,7 @@
   margin: 0 0 1rem;
 }
 .mp-copy .mp-kicker {
-  color: var(--sage);
+  color: var(--on-brand);
 }
 .mp-pages .mk-section h2 {
   max-width: 24ch;
@@ -171,7 +171,7 @@
   bottom: 0.8rem;
   left: 0.8rem;
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
   border-radius: 9rem;
   font-size: 0.8rem;
   padding: 0.36rem 0.8rem;
@@ -200,7 +200,7 @@
 }
 .mp-pills button[aria-pressed="true"] {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .mp-plans {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -212,7 +212,7 @@
 }
 .mp-plans article:last-child {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .mp-plans h3 {
   font-size: clamp(2rem, 4vw, 3.5rem);

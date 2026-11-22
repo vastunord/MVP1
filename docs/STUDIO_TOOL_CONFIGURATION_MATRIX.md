@@ -1,5 +1,9 @@
 # Studio tool configuration matrix
 
+**Current Studio implementation.** The owner supplied a compact interior-editor reference after the prototype inspection. Room Reimagination now has nine visual rendering styles, optional camera reframing, daylight and lighting choices, room type, interior style and palette. Expandable details cover furnishing, plants, accessories, floors, people, annotations and a child-friendly layout preference. Quiet retreat, Family living and Social space apply editable combinations. Output settings include aspect ratio and an optional numeric seed. Two reference slots can select private images already saved to the current project when private media is enabled. These controls prepare a local design brief. The public demo keeps uploads and generation closed. [Configuration](../packages/contracts/src/tools.ts) · [Room inspector](../apps/web/src/components/room-settings.tsx)
+
+## Observed prototype
+
 This matrix summarizes rendered UI evidence for all 17 tool cards observed in the designer prototype. Photo upload controls accept JPEG/PNG/WEBP up to 20 MB unless a row adds scene-framing guidance. **OBSERVED** means visible in the public interface; **DISABLED** means unavailable in the inspected empty-photo state; **UNVERIFIED** means no behavior/default was established from available evidence. The shared editor shell is documented in `docs/STUDIO_INVENTORY.md` and applies unless a row notes a difference. Header “40 credits” is OBSERVED display only; wallet balance, AI, persistence, exports and billing are UNVERIFIED for every tool.
 
 | # / Tool identifier and route | Category | Inputs and references | Prompt | Option groups, defaults, unique controls | Example and comparison | Primary action and empty state | Unverified capabilities |

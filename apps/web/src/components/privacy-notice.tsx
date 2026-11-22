@@ -25,8 +25,8 @@ export function PrivacyNotice({ locale }: { locale: Locale }) {
         </p>
         <p>
           {t(
-            "Velg «Innstillinger for informasjonskapsler» i bunnteksten for å endre valgene dine. Du kan også slette lagrede nettstedsdata i nettleseren.",
-            "Open Cookie settings in the footer to change your choices. You can also clear stored site data in your browser.",
+            "Bruk den runde knappen med informasjonskapselen nederst til venstre, eller velg «Innstillinger for informasjonskapsler» i bunnteksten, for å endre valgene dine. Du kan også slette lagrede nettstedsdata i nettleseren.",
+            "Use the round cookie button at the bottom left or open Cookie settings in the footer to change your choices. You can also clear stored site data in your browser.",
           )}
         </p>
       </section>

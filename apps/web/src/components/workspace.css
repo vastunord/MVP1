@@ -120,8 +120,8 @@
       rgba(0, 44, 54, 0.74) 36%,
       rgba(0, 44, 54, 0.15) 79%
     ),
-    url("/reference/soft.webp") center 54% / cover;
-  color: var(--paper);
+    url("/reference/editorial/dashboard-hero.webp") center 54% / cover;
+  color: var(--on-brand);
 }
 .vn-atelier-hero h2 {
   font-size: clamp(2rem, 3.35vw, 3.75rem);
@@ -134,7 +134,7 @@
 .vn-atelier-hero p {
   max-width: 34ch;
   line-height: 1.45;
-  color: var(--paper);
+  color: var(--on-brand);
   margin: 0 0 17px;
 }
 .vn-hero-link {
@@ -343,7 +343,7 @@
 }
 .vn-favourite[aria-pressed="true"] {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .vn-empty,
 .vn-settings {
@@ -466,7 +466,7 @@
   .vn-atelier-hero {
     background-image:
       linear-gradient(90deg, rgba(0, 36, 48, 0.91), rgba(0, 44, 54, 0.42)),
-      url("/reference/soft.webp");
+      url("/reference/editorial/dashboard-hero.webp");
   }
   .vn-discover > a {
     padding: 14px 18px;

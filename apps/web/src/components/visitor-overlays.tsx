@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   createContext,
   useContext,
   useEffect,
+  useEffectEvent,
   useRef,
   useState,
   useSyncExternalStore,
@@ -60,7 +62,11 @@ export function CookieNotice({ locale }: { locale: Locale }) {
   const en = locale === "en";
   function choose(value: boolean) {
     saveCookieChoices(value, value);
-    requestAnimationFrame(focusMain);
+    requestAnimationFrame(() =>
+      document
+        .getElementById("vn-cookie-launcher")
+        ?.focus({ preventScroll: true }),
+    );
   }
   return (
     <aside className="vn-cookie-notice" aria-labelledby="vn-cookie-title">
@@ -71,24 +77,28 @@ export function CookieNotice({ locale }: { locale: Locale }) {
           </h2>
           <p>
             {en
-              ? "Necessary storage remembers your settings. Optional categories are off. "
-              : "Nødvendig lagring husker innstillingene dine. Valgfrie kategorier er slått av. "}
-            <Link href={publicHref("/privacy", locale)}>
-              {en ? "Privacy and cookies" : "Personvern og informasjonskapsler"}
-            </Link>
+              ? "We remember your privacy choices. Optional statistics and marketing are off until you choose."
+              : "Vi husker personvernvalgene dine. Valgfri statistikk og markedsføring er avslått til du tar et valg."}
           </p>
+          <Link href={publicHref("/privacy", locale)}>
+            {en ? "Privacy and cookies" : "Personvern og informasjonskapsler"}
+          </Link>
         </div>
         <div className="vn-consent-actions">
-          <button type="button" onClick={() => choose(true)}>
-            {en ? "Accept all" : "Godta alle"}
-          </button>
           <button type="button" onClick={() => choose(false)}>
             {en ? "Reject optional" : "Avvis valgfrie"}
           </button>
-          <button type="button" onClick={context.customize}>
-            {en ? "Customize" : "Tilpass"}
+          <button type="button" onClick={() => choose(true)}>
+            {en ? "Accept all" : "Godta alle"}
           </button>
         </div>
+        <button
+          className="vn-notice-details"
+          type="button"
+          onClick={context.customize}
+        >
+          {en ? "Customize" : "Tilpass"} <span aria-hidden="true">→</span>
+        </button>
       </div>
     </aside>
   );
@@ -132,8 +142,8 @@ function CookiePreferences({
     >
       <p>
         {en
-          ? "Choose what this site may store on your device. You can change your choices in the footer at any time."
-          : "Velg hva nettstedet kan lagre på enheten din. Du kan endre valgene nederst på siden når som helst."}
+          ? "Choose what this site may store on your device. Use the cookie button to change these choices at any time."
+          : "Velg hva nettstedet kan lagre på enheten din. Bruk knappen med informasjonskapselen for å endre valgene når du vil."}
       </p>
       <div className="vn-choice-list">
         <div className="vn-choice-row">
@@ -201,7 +211,7 @@ function CookiePreferences({
   );
 }
 
-function Mark({ mail = false }: { mail?: boolean }) {
+function DockIcon({ kind }: { kind: "cookie" | "ticket" }) {
   return (
     <svg
       aria-hidden="true"
@@ -214,13 +224,21 @@ function Mark({ mail = false }: { mail?: boolean }) {
       strokeLinejoin="round"
       strokeLinecap="round"
     >
-      {mail ? (
+      {kind === "ticket" ? (
         <>
-          <rect x="3" y="5" width="18" height="14" rx="2" />
-          <path d="m4 7 8 6 8-6" />
+          <path d="M3 5.5h18v4a2.5 2.5 0 0 0 0 5v4H3v-4a2.5 2.5 0 0 0 0-5z" />
+          <path d="M15 6v2m0 3v2m0 3v2" />
         </>
       ) : (
-        <path d="M12 2.5c1.2 5.9 3.6 8.3 9.5 9.5-5.9 1.2-8.3 3.6-9.5 9.5C10.8 15.6 8.4 13.2 2.5 12c5.9-1.2 8.3-3.6 9.5-9.5Z" />
+        <>
+          <path d="M20.7 12.5A8.8 8.8 0 1 1 11.4 3.2a4 4 0 0 0 4.4 5.2 4.1 4.1 0 0 0 4.9 4.1Z" />
+          <g fill="currentColor" stroke="none">
+            <circle cx="8.6" cy="9.1" r="1" />
+            <circle cx="7.5" cy="14" r="1.3" />
+            <circle cx="12.7" cy="12.4" r=".9" />
+            <circle cx="14" cy="16.6" r="1.15" />
+          </g>
+        </>
       )}
     </svg>
   );
@@ -280,7 +298,9 @@ function VisitorDialog({
     >
       <div className="vn-panel-heading">
         <h2 id="vn-panel-title">
-          {layer !== "preferences" && <Mark mail={layer === "newsletter"} />}
+          {layer === "prana" && (
+            <Image alt="" src="/brand/prana.svg" width={37} height={37} />
+          )}
           {title}
         </h2>
         <button
@@ -360,6 +380,24 @@ export function VisitorExperience({
         : null;
     setOpen({ layer: kind, pathname });
   };
+  const openPrana = useEffectEvent(() => launch("prana"));
+  useEffect(() => {
+    const fromHeader = () => openPrana();
+    window.addEventListener("vn:open-prana", fromHeader);
+    const url = new URL(window.location.href);
+    const frame =
+      url.searchParams.get("assistant") === "prana"
+        ? requestAnimationFrame(() => {
+            url.searchParams.delete("assistant");
+            window.history.replaceState(window.history.state, "", url);
+            openPrana();
+          })
+        : undefined;
+    return () => {
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      window.removeEventListener("vn:open-prana", fromHeader);
+    };
+  }, [pathname]);
   function openOffer() {
     // Mark the automatic offer as seen before presenting it, including a reload mid-dialog.
     setNewsletterDisplay("minimized");
@@ -369,8 +407,13 @@ export function VisitorExperience({
     setOpen(null);
     requestAnimationFrame(() => {
       if (window.location.pathname !== pathname) return;
+      const invoker = previousFocus.current;
       const next =
-        layer === "newsletter" ? newsletterDock.current : previousFocus.current;
+        layer === "newsletter"
+          ? newsletterDock.current
+          : layer === "preferences" && !invoker?.isConnected
+            ? document.getElementById("vn-cookie-launcher")
+            : invoker;
       if (next?.isConnected) next.focus({ preventScroll: true });
       else focusMain();
     });
@@ -394,6 +437,23 @@ export function VisitorExperience({
     >
       {children}
       <div className="vn-visitor-dock">
+        {choices && (
+          <button
+            id="vn-cookie-launcher"
+            type="button"
+            className="vn-dock-button vn-cookie-dock"
+            aria-label={
+              en
+                ? "Change cookie preferences"
+                : "Endre valg for informasjonskapsler"
+            }
+            aria-haspopup="dialog"
+            aria-expanded={layer === "preferences"}
+            onClick={() => launch("preferences")}
+          >
+            <DockIcon kind="cookie" />
+          </button>
+        )}
         {dockRoute && display === "minimized" && choices && (
           <button
             ref={newsletterDock}
@@ -403,7 +463,7 @@ export function VisitorExperience({
             aria-expanded={layer === "newsletter"}
             onClick={openOffer}
           >
-            <Mark mail />
+            <DockIcon kind="ticket" />
             {en ? "Newsletter" : "Nyhetsbrev"}
           </button>
         )}
@@ -415,7 +475,7 @@ export function VisitorExperience({
           aria-expanded={layer === "prana"}
           onClick={() => launch("prana")}
         >
-          <Mark />
+          <Image alt="" src="/brand/prana.svg" width={33} height={33} />
           Prana
         </button>
       </div>

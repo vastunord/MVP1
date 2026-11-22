@@ -20,6 +20,8 @@ The guide lists ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold an
 
 ## Color values
 
+The owner requires white lettering on blue and orange surfaces, with black text reserved for light backgrounds. Compact actions use deep teal and white for legibility. The hero’s orange primary action uses large bold white type. The separate Prana emblem preserves the supplied compass, roof, speech bubble and nine-square plan using the official solid swatches. The main Vastu Nord wordmark retains its original geometry.
+
 The CSS retains the guide's PDF fill operands. The nearest 8-bit sRGB values below are suitable for raster and SVG output.
 
 | Swatch | CSS token | sRGB |

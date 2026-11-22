@@ -89,7 +89,7 @@ test("filters, routing, locale and theme persist", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Tool library" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Dark", exact: true }).click();
+  await page.getByRole("button", { name: "Switch to dark theme", exact: true }).click();
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");

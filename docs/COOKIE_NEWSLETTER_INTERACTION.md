@@ -4,11 +4,11 @@
 
 | Interaction | Behavior |
 |---|---|
-| First visit | A bilingual inline notice offers equally prominent accept, reject and customize actions. The visitor can continue browsing. A missing, malformed or obsolete decision starts with both optional categories off. |
-| Settings | The footer opens the preference center. Saving replaces the previous decision. The site has no optional analytics or advertising integrations or identifiers to clear. The browser requests the official webfont from Google’s CDN. [Norwegian privacy notice](https://vastunord-web.vercel.app/privacy) · [English privacy notice](https://vastunord-web.vercel.app/en/privacy) |
-| Newsletter invitation | The automatic invitation is eligible after 27 seconds of visible, focused marketing-page time with a recorded cookie choice, including rejection. The timer pauses during other dialogs, menu or form interactions. Account, Studio, privacy and email-link pages never trigger it. |
+| First visit | A bilingual card sits in the lower-left corner. It offers equally prominent reject and accept buttons, a link to the policy and a preference editor. The page stays available for browsing. A missing, malformed or obsolete decision starts with both optional categories off. |
+| Settings | Saving a choice collapses the card into a round cookie button. It reopens the preferences alongside the existing footer control. The site has no optional analytics or advertising integrations or identifiers to clear. The browser requests the official webfont from Google’s CDN. [Norwegian privacy notice](https://vastunord-web.vercel.app/privacy) · [English privacy notice](https://vastunord-web.vercel.app/en/privacy) |
+| Newsletter invitation | A cinema ticket with perforated edges and a detachable-stub design opens after 27 seconds of visible, focused marketing-page time with a recorded cookie choice, including rejection. The timer pauses during other dialogs, menu or form interactions. Account, Studio, privacy and email-link pages never trigger it. |
 | Dismiss or reopen | First presentation records the invitation as seen. Close, Escape and Not now leave a fixed lower-left tab. It reopens on demand and survives navigation and reload. An open letter or Prana panel is the only expanded visitor dialog. |
-| Prana | A fixed lower-right launcher opens Prana, Quick Tips and Film. The tablist supports arrows, Home and End. The panel presents the existing bilingual room guides. Consultation and a rights-approved film/playlist await activation. The header also links to the full-page experience. |
+| Prana | The upper-right header button and the fixed lower-right emblem open the same assistant panel. The tablist supports arrows, Home and End. It offers Prana, Quick Tips and Film with bilingual room guides. Consultation and a rights-approved film or playlist await activation. |
 
 ## Stored choices
 

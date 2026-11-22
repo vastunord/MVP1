@@ -1,0 +1,180 @@
+.studio-editor .room-settings {
+  gap: .85rem;
+  color: #fff;
+}
+.room-settings :is(fieldset, label) { min-width: 0; }
+.room-settings legend, .room-select, .room-seed > label, .room-reference legend {
+  font-size: .77rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.room-settings legend { margin: 0 0 .4rem; padding: 0; }
+.room-media-grid, .room-selects, .room-reference-pair {
+  display: grid;
+  gap: .4rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.room-media-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.room-medium, .room-chip {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  color: #fff;
+  background: var(--bg);
+  border-radius: .42rem;
+  overflow: hidden;
+  font-size: .73rem;
+  line-height: 1.25;
+}
+.room-medium input, .room-chip input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.room-medium:has(:focus-visible), .room-chip:has(:focus-visible) {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.room-medium:has(:checked), .room-chip:has(:checked), .room-directions button[aria-pressed="true"] {
+  border-color: var(--orange);
+  background: var(--navy);
+  box-shadow: inset 0 0 0 1px var(--orange);
+}
+.room-medium:has(:checked)::after {
+  content: "✓";
+  position: absolute;
+  top: .18rem;
+  right: .18rem;
+  width: 1.05rem;
+  line-height: 1.05rem;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  background: var(--navy);
+}
+.room-medium { align-items: stretch; flex-direction: column; text-align: center; }
+.room-medium > span:last-child { margin: auto; padding: .23rem .08rem; overflow-wrap: anywhere; }
+.room-chip-list, .room-directions { display: flex; flex-wrap: wrap; gap: .3rem; }
+.room-chip, .room-directions button {
+  min-height: 2rem;
+  padding: .28rem .55rem;
+  font-size: .73rem;
+}
+.room-directions button {
+  border: 1px solid var(--border);
+  border-radius: .42rem;
+  background: var(--bg);
+  color: #fff;
+}
+.room-select, .room-reference label { display: grid; align-content: start; gap: .3rem; }
+.room-select select, .room-reference select { min-width: 0; width: 100%; font-size: .77rem; min-height: 2.5rem; }
+.room-drawer { border-block-start: 1px solid var(--border); }
+.room-drawer summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.7rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: .85rem;
+  font-weight: 600;
+}
+.room-drawer summary::-webkit-details-marker { display: none; }
+.room-drawer summary::after { content: "+"; font-size: 1.15rem; }
+.room-drawer[open] summary::after { content: "−"; }
+.room-drawer > div, .room-reference { display: grid; gap: .85rem; }
+.room-check { display: flex; align-items: center; gap: .5rem; font-size: .8rem; }
+.room-seed { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .3rem; }
+.room-seed > label { grid-column: 1 / -1; }
+.room-seed button {
+  min-width: 2.75rem; border: 1px solid var(--border); border-radius: .42rem; font-size: 1.25rem;
+}
+.room-reference { margin-block-start: .6rem; font-size: .77rem; }
+.room-reference-pair label { padding: .5rem; border: 1px dashed var(--border); border-radius: .42rem; }
+.room-reference-pair img { width: 100%; height: 3.4rem; object-fit: contain; }
+.room-reference-pair select:disabled { opacity: .72; }
+.room-section-links {
+  display: flex;
+  gap: 1rem;
+  padding: .5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--navy);
+  color: #fff;
+  font-size: .77rem;
+}
+.room-section-links a { display: inline-flex; align-items: center; min-height: 2rem; text-decoration: underline; text-underline-offset: .2em; }
+.studio-editor :is(#room-settings, #source-image) { scroll-margin-block-start: 7.75rem; }
+
+/* Original material maquettes. Each medium uses its own surface, light and linework. */
+.room-material-art {
+  --wall: var(--paper); --floor: var(--sand); --object: var(--sage); --face: var(--navy);
+  display: block;
+  height: clamp(2.8rem, 4vw, 3.7rem);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(155deg, transparent 59%, var(--floor) 60%),
+    linear-gradient(110deg, var(--wall) 54%, var(--floor) 55%, var(--wall) 96%);
+}
+.room-material-art i { display: block; position: absolute; }
+.material-arch {
+  width: 40%; height: 70%; right: 12%; bottom: 17%;
+  border-radius: 52% 52% 0 0;
+  background: linear-gradient(110deg, var(--face), var(--object));
+  box-shadow: 3px 2px 0 var(--object);
+}
+.material-slab {
+  left: 11%; bottom: 12%; width: 51%; height: 35%;
+  background: linear-gradient(160deg, var(--object) 49%, var(--face) 51%);
+  transform: skewY(6deg);
+}
+.material-sphere {
+  left: 24%; bottom: 33%; width: 20%; aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 27%, var(--wall), var(--object) 55%, var(--face));
+}
+.room-material-art[data-medium="Clay model"] {
+  --floor: var(--sand);
+  --face: color-mix(in srgb, var(--sand) 55%, var(--ink));
+  --object: color-mix(in srgb, var(--sand) 76%, var(--paper));
+}
+.room-material-art[data-medium="Architectural"] { --floor: var(--navy); --wall: var(--sand); --object: var(--sage); }
+.room-material-art[data-medium="Pencil"], .room-material-art[data-medium="Diagram"], .room-material-art[data-medium="CAD"] {
+  --wall: #fff; --floor: var(--paper); --face: var(--navy); --object: var(--sand);
+}
+.room-material-art[data-medium="Pencil"] i {
+  border: 1px solid var(--ink); box-shadow: none;
+  background: repeating-linear-gradient(40deg, #fff 0 2px, var(--sage) 2px 3px);
+}
+.room-material-art[data-medium="Watercolor"] {
+  --face: color-mix(in srgb, var(--sage) 64%, var(--navy));
+  --object: color-mix(in srgb, var(--sand) 80%, var(--orange));
+  --wall: color-mix(in srgb, var(--sand) 55%, var(--paper));
+}
+.room-material-art[data-medium="Watercolor"] i { filter: blur(1.2px); opacity: .86; }
+.room-material-art[data-medium="Illustration"] { --wall: var(--sand); --floor: var(--sage); }
+.room-material-art[data-medium="Illustration"] .material-arch { background: var(--orange); box-shadow: none; }
+.room-material-art[data-medium="Illustration"] .material-sphere { background: var(--paper); }
+.room-material-art[data-medium="Diagram"] { background: var(--paper); }
+.room-material-art[data-medium="Diagram"] i { background: var(--sage); border: 1px dashed var(--navy); box-shadow: none; }
+.room-material-art[data-medium="Diagram"] .material-sphere { background: var(--orange); }
+.room-material-art[data-medium="CAD"] {
+  background-color: var(--navy);
+  background-image: linear-gradient(#ffffff27 1px, transparent 1px), linear-gradient(90deg, #ffffff27 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+.room-material-art[data-medium="CAD"] i { border: 1px solid #fff; background: transparent; box-shadow: none; }
+.room-material-art[data-medium="Material study"] { --wall: var(--sage); --floor: var(--paper); --face: var(--ink); }
+.room-material-art[data-medium="Material study"] .material-arch { background: repeating-linear-gradient(90deg, var(--sand) 0 3px, color-mix(in srgb, var(--sand) 69%, var(--ink)) 3px 4px); }
+@media (pointer: coarse) {
+  .room-chip, .room-directions button, .room-section-links a { min-height: 2.75rem; }
+}

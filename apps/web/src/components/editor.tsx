@@ -10,32 +10,25 @@ import {
 import { messages, type Locale } from "@/lib/i18n";
 import { studioSampleHref, translated, type StudioSample } from "@/lib/workspace-catalog";
 import { Button } from "./ui";
-import { PrivateUpload } from "./private-upload";
+import { PrivateUpload, RoomReferences } from "./private-upload";
+import { RoomSettings, roomLabel } from "./room-settings";
 import { StudioCanvas } from "./studio-canvas";
 import "./studio-tools.css";
 function Field({
   control,
   value,
   onChange,
-  unknown,
+  locale,
 }: {
   control: Control;
   value: string | number | boolean | undefined;
   onChange: (value: string | number | boolean) => void;
-  unknown: string;
+  locale: Locale;
 }) {
   const id = "option-" + control.id;
+  const text = (label: string) => roomLabel(label, locale);
   if (control.kind === "action")
     return <Button disabled>{control.label}</Button>;
-  if (control.kind === "unknown")
-    return (
-      <div className="field">
-        <label htmlFor={id}>{control.label}</label>
-        <select id={id} disabled>
-          <option>{unknown}</option>
-        </select>
-      </div>
-    );
   if (control.kind === "toggle" && typeof value === "boolean")
     return (
       <label className="check" htmlFor={id}>
@@ -45,7 +38,7 @@ function Field({
           checked={value}
           onChange={(e) => onChange(e.target.checked)}
         />
-        {control.label}
+        {text(control.label)}
       </label>
     );
   if (control.kind === "range")
@@ -84,7 +77,7 @@ function Field({
   )
     return (
       <div className="field">
-        <strong id={id}>{control.label}</strong>
+        <strong id={id}>{text(control.label)}</strong>
         <div className="preset-options" role="group" aria-labelledby={id}>
           {options.map((option) => (
             <button
@@ -93,7 +86,7 @@ function Field({
               aria-pressed={value === option}
               onClick={() => onChange(option)}
             >
-              {option}
+              {text(option)}
             </button>
           ))}
         </div>
@@ -101,7 +94,7 @@ function Field({
     );
   return (
     <div className="field">
-      <label htmlFor={id}>{control.label}</label>
+      <label htmlFor={id}>{text(control.label)}</label>
       <select
         id={id}
         value={
@@ -116,13 +109,12 @@ function Field({
         }
       >
         <option value="" disabled>
-          {unknown}
+          {locale === "en" ? "Choose…" : "Velg …"}
         </option>
         {options.map((o) => (
-          <option key={o}>{o}</option>
+          <option key={o} value={o}>{text(o)}</option>
         ))}
       </select>
-      {options.length === 1 && <span className="small">{unknown}</span>}
     </div>
   );
 }
@@ -150,6 +142,12 @@ export function Editor({
   const [prompt, setPrompt] = useState("");
   const [preview, setPreview] = useState("");
   const english = locale === "en";
+  const room = tool.id === "room-reimagination";
+  const configured = visibleControls(tool, values);
+  const unavailable = configured.filter(control => control.kind === "unknown");
+  const startWithDesign = room && !sample && !uploadsEnabled;
+  const settings = room && <RoomSettings tool={tool} values={values} locale={locale}
+    update={next => setValues(previous => ({ ...previous, ...next }))} />;
   return (
     <div className="studio-editor">
       <div className="editor-topbar">
@@ -161,18 +159,23 @@ export function Editor({
       </div>
       <div className="studio-workbench">
         <div className="inspector">
+          {room && <nav className="room-section-links" aria-label={english ? "Room controls" : "Romvalg"}>
+            <a href="#room-settings">Design</a>
+            <a href="#source-image">{english ? "Image & brief" : "Bilde og beskrivelse"}</a>
+          </nav>}
           <div
             className="inspector-scroll"
             role="region"
             tabIndex={0}
             aria-label={t.controls}
           >
+            {startWithDesign && settings}
             <section className="inspector-group" id="source-image">
               <h2>{english ? "Source image" : "Kildebilde"}</h2>
               {sample && !preview && (
                 <div className="selected-study">
                   <strong>{translated(sample.name, locale)}</strong>
-                  <span>{english ? "Studio sample" : "Studiobilde"}</span>
+                  <span>{english ? "Studio sample" : "Eksempel i Studio"}</span>
                   <details>
                     <summary>{english ? "Try another tool with this photo" : "Prøv et annet verktøy med dette bildet"}</summary>
                     {([
@@ -198,9 +201,11 @@ export function Editor({
                   locale={locale}
                   enabled={uploadsEnabled}
                   onPreview={setPreview}
+                  withRoomReferences={room}
                 />
               </div>
-              {tool.reference && (
+              {room && !uploadsEnabled && <RoomReferences assets={[]} enabled={false} locale={locale} />}
+              {tool.reference && !room && (
                 <Button className="reference-slot" disabled>
                   ＋ {t.reference}
                 </Button>
@@ -210,8 +215,8 @@ export function Editor({
               <label className="studio-kicker" htmlFor="prompt">
                 {t.prompt}
               </label>
-              <p className="inspector-help" lang="en">
-                {tool.prompt}
+              <p className="inspector-help" lang={room ? locale : "en"}>
+                {room && !english ? "Beskriv rommet du ønsker" : tool.prompt}
               </p>
               <textarea
                 id="prompt"
@@ -239,9 +244,9 @@ export function Editor({
                 <textarea aria-label={t.avoid} rows={2} maxLength={1000} />
               </details>
             </section>
-            <section className="inspector-group">
+            {room ? (!startWithDesign && settings) : <section className="inspector-group">
               <h2>{t.controls}</h2>
-              {visibleControls(tool, values).map((c) => (
+              {configured.filter(control => control.kind !== "unknown").map((c) => (
                 <fieldset
                   key={c.id}
                   disabled={
@@ -253,18 +258,26 @@ export function Editor({
                   <Field
                     control={c}
                     value={values[c.id]}
-                    unknown={t.unknown}
+                    locale={locale}
                     onChange={(v) =>
                       setValues((prev) => ({ ...prev, [c.id]: v }))
                     }
                   />
                 </fieldset>
               ))}
-            </section>
+              {unavailable.length > 0 && (
+                <details className="avoid-detail">
+                  <summary>{english ? "Unavailable settings" : "Utilgjengelige innstillinger"} ({unavailable.length})</summary>
+                  <ul>{unavailable.map(control =>
+                    <li key={control.id}>{roomLabel(control.label, locale)}</li>
+                  )}</ul>
+                </details>
+              )}
+            </section>}
           </div>
           <div className="primary-action">
             <Button className="primary" disabled aria-describedby="action-help">
-              {primaryAction(tool, values)}
+              {room && !english ? "Generer rom" : primaryAction(tool, values)}
             </Button>
             <p id="action-help">{t.actionHelp}</p>
           </div>

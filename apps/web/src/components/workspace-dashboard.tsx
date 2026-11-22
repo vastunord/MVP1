@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
-import { studies, scenes, translated } from "@/lib/workspace-catalog";
+import { studies, translated } from "@/lib/workspace-catalog";
+import { renderGallery } from "@/lib/render-gallery";
 import { StudyCards } from "./workspace-gallery";
 import { WorkspaceIcon } from "./workspace";
 
@@ -20,7 +21,7 @@ export function Dashboard({
     <section className="vn-dashboard">
       <header className="vn-pagehead">
         <p className="eyebrow">
-          {en ? "Your personal atelier" : "Ditt personlige atelier"}
+          {en ? "Your Studio" : "Ditt Studio"}
         </p>
         <h1>{en ? "Good spaces start here." : "Gode rom begynner her."}</h1>
       </header>
@@ -29,11 +30,11 @@ export function Dashboard({
           <h2>{en ? "From a room to a direction." : "Fra rom til retning."}</h2>
           <p>
             {en
-              ? "Explore materials, light and layout in the Studio."
+              ? "Explore materials, light and layout in Studio."
               : "Utforsk materialer, lys og planløsning i Studio."}
           </p>
           <Link className="vn-hero-link" href="/app/tools/room-reimagination">
-            {en ? "Open room editor" : "Åpne romredigering"} ↗
+            {en ? "Open Studio" : "Åpne Studio"} ↗
           </Link>
         </div>
       </div>
@@ -46,8 +47,8 @@ export function Dashboard({
               en ? "Projects" : "Prosjekter",
               authenticated
                 ? en
-                  ? "Open your workspace"
-                  : "Åpne arbeidsområdet ditt"
+                  ? "Open Studio"
+                  : "Åpne Studio"
                 : en
                   ? "Explore project studies"
                   : "Utforsk eksempelprosjektene",
@@ -110,9 +111,9 @@ export function Dashboard({
         <h2>{en ? "Project studies" : "Eksempelprosjekter"}</h2>
         <Link href="/app/albums">{en ? "View albums" : "Vis album"} ↗</Link>
       </div>
-      <StudyCards locale={locale} />
+      <StudyCards locale={locale} overview />
       <div className="vn-section-title">
-        <h2>{en ? "Explore the atelier" : "Utforsk atelieret"}</h2>
+        <h2>{en ? "Explore Studio" : "Utforsk Studio"}</h2>
       </div>
       <div className="vn-discover">
         <Link href="/app/home-experience">
@@ -135,16 +136,6 @@ export function Dashboard({
           </p>
           <span>↗</span>
         </Link>
-        <Link href="/app/prana">
-          <WorkspaceIcon name="spark" />
-          <h3>Prana</h3>
-          <p>
-            {en
-              ? "Find a practical design tip for your next study."
-              : "Finn et praktisk designtips til din neste studie."}
-          </p>
-          <span>↗</span>
-        </Link>
       </div>
     </section>
   );
@@ -158,7 +149,7 @@ export function StudyDetail({
   study: Study;
 }) {
   const en = locale === "en";
-  const images = scenes.filter((s) => s.study === study.id);
+  const images = renderGallery.filter((s) => s.study === study.id);
   return (
     <section>
       <header className="vn-pagehead">
@@ -170,7 +161,7 @@ export function StudyDetail({
       <div className="vn-study-cover">
         <Image
           fill
-          src={"/reference/" + study.image}
+          src={`/reference/editorial/study-detail-${study.id}.webp`}
           alt={translated(study.name, locale)}
           sizes="(max-width:800px) 100vw, 78vw"
         />
@@ -187,33 +178,17 @@ export function StudyDetail({
           : "Referansebilder til denne konseptstudien"}{" "}
         · {study.rooms} {en ? "rooms" : "rom"}
       </p>
-      <div className="vn-study-grid">
-        {images.map((s) => (
-          <Link
-            className="vn-study"
-            key={s.image}
-            href={"/app/renders?album=" + study.id}
-          >
-            <div className="vn-photo">
-              <Image
-                fill
-                src={"/reference/" + s.image}
-                sizes="(max-width:640px) 92vw, 32vw"
-                alt=""
-              />
-            </div>
-            <div className="vn-study-text">
-              <h3>{translated(s.title, locale)}</h3>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <p>
+        <Link href={"/app/renders?album=" + study.id}>
+          {images.length} {en ? "curated references in the album" : "utvalgte referanser i albumet"} ↗
+        </Link>
+      </p>
       <div className="vn-related">
         <Link href="/app/projects">
           {en ? "All projects" : "Alle prosjekter"}
         </Link>
         <Link href="/app/tools/room-reimagination">
-          {en ? "Open room editor" : "Åpne romredigering"} ↗
+          {en ? "Open Studio" : "Åpne Studio"} ↗
         </Link>
       </div>
     </section>
@@ -244,16 +219,16 @@ export function CollaborationScreen({
         <h2>
           {team
             ? en
-              ? "Personal workspace"
-              : "Personlig arbeidsområde"
+              ? "Personal Studio"
+              : "Personlig Studio"
             : en
               ? "No shared collection"
               : "Ingen delt samling"}
         </h2>
         <p>
           {en
-            ? "Invitations and shared workspaces are unavailable in this version."
-            : "Invitasjoner og delte arbeidsområder er utilgjengelige i denne versjonen."}
+            ? "Studio invitations and sharing are unavailable in this version."
+            : "Invitasjoner og deling i Studio er utilgjengelig i denne versjonen."}
         </p>
         <Link className="button" href="/app/projects">
           {en ? "Browse projects" : "Se prosjekter"}
@@ -267,7 +242,7 @@ export function SettingsLinks({ locale }: { locale: Locale }) {
   const en = locale === "en";
   return (
     <div className="vn-settings">
-      <h2>{en ? "Workspace preferences" : "Valg for arbeidsområdet"}</h2>
+      <h2>{en ? "Studio preferences" : "Innstillinger for Studio"}</h2>
       <div className="vn-related">
         <a href="#language">{en ? "Language" : "Språk"}</a>
         <a href="#theme">{en ? "Appearance" : "Utseende"}</a>

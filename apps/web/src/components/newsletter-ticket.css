@@ -1,0 +1,258 @@
+.vn-visitor-dialog.vn-newsletter-dialog {
+  inset: 0;
+  width: min(
+    55rem,
+    calc(100% - 2rem - env(safe-area-inset-left) - env(safe-area-inset-right))
+  );
+  height: fit-content;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  border-radius: 18px;
+  filter: drop-shadow(0 12px 26px rgb(0 0 0 / 28%));
+}
+.vn-newsletter-dialog::backdrop {
+  background: rgb(13 14 14 / 54%);
+}
+.vn-newsletter-dialog .vn-panel-heading {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+}
+.vn-visually-hidden,
+.vn-newsletter-dialog .vn-panel-heading h2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.vn-newsletter-dialog .vn-panel-close {
+  position: absolute;
+  inset: 0.75rem 0.85rem auto auto;
+  width: 44px;
+  color: white;
+  background: var(--navy);
+  border-color: rgb(255 255 255 / 60%);
+}
+.vn-cinema-ticket {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 10rem;
+  color: white;
+  background: var(--navy);
+  mask-image:
+    radial-gradient(circle at left, transparent 4.5px, #000 5px),
+    radial-gradient(circle at right, transparent 4.5px, #000 5px);
+  mask-size: 100% 19px;
+  mask-repeat: repeat-y;
+  mask-composite: intersect;
+}
+.vn-ticket-body {
+  padding: clamp(1.5rem, 4.3vw, 3.4rem);
+}
+.vn-ticket-wordmark {
+  width: 8.7rem;
+  height: auto;
+}
+.vn-ticket-body h3 {
+  max-width: 15ch;
+  margin: 2rem 0 1rem;
+  color: #fff;
+  font: 580 clamp(2.2rem, 5.3vw, 3.9rem)/0.99 var(--font-brand);
+  letter-spacing: -0.065em;
+  text-wrap: balance;
+}
+.vn-ticket-body p {
+  margin: 0;
+  line-height: 1.5;
+}
+.vn-newsletter-form {
+  display: grid;
+  gap: 0.85rem;
+}
+.vn-ticket-intro {
+  max-width: 45ch;
+  font-size: clamp(0.89rem, 1.6vw, 1.05rem);
+}
+.vn-ticket-email-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+  border: 1px solid var(--paper);
+  border-radius: 9px;
+  color: var(--ink);
+  background: var(--paper);
+}
+.vn-ticket-email-row svg {
+  flex: none;
+}
+.vn-ticket-email-row input {
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 2px;
+  font: inherit;
+  font-size: 1rem;
+  color-scheme: light;
+  background: var(--paper);
+  color: var(--ink);
+}
+.vn-ticket-email-row input::placeholder {
+  color: var(--navy);
+  opacity: 1;
+}
+.vn-ticket-email-row input:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: -2px;
+}
+.vn-ticket-action {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  color: white;
+  background: var(--navy);
+  font: 620 0.82rem/1.2 var(--font-brand);
+  white-space: nowrap;
+}
+.vn-ticket-action:disabled {
+  color: var(--ink);
+  background: var(--sage);
+}
+.vn-ticket-action:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+.vn-newsletter-form .vn-checkbox-row {
+  font-size: 0.81rem;
+  line-height: 1.5;
+}
+.vn-newsletter-form .vn-checkbox-row input {
+  accent-color: var(--paper);
+}
+.vn-ticket-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 1.35rem;
+}
+.vn-ticket-links :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: 0.81rem;
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+.vn-newsletter-form .vn-service-note,
+.vn-newsletter-form p[role="alert"] {
+  border-inline-start: 2px solid var(--orange);
+  padding-inline-start: 0.65rem;
+  font-size: 0.78rem;
+}
+.vn-ticket-stub {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 4rem 1.15rem 1.5rem;
+  border-inline-start: 1px dashed var(--sage);
+  background: var(--ink);
+}
+.vn-ticket-stub svg {
+  color: var(--orange);
+}
+.vn-ticket-stub span {
+  font: 630 1.23rem/1.2 var(--font-brand);
+  letter-spacing: -0.04em;
+}
+.vn-ticket-bars {
+  width: 85%;
+  height: 1.5rem;
+  margin-top: 1rem;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--paper) 0 2px,
+    transparent 2px 5px,
+    var(--paper) 5px 6px,
+    transparent 6px 9px,
+    var(--paper) 9px 13px,
+    transparent 13px 16px
+  );
+  opacity: 0.75;
+}
+@media (max-width: 41rem) {
+  .vn-visitor-dialog.vn-newsletter-dialog {
+    width: min(
+      31rem,
+      calc(
+        100% - 1.3rem - env(safe-area-inset-left) - env(safe-area-inset-right)
+      )
+    );
+  }
+  .vn-cinema-ticket {
+    grid-template-columns: 1fr;
+  }
+  .vn-ticket-body {
+    padding: 1.5rem 1.25rem 1.15rem;
+  }
+  .vn-ticket-wordmark {
+    width: 7.5rem;
+    margin-block: 0.35rem;
+  }
+  .vn-ticket-body h3 {
+    margin-top: 1.6rem;
+  }
+  .vn-ticket-stub {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    border-inline-start: 0;
+    border-block-start: 1px dashed var(--sage);
+    padding: 0.8rem 1.25rem;
+  }
+  .vn-ticket-stub svg {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+  .vn-ticket-stub span {
+    font-size: 0.85rem;
+  }
+  .vn-ticket-bars {
+    width: 3.5rem;
+    height: 1.1rem;
+    margin: 0 0 0 auto;
+  }
+}
+@media (max-width: 22rem) {
+  .vn-ticket-email-row svg {
+    display: none;
+  }
+  .vn-ticket-action {
+    padding-inline: 0.55rem;
+  }
+}

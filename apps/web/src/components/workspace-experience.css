@@ -176,7 +176,7 @@
 }
 .xp-plan button[aria-pressed="true"] {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .xp-small {
   font-size: 0.77rem;
@@ -216,7 +216,7 @@
 }
 .xp-pills button[aria-pressed="true"] {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
   border-color: var(--sage);
   box-shadow: inset 0 0 0 1px var(--sage);
 }
@@ -370,11 +370,11 @@
 }
 .xp-account-card {
   background: var(--navy);
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .xp-account-card h2 {
   margin: 0.7rem 0;
-  color: var(--paper);
+  color: var(--on-brand);
 }
 .xp-empty {
   padding-top: 1rem;

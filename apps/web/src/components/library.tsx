@@ -7,49 +7,16 @@ import { messages, formatNumber, type Locale } from "@/lib/i18n";
 import { toolDescription } from "./tool-presentation";
 import "./studio-tools.css";
 
-const photos: Record<string, string> = {
-  "room-reimagination": "soft",
-  "virtual-home-staging": "warm",
-  "furniture-refresh": "cover",
-  "seasonal-styling": "soft-moss",
-  "visual-cleanup": "soft-bright",
-  "resolution-enhancement": "soft-day",
-  "perspective-correction": "cover",
-  "decor-redefinition": "warm",
-  "material-refinement": "cover",
-  "lighting-reimagination": "soft-evening",
-};
-
 function ToolArt({ id }: { id: string }) {
-  const photo = photos[id];
-  if (photo)
-    return (
-      <div className={"tool-picture picture-" + id}>
-        <Image
-          src={"/reference/" + photo + ".webp"}
-          alt=""
-          fill
-          sizes="(max-width: 680px) 90vw, 24vw"
-        />
-      </div>
-    );
-  const diagram = {
-    "outdoor-visualization": "land",
-    "hardscape-design": "paving",
-    "garden-design": "garden",
-    "pool-redesign": "pool",
-    "sky-transformation": "sky",
-    "seasonal-transformation": "season",
-    "object-placement": "placement",
-  }[id];
   return (
-    <div
-      className={"tool-picture tool-diagram diagram-" + diagram}
-      aria-hidden="true"
-    >
-      <i />
-      <i />
-      <i />
+    <div className="tool-picture">
+      <Image
+        src={`/media/tools/${id}.webp`}
+        unoptimized
+        alt=""
+        fill
+        sizes="(max-width: 680px) 90vw, 24vw"
+      />
     </div>
   );
 }

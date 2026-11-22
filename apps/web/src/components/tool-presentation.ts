@@ -75,6 +75,30 @@ export function toolDescription(id: string, locale: Locale) {
   return descriptions[id]?.[locale === "en" ? 1 : 0] ?? "";
 }
 
+const canvasDescriptions: Record<string, [string, string]> = {
+  "room-reimagination": ["Lys stue med møbler og vegger i tre.", "Light living room with timber walls and furniture."],
+  "virtual-home-staging": ["Lys stue med hvite sofaer mot vinduet.", "Bright living room with white sofas against the window."],
+  "outdoor-visualization": ["Skogkledd strand med hus ved vannet.", "Wooded shoreline with a house at the water’s edge."],
+  "hardscape-design": ["Terrassebord og sitteplass utendørs.", "Timber decking and outdoor seating."],
+  "furniture-refresh": ["Sittegruppe ved vinduet i en klassisk stue.", "A seating arrangement by a traditional living room window."],
+  "seasonal-styling": ["Tekstiler og tre i et soverom mot landskapet.", "Timber and textiles in a bedroom looking out over the landscape."],
+  "visual-cleanup": ["Leker og bøker fordelt over gulvet i et lyst rom.", "Toys and books scattered across a bright room."],
+  "resolution-enhancement": ["Detaljrike akustiske trepaneler og flygel.", "Detailed acoustic timber panels beside a grand piano."],
+  "perspective-correction": ["Lang korridor kledd i tre.", "Long timber-clad corridor."],
+  "decor-redefinition": ["Stue med kunst på veggen og dekor rundt sofaen.", "Living room with framed art and decorative objects around a sofa."],
+  "material-refinement": ["Baderom med tre, speil og stein.", "Bathroom with timber, mirror and stone surfaces."],
+  "lighting-reimagination": ["Lunt trepanel mot blått lys utenfor vinduet.", "Warm timber panelling framing a blue-lit window."],
+  "garden-design": ["Beplantet hage med gangsti mellom bygninger.", "Planted garden with paths between buildings."],
+  "pool-redesign": ["Rundt basseng under et åpent overlys.", "Round pool beneath a circular skylight."],
+  "sky-transformation": ["Lav sol over vannet utenfor en bolig.", "Low sun over the water beside a house."],
+  "seasonal-transformation": ["Rødt trehus ved en snødekt gate.", "Red timber house beside a snowy street."],
+  "object-placement": ["Spisebord, stoler og planter ved vinduene.", "Dining table, chairs and plants near the windows."],
+};
+
+export function canvasDescription(id: string, locale: Locale) {
+  return canvasDescriptions[id]?.[locale === "en" ? 1 : 0] ?? "";
+}
+
 export const sampleTones = [
   { id: "soft-day", nb: "Dagslys", en: "Daylight" },
   { id: "soft-evening", nb: "Kveldslys", en: "Evening" },

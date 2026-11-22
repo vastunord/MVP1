@@ -8,6 +8,11 @@ test("consent defaults, changes, revocation and version renewal are independent 
     name: "Your cookie choices",
   });
   await expect(notice).toBeVisible();
+  await expect(notice).toHaveCSS("position", "fixed");
+  const cookie = page.getByRole("button", {
+    name: "Change cookie preferences",
+  });
+  await expect(cookie).toHaveCount(0);
   await notice.getByRole("button", { name: "Customize" }).click();
   const settings = page.getByRole("dialog", { name: "Cookie settings" });
   const stats = settings.getByRole("checkbox", { name: /Statistics/ });
@@ -16,15 +21,15 @@ test("consent defaults, changes, revocation and version renewal are independent 
   await expect(marketing).not.toBeChecked();
   await stats.check();
   await settings.getByRole("button", { name: "Save choices" }).click();
+  await expect(cookie).toBeFocused();
   await page.reload();
   await expect(notice).toHaveCount(0);
-  const settingsButton = page.getByRole("button", { name: "Cookie settings" });
-  await settingsButton.click();
+  await cookie.click();
   await expect(stats).toBeChecked();
   await expect(marketing).not.toBeChecked();
   await stats.uncheck();
   await settings.getByRole("button", { name: "Save choices" }).click();
-  await expect(settingsButton).toBeFocused();
+  await expect(cookie).toBeFocused();
   const choices = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("vn-cookie-choices")!),
   );
@@ -48,7 +53,7 @@ test("consent defaults, changes, revocation and version renewal are independent 
   );
   await page.reload();
   await notice.getByRole("button", { name: "Accept all" }).click();
-  await settingsButton.click();
+  await page.getByRole("button", { name: "Cookie settings" }).click();
   await expect(stats).toBeChecked();
   await expect(marketing).toBeChecked();
   await page.keyboard.press("Escape");
@@ -106,6 +111,10 @@ test("only eligible time opens the newsletter and dismissal survives scrolling, 
   await expect(invite).toHaveCount(0);
   await page.clock.fastForward(4_000);
   await expect(invite).toBeVisible();
+  await expect(
+    invite.getByRole("heading", { name: "Room for new ideas." }),
+  ).toBeVisible();
+  await expect(invite.locator(".vn-ticket-stub")).toBeVisible();
   await expect(invite.getByRole("checkbox")).not.toBeChecked();
   await expect(invite.getByRole("textbox")).toBeDisabled();
   await invite.getByRole("button", { name: "Not now" }).click();
@@ -119,6 +128,10 @@ test("only eligible time opens the newsletter and dismissal survives scrolling, 
   expect(before!.x + before!.width).toBeLessThan(
     (await prana.boundingBox())!.x,
   );
+  const cookie = await page
+    .getByRole("button", { name: "Change cookie preferences" })
+    .boundingBox();
+  expect(cookie!.x + cookie!.width).toBeLessThan(before!.x);
   await page.goto("/en/about");
   await expect(dock).toBeVisible();
   await page.reload();
@@ -132,6 +145,26 @@ test("only eligible time opens the newsletter and dismissal survives scrolling, 
   await expect(
     page.getByRole("button", { name: "Nyhetsbrev", exact: true }),
   ).toBeVisible();
+});
+
+test("header and legacy assistant links open the single floating Prana panel", async ({
+  page,
+}) => {
+  await page.goto("/en?assistant=prana&preserve=yes");
+  const panel = page.getByRole("dialog", { name: "VastuNord Prana" });
+  await expect(panel).toBeVisible();
+  await expect(page).toHaveURL(/\/en\?preserve=yes$/);
+  await page.keyboard.press("Escape");
+  await page.reload();
+  await expect(panel).toHaveCount(0);
+  const headerTrigger = page.getByRole("button", {
+    name: "VastuNord Prana",
+    exact: true,
+  });
+  await headerTrigger.click();
+  await expect(panel).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(headerTrigger).toBeFocused();
 });
 
 test("existing dialogs, signup, privacy reading and Studio editing never get an automatic offer", async ({

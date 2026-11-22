@@ -13,10 +13,9 @@ test("global controls preserve the current route, query, language and theme", as
   const norwegian = header.getByRole("button", { name: "NO – Norsk bokmål" });
   await expect(header.locator("#language button")).toHaveText(["NO", "EN"]);
   await expect(norwegian).toHaveAttribute("aria-pressed", "true");
-  await expect(header.getByRole("button", { name: "Dark" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    header.getByRole("button", { name: "Bytt til lyst tema" }),
+  ).toBeVisible();
   await expect(header.locator(".vg-logo-ivory")).toBeVisible();
   await expect(header.locator(".vg-logo-teal")).toBeHidden();
   await english.focus();
@@ -28,22 +27,21 @@ test("global controls preserve the current route, query, language and theme", as
   await expect(
     header.getByRole("link", { name: "Knowledge", exact: true }),
   ).toHaveAttribute("aria-current", "page");
-  await header.getByRole("button", { name: "Light" }).click();
+  await header.getByRole("button", { name: "Switch to light theme" }).click();
   await page.reload();
   await expect(header.locator(".vg-logo-teal")).toBeVisible();
   await expect(header.locator(".vg-logo-ivory")).toBeHidden();
-  await expect(header.getByRole("button", { name: "Light" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await header.getByRole("link", { name: "VastuNord Prana" }).click();
   await expect(
-    page.getByRole("heading", { name: "Vastu Nord Prana" }),
+    header.getByRole("button", { name: "Switch to dark theme" }),
   ).toBeVisible();
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await header.getByRole("button", { name: "VastuNord Prana" }).click();
   await expect(
-    header.getByRole("link", { name: "VastuNord Prana" }),
-  ).toHaveAttribute("aria-current", "page");
+    page.getByRole("dialog", { name: "VastuNord Prana" }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(
+    header.getByRole("button", { name: "VastuNord Prana" }),
+  ).toBeFocused();
   await header.getByRole("link", { name: "Open Studio" }).click();
   await expect(page).toHaveURL(/\/app\/tools\/room-reimagination$/);
   await expect(
@@ -65,8 +63,7 @@ for (const width of [390, 768, 1280, 1440]) {
       for (const name of [
         "EN – English",
         "NO – Norsk bokmål",
-        "Light",
-        "Dark",
+        "Bytt til mørkt tema",
       ]) {
         await expect(
           header.getByRole("button", { name, exact: true }),
@@ -76,7 +73,7 @@ for (const width of [390, 768, 1280, 1440]) {
         header.getByRole("link", { name: "Åpne Studio" }),
       ).toBeInViewport();
       await expect(
-        header.getByRole("link", { name: "VastuNord Prana" }),
+        header.getByRole("button", { name: "VastuNord Prana" }),
       ).toBeInViewport();
       await page.evaluate(() => window.scrollTo(0, 600));
       await expect
@@ -103,7 +100,8 @@ for (const width of [390, 768, 1280, 1440]) {
         await expect(
           menu.getByRole("link", { name: "Om oss" }),
         ).toHaveAttribute("aria-current", "page");
-        await menu.getByRole("link", { name: "Logg inn" }).tap();
+        await page.keyboard.press("Escape");
+        await header.getByRole("link", { name: "Logg inn" }).tap();
         await expect(menu).toBeHidden();
       } else {
         await expect(

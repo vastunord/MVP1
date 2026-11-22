@@ -155,7 +155,7 @@ function About({ locale, t }: PageContext) {
           "Det er lettere å snakke om en forandring når du kan se den. Vi utforsker rom, lys og materialer med utgangspunkt i hjemmet ditt.",
           "A change is easier to discuss when you can see it. We explore space, light and materials with your home as the starting point.",
         )}
-        photo="warm"
+        photo="editorial/about-hero"
       >
         <div className="mp-link-row">
           <Action href="/app/library">
@@ -198,7 +198,7 @@ function About({ locale, t }: PageContext) {
       </Section>
       <Section tone="dark">
         <div className="mp-feature-row">
-          <Photo name="soft-day" />
+          <Photo name="editorial/about-study" />
           <div>
             <p className="mp-kicker">{t("Vår idé", "Our mission")}</p>
             <h2>
@@ -219,6 +219,7 @@ function About({ locale, t }: PageContext) {
       <Workflow t={t} />
       <Audience t={t} />
       <Closing
+        photo="about-close"
         locale={locale}
         title={t(
           "Utforsk mulighetene for ditt rom.",
@@ -278,9 +279,9 @@ function Features({ locale, t }: PageContext) {
     ],
   ];
   const variants = [
-    [t("Dagslys", "Daylight"), "soft-day"],
-    [t("Kveldslys", "Evening light"), "soft-evening"],
-    [t("Salvietoner", "Sage tones"), "soft-moss"],
+    [t("Dagslys", "Daylight"), "editorial/feature-triptych-light"],
+    [t("Kveldslys", "Evening light"), "editorial/feature-triptych-mood"],
+    [t("Salvietoner", "Sage tones"), "editorial/feature-triptych-soft"],
   ];
   return (
     <>
@@ -295,11 +296,11 @@ function Features({ locale, t }: PageContext) {
           "Utforsk hvordan møbler, materialer og dagslys kan forandre rommet, før du bestemmer deg.",
           "Explore the difference furniture, finishes and daylight can make before you decide.",
         )}
-        photo="soft"
+        photo="editorial/feature-hero"
       >
         <div className="mp-link-row">
           <Action href="/app/tools/room-reimagination">
-            {t("Utforsk romverktøyet", "Explore the room editor")}
+            {t("Utforsk Studio", "Explore Studio")}
           </Action>
           <Action href="#variations" secondary>
             {t("Se eksempler", "See examples")}
@@ -322,13 +323,13 @@ function Features({ locale, t }: PageContext) {
               )}
             </p>
           </div>
-          <Photo name="warm" />
+          <Photo name="editorial/feature-materials" />
         </div>
       </Section>
       <Section tone="dark">
         <p className="mp-kicker">{t("Muligheter", "Possibilities")}</p>
         <h2>
-          {t("Ett rom. Flere retninger.", "One room. Different directions.")}
+          {t("Tre stuer. Tre retninger.", "Three living rooms. Three directions.")}
         </h2>
         <div className="mp-triptych">
           {variants.map(([title, name]) => (
@@ -356,7 +357,7 @@ function Features({ locale, t }: PageContext) {
       </Section>
       <Section tone="sand">
         <div className="mp-feature-row">
-          <Photo name="soft-bright" />
+          <Photo name="editorial/feature-application" />
           <div>
             <h2>
               {t(
@@ -378,7 +379,7 @@ function Features({ locale, t }: PageContext) {
       <Section id="variations">
         <h2>{t("Sammenlign uttrykk", "Compare directions")}</h2>
         <div className="mp-variant">
-          <Photo name={variants[variant][1]} />
+          <Photo name="editorial/feature-variant" className={["mk-tone-daylight", "mk-tone-evening", "mk-tone-moss"][variant]} />
         </div>
         <div
           className="mp-pills"
@@ -426,6 +427,7 @@ function Features({ locale, t }: PageContext) {
         </div>
       </Section>
       <Closing
+        photo="feature-close"
         locale={locale}
         title={t(
           "Se på stuen med nye øyne.",
@@ -448,7 +450,7 @@ function Pricing({ locale, t }: PageContext) {
           "Utforsk planoversikten. Denne demonstrasjonen er åpen for utprøving uten kjøp eller abonnement.",
           "Explore the plan overview. This demonstration is open for testing without a purchase or subscription.",
         )}
-        photo="soft-evening"
+        photo="editorial/pricing-hero"
       >
         <Action href="#plans">{t("Se planene", "View plans")}</Action>
       </Hero>
@@ -541,6 +543,7 @@ function Pricing({ locale, t }: PageContext) {
         ]}
       />
       <Closing
+        photo="pricing-close"
         locale={locale}
         title={t(
           "Utforsk Studio i ditt tempo.",
@@ -574,7 +577,7 @@ function Resources({ locale, t }: PageContext) {
           "Finn en idé, utforsk en stil eller lær å bruke verktøyene.",
           "Find inspiration, explore a style or learn your way around the tools.",
         )}
-        photo="warm"
+        photo="editorial/resources-hero"
       >
         <label className="mp-search">
           {t("Søk i ressurser", "Search resources")}
@@ -672,6 +675,7 @@ function Resources({ locale, t }: PageContext) {
         </div>
       </Section>
       <Closing
+        photo="resources-close"
         locale={locale}
         title={t("Gå fra idé til romstudie.", "Take an idea into Studio.")}
       />
@@ -683,8 +687,8 @@ function Contact({ locale, t }: PageContext) {
     [
       t("Produkthjelp", "Product support"),
       t(
-        "Finn hjelp med verktøyene og arbeidsområdet.",
-        "Find help with the tools and workspace.",
+        "Finn hjelp med Studio og verktøyene.",
+        "Find help with Studio and its tools.",
       ),
     ],
     [
@@ -719,7 +723,7 @@ function Contact({ locale, t }: PageContext) {
           "Velg et tema eller finn svar på vanlige spørsmål om Studio.",
           "Choose a topic or find answers to common questions about Studio.",
         )}
-        photo="soft-evening"
+        photo="editorial/contact-hero"
       >
         <Action href="#contact-paths">
           {t("Se kontaktmuligheter", "Explore contact options")}
@@ -798,6 +802,7 @@ function Contact({ locale, t }: PageContext) {
         ]}
       />
       <Closing
+        photo="contact-close"
         locale={locale}
         title={t("Bli kjent med Studio.", "Get to know Studio.")}
       />
@@ -828,7 +833,7 @@ export function MarketingPages({
             caption={categories[article.tags[0]]}
             title={article.name}
             body={article.intro}
-            photo={article.image}
+            photo={article.detailImage}
           >
             <Action href={publicHref("/resources", locale)} secondary>
               {t("Alle guider", "All guides")}

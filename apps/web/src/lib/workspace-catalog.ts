@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n";
+import { homeComparisons } from "./home-comparisons";
 
 export const studies = [
   {
@@ -39,56 +40,25 @@ export const studies = [
   },
 ] as const;
 
-export type StudioSample = (typeof studies)[number];
+export type StudioSample = {
+  id: string;
+  name: readonly [string, string];
+  image: string;
+  sampleAlt: readonly [string, string];
+  sampleTool: string;
+};
 
-export function findStudioSample(value?: string | string[]) {
-  return studies.find((study) => study.id === value);
+export function findStudioSample(value?: string | string[]): StudioSample | undefined {
+  if (typeof value !== "string") return;
+  if (!value.startsWith("hero-")) return studies.find((study) => study.id === value);
+  const scene = homeComparisons.find((item) => "hero-" + item.id === value);
+  if (scene) return { id: value, name: scene.title, image: scene.before, sampleAlt: scene.beforeAlt, sampleTool: "room-reimagination" };
 }
 
 export function studioSampleHref(sample: StudioSample, tool = sample.sampleTool) {
   return `/app/tools/${tool}?sample=${sample.id}`;
 }
 
-export const scenes = [
-  {
-    image: "soft.webp",
-    title: ["Skandinavisk ro", "Quiet Scandinavian"],
-    style: ["Nordisk", "Nordic calm"],
-    study: "fjord",
-  },
-  {
-    image: "warm.webp",
-    title: ["Varme tretoner", "Warm timber edit"],
-    style: ["Organisk", "Organic modern"],
-    study: "fjord",
-  },
-  {
-    image: "soft-evening.webp",
-    title: ["Gyllent kveldslys", "Golden hour"],
-    style: ["Varm minimalisme", "Warm minimal"],
-    study: "fjord",
-  },
-  {
-    image: "soft-moss.webp",
-    title: ["Salvie og stein", "Sage & stone"],
-    style: ["Jordtoner", "Earthy Nordic"],
-    study: "atelier",
-  },
-  {
-    image: "soft-bright.webp",
-    title: ["Åpen planløsning", "Open-plan study"],
-    style: ["Dagslys", "Daylight"],
-    study: "atelier",
-  },
-  {
-    image: "cover.webp",
-    title: ["Vintermorgen", "Soft winter morning"],
-    style: ["Vinterro", "Winter retreat"],
-    study: "cabin",
-  },
-] as const;
-
-export type Scene = (typeof scenes)[number];
 export const translated = (pair: readonly [string, string], locale: Locale) =>
   pair[locale === "en" ? 1 : 0];
 
@@ -131,7 +101,6 @@ export const destinations = [
     title: ["Kunnskapsbase", "Knowledge hub"],
     icon: "book",
   },
-  { group: 1, href: "/app/prana", title: ["Prana", "Prana"], icon: "spark" },
   {
     group: 1,
     href: "/app/budget",

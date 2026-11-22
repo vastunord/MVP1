@@ -28,6 +28,7 @@ Thumbs.db
 *.pem
 *.key
 assets/Visuals/
+assets/BeforeAfter/
 apps/web/src/generated/prisma/
 credentials/
 secrets/
