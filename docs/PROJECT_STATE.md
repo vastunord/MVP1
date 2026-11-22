@@ -4,6 +4,8 @@
 
 Added a private project-render gallery with comparison, download, loading, retry and empty states. It reads completed jobs through the existing authenticated, project-owner-checked API; tool-specific history continues to include active jobs. Local synthetic browser tests exercise comparison and failure/retry states, and isolated PostgreSQL tests verify owner-scoped history and denial. These checks do not establish that the existing MNML proof has been attached.
 
+The tested application changes from `a048c9d` are available on protected Preview `dpl_GzHakS8X5WLC3uZHW12MepzUrNKY` at https://vastunord-80fwuwv96-vastu-nord.vercel.app. This diagnostic build also includes an account- and Preview-pinned synthetic proof attachment helper with the corrected project idempotency key. Anonymous application requests to the private-asset and render-history endpoints returned 401; the specific proof asset has not been attached, so its live retrieval is unverified. New paid submissions remain disabled.
+
 The owner reports that `contact@vastu.no` has been recovered and signed in. The Codex in-app browser does not share that session and still shows Vercel sign-in. No recovery or verification email was resent. Live attachment, gallery, comparison, post-login reopening and anonymous denial remain pending an authenticated shared browser. The second-user live check remains independent. No additional MNML render was requested.
 
 ## 22 November 2026 · MNML single-user continuation
