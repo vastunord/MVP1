@@ -4,8 +4,10 @@ import { cookies, headers } from "next/headers";
 import { getSessionCookie } from "better-auth/cookies";
 import type { Metadata } from "next";
 import { Header } from "@/components/header";
+import { CookieNotice } from "@/components/visitor-overlays";
 import { Marketing, Footer, publicPages } from "@/components/marketing";
 import { AuthScreen } from "@/components/auth-screens";
+import { privacyTitle } from "@/components/privacy-notice";
 import { authReadiness, verifiedSessionUserId } from "@/server/auth-readiness";
 import { messages, publicHref, type Locale, type MessageKey } from "@/lib/i18n";
 type Props = { params: Promise<{ path?: string[] }> };
@@ -26,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title:
       article?.name ??
-      (page && page in t ? t[page as MessageKey] : "Vastu Nord"),
+      (page === "privacy" ? privacyTitle(locale) : page && page in t ? t[page as MessageKey] : "Vastu Nord"),
     description: article?.intro ?? t.intro,
     alternates: {
       languages: {
@@ -84,6 +86,7 @@ export default async function Page({ params }: Props) {
         authReady={authState.ready}
         signedIn={signedIn}
       />
+      <CookieNotice locale={locale} />
       {authPage ? (
         <AuthScreen
           locale={locale}

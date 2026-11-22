@@ -9,8 +9,8 @@ import "./home-photo-hero.css";
 
 const scenes = [
   [
-    "Originalfoto / kveldstone",
-    "Original photo / evening tone",
+    "Lysstudie · samme stue",
+    "Lighting study · same living room",
     "Et nytt blikk på stuen.",
     "Reimagine your living room.",
   ],
@@ -28,6 +28,8 @@ const scenes = [
   ],
 ] as const;
 
+const comparisonPosition = 71;
+
 export function HomePhotoHero({
   locale,
   uploadsEnabled,
@@ -38,9 +40,22 @@ export function HomePhotoHero({
   const en = locale === "en";
   const t = (nb: string, english: string) => (en ? english : nb);
   const [index, setIndex] = useState(0);
-  const [split, setSplit] = useState(71);
+  const [split, setSplit] = useState(comparisonPosition);
   const sample = studies[index];
   const scene = scenes[index];
+  const sampleEntry = {
+    href: studioSampleHref(sample),
+    label: t("Prøv dette bildet", "Try this sample"),
+  };
+  const editorEntry = {
+    href: "/app/tools/room-reimagination#source-image",
+    label: uploadsEnabled
+      ? t("Last opp ditt bilde", "Upload your photo")
+      : t("Åpne romeditoren", "Open room editor"),
+  };
+  const [primary, secondary] = uploadsEnabled
+    ? [editorEntry, sampleEntry]
+    : [sampleEntry, editorEntry];
   const move = (direction: number) =>
     setIndex((i) => (i + direction + studies.length) % studies.length);
 
@@ -89,10 +104,37 @@ export function HomePhotoHero({
                 "Compare room lighting",
               )}
               aria-valuetext={t(
-                `Originalfoto ${split} prosent, resten kveldstone`,
-                `Original photo ${split} percent, remainder evening tone`,
+                `Før: ${split} prosent originalfoto. Etter: ${100 - split} prosent kveldstone.`,
+                `Before: ${split} percent original photo. After: ${100 - split} percent evening tone.`,
               )}
             />
+            <div
+              className="photo-hero-views"
+              role="group"
+              aria-label={t("Vis lysstudien", "View the lighting study")}
+            >
+              <button
+                type="button"
+                aria-pressed={split === 100}
+                onClick={() => setSplit(100)}
+              >
+                {t("Før · original", "Before · original")}
+              </button>
+              <button
+                type="button"
+                aria-pressed={split > 0 && split < 100}
+                onClick={() => setSplit(comparisonPosition)}
+              >
+                {t("Sammenlign", "Compare")}
+              </button>
+              <button
+                type="button"
+                aria-pressed={split === 0}
+                onClick={() => setSplit(0)}
+              >
+                {t("Etter · kveldstone", "After · evening tone")}
+              </button>
+            </div>
           </>
         )}
         <div className="photo-hero-veil" />
@@ -113,13 +155,9 @@ export function HomePhotoHero({
             )}
           </p>
           <div className="photo-hero-actions">
-            <Action href="/app/tools/room-reimagination#source-image">
-              {uploadsEnabled
-                ? t("Last opp ditt bilde", "Upload your photo")
-                : t("Åpne romeditoren", "Open room editor")}
-            </Action>
-            <Action secondary href={studioSampleHref(sample)}>
-              {t("Prøv dette bildet", "Try this sample")}
+            <Action href={primary.href}>{primary.label}</Action>
+            <Action secondary href={secondary.href}>
+              {secondary.label}
             </Action>
           </div>
         </div>

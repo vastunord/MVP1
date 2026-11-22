@@ -8,9 +8,21 @@ test("home study controls and transformation directions lead into the Studio", a
     page.getByRole("heading", { name: "See what’s possible." }),
   ).toBeVisible();
   const lighting = page.getByRole("slider", { name: "Compare room lighting" });
+  const views = page.getByRole("group", { name: "View the lighting study" });
+  await views.getByRole("button", { name: "After · evening tone" }).click();
+  await expect(lighting).toHaveValue("0");
+  await views.getByRole("button", { name: "Before · original" }).click();
+  await expect(lighting).toHaveValue("100");
+  await views.getByRole("button", { name: "Compare", exact: true }).click();
+  await expect(
+    views.getByRole("button", { name: "Compare", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   await lighting.focus();
   await page.keyboard.press("End");
   await expect(lighting).toHaveValue("100");
+  await expect(
+    views.getByRole("button", { name: "Before · original" }),
+  ).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "Next study" }).click();
   await expect(
     page.getByRole("heading", { name: "Explore texture and depth." }),
@@ -45,6 +57,9 @@ test("a selected public study remains the source when reopening or switching too
   });
   await page.goto("/en");
   const hero = page.locator(".photo-hero");
+  await expect(hero.locator(".photo-hero-actions a").first()).toHaveText(
+    /Try this sample/,
+  );
   await hero.getByRole("button", { name: "The Atelier Apartment" }).click();
   await hero.getByRole("link", { name: "Try this sample" }).click();
   await expect(page).toHaveURL(
@@ -106,6 +121,9 @@ test("the Norwegian photo entry works on a narrow screen with private uploads cl
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   const hero = page.locator(".photo-hero");
+  await expect(
+    hero.getByRole("group", { name: "Vis lysstudien" }),
+  ).toBeInViewport();
   await expect(
     hero.getByRole("link", { name: "Last opp ditt bilde" }),
   ).toHaveCount(0);

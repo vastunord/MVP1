@@ -11,6 +11,7 @@ test("global controls preserve the current route, query, language and theme", as
   const header = page.getByRole("banner");
   const english = header.getByRole("button", { name: "EN – English" });
   const norwegian = header.getByRole("button", { name: "NO – Norsk bokmål" });
+  await expect(header.locator("#language button")).toHaveText(["NO", "EN"]);
   await expect(norwegian).toHaveAttribute("aria-pressed", "true");
   await expect(header.getByRole("button", { name: "Dark" })).toHaveAttribute(
     "aria-pressed",

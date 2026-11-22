@@ -1,5 +1,13 @@
 # Vastu Nord — current project handoff (living document)
 
+## V7 Phase 01 · visitor experience
+
+The updated Phase 01 brief supersedes the earlier homepage-only instructions. The shared navigation, fixed Prana launcher, three-tab panel, bilingual privacy notice, consent settings, delayed marketing invitation and persistent newsletter tab are implemented. The hero includes direct image-state controls alongside its slider. Its approved fallback shows daylight and evening in the same living room. The requested empty and furnished pair still requires scoped publication rights. [Design matrix](FIGMA_TO_ROUTE_MATRIX.md) · [Cookie and newsletter behavior](COOKIE_NEWSLETTER_INTERACTION.md)
+
+Newsletter enrollment is gated to a configured Development context. The Hobby demo keeps collection closed. No database migration or campaign was run on a cloud environment in this increment.
+
+The isolated PostgreSQL and local browser checks passed for confirmation, duplicate handling, simulated delivery failure, retry, withdrawal and suppressed re-enrollment. Sender delivery and newsletter persistence in the actual cloud environment still need a separately authorized test. [Service configuration](ENVIRONMENT_VARIABLE_INVENTORY.md)
+
 ## V7 Phase 00 · 22 November 2026
 
 **Live noncommercial demo.** Vercel marked application commit `a550e02` READY and assigned it to [vastunord-web.vercel.app](https://vastunord-web.vercel.app). The [deployment record](https://vercel.com/vastu-nord/vastunord-web/Gdmdz94uY1kK9PE8e1Yo6GCpbVtR) identifies the existing Vastu Nord project and Production alias.

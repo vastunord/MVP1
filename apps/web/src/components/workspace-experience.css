@@ -37,15 +37,13 @@
   object-fit: cover;
 }
 .xp-room-layout,
-.xp-account,
-.xp-prana {
+.xp-account {
   display: grid;
   gap: clamp(1rem, 2vw, 1.75rem);
   grid-template-columns: minmax(0, 2.25fr) minmax(230px, 1fr);
 }
 .xp-panel,
 .xp-guide,
-.xp-prana,
 .xp-account-card,
 .xp-scenarios button {
   border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
@@ -311,21 +309,6 @@
   margin: 0;
   padding: 0 1rem 1.2rem;
 }
-.xp-prana {
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
-  overflow: hidden;
-  gap: 0;
-}
-.xp-prana-picture {
-  position: relative;
-  min-height: 23rem;
-}
-.xp-prana-content {
-  padding: clamp(1.3rem, 3.3vw, 3.5rem);
-}
-.xp-prana-content section {
-  margin-top: 2.4rem;
-}
 .xp-field {
   margin-bottom: 1.2rem;
 }
@@ -405,13 +388,9 @@
   }
 }
 @media (max-width: 700px) {
-  .xp-prana,
   .xp-account,
   .xp-scenarios {
     grid-template-columns: 1fr;
-  }
-  .xp-prana-picture {
-    min-height: 13rem;
   }
   .xp-scenarios button {
     display: flex;

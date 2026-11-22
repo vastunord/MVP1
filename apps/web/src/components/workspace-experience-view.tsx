@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import type { Locale } from "@/lib/i18n";
+import { PranaPanel } from "./prana-panel";
 import type { ExperienceRoute } from "./workspace-experience";
 import {
   guides,
@@ -281,107 +282,6 @@ function Knowledge({ t }: ViewProps) {
   );
 }
 
-const pranaModes = [
-  ["AI-konsultasjon", "AI Consultation"],
-  ["Raske tips", "Quick Tips"],
-  ["Film", "Film"],
-] as const;
-function Prana({ t }: ViewProps) {
-  const [mode, setMode] = useState(0);
-  const [guide, setGuide] = useState(0);
-  const item = guides[guide];
-  return (
-    <>
-      <Heading
-        title="Vastu Nord Prana"
-        description={t(
-          "Utforsk hvordan lys, materialer og bevegelse former rommet ditt.",
-          "Explore how light, materials and movement shape your space.",
-        )}
-      />
-      <div className="xp-prana">
-        <div className="xp-prana-picture">
-          <ReferencePhoto
-            image={mode === 1 ? item.image : "soft-evening"}
-            priority
-          />
-        </div>
-        <div className="xp-prana-content">
-          <div
-            className="xp-pills"
-            role="group"
-            aria-label={t("Prana-visning", "Prana view")}
-          >
-            {pranaModes.map((m, i) => (
-              <button
-                type="button"
-                key={m[1]}
-                aria-pressed={mode === i}
-                onClick={() => setMode(i)}
-              >
-                {t(m[0], m[1])}
-              </button>
-            ))}
-          </div>
-          {mode === 0 && (
-            <section>
-              <h2>{t("AI-konsultasjon", "AI Consultation")}</h2>
-              <p>
-                {t(
-                  "Personlig konsultasjon er utilgjengelig i demonstrasjonen. Begynn med et tips om rommet ditt.",
-                  "Personal consultation is unavailable in this demonstration. Start with a design tip for your space.",
-                )}
-              </p>
-              <button className="button" onClick={() => setMode(1)}>
-                {t("Utforsk tips", "Explore tips")} →
-              </button>
-            </section>
-          )}
-          {mode === 1 && (
-            <section>
-              <label className="xp-field">
-                <span id="prana-topic-label">
-                  {t("Velg tema", "Choose a topic")}
-                </span>
-                <select
-                  aria-labelledby="prana-topic-label"
-                  value={guide}
-                  onChange={(e) => setGuide(Number(e.target.value))}
-                >
-                  {guides.map((g, i) => (
-                    <option key={g.id} value={i}>
-                      {t(g.topic[0], g.topic[1])}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <h2>{t(item.title[0], item.title[1])}</h2>
-              <p>{t(item.body[0], item.body[1])}</p>
-              <Link className="xp-text-link" href="/app/knowledge">
-                {t("Se alle guider", "Browse guides")} →
-              </Link>
-            </section>
-          )}
-          {mode === 2 && (
-            <section>
-              <h2>{t("Filmbibliotek", "Film library")}</h2>
-              <p>
-                {t(
-                  "Ingen filmer er publisert her ennå. Utforsk den guidede romstudien bilde for bilde.",
-                  "No films have been published here yet. Explore the guided room study one image at a time.",
-                )}
-              </p>
-              <Link className="button" href="/app/home-experience">
-                {t("Åpne boligopplevelsen", "Open Home Experience")} →
-              </Link>
-            </section>
-          )}
-        </div>
-      </div>
-    </>
-  );
-}
-
 const scenarios = [
   { name: ["Enkel oppfriskning", "Essential refresh"], amount: 95000 },
   { name: ["Balansert oppussing", "Balanced redesign"], amount: 185000 },
@@ -569,7 +469,18 @@ export function ExperienceView({
       body = <Knowledge t={t} />;
       break;
     case "prana":
-      body = <Prana t={t} />;
+      body = (
+        <>
+          <Heading
+            title="Vastu Nord Prana"
+            description={t(
+              "Utforsk hvordan lys, materialer og bevegelse former rommet ditt.",
+              "Explore how light, materials and movement shape your space.",
+            )}
+          />
+          <PranaPanel locale={locale} fullPage />
+        </>
+      );
       break;
     case "budget":
       body = <Budget t={t} locale={locale} />;

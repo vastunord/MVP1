@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+## 22 November 2026 · v7 Phase 01 visitor experience
+
+- Added a shared, keyboard-accessible Prana panel, inline cookie notice, editable first-party preferences, bilingual privacy page and a delayed newsletter that minimizes to a persistent lower-left tab.
+- Preserved the official lockups and typography, placed NO before EN, and added direct Before/Compare/After controls and a Studio sample entry to the existing hero. The published image states are explicitly identified as a lighting study.
+- Added gated double opt-in, consent records, localized confirmation and withdrawal, rate limits and duplicate/suppression handling. Public Hobby signup stays closed. [Behavior and service boundaries](COOKIE_NEWSLETTER_INTERACTION.md)
+
 ## 22 November 2026 · v7 brand, navigation and photo entry
 
 - Released `a550e02` to [the noncommercial public demo](https://vastunord-web.vercel.app). Vercel deployment `dpl_Gdmdz94uY1kK9PE8e1Yo6GCpbVtR` reached READY. TypeScript, lint, production build, 23 unit tests and 28 browser tests passed.

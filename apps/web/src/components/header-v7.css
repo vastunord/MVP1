@@ -114,6 +114,10 @@
   position: relative;
   outline-offset: 2px;
 }
+.vg-segment button:focus-visible {
+  z-index: 1;
+  outline: 2px solid var(--focus);
+}
 .vg-create {
   min-height: 44px;
   gap: 0.5rem;

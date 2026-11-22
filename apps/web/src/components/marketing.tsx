@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { messages, publicHref, type Locale } from "@/lib/i18n";
 import { MarketingHome } from "./marketing-home";
+import { CookieSettingsButton } from "./visitor-overlays";
+import { PrivacyNotice } from "./privacy-notice";
 import { MarketingPages } from "./marketing-pages";
 import { readServerConfig } from "@/server/config";
 import "./marketing-v5.css";
@@ -12,6 +14,7 @@ export const publicPages = [
   "pricing",
   "resources",
   "contact",
+  "privacy",
   "login",
   "signup",
   "forgot-password",
@@ -31,7 +34,9 @@ export function Marketing({
 }) {
   return (
     <main id="main" className="mk-site">
-      {page ? (
+      {page === "privacy" ? (
+        <PrivacyNotice locale={locale} />
+      ) : page ? (
         <MarketingPages locale={locale} page={page} authReady={authReady} />
       ) : (
         <MarketingHome
@@ -93,6 +98,10 @@ export function Footer({ locale }: { locale: Locale }) {
               ))}
             </div>
           ))}
+        </div>
+        <div className="vn-footer-privacy">
+          <Link href={publicHref("/privacy", locale)}>{locale === "en" ? "Privacy and cookies" : "Personvern og informasjonskapsler"}</Link>
+          <CookieSettingsButton locale={locale} />
         </div>
         <small>{t.foundation}</small>
       </div>

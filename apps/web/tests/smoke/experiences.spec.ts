@@ -44,7 +44,7 @@ test("knowledge and Prana offer local reading and accessible empty states", asyn
   await expect(
     main.getByRole("heading", { name: "Plass til å bevege seg" }),
   ).toBeVisible();
-  await main.getByRole("button", { name: "Film", exact: true }).click();
+  await main.getByRole("tab", { name: "Film", exact: true }).click();
   await expect(main.getByText(/Ingen filmer er publisert/)).toBeVisible();
 });
 

@@ -7,6 +7,26 @@ datasource db {
   provider = "postgresql"
 }
 
+// A newsletter address has a separate consent lifecycle from a user account.
+model NewsletterSubscriber {
+  id String @id @db.Uuid
+  email String @unique
+  locale String
+  consentVersion String
+  source String
+  requestedAt DateTime
+  lastAttemptAt DateTime?
+  confirmedAt DateTime?
+  unsubscribedAt DateTime?
+}
+
+model NewsletterRateBucket {
+  key String @id
+  count Int
+  expiresAt DateTime
+  @@index([expiresAt])
+}
+
 enum WorkspaceRole {
   OWNER
   MEMBER

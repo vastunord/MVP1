@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "test:newsletter-db": "node --experimental-strip-types --test tests/newsletter-postgres.mjs",
     "test:smoke": "playwright test"
   },
   "dependencies": {

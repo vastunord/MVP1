@@ -126,6 +126,36 @@
   outline: 3px solid var(--paper);
   outline-offset: 3px;
 }
+.photo-hero-views {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: clamp(0.85rem, 2vw, 1.8rem);
+  inset-inline-end: var(--photo-gutter);
+  display: inline-flex;
+  max-width: calc(100% - 2 * var(--photo-gutter));
+  padding: 3px;
+  background: color-mix(in srgb, var(--photo-shadow) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--paper) 48%, transparent);
+  border-radius: 0.45rem;
+}
+.photo-hero-views button {
+  min-height: 44px;
+  padding: 0.3rem clamp(0.42rem, 1.1vw, 0.95rem);
+  color: var(--paper);
+  background: transparent;
+  border: 0;
+  border-radius: 0.25rem;
+  font-size: clamp(0.63rem, 1vw, 0.75rem);
+  font-weight: 550;
+  line-height: 1.3;
+}
+.photo-hero-views button:hover {
+  background: color-mix(in srgb, var(--paper) 15%, transparent);
+}
+.photo-hero-views button[aria-pressed="true"] {
+  background: var(--paper);
+  color: var(--ink);
+}
 .photo-hero-rail {
   display: flex;
   align-items: center;
@@ -228,6 +258,20 @@
     max-width: 38ch;
   }
 }
+@media (min-width: 601px) and (max-width: 800px) {
+  .photo-hero-veil {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--photo-shadow) 92%, transparent),
+      color-mix(in srgb, var(--photo-shadow) 75%, transparent) 45%,
+      color-mix(in srgb, var(--photo-shadow) 46%, transparent) 66%,
+      transparent 88%
+    );
+  }
+  .photo-hero-deck {
+    max-width: min(38ch, 55vw);
+  }
+}
 @media (max-width: 600px) {
   .photo-hero-stage {
     min-height: 520px;
@@ -276,7 +320,7 @@
     bottom: 57%;
   }
   .photo-hero-line b {
-    top: 44%;
+    top: 57%;
   }
   .photo-hero-stage input.photo-hero-range {
     height: 43%;
@@ -288,6 +332,13 @@
   }
   .photo-hero-current {
     flex: 1 1 142px;
+  }
+  /* The initial consent notice can place these arrows next to the fixed launcher. */
+  body:has(.vn-cookie-notice) .photo-hero-rail {
+    padding-inline-end: calc(7.3rem + env(safe-area-inset-right));
+  }
+  body:has(.vn-cookie-notice) .photo-hero-current {
+    flex-basis: 6.5rem;
   }
   .photo-hero-nav {
     gap: 0.25rem;

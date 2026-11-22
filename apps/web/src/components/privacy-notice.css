@@ -1,0 +1,31 @@
+.vn-privacy {
+  max-width: 57rem;
+  padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.25rem, 5vw, 3.5rem);
+  margin-inline: auto;
+  color: var(--text);
+}
+.mk-site .vn-privacy h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  letter-spacing: -0.055em;
+  line-height: 1.08;
+  margin: 0 0 1.1rem;
+  overflow-wrap: anywhere;
+}
+.mk-site .vn-privacy h2 {
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  line-height: 1.25;
+  margin: 0 0 0.5rem;
+}
+.vn-privacy section {
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+.vn-privacy p {
+  max-width: 66ch;
+  margin: 0.6rem 0;
+}
+.vn-privacy a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}

@@ -69,7 +69,7 @@ function Preferences({ locale, theme }: { locale: Locale; theme: Theme }) {
         id="language"
         tabIndex={-1}
       >
-        {(["en", "nb-NO"] as const).map((language) => (
+        {(["nb-NO", "en"] as const).map((language) => (
           <button
             key={language}
             type="button"

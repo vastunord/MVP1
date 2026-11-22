@@ -12,6 +12,7 @@ Checked 2026-11-21. Owner: Vastu Nord. Names and statuses only; never record val
 | BETTER_AUTH_URL | Canonical auth origin | CONFIGURED for local testing | Derived from validated VERCEL_URL | MISSING until actual assigned HTTPS deployment origin exists |
 | AUTH_ENABLED | Production authentication gate | Not required | Not required | CONFIGURED false |
 | AUTH_EMAIL_PROVIDER, AUTH_EMAIL_FROM, RESEND_API_KEY | Transactional email | CONFIGURED; controlled live signup passed | CONFIGURED; delivery UNVERIFIED | CONFIGURED approved sender and domain-scoped key; delivery UNVERIFIED |
+| NEWSLETTER_ENABLED, NEWSLETTER_TOKEN_SECRET | Development-only double opt-in and signed management links. Reuses the approved Resend sender, application database and canonical origin. | OFF by default. Template only. Dedicated signing key, reviewed newsletter migration and controlled integration test pending. | DISABLED in code | DISABLED in code for the noncommercial demo |
 | BLOB_STORE_ID, VERCEL_OIDC_TOKEN | Private Blob and server identity | VERIFIED private store and synthetic tests | CONFIGURED separate private store; live use UNVERIFIED | CONFIGURED separate private store and association; live use UNVERIFIED |
 | BLOB_READ_WRITE_TOKEN | Alternative static Blob credential | OPTIONAL-DEFERRED; OIDC used | OPTIONAL-DEFERRED | OPTIONAL-DEFERRED; OIDC used |
 | MEDIA_UPLOADS_ENABLED | Private uploads | CONFIGURED true; tested | CONFIGURED; live use UNVERIFIED | CONFIGURED false |
