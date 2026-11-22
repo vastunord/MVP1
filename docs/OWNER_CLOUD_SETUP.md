@@ -3,7 +3,7 @@
 **Consolidated Production setup checklist:**
 
 1. Before public business use, move the Vastu Nord Vercel team to a commercial-eligible plan; no upgrade or charges are authorized automatically.
-2. In the Vastu Nord Neon console select Production branch br-wild-unit-bhin6sli, database neondb, role vastunord_prod_runtime and the pooled connection. In Vercel vastu-nord / vastunord-web / Settings / Environment Variables, replace Production-only DATABASE_URL as a sensitive secret. Do not share the URL or password in chat. Then verify the actual runtime connection through an approved secret-safe mechanism.
+2. The Production build for `0a99e002adc9` rejected the configured database target before connecting. In Vastu Nord Neon select the Frankfurt Production branch `br-wild-unit-bhin6sli`, database `neondb`, role `vastunord_prod_runtime` and connection pooling. The expected pool host is `ep-shiny-block-bhmlplzm-pooler.c-10.eu-central-1.aws.neon.tech`. In Vercel, replace only the Production `DATABASE_URL` server secret using the provider's TLS URL. Repeat the protected build check before any migration or public service test.
 3. Provide inspectable access to approved Figma frames and assets, or approved exports, so marketing route parity can be established.
 
 The assigned HTTPS origin is configured in Production. Before opening accounts, establish a protected Production-only migration handoff and recovery plan, then verify email delivery, account isolation and private Blob using synthetic data. Use the consolidated [owner actions](OWNER_ACTIONS_ONE_LIST.md) and [environment inventory](ENVIRONMENT_VARIABLE_INVENTORY.md).

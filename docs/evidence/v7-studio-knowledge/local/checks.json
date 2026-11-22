@@ -1,0 +1,96 @@
+{
+  "origin": "http://127.0.0.1:3100",
+  "checkedAt": "2026-11-22T14:25:51.810Z",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "decodedFaqIllustrations": 12,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 800,
+      "decodedFaqIllustrations": 12,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "decodedFaqIllustrations": 12,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "decodedFaqIllustrations": 12,
+      "overflow": false
+    }
+  ],
+  "editors": [
+    "/app/tools/room-reimagination",
+    "/app/tools/virtual-home-staging",
+    "/app/tools/outdoor-visualization",
+    "/app/tools/hardscape-design",
+    "/app/tools/furniture-refresh",
+    "/app/tools/seasonal-styling",
+    "/app/tools/visual-cleanup",
+    "/app/tools/resolution-enhancement",
+    "/app/tools/perspective-correction",
+    "/app/tools/decor-redefinition",
+    "/app/tools/material-refinement",
+    "/app/tools/lighting-reimagination",
+    "/app/tools/garden-design",
+    "/app/tools/pool-redesign",
+    "/app/tools/sky-transformation",
+    "/app/tools/seasonal-transformation",
+    "/app/tools/object-placement"
+  ],
+  "articles": [
+    {
+      "route": "/resources/place-exercise-equipment-outside-the-walking-line",
+      "image": "/reference/studies/00277f947db765.webp"
+    },
+    {
+      "route": "/en/resources/place-exercise-equipment-outside-the-walking-line",
+      "image": "/reference/studies/00277f947db765.webp"
+    },
+    {
+      "route": "/resources/give-two-washstands-a-shared-line-of-sight",
+      "image": "/reference/studies/6e294e80cb2d9e.webp"
+    },
+    {
+      "route": "/en/resources/give-two-washstands-a-shared-line-of-sight",
+      "image": "/reference/studies/6e294e80cb2d9e.webp"
+    },
+    {
+      "route": "/resources/balance-art-light-with-the-glow-outside",
+      "image": "/reference/studies/e75fd2712711b6.webp"
+    },
+    {
+      "route": "/en/resources/balance-art-light-with-the-glow-outside",
+      "image": "/reference/studies/e75fd2712711b6.webp"
+    }
+  ],
+  "closedServices": {
+    "/api/auth/get-session": 503,
+    "/api/account": 503,
+    "/api/projects": 503,
+    "/api/assets/demo-read-only/download": 503,
+    "/api/studio/renders?projectId=public-demo": 503,
+    "/api/prana": 503
+  },
+  "galleryTools": 17,
+  "screenshots": [
+    "faq-1440.png",
+    "home-1440.png",
+    "home-1024.png",
+    "home-768.png",
+    "faq-390.png",
+    "home-390.png",
+    "studio-options-390.png",
+    "studio-room-1440.png",
+    "study-1440.png"
+  ],
+  "fontFailures": []
+}

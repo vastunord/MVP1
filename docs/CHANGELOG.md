@@ -2,6 +2,7 @@
 
 ## 22 November 2026 · Studio workflows, Prana and illustrated Knowledge Hub
 
+- Deployed `0a99e002adc9` to the [assigned noncommercial site](https://vastunord-web.vercel.app). A protected check rejected the existing Production database configuration and skipped the connection. The normal application refuses an unexpected target. [Verification record](evidence/v7-studio-knowledge/README.md)
 - Revised the homepage sequence, section links and illustrated FAQs. Added a gallery-to-editor handoff for all 17 tools, workspace menu descriptions and on-demand comparison.
 - Added 500 Norwegian and English visual studies with original observations, exercises, palettes, light analysis and distinct illustrated covers. Recorded each source and derivative. [Image register](KNOWLEDGE_STUDY_IMAGES.csv)
 - Implemented capped, server-side OpenAI consultations and MNML v2 render jobs, including private result handling and independent video activation. Added tests for cost controls, isolation and failure states. Provider acceptance requires protected Development keys and an approved test budget.

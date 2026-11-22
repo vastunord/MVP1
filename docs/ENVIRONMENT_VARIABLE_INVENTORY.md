@@ -6,7 +6,7 @@ Updated 22 November 2026. Vastu Nord owns the configurations below. Status refer
 
 | Name / configuration | Purpose | Development | Preview (optional) | Production |
 |---|---|---|---|---|
-| DATABASE_URL | Neon pooled application connection | VERIFIED development endpoint; temporary development owner role | CONFIGURED, owner confirmed branch/role; runtime UNVERIFIED | UNVERIFIED existing secret; replace with restricted Production runtime connection before use |
+| DATABASE_URL | Neon pooled application connection | VERIFIED development endpoint; temporary development owner role | CONFIGURED, owner confirmed branch/role; runtime UNVERIFIED | BLOCKED. The actual Production build failed the expected pool/database/role/TLS check and skipped connecting. Current target undisclosed. |
 | DIRECT_DATABASE_URL | Migration connection; protected context only | Separate protected development helper | OPTIONAL-DEFERRED | MISSING protected Production migration handoff |
 | BETTER_AUTH_SECRET | Session signing | CONFIGURED; live Development tested | CONFIGURED, distinct; not deployed | CONFIGURED, distinct strong secret; runtime UNVERIFIED |
 | BETTER_AUTH_URL | Canonical auth origin | CONFIGURED for local testing | Derived from validated VERCEL_URL | CONFIGURED for the assigned HTTPS site. Live sign-in remains closed. |
@@ -31,4 +31,4 @@ Updated 22 November 2026. Vastu Nord owns the configurations below. Status refer
 | VASTUNORD_CMS_PUBLIC_ORIGIN | Web app's read-only published journal origin | Optional. Cloud CMS unavailable | Unconfigured | Unconfigured. Keep absent until dedicated CMS is verified |
 | Payments and social publishing | Separate founder decisions | Deferred | Deferred | Disabled |
 
-Production application schema is absent. The separate Production role passed a provider-backed read-only identity check; the Vercel runtime mapping and application authorization remain unverified. Resend domain verification and Blob association do not prove delivery or object access. See [owner setup](OWNER_CLOUD_SETUP.md) and [deployment plan](DEPLOYMENT_PLAN.md).
+Neon identifies the Frankfurt Production branch as `br-wild-unit-bhin6sli`, direct endpoint `ep-shiny-block-bhmlplzm`, database `neondb` and restricted role `vastunord_prod_runtime`. On 22 November the protected Vercel build for `0a99e002adc9` rejected the existing Production connection configuration before opening a socket. The previous provider inspection found no application schema. Replace only the Production secret with the restricted role's pooled TLS URL, then verify the protected build check and separately qualify account and media operations. [Owner setup](OWNER_CLOUD_SETUP.md) · [Deployment plan](DEPLOYMENT_PLAN.md)

@@ -2,6 +2,8 @@
 
 ## 22 November 2026 · Studio, Knowledge Hub and launch preparation
 
+Application commit `0a99e002adc9` is on the [Vastu Nord noncommercial demo](https://vastunord-web.vercel.app). Vercel marked deployment `dpl_HMXJBbuSXgDzs8a9YeQ2kucJqojW` ready. Web and CMS builds, TypeScript, ESLint, 44 web unit tests and 41 browser tests passed. The protected Production build rejected the existing database configuration before connection. Customer accounts, uploads, AI and newsletter collection remain closed. [Release verification](evidence/v7-studio-knowledge/README.md)
+
 The homepage uses an edge-triggered photo sequence, keeps section 01 with a direct Studio link, and offers 12 illustrated questions. In the gallery, each of 50 scenes opens directly in any of the 17 editors. Studio starts with a single image and offers comparison on request. The workspace navigation explains the purpose of each destination. The Knowledge Hub now includes 500 new illustrated bilingual studies alongside its five existing guides. [Studies and image provenance](KNOWLEDGE_STUDY_IMAGES.csv)
 
 Prana has a real server-side OpenAI integration with short, topic-limited responses, polite redirection and daily usage limits. Studio has an authenticated MNML v2 job path for private inputs and results with idempotency, bounded operation counts and separate video activation. Both were exercised with isolated services. A live funded answer or render awaits provider credentials, an approved spend limit and the appropriate database schema. [AI integration](AI_AND_WORKERS.md)

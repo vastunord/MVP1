@@ -2,7 +2,7 @@
 
 ## Studio and Knowledge Hub release
 
-The new candidate includes edge-triggered homepage photo changes, 12 illustrated FAQs, a single-photo Studio start, 17 gallery-to-editor handoffs and 500 bilingual visual studies. Prana and rendering provider paths are implemented behind server-side gates. The commercial release checklist records sign-off, provider funding, tested cloud dependencies and the hosting decision. [Release checklist](RELEASE_CHECKLIST.md) · [Owner actions](../OWNER_ACTIONS_ONE_LIST.md)
+Application commit `0a99e002adc9` is live at the [Vastu Nord demo](https://vastunord-web.vercel.app), deployment `dpl_HMXJBbuSXgDzs8a9YeQ2kucJqojW`. It includes edge-triggered homepage photo changes, 12 illustrated FAQs, a single-photo Studio start, 17 gallery-to-editor handoffs and 500 bilingual visual studies. Prana and rendering provider paths are implemented behind server-side gates. The build rejected the configured Production database mapping before connecting. [Release evidence](../evidence/v7-studio-knowledge/README.md) · [Commercial checklist](RELEASE_CHECKLIST.md) · [Owner actions](../OWNER_ACTIONS_ONE_LIST.md)
 
 ## Previous windowed comparison release
 
