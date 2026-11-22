@@ -37,7 +37,7 @@ async function handle(request: Request, write: boolean) {
     const actor = { userId: ctx.userId, workspaceId: space.id };
     if (!write)
       return Response.json(
-        await projectJobs(ctx.db, actor, id, query.get("toolId") ?? ""),
+        await projectJobs(ctx.db, actor, id, query.get("toolId") || undefined),
         { headers: privateHeaders },
       );
     if (input.action === "status") {

@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+## 22 November 2026 · Private saved-render gallery
+
+- Added a project-scoped private render gallery with original/result comparison, download, empty, loading and retry states. Tool-specific job history is preserved; cross-tool gallery queries include completed results only and retain ownership checks.
+- The owner reports the contact account is recovered and signed in, but its session is not shared with the Codex browser. The synthetic result remains unattached pending a shared authenticated session; live two-user testing remains separate. No new MNML request or account email was sent.
+- Local browser coverage used synthetic mocked responses; database-backed local tests covered project ownership and job filtering. Live Preview verification is still pending.
+
 ## 22 November 2026 · MNML single-user test continuation
 
 - Separated the saved-render owner journey from optional second-user isolation and added local regression checks. The diagnostic harness preserves successful checkpoints and existing test data.

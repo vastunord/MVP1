@@ -4,6 +4,7 @@ import Link from "next/link";
 import { tools } from "@vastunord/contracts/tools";
 import { StudioChoices } from "./studio-choices";
 import { PrivateUpload } from "./private-upload";
+import { PrivateRenderGallery } from "./private-render-gallery";
 import { useRef, useState, useSyncExternalStore } from "react";
 import type { Locale } from "@/lib/i18n";
 import { studies, translated } from "@/lib/workspace-catalog";
@@ -218,6 +219,9 @@ export function Gallery({
             />
           )}
         </section>
+      )}
+      {!publicCollection && !assets && privateFilesEnabled && (
+        <PrivateRenderGallery locale={locale} />
       )}
       {!publicCollection && assets && (
         <h2 className="vn-section-heading">

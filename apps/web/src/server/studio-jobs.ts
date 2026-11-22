@@ -19,6 +19,7 @@ type Actor = { userId: string; workspaceId: string };
 function status(row: RenderJob): RenderStatus {
   return {
     id: row.id,
+    toolId: row.toolId,
     state: row.state,
     sourceAssetId: row.sourceAssetId,
     outputAssetId: row.state === "SUCCEEDED" ? row.outputAssetId : null,
@@ -198,13 +199,13 @@ export async function projectJobs(
   db: PrismaClient,
   actor: Actor,
   projectId: string,
-  toolId: string,
+  toolId?: string,
 ) {
   const rows = await db.renderJob.findMany({
     where: {
       workspaceId: actor.workspaceId,
       projectId,
-      toolId,
+      ...(toolId ? { toolId } : { state: "SUCCEEDED" }),
       requestHash: { not: null },
       project: {
         archivedAt: null,

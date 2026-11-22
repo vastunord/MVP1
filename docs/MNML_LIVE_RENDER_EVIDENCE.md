@@ -1,5 +1,9 @@
 # MNML live render evidence
 
+## Private gallery continuation — 22 November 2026
+
+The owner reports recovery and successful sign-in for the verified contact account. The Codex in-app browser shows Vercel sign-in rather than that authenticated session; the existing synthetic proof has not yet been attached. The private gallery now requests completed project jobs through the existing authenticated ownership checks and presents comparison and download controls. Synthetic local browser tests and isolated PostgreSQL authorization tests passed; real Blob attachment, image display and post-login reopening remain unverified. No recovery email or paid provider request was sent in this continuation.
+
 ## Single-user continuation — 22 November 2026
 
 `apps/web/scripts/test-preview-mnml-journey.mjs` separates the owner workflow from the optional second-user stage. It uses protected process environment credentials, creates only a named synthetic project with a UUID idempotency key, and does not submit a provider request or delete test data. Stage checkpoints precede the independent isolation result. Unit tests cover stage independence and preserving owner evidence; an isolated PostgreSQL test covers authorization and persistence. Neither substitutes for the live journey.

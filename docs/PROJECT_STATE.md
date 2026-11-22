@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · Private saved-render gallery
+
+Added a private project-render gallery with comparison, download, loading, retry and empty states. It reads completed jobs through the existing authenticated, project-owner-checked API; tool-specific history continues to include active jobs. Local synthetic browser tests exercise comparison and failure/retry states, and isolated PostgreSQL tests verify owner-scoped history and denial. These checks do not establish that the existing MNML proof has been attached.
+
+The owner reports that `contact@vastu.no` has been recovered and signed in. The Codex in-app browser does not share that session and still shows Vercel sign-in. No recovery or verification email was resent. Live attachment, gallery, comparison, post-login reopening and anonymous denial remain pending an authenticated shared browser. The second-user live check remains independent. No additional MNML render was requested.
+
 ## 22 November 2026 · MNML single-user continuation
 
 The live test harness now separates the owner journey from optional cross-user isolation. A missing second account no longer prevents the owner stage, and completed checkpoints are reported before a later failure. Existing synthetic data is not deleted by the harness. Local stage tests and the isolated PostgreSQL ownership/persistence test passed; these are not evidence of a live attachment.

@@ -54,6 +54,7 @@ export interface RenderSelection {
 
 export interface RenderStatus {
   id: string;
+  toolId: string;
   state: "QUEUED" | "RUNNING" | "FAILED" | "CANCELLED" | "SUCCEEDED";
   sourceAssetId: string | null;
   outputAssetId: string | null;

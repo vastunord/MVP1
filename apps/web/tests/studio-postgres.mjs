@@ -228,6 +228,9 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       await projectJobs(db, wrongUser, "pa", "room-reimagination"),
       [],
     );
+    assert.deepEqual(await projectJobs(db, wrongUser, "pa"), []);
+    assert.deepEqual(await projectJobs(db, actor, "pa"), []);
+    assert.equal((await projectJobs(db, actor, "pa", "room-reimagination"))[0].state, "RUNNING");
     await assert.rejects(
       syncJob(db, "fixture", wrongUser, "pa", input.id, io),
       /unavailable/,
@@ -238,6 +241,11 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     );
     const done = await syncJob(db, "fixture", actor, "pa", input.id, io);
     assert.equal(done.state, "SUCCEEDED");
+    assert.ok(
+      (await projectJobs(db, actor, "pa")).some(
+        (row) => row.id === input.id && row.toolId === "room-reimagination",
+      ),
+    );
     assert.equal(
       (await syncJob(db, "fixture", actor, "pa", input.id, io)).outputAssetId,
       done.outputAssetId,
