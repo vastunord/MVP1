@@ -222,8 +222,10 @@ export async function mnmlRequest(
   });
   if (!response.ok) {
     throw new RenderError(
-      [402, 403, 429].includes(response.status) ? response.status : 502,
-      "The rendering provider could not complete this request",
+      response.status === 401 ? 503 : [402, 403, 429].includes(response.status) ? response.status : 502,
+      response.status === 401
+        ? "The rendering provider rejected its credentials"
+        : "The rendering provider could not complete this request",
       [400, 401, 402, 403, 404, 422, 429].includes(response.status),
     );
   }

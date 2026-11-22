@@ -1,0 +1,15 @@
+# MNML live render evidence
+
+The replacement Preview API key passed `GET /v2/account` and `GET /v2/engines`. MNML accepted one synthetic interior job, ID `674349`, with engine `v4.5-fast`. The job succeeded and reported a charge of USD 0.099. The provider result was copied to the dedicated private Preview Blob store, read back and validated as a 2528 × 1696 WebP. This diagnostic did not use or create a project record. Project persistence, a Studio comparison and reopening remain unverified until the Preview migration and grants are available.
+
+The automated approval review rejected a read-only direct connection attempt using the inherited development-named role because Preview requires a separate migration credential. No connection was attempted and no migration was applied. The previously approved Preview runtime remains restricted. A separate Preview-only migration role and protected direct connection with ownership of the Preview migration history and RenderJob are required.
+
+Before enabling Studio submission, implement and verify the requested noncommercial beta generation cap. The single proof's fixed idempotency key prevented duplicate requests, but it is not a reusable account-wide cap. Keep unsupported and unverified workflows closed until their provider capabilities have been checked.
+
+On 22 November 2026, the protected Vastu Nord Preview build checked the existing server-only `MNMLAPI` credential using read-only requests. Both `GET /v2/account` and `GET /v2/engines` returned HTTP 401. The response did not establish the account's wallet balance, engine availability or mode support. No render was submitted and no charge occurred.
+
+The official API pricing page lists v4.5 Fast at USD 0.099 per image. A single test is authorized up to USD 1, provided the API reports an available engine, a matching current price and sufficient prepaid API balance. [MNML pricing](https://developers.mnml.ai/docs/pricing)
+
+The actual deployed Preview build verified the restricted runtime connection to the `vastunord-preview-02e3` branch `br-summer-night-bh70tetr`. The Preview runtime catalog shows the existing RenderJob table has seven columns and no runtime SELECT, INSERT or UPDATE grants. The reviewed additive Studio migration adds the provider ID, source and output references, request hash, media type and cost fields. Both the additive migration and narrow runtime grants are required for project persistence. The first two recorded migrations must not be rerun.
+
+The independent provider diagnostic lives in `scripts/mnml-build-probe.mjs`. It makes only read-only account and engine requests and prints sanitized metadata. A temporary protected Preview build ran it with the existing server-side secret. The one-off synthetic render is recorded in `scripts/mnml-live-proof.mjs`. It must not be rerun, because the authorization covers one render only.

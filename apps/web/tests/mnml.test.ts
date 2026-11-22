@@ -13,6 +13,7 @@ import {
   submitRender,
   checkRender,
   signedOutput,
+  RenderError,
 } from "../src/server/mnml.ts";
 const input = {
   id: "19272b7a-989a-4229-a98d-984065cee206",
@@ -190,6 +191,18 @@ test("One provider submission sends explicit private input and reuses the stable
       )
     ).id,
     "23",
+  );
+});
+test("a provider credential rejection is a confirmed failure without leaking response details", async () => {
+  await assert.rejects(
+    submitRender("fixture", parseRender(input), "data:image/png;base64,test", [], async () =>
+      new Response("sensitive provider response", { status: 401 }),
+    ),
+    (error: unknown) =>
+      error instanceof RenderError &&
+      error.status === 503 &&
+      error.confirmedRejection &&
+      !error.message.includes("sensitive"),
   );
 });
 test("Provider job status and private output URLs stay bound to the requested MNML job", async () => {

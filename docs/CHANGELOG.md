@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+## 22 November 2026 · MNML provider check
+
+- Retested the replacement MNML key successfully. One synthetic v4.5 Fast interior render, job `674349`, succeeded for USD 0.099 and was copied to private Preview Blob. Project persistence requires the Preview-only migration role and narrow grants.
+
+- Added a read-only protected-build provider diagnostic. MNML returned 401 for both account and engine requests, so no funded render was attempted. Verified the Preview branch, existing RenderJob columns and missing runtime grants. [Evidence](MNML_LIVE_RENDER_EVIDENCE.md)
+
 ## 22 November 2026 · Studio and Google setup
 
 - Published the VN-1 selector to [protected Preview](https://vastunord-jxvj6rsoa-vastu-nord.vercel.app). Google appears on its sign-in page. Four Studio browser checks and nine provider tests passed. The Google callback and live rendering are unverified.

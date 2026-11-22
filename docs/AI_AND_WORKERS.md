@@ -2,6 +2,17 @@
 
 ## Implemented provider paths
 
+### MNML capability status
+
+| Workflow | Provider contract | Live account status | Release status |
+|---|---|---|---|
+| Room Reimagination and Virtual Home Staging, image to interior | `POST /v2/renders` with `mode=interior` | TESTED independently with one synthetic image and v4.5 Fast. | BLOCKED pending Preview persistence and Studio end-to-end verification. |
+| Other interior, exterior, landscape and plan workflows | Documented render modes, account capabilities unverified | NOT TESTED | Future validation. |
+| Edits, masks and enhancement workflows | Separate provider operations | NOT TESTED | Future validation. |
+| Video walkthrough | Separate video operation | NOT TESTED | Out of scope for the authorized single-image proof. |
+
+The 17 Studio routes remain available. The existing backend can construct requests for more workflows, but these mappings have not been established as live capabilities of the configured account. The current Preview schema and runtime role keep rendering disabled.
+
 Prana and Studio’s brief improvement use the same Groq server credential. The Groq chat API returns a structured domain classification and up to three short sentences. The app returns a localized redirect for abusive, unrelated and unsafe questions. Only the text the visitor submits and public guidance enter a consultation. Visitors explicitly accept a suggested brief before it replaces their text. Groq sets usage limits. [Groq structured outputs](https://console.groq.com/docs/structured-outputs)
 
 Studio submits to MNML v2 only for an authenticated user with an authorized project and explicit image-processing consent. The job stores an idempotency key, input references, provider job ID and private output metadata. Prana V1 is the interface label for the five render levels. MNML account limits apply. Fulfilment requires the render migration and appropriate table access. [MNML API](https://developers.mnml.ai/docs) · [Configuration](ENVIRONMENT_VARIABLE_INVENTORY.md)

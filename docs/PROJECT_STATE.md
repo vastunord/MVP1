@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · MNML provider proof
+
+The owner replaced the key after the initial 401. Account and engine discovery then passed. One authorized synthetic interior job `674349` succeeded at USD 0.099. Its result was written to private Preview Blob, retrieved and decoded successfully. The Preview migration and project association remain blocked by the missing separate Preview migration role. Automated approval rejected using the development-named role on Preview; no migration was attempted. [Provider evidence](MNML_LIVE_RENDER_EVIDENCE.md)
+
+The protected Preview build verified the configured database identity. The initial `MNMLAPI` value returned HTTP 401 for read-only account and engine checks. The replacement credential resolved that provider blocker. The Preview RenderJob table lacks the seven additive provider fields and the restricted runtime role lacks RenderJob access. [Provider evidence](MNML_LIVE_RENDER_EVIDENCE.md)
+
 ## 22 November 2026 · Studio model and Google configuration in progress
 
 Protected Preview [20bc8cd](https://vastunord-jxvj6rsoa-vastu-nord.vercel.app) is ready. Its sign-in page displays Google after the Preview client ID, enable flag and existing secret were configured. A full OAuth callback is unverified. The Studio build and four editor browser checks passed. All 17 workflow thumbnail files exist.
