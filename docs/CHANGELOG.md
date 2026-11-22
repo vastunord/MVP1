@@ -2,6 +2,8 @@
 
 ## 22 November 2026 · Studio and Google setup
 
+- Published the VN-1 selector to [protected Preview](https://vastunord-jxvj6rsoa-vastu-nord.vercel.app). Google appears on its sign-in page. Four Studio browser checks and nine provider tests passed. The Google callback and live rendering are unverified.
+
 - Replaced the model tiles with the VN-1 selector, hid Palette, added three selection images and supported the existing Google secret variable. Google sign-in and MNML generation remain pending end-to-end verification.
 
 ## 22 November 2026 · Development journey updates

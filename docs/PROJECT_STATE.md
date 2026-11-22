@@ -2,6 +2,8 @@
 
 ## 22 November 2026 · Studio model and Google configuration in progress
 
+Protected Preview [20bc8cd](https://vastunord-jxvj6rsoa-vastu-nord.vercel.app) is ready. Its sign-in page displays Google after the Preview client ID, enable flag and existing secret were configured. A full OAuth callback is unverified. The Studio build and four editor browser checks passed. All 17 workflow thumbnail files exist.
+
 The editor now presents the VN-1 levels as a model selector, hides Palette and supplies imagery for the sketch, plan and hallway choices. Google sign-in can read the server-only `GoogleOauth` secret when explicitly enabled. The Google client ID is configured for Preview. Google callbacks and an authenticated sign-in still need verification.
 
 MNML rendering requires the reviewed render migration and runtime permissions. The existing Development migration credential failed authentication and Preview requires a separate protected migration credential. Contact submissions, conversation persistence and an authorized reporting dashboard remain to be implemented and verified.
