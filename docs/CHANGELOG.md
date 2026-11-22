@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+## 22 November 2026 · Windowed homepage and Studio image controls
+
+- Moved the comparison beside the headline on desktop and below it on mobile. Removed the tint, scene labels and over-image toolbar. The divider moves slowly until hovered. Image pairs continue rotating independently.
+- Removed the Today/Reimagined footer labels from Studio comparisons. Tone choices show the current scene and Room Reimagination offers three editable, illustrated room briefs.
+- Recorded commercial launch requirements and the evidence needed for each customer-facing service. [Release checklist](go-live/RELEASE_CHECKLIST.md)
+
 ## 22 November 2026 · Phase 01 design revision
 
 - Released application commit `d1af4d8` to the existing Vastu Nord noncommercial demo. [Live visual evidence](evidence/v7-visuals-refresh/README.md)

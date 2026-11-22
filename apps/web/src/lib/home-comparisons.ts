@@ -2,6 +2,7 @@
 export const homeComparisons = [
   {
     "id": "city-living",
+    "aspectRatio": 1668 / 943,
     "before": "/media/hero/city-living-before.webp",
     "after": "/media/hero/city-living-after.webp",
     "title": [
@@ -19,6 +20,7 @@ export const homeComparisons = [
   },
   {
     "id": "forest-living",
+    "aspectRatio": 1536 / 1024,
     "before": "/media/hero/forest-living-before.webp",
     "after": "/media/hero/forest-living-after.webp",
     "title": [
@@ -36,6 +38,7 @@ export const homeComparisons = [
   },
   {
     "id": "vaulted-living",
+    "aspectRatio": 1536 / 1024,
     "before": "/media/hero/vaulted-living-before.webp",
     "after": "/media/hero/vaulted-living-after.webp",
     "title": [
@@ -53,6 +56,7 @@ export const homeComparisons = [
   },
   {
     "id": "white-villa",
+    "aspectRatio": 1536 / 1024,
     "before": "/media/hero/white-villa-before.webp",
     "after": "/media/hero/white-villa-after.webp",
     "title": [
@@ -70,6 +74,7 @@ export const homeComparisons = [
   },
   {
     "id": "forest-garage",
+    "aspectRatio": 1536 / 1024,
     "before": "/media/hero/forest-garage-before.webp",
     "after": "/media/hero/forest-garage-after.webp",
     "title": [
@@ -87,6 +92,7 @@ export const homeComparisons = [
   },
   {
     "id": "compact-living",
+    "aspectRatio": 1672 / 941,
     "before": "/media/hero/compact-living-before.webp",
     "after": "/media/hero/compact-living-after.webp",
     "title": [
@@ -104,6 +110,7 @@ export const homeComparisons = [
   },
   {
     "id": "courtyard-spa",
+    "aspectRatio": 1672 / 941,
     "before": "/media/hero/courtyard-spa-before.webp",
     "after": "/media/hero/courtyard-spa-after.webp",
     "title": [
@@ -121,6 +128,7 @@ export const homeComparisons = [
   },
   {
     "id": "open-plan",
+    "aspectRatio": 1668 / 943,
     "before": "/media/hero/open-plan-before.webp",
     "after": "/media/hero/open-plan-after.webp",
     "title": [
@@ -138,6 +146,7 @@ export const homeComparisons = [
   },
   {
     "id": "stone-bath",
+    "aspectRatio": 1668 / 943,
     "before": "/media/hero/stone-bath-before.webp",
     "after": "/media/hero/stone-bath-after.webp",
     "title": [
@@ -155,6 +164,7 @@ export const homeComparisons = [
   },
   {
     "id": "bedroom-alcove",
+    "aspectRatio": 1668 / 943,
     "before": "/media/hero/bedroom-alcove-before.webp",
     "after": "/media/hero/bedroom-alcove-after.webp",
     "title": [
@@ -172,6 +182,7 @@ export const homeComparisons = [
   },
   {
     "id": "timber-loft",
+    "aspectRatio": 1535 / 1024,
     "before": "/media/hero/timber-loft-before.webp",
     "after": "/media/hero/timber-loft-after.webp",
     "title": [

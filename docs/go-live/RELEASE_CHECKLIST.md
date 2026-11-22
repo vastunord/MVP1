@@ -1,4 +1,32 @@
-# Demo release checks
+# Commercial launch checklist
+
+The existing Vercel site is a noncommercial demonstration. Development has passed signup, email verification, sign-in with the original password, project persistence, two-user isolation and private Blob tests. All 17 Studio editors are available for demonstration. The steps below cover the work between that baseline and a commercial release. Record the release commit and dated evidence for each enabled feature in the [release state](GO_LIVE_STATE.md).
+
+## Before the first commercial page goes live
+
+- [ ] **Founder — choose the first release.** Identify which pages and customer journeys will open, the business contact responsible for them, and the maximum hosting/provider spend. The assigned Vercel address can remain the canonical address. A custom domain requires separate DNS approval.
+- [ ] **Founder and release lead — change hosting eligibility.** Move the Vastu Nord team to a commercial-eligible plan before business promotion or customer acquisition, enable spend alerts and confirm the existing project still belongs to that team. Keep future customer billing separate from the hosting purchase. [Vercel commercial-use policy](https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage)
+- [ ] **Design and editorial — clear what visitors will see.** Compare the released Norwegian and English routes with approved full-size Figma exports at desktop, tablet and phone widths. Close broken destinations or remove their links, verify each CTA end to end, and secure commercial-use rights for the actual photos, before/after pairs, typefaces and films used. Remove unsupported prices, testimonials and product claims. [Figma route matrix](../FIGMA_TO_ROUTE_MATRIX.md)
+- [ ] **Business and privacy owner — approve public information and data handling.** Publish accurate operator/contact, privacy and applicable service terms in both languages. Review processors, transfers, retention, erasure requests and incident contacts for each feature collecting data. Test that optional tracking waits for consent and visitors can refuse or withdraw it using the cookie control. [Datatilsynet cookie guidance](https://www.datatilsynet.no/personvern-pa-ulike-omrader/internett-og-apper/bruk-av-informasjonskapsler-og-andre-sporingsteknologier/)
+- [ ] **Engineering and release lead — qualify the release.** Run the checks below against the release candidate. Verify keyboard, screen reader, reduced motion, theme contrast, mobile performance, canonical URLs, language alternates, sitemap and crawl rules. Probe disabled endpoints anonymously. Assign monitoring and support owners, test uptime and error alerts, check redacted logs, and rehearse restoring the previous compatible deployment. Record the approved feature flags and verify them again on the public alias.
+
+## Before opening accounts, projects or private photos
+
+1. **Database and operations.** Replace the temporary Development owner connection with a restricted runtime account. Supply the separate restricted Production runtime connection to Vercel, verify its database, branch and role from the actual runtime, and keep migration secrets outside the app. Establish a protected Production migration runner, agree backup retention and recovery targets, and demonstrate recovery to an isolated database. The earlier development clone proves cloning only. Obtain approval for reviewed Production migrations, verify their history and schema, and test scoped access. Preview is optional and requires a verified separate mapping if used. [Environment inventory](../ENVIRONMENT_VARIABLE_INVENTORY.md)
+2. **Accounts and projects.** Set Better Auth's canonical HTTPS origin. With controlled inboxes and separately authorized Production credentials, verify signup, actual Resend delivery in both languages, verification, sign-in, logout, recovery, token expiry and session invalidation. Demonstrate project creation, rename, archive, restore and deletion. Prove anonymous and cross-user requests cannot list or change another customer's records. Open registration only after these checks pass. [Auth and security](../AUTH_AND_SECURITY.md)
+3. **Private media.** Verify Production Blob identity and server access, scoped upload, file type/size validation, private retrieval after sign-in, two-user denial and deletion with synthetic images. Configure protected reconciliation, test partial upload failures and orphan cleanup, and verify retention and retrieval after recovery. Enable uploads only after the database and account gates pass. [Owner setup](../OWNER_CLOUD_SETUP.md)
+
+## Before advertising each additional capability
+
+| Capability | Remaining work and acceptance evidence |
+|---|---|
+| Real Studio rendering | Approve provider, models, data-processing terms and spend limits. Start with one image tool, then qualify each advertised tool against representative inputs. Verify private inputs/outputs, durable jobs, quotas, timeout, retry, cancellation, duplicate requests and cost alerts. Verify supported video workflows separately. [AI and workers](../AI_AND_WORKERS.md) |
+| Newsletter | Validate the reviewed newsletter migration, signing secret and delivery to controlled Development inboxes. Add and verify authorized Production support, including consent records, confirmation, rate limits, unsubscribe and suppression. Enable collection after the hosting and privacy gates pass. [Newsletter records](../COOKIE_NEWSLETTER_INTERACTION.md) |
+| Editorial content, public gallery and social | Implement Payload editorial roles, drafts and publishing for the Knowledge Hub where included. Verify per-asset commercial rights, opt-in, editorial approval and withdrawal. Require independent consent for each social destination and test the manual process before featuring it publicly. [Content and consent](../CONTENT_AND_CONSENT.md) |
+| Prana | Review Quick Tips and secure rights to the selected films. Before opening consultation, verify the approved model, budget, privacy handling and failure states. Publish only the tabs with approved, working content. |
+| Payments | Deferred to a separate owner-approved phase. Before charging, approve prices, taxes, customer terms and refunds, then test payment, authenticated webhooks, idempotency, cancellation, receipts and reconciliation. A free commercial release can precede checkout. |
+
+## Routine demo and release checks
 
 1. Confirm the checkout, Git remote, Vastu Nord Vercel scope and linked `vastunord-web` project. Stage tracked application sources from the tested commit.
 2. Check wordmark proportions, palette, upright/italic font delivery, English/Norwegian controls, both themes, keyboard navigation and Prana entry.

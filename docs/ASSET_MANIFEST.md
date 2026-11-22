@@ -2,13 +2,14 @@
 
 ## Current demo placements
 
-The owner supplied 11 paired scenes in `assets/BeforeAfter/` and approved use of the local Visuals collection on the noncommercial Vastu Nord site. The [placement register](VISUALS_PLACEMENTS.csv) binds each displayed scene to a specific original, SHA-256, public derivative, maximum width and WebP quality. The [full source inventory](VISUALS_ASSET_MANIFEST.csv) carries the limited site use for the 155 selected Visuals files. New uses, including social publishing, have their own approval process.
+The owner supplied 11 paired scenes in `assets/BeforeAfter/` and approved use of the local Visuals collection on the noncommercial Vastu Nord site. Each displayed scene has a recorded original, SHA-256, public derivative, maximum width and WebP quality. The source inventory records the limited site use of the 158 selected Visuals files. New uses, including social publishing, have their own approval process. [Placement register](VISUALS_PLACEMENTS.csv) · [Source inventory](VISUALS_ASSET_MANIFEST.csv)
 
 | Placement | Unique originals | Selection and display |
 |---|---:|---|
 | Homepage comparisons | 22 | The owner’s 11 before/after pairs. Visual review identified B as the before and A as the after, including the irregularly named `03-B` source. The first pair shows a Scandinavian living room. Other pairs include a bedroom, bathrooms, garage and villa exterior. Several before frames already contain furniture. |
 | Render gallery | 50 | A stable shuffled selection of still renders, reviewed for subject, labels and duplicates. The grid requests 520 px thumbnails. Opening a photo shows the larger version of the same selected scene. Both sizes are static. Captions and subject filters are bilingual. |
 | Studio tools | 34 | Each of the 17 tools has an individual 720 px card and a separate editor reference, chosen by subject. Studio compares visual treatments of its selected reference within the same canvas. |
+| Room briefs | 3 | Three 240 px photographs show a timber meditation room, a daylight family kitchen and a fireplace seating area. Each belongs to one editable Room Reimagination brief. |
 | Other site photography | 71 | Separate images for marketing sections, articles, Studio project and album covers, the room tour, files and guides. Related assets use distinct compositions. A selected photo follows the visitor through its own preview or into Studio. |
 
 The homepage and Studio images are illustrative studies. Original camera files, metadata, video files and the full source folders are excluded from release archives. To validate all derivatives, run `python scripts/verify_display_media.py` with Pillow available. On an authorized checkout containing the originals, add `--sources` to check every original hash. When replacing a photograph, review its subject, source permission and possible duplicates, then update its row, derivative and localized caption together.

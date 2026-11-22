@@ -1,4 +1,5 @@
 import { visibleControls, type Control, type ToolDefinition } from "@vastunord/contracts/tools";
+import Image from "next/image";
 import type { Locale } from "@/lib/i18n";
 import "./room-settings.css";
 
@@ -27,8 +28,11 @@ const bokmal: Record<string, string> = {
   People: "Personer", Many: "Mange", Annotations: "Bildetekst", "Remove text": "Fjern tekst",
   "Output ratio": "Bildeformat", Seed: "Startverdi", "Room details": "Romdetaljer",
   "Camera and light": "Kamera og lys", "Output settings": "Bildeinnstillinger",
-  "Design direction": "Designretning", "Quiet retreat": "Rolig fristed",
-  "Family living": "Familieliv", "Social space": "Sosialt rom",
+  "Start with a room brief": "Velg et romkonsept",
+  "Forest stillness": "Skogens ro", "Everyday rhythm": "Hverdagsrytme", "By the hearth": "Rundt ildstedet",
+  "Window light and pale timber": "Vinduslys og lyst tre",
+  "Open space for family life": "Åpen plass til familieliv",
+  "Full seating in the evening light": "Flere sitteplasser i kveldslys",
   Random: "Tilfeldig", "New random seed": "Ny tilfeldig startverdi",
   "Time of day": "Tid på døgnet", "Site context": "Omgivelser", Greenery: "Vegetasjon",
   Vehicles: "Kjøretøy", "Numbered location pins": "Nummererte plasseringsmerker",
@@ -38,9 +42,12 @@ export function roomLabel(label: string, locale: Locale) {
 }
 
 const directions = [
-  { name: "Quiet retreat", values: { style: "Japandi", furnishing: "Minimal", plants: "A few", lighting: "Window light", safe: false } },
-  { name: "Family living", values: { style: "Scandinavian", furnishing: "Balanced", plants: "A few", lighting: "Layered", safe: true } },
-  { name: "Social space", values: { style: "Modern luxury", furnishing: "Full", plants: "Lush", lighting: "Layered", safe: false } },
+  { name: "Forest stillness", photo: "forest-stillness", detail: "Window light and pale timber",
+    values: { style: "Japandi", furnishing: "Minimal", plants: "A few", lighting: "Window light", palette: "Pale oak", time: "Soft daylight", safe: false } },
+  { name: "Everyday rhythm", photo: "everyday-rhythm", detail: "Open space for family life",
+    values: { style: "Scandinavian", furnishing: "Balanced", plants: "A few", lighting: "Layered", palette: "Sea glass", time: "As photographed", safe: true } },
+  { name: "By the hearth", photo: "by-the-hearth", detail: "Full seating in the evening light",
+    values: { style: "Scandinavian", furnishing: "Full", plants: "A few", lighting: "Layered", palette: "Ember", time: "Golden hour", safe: false } },
 ] as const;
 
 function RoomField({ control, locale, value, change }: {
@@ -66,7 +73,7 @@ function RoomField({ control, locale, value, change }: {
         onClick={() => change(crypto.getRandomValues(new Uint32Array(1))[0])}>⤨</button>
     </div>
   );
-  if (["room", "style", "palette"].includes(control.id)) return (
+  if (["room", "style", "palette", "medium"].includes(control.id)) return (
     <label className="room-select">
       {title}
       <select value={String(value)} onChange={(event) => change(event.target.value)}>
@@ -74,18 +81,14 @@ function RoomField({ control, locale, value, change }: {
       </select>
     </label>
   );
-  const medium = control.id === "medium";
   return (
     <fieldset className="room-choices">
       <legend>{title}</legend>
-      <div className={medium ? "room-media-grid" : "room-chip-list"}>
+      <div className="room-chip-list">
         {control.options?.map((option) => (
-          <label key={option} className={medium ? "room-medium" : "room-chip"}>
+          <label key={option} className="room-chip">
             <input type="radio" aria-label={roomLabel(option, locale)} name={"room-" + control.id} value={option}
               checked={value === option} onChange={() => change(option)} />
-            {medium && <span aria-hidden="true" data-medium={option} className="room-material-art">
-              <i className="material-slab" /><i className="material-arch" /><i className="material-sphere" />
-            </span>}
             <span>{roomLabel(option, locale)}</span>
           </label>
         ))}
@@ -105,29 +108,37 @@ export function RoomSettings({ tool, values, locale, update }: {
   });
   return (
     <section className="inspector-group room-settings" id="room-settings" aria-label={locale === "en" ? "Room design settings" : "Innstillinger for romdesign"}>
-      {fields("medium")}
+      <fieldset className="room-choices">
+        <legend>{roomLabel("Start with a room brief", locale)}</legend>
+        <div className="room-directions">{directions.map(direction => {
+          const selected = Object.entries(direction.values).every(([id, value]) => values[id] === value);
+          return (
+            <button type="button" key={direction.photo} aria-pressed={selected}
+              onClick={() => update(direction.values)}>
+              <Image src={"/media/briefs/" + direction.photo + ".webp"} alt="" unoptimized width={112} height={80} />
+              <span className="room-direction-copy">
+                <strong>{roomLabel(direction.name, locale)}</strong>
+                <small>{roomLabel(direction.detail, locale)}</small>
+              </span>
+              {selected && <span className="room-direction-check" aria-hidden="true">✓</span>}
+            </button>
+          );
+        })}</div>
+      </fieldset>
       <div className="room-selects">{fields("room", "style")}</div>
-      <details className="room-drawer" open>
+      <details className="room-drawer">
         <summary>{roomLabel("Camera and light", locale)}</summary>
         <div>{fields("camera", "viewpoint", "time", "lighting")}</div>
       </details>
       <details className="room-drawer">
         <summary>{roomLabel("Room details", locale)}</summary>
         <div>
-          <fieldset className="room-choices">
-            <legend>{roomLabel("Design direction", locale)}</legend>
-            <div className="room-directions">{directions.map(direction =>
-              <button type="button" key={direction.name}
-                aria-pressed={Object.entries(direction.values).every(([id, value]) => values[id] === value)}
-                onClick={() => update(direction.values)}>{roomLabel(direction.name, locale)}</button>
-            )}</div>
-          </fieldset>
           {fields("palette", "furnishing", "plants", "accessories", "floor", "safe", "people", "markings")}
         </div>
       </details>
       <details className="room-drawer">
         <summary>{roomLabel("Output settings", locale)}</summary>
-        <div>{fields("ratio", "seed")}</div>
+        <div>{fields("medium", "ratio", "seed")}</div>
       </details>
     </section>
   );

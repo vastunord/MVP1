@@ -8,6 +8,14 @@ test("studio sample tones, accessible comparison and independent editor settings
     name: "Sammenlign før og etter",
   });
   await expect(comparison).toHaveValue("46");
+  await expect(page.locator(".sample-stage")).not.toContainText(/Today|Reimagined/);
+  const variants = page.getByRole("group", { name: "Eksempeltoner" });
+  const tonePhotos = variants.locator("img");
+  await expect(tonePhotos).toHaveCount(4);
+  for (const img of await tonePhotos.all()) {
+    await expect(img).toHaveAttribute("src", "/media/canvas/room-reimagination.webp");
+    await img.evaluate(photo => (photo as HTMLImageElement).decode());
+  }
   await comparison.focus();
   await comparison.press("ArrowRight");
   await expect(comparison).toHaveValue("47");
@@ -24,25 +32,42 @@ test("studio sample tones, accessible comparison and independent editor settings
   await expect(page.locator(".primary-action button")).toBeDisabled();
 });
 
-test("room design settings combine keyboard-accessible media, camera and editable design directions", async ({ page }) => {
+test("photographic room briefs apply editable settings and preserve all nine output media", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/app/tools/room-reimagination");
   const design = page.getByRole("region", { name: "Innstillinger for romdesign" });
-  const media = design.getByRole("group", { name: "Bildestil" });
-  await expect(media.getByRole("radio")).toHaveCount(9);
-  await media.getByRole("radio", { name: "Fotografi" }).focus();
-  await page.keyboard.press("ArrowRight");
-  await expect(media.getByRole("radio", { name: "Leirmodell" })).toBeChecked();
+  const briefs = design.getByRole("group", { name: "Velg et romkonsept" });
+  const photos = briefs.locator("img");
+  await expect(photos).toHaveCount(3);
+  const sources = new Set<string>();
+  for (const photo of await photos.all()) {
+    await photo.scrollIntoViewIfNeeded();
+    sources.add(await photo.evaluate(async el => {
+      const image = el as HTMLImageElement;
+      await image.decode();
+      if (image.naturalWidth < 100) throw new Error("Room brief image did not load");
+      return image.src;
+    }));
+  }
+  expect(sources.size).toBe(3);
+  const family = briefs.getByRole("button", { name: /Hverdagsrytme/ });
+  await family.focus();
+  await page.keyboard.press("Enter");
+  await expect(family).toHaveAttribute("aria-pressed", "true");
+  await design.getByText("Kamera og lys", { exact: true }).click();
   await expect(design.getByRole("group", { name: "Synsvinkel" })).toHaveCount(0);
   await design.getByRole("radio", { name: "Nytt utsnitt" }).check();
   await design.getByRole("radio", { name: "Lav vinkel" }).check();
   await design.getByText("Romdetaljer", { exact: true }).click();
-  await design.getByRole("button", { name: "Familieliv" }).click();
   await expect(design.getByLabel("Barnevennlig innredning")).toBeChecked();
   await expect(design.getByRole("combobox", { name: "Interiørstil", exact: true })).toHaveValue("Scandinavian");
   await design.getByRole("group", { name: "Planter" }).getByRole("radio", { name: "Frodig" }).check();
-  await expect(design.getByRole("button", { name: "Familieliv" })).toHaveAttribute("aria-pressed", "false");
+  await expect(family).toHaveAttribute("aria-pressed", "false");
   await design.getByText("Bildeinnstillinger", { exact: true }).click();
+  const media = design.getByRole("combobox", { name: "Bildestil" });
+  await expect(media.locator("option")).toHaveCount(9);
+  await media.selectOption("Watercolor");
+  await expect(media).toHaveValue("Watercolor");
   await design.getByRole("radio", { name: "16:9" }).check();
   await design.getByRole("button", { name: "Ny tilfeldig startverdi" }).click();
   await expect(design.getByRole("textbox", { name: "Startverdi" })).toHaveValue(/^\d{1,10}$/);
@@ -67,6 +92,19 @@ test("library search and recovery from an empty result", async ({ page }) => {
   await expect(page.locator(".tool-card")).toHaveCount(0);
   await page.getByRole("button", { name: "Tilbakestill", exact: true }).click();
   await expect(page.locator(".tool-card")).toHaveCount(17);
+  const photos = page.locator(".tool-card img");
+  const sources = new Set<string>();
+  for (const photo of await photos.all()) {
+    await photo.scrollIntoViewIfNeeded();
+    const source = await photo.evaluate(async el => {
+      const image = el as HTMLImageElement;
+      await image.decode();
+      if (!image.naturalWidth || !image.getBoundingClientRect().height) throw new Error("Tool photo is blank");
+      return image.src;
+    });
+    sources.add(source);
+  }
+  expect(sources.size).toBe(17);
 });
 
 test("unspecified outdoor controls share one disclosure", async ({ page }) => {

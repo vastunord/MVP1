@@ -1,6 +1,47 @@
 import { test, expect } from "@playwright/test";
 
-test("the homepage cycles through every pair, wraps and respects pause and reduced motion", async ({
+test("the untinted comparison has its own window beside the desktop introduction", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en");
+  const hero = page.locator(".photo-hero");
+  const frame = hero.locator(".photo-hero-stage");
+  const copy = hero.locator(".photo-hero-copy");
+  await expect(frame).toBeInViewport({ ratio: 1 });
+  const [frameBox, copyBox] = await Promise.all([
+    frame.boundingBox(),
+    copy.boundingBox(),
+  ]);
+  expect(frameBox!.x).toBeGreaterThanOrEqual(copyBox!.x + copyBox!.width);
+  expect(frameBox!.width).toBeGreaterThan(copyBox!.width);
+  expect(frameBox!.x + frameBox!.width).toBeLessThan(1440);
+  expect(await frame.locator("img").count()).toBe(2);
+  await expect(frame).toHaveText("");
+  await expect(frame.getByRole("button")).toHaveCount(0);
+  await expect(frame.locator(".photo-hero-veil")).toHaveCount(0);
+  for (const photo of await frame.locator("img").all()) {
+    await expect(photo).toHaveCSS("opacity", "1");
+    await expect(photo).toHaveCSS("filter", "none");
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const [mobileFrame, mobileCopy] = await Promise.all([
+    frame.boundingBox(),
+    copy.boundingBox(),
+  ]);
+  expect(mobileFrame!.y).toBeGreaterThanOrEqual(
+    mobileCopy!.y + mobileCopy!.height,
+  );
+  expect(mobileFrame!.width).toBeLessThan(390);
+  expect(mobileFrame!.width).toBeGreaterThan(320);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(390);
+});
+
+test("the homepage cycles through all eleven photo pairs and honors a motion pause", async ({
   page,
 }) => {
   await page.clock.install();
@@ -11,10 +52,18 @@ test("the homepage cycles through every pair, wraps and respects pause and reduc
   const first = await stage.getAttribute("data-scene");
   const visited = new Set([first]);
   for (let index = 0; index < 11; index++) {
-    await page.clock.fastForward(8100);
-    await expect(hero.locator(".hero-incoming")).toHaveCount(1);
-    await page.clock.fastForward(700);
-    await expect(hero.locator(".hero-incoming")).toHaveCount(0);
+    const previous = await stage.getAttribute("data-scene");
+    await page.clock.fastForward(12100);
+    await expect(stage).not.toHaveAttribute("data-scene", previous!);
+    const imageRatio = await stage
+      .locator(".hero-images > img")
+      .evaluate(async (node) => {
+        const image = node as HTMLImageElement;
+        await image.decode();
+        return image.naturalWidth / image.naturalHeight;
+      });
+    const photo = await stage.boundingBox();
+    expect(Math.abs(photo!.width / imageRatio - photo!.height)).toBeLessThan(1);
     visited.add(await stage.getAttribute("data-scene"));
   }
   expect(visited.size).toBe(11);
@@ -29,6 +78,40 @@ test("the homepage cycles through every pair, wraps and respects pause and reduc
   ).toHaveCount(0);
   await page.clock.fastForward(20000);
   await expect(stage).toHaveAttribute("data-scene", first!);
+  const slider = hero.getByRole("slider");
+  const reducedPosition = await slider.inputValue();
+  await page.clock.fastForward(30000);
+  await expect(slider).toHaveValue(reducedPosition);
+  await hero.getByRole("button", { name: "Next image pair" }).click();
+  await expect(stage).not.toHaveAttribute("data-scene", first!);
+});
+
+test("the slow divider pauses inside the photo while the image pairs keep changing", async ({
+  page,
+}) => {
+  await page.clock.install();
+  await page.goto("/en");
+  await page.getByRole("button", { name: /Reject optional/ }).click();
+  const frame = page.locator(".photo-hero-stage");
+  const slider = frame.getByRole("slider");
+  const copy = page.locator(".photo-hero-copy");
+  await copy.hover();
+  const initial = Number(await slider.inputValue());
+  await page.clock.runFor(2000);
+  const distance = Math.abs(Number(await slider.inputValue()) - initial);
+  expect(distance).toBeGreaterThan(0);
+  expect(distance).toBeLessThanOrEqual(6);
+  await frame.hover();
+  const held = await slider.inputValue();
+  const previous = await frame.getAttribute("data-scene");
+  await page.clock.fastForward(13000);
+  await expect(frame).not.toHaveAttribute("data-scene", previous!);
+  await expect(slider).toHaveValue(held);
+  await copy.hover();
+  await page.clock.runFor(2000);
+  const resumed = Math.abs(Number(await slider.inputValue()) - Number(held));
+  expect(resumed).toBeGreaterThan(0);
+  expect(resumed).toBeLessThanOrEqual(6);
 });
 
 test("home study controls and transformation directions lead into the Studio", async ({
@@ -85,8 +168,10 @@ test("a selected public study remains the source when reopening or switching too
   await expect(hero.locator(".photo-hero-actions a").first()).toHaveText(
     /Try this image/,
   );
+  const frame = hero.locator(".photo-hero-stage");
+  const first = await frame.getAttribute("data-scene");
   await hero.getByRole("button", { name: "Next image pair" }).click();
-  await expect(hero.locator(".hero-counter")).toHaveText(/^02/);
+  await expect(frame).not.toHaveAttribute("data-scene", first!);
   const original = await hero.locator(".hero-images > img").getAttribute("src");
   const href = await hero
     .getByRole("link", { name: "Try this image" })

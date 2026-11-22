@@ -176,3 +176,6 @@ placement,site_path,local_source,source_sha256,max_width,webp_quality
 "render gallery","/media/gallery/scene-48.webp","assets/Visuals/kling_20260504_作品_wide_angle_1335_0.png","81b6f164d678a4e227d7059b59367fb470358e0501ab2f6a7d1d567343ba5599","1100","78"
 "render gallery","/media/gallery/scene-49.webp","assets/Visuals/quiet-meditation-space-with-dark-timber-walls-woo.png","a8acffc0939b56221b82147f7b42dedfd8c7845e6f82fae888fc3c29cf6f6f17","1100","78"
 "render gallery","/media/gallery/scene-50.webp","assets/Visuals/drone-view-a-high-end-reinterpretation-of-the-clas.png","45e7289cfc12f96429fa5d553188c55387d0b031d66837a54032de33482f38cf","1100","78"
+"room brief","/media/briefs/forest-stillness.webp","assets/Visuals/quiet-meditation-space-inside-forest-villa-with-sp.png","4f0d6e0d986567bc0d1b844fc9dcba15abacd829c7721afa3d3b66bb2cdb2962","240","83"
+"room brief","/media/briefs/everyday-rhythm.webp","assets/Visuals/nordic-family-kitchen-with-spruce-wood-cabinetry.png","c8e2b254a032d67242d3f51c864e2e8e8b11319171796a8efd3dd4363db9d1bf","240","83"
+"room brief","/media/briefs/by-the-hearth.webp","assets/Visuals/living-room-with-dining-of-a-a-classic-swiss-alpin.png","179fdf26ec67579eb5597dae7f27e76be60d757c83f8f4b1111f67173a8d750d","240","83"

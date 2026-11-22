@@ -109,15 +109,7 @@ export function StudioCanvas({
                     " %"
                   }
                 />
-                <span className="sample-label sample-left" lang="en">
-                  {tool.comparison?.[0]}
-                </span>
               </>
-            )}
-            {!staticExample && (
-              <span className="sample-label sample-right" lang="en">
-                {tool.comparison?.[1]}
-              </span>
             )}
             {staticExample &&
               tool.id === "perspective-correction" &&
@@ -177,7 +169,14 @@ export function StudioCanvas({
                 aria-pressed={toneIndex === i}
                 onClick={() => setToneIndex(i)}
               >
-                <span className={"studio-tone-chip tone-" + s.id} aria-hidden="true" />
+                <Image
+                  src={canvasPhoto}
+                  unoptimized
+                  className={"studio-tone-chip tone-" + s.id}
+                  width={80}
+                  height={48}
+                  alt=""
+                />
                 <span>{english ? s.en : s.nb}</span>
               </button>
             ))}
