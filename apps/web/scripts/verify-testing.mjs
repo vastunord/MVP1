@@ -25,16 +25,25 @@ if (env.VERCEL_ENV === "preview" || process.argv[2] === "preview") {
   };
   console.log("Vastu Nord Preview configuration", JSON.stringify(checks));
   if (!match) {
-    const candidate = URL.canParse(env.DATABASE_URL || "") ? new URL(env.DATABASE_URL) : null;
-    console.log("Preview connection components", JSON.stringify({
-      present: Boolean(env.DATABASE_URL), validUrl: Boolean(candidate),
-      expectedPool: candidate?.hostname === previewPool,
-      expectedRole: candidate?.username === previewRole,
-      expectedDatabase: candidate?.pathname === "/neondb",
-      tls: ["require","verify-full"].includes(candidate?.searchParams.get("sslmode")),
-      mailProvider: env.AUTH_EMAIL_PROVIDER === "resend",
-      sender: Boolean(env.AUTH_EMAIL_FROM), mailCredential: Boolean(env.RESEND_API_KEY)
-    }));
+    const candidate = URL.canParse(env.DATABASE_URL || "")
+      ? new URL(env.DATABASE_URL)
+      : null;
+    console.log(
+      "Preview connection components",
+      JSON.stringify({
+        present: Boolean(env.DATABASE_URL),
+        validUrl: Boolean(candidate),
+        expectedPool: candidate?.hostname === previewPool,
+        expectedRole: candidate?.username === previewRole,
+        expectedDatabase: candidate?.pathname === "/neondb",
+        tls: ["require", "verify-full"].includes(
+          candidate?.searchParams.get("sslmode"),
+        ),
+        mailProvider: env.AUTH_EMAIL_PROVIDER === "resend",
+        sender: Boolean(env.AUTH_EMAIL_FROM),
+        mailCredential: Boolean(env.RESEND_API_KEY),
+      }),
+    );
   }
   if (
     !checks.stage ||

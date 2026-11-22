@@ -226,6 +226,27 @@ test("gallery requires rights, editorial review, and separate user consents", ()
   );
 });
 
+test("a protected function uses request-scoped Blob identity with the pinned store", () => {
+  const hosted = {
+    APP_ENV: "preview",
+    VERCEL_ENV: "preview",
+    VERCEL: "1",
+    MEDIA_UPLOADS_ENABLED: "true",
+    DATABASE_URL:
+      "postgresql://vastunord_preview_runtime:test@ep-frosty-violet-bhh19hyh-pooler.c-10.eu-central-1.aws.neon.tech/neondb?sslmode=require",
+    BLOB_STORE_ID: "store_FqCkmEg47WkbeoRZ",
+  };
+  assert.equal(readServerConfig(hosted).uploadsEnabled, true);
+  assert.throws(
+    () => readServerConfig({ ...hosted, BLOB_STORE_ID: "other" }),
+    /unverified/,
+  );
+  assert.throws(
+    () => readServerConfig({ ...hosted, VERCEL: "" }),
+    /credential/,
+  );
+});
+
 test("cloud configuration remains closed without dedicated resources", () => {
   assert.equal(
     readServerConfig({ APP_ENV: "preview", MEDIA_UPLOADS_ENABLED: "false" })

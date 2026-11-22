@@ -8,10 +8,11 @@ import {
   put,
 } from "@vercel/blob";
 import type { PrivateMediaDriver } from "./media";
+import { hasBlobIdentity } from "./config";
 
 // Instantiate only after confirming a dedicated Vastu Nord private store.
 export function createVercelPrivateDriver(token?: string): PrivateMediaDriver {
-  if (!token && !process.env.VERCEL_OIDC_TOKEN)
+  if (!token && !hasBlobIdentity(process.env))
     throw new Error("Private storage credential is missing");
   return {
     async put(pathname, bytes, contentType) {
