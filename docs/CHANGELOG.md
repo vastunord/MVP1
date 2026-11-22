@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 22 November 2026 · Studio and Google setup
+
+- Replaced the model tiles with the VN-1 selector, hid Palette, added three selection images and supported the existing Google secret variable. Google sign-in and MNML generation remain pending end-to-end verification.
+
 ## 22 November 2026 · Development journey updates
 
 The [current protected Preview](https://vastunord-67rdd27lp-vastu-nord.vercel.app) runs `b35bbb28dd9f`. Gallery visitors can select any of 17 editors by photo. Prana, the two Knowledge Hub views and gallery filters use visible choices in both languages. All 44 browser tests passed on the rebuilt interface. [Browser evidence](evidence/test-preview-studio/README.md)

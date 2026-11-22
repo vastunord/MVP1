@@ -98,7 +98,6 @@ function Field({
           "style",
           "time",
           "lighting",
-          "palette",
           "medium",
           "camera",
           "viewpoint",
@@ -230,16 +229,14 @@ export function Editor({
                   />
                 )}
                 {renderMode(tool.id) && !video ? (
-                  <StudioChoices
-                    label="Prana V1"
-                    kind="level"
-                    value={engine}
-                    choices={renderEngines.map((e) => ({
-                      value: e.id,
-                      label: e.label,
-                    }))}
-                    onChange={(v) => setEngine(v as RenderEngine)}
-                  />
+                  <label className="studio-model-select">
+                    <span>◈ {english ? "Prana Model" : "Prana-modell"}</span>
+                    <select value={engine} onChange={(event) => setEngine(event.target.value as RenderEngine)}>
+                      {renderEngines.map((option) => (
+                        <option key={option.id} value={option.id}>VN-1 {option.label}</option>
+                      ))}
+                    </select>
+                  </label>
                 ) : (
                   <p className="studio-kicker">
                     Prana V1 ·{" "}
@@ -405,7 +402,7 @@ export function Editor({
                   <summary>{t.controls}</summary>
                   <div>
                     {configured
-                      .filter((control) => control.kind !== "unknown")
+                      .filter((control) => control.kind !== "unknown" && control.id !== "palette")
                       .map((c) => (
                         <fieldset
                           key={c.id}

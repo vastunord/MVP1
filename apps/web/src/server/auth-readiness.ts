@@ -99,7 +99,7 @@ export function oauthConfiguration(
   for (const provider of ["google", "github", "apple"] as const) {
     const prefix = provider.toUpperCase();
     const clientId = env[prefix + "_CLIENT_ID"]?.trim();
-    const clientSecret = env[prefix + "_CLIENT_SECRET"]?.trim();
+    const clientSecret = (env[prefix + "_CLIENT_SECRET"] || (provider === "google" ? env.GoogleOauth : undefined))?.trim();
     if (
       env[prefix + "_OAUTH_ENABLED"] !== "true" ||
       !clientId ||

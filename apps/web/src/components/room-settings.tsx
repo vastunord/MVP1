@@ -126,7 +126,6 @@ export function RoomSettings({
         "viewpoint",
         "camera",
         "lighting",
-        "palette",
         "medium",
       ].includes(id);
       return (
@@ -165,7 +164,6 @@ export function RoomSettings({
         <summary>{roomLabel("Room details", locale)}</summary>
         <div>
           {fields(
-            "palette",
             "furnishing",
             "plants",
             "accessories",

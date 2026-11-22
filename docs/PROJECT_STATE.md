@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · Studio model and Google configuration in progress
+
+The editor now presents the VN-1 levels as a model selector, hides Palette and supplies imagery for the sketch, plan and hallway choices. Google sign-in can read the server-only `GoogleOauth` secret when explicitly enabled. The Google client ID is configured for Preview. Google callbacks and an authenticated sign-in still need verification.
+
+MNML rendering requires the reviewed render migration and runtime permissions. The existing Development migration credential failed authentication and Preview requires a separate protected migration credential. Contact submissions, conversation persistence and an authorized reporting dashboard remain to be implemented and verified.
+
 ## 22 November 2026 · Protected visitor and Studio rehearsal
 
 The [current protected test site](https://vastunord-67rdd27lp-vastu-nord.vercel.app) uses commit `b35bbb28dd9f`, deployment `dpl_BepcdXDcQyUrnTpN8iqAsE7wr1UY`. Studio entry links use “Open Studio” or “Åpne Studio”. Internal selectors use “Workflow” or “Arbeidsflyt”. Gallery filters and all 17 gallery-to-Studio choices use visible buttons or photographic tiles. Prana and Knowledge Hub topic filters use keyboard-accessible buttons. At 390 and 1440 CSS pixels all five Prana V1 level names fit on a single line per label. [Browser evidence](evidence/test-preview-studio/README.md)
