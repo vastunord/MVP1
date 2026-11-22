@@ -2,9 +2,9 @@
 
 ## Implemented provider paths
 
-Prana uses OpenAI Responses with a structured classification, a three-sentence limit and Norwegian or English replies. Abusive, unrelated and unsafe questions receive a localized redirect. The server sends only the individual question and published guidance. It requests no provider response storage. The application stores daily counters with keyed visitor identifiers. One transaction enforces both the visitor and global limits across server instances. Private project information stays outside consultation. [OpenAI Responses](https://platform.openai.com/docs/api-reference/responses/create)
+Prana and Studio’s brief improvement use the same Groq server credential. The Groq chat API returns a structured domain classification and up to three short sentences. The app returns a localized redirect for abusive, unrelated and unsafe questions. Only the text the visitor submits and public guidance enter a consultation. Visitors explicitly accept a suggested brief before it replaces their text. Groq sets usage limits. [Groq structured outputs](https://console.groq.com/docs/structured-outputs)
 
-Studio uses MNML v2 through the authenticated project API. Development requires a server-side key, an approved daily allowance, private project access and explicit approval to send selected material. The render record ties the idempotency key, requester, input, provider job and private output together. An additional limit controls video. Reopening the project can resume status checks. Provider pricing, quality, retention and funded real responses still require controlled verification. [MNML API](https://developers.mnml.ai/docs) · [Configuration](ENVIRONMENT_VARIABLE_INVENTORY.md)
+Studio submits to MNML v2 only for an authenticated user with an authorized project and explicit image-processing consent. The job stores an idempotency key, input references, provider job ID and private output metadata. Prana V1 is the interface label for the five render levels. MNML account limits apply. Fulfilment requires the render migration and appropriate table access. [MNML API](https://developers.mnml.ai/docs) · [Configuration](ENVIRONMENT_VARIABLE_INVENTORY.md)
 
 ## Earlier architecture and remaining worker requirements
 

@@ -1,5 +1,9 @@
 # Database architecture — Phase 02E development branch
 
+## Development newsletter and Studio schema preflight
+
+The two additive migrations `20261122_phase01_newsletter` and `20261122_studio_mnml` passed their isolated PostgreSQL tests. The Development-only runner checked the four migration files against the tracked SHA-256 values. Its TLS connection to Frankfurt endpoint `ep-purple-fog-bhs946ij` for `vastunord_dev_migrator` on `neondb` failed at password authentication (SQLSTATE `28P01`). The live role, migration history and schema could therefore not be queried. No deployment was attempted. Restore a working credential to the migration-only Windows DPAPI context, then run `scripts/test-development-migrations.ps1` for the read-only preflight. `-Apply` rechecks the same target and history before allowing the two pending migrations on `br-mute-resonance-bhea4dyx`.
+
 ## Phase 02E-2A final runtime permission assessment
 
 Vastu Nord development `neondb` role `vastunord_dev_runtime` remains NOLOGIN. Metadata confirms no memberships, neon_superuser, database/schema CREATE, role ownership of application relations or extra relation DDL privileges. Previously approved per-table DML grants are unchanged. The owner accepted inherited PUBLIC CONNECT and TEMPORARY.

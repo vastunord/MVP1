@@ -22,7 +22,6 @@ type Props = {
   locale: Locale;
   enabled: boolean;
   workflow: StudioWorkflow;
-  videoEnabled: boolean;
   selection: RenderSelection;
   onResult: (asset: StudioResult | null) => void;
 };
@@ -42,7 +41,6 @@ export function StudioRenderAction({
   selection,
   onResult,
   workflow,
-  videoEnabled,
 }: Props) {
   const en = locale === "en";
   const [consent, setConsent] = useState(false);
@@ -71,7 +69,6 @@ export function StudioRenderAction({
       ? Boolean(prompt.trim())
       : Boolean(selection.sourceAssetId)) &&
     (workflow !== "style" || selection.referenceIds.length > 0) &&
-    (workflow !== "video" || videoEnabled) &&
     (!needsLocation || prompt.trim()) &&
     !unsupportedMode;
   useEffect(() => {
@@ -157,13 +154,21 @@ export function StudioRenderAction({
       });
       if (!response.ok) {
         setError(
-          response.status === 429
+          response.status === 402
             ? en
-              ? "The daily render limit has been reached."
-              : "Dagens rendergrense er nådd."
-            : en
-              ? "Could not submit this render. Retry the same brief or check project renders."
-              : "Kunne ikke sende oppdraget. Prøv samme beskrivelse på nytt eller sjekk prosjektrendere.",
+              ? "The rendering provider requires available funds."
+              : "Rendertjenesten krever tilgjengelige midler."
+            : response.status === 403
+              ? en
+                ? "This operation is unavailable on the rendering account."
+                : "Rendertjenestens konto gir ikke tilgang til denne operasjonen."
+              : response.status === 429
+                ? en
+                  ? "The rendering provider is at a usage limit. Check your project renders before retrying."
+                  : "Rendertjenesten har nådd en bruksgrense. Sjekk prosjektrendere før du prøver igjen."
+                : en
+                  ? "Could not submit this render. Retry the same brief or check project renders."
+                  : "Kunne ikke sende oppdraget. Prøv samme beskrivelse på nytt eller sjekk prosjektrendere.",
         );
         return;
       }
@@ -252,36 +257,38 @@ export function StudioRenderAction({
       <p id="action-help">
         {!enabled
           ? en
-            ? "Rendering is closed in this demo."
-            : "Rendring er stengt i denne demoen."
+            ? "Rendering is unavailable in this environment."
+            : "Rendring er utilgjengelig i dette miljøet."
           : unsupportedMode
             ? en
               ? "Choose automatic enhancement without a written brief, or describe an object edit without a brush mask."
               : "Velg automatisk forbedring uten beskrivelse, eller beskriv en endring uten penselmaske."
-            : workflow === "video" && !videoEnabled
+            : workflow === "concept" && !prompt.trim()
               ? en
-                ? "Video requires a separate development allowance."
-                : "Video krever en egen utviklingskvote."
-              : workflow === "concept" && !prompt.trim()
+                ? "Describe the scene to create."
+                : "Beskriv motivet du vil lage."
+              : workflow === "style" && !selection.referenceIds.length
                 ? en
-                  ? "Describe the scene to create."
-                  : "Beskriv motivet du vil lage."
-                : workflow === "style" && !selection.referenceIds.length
+                  ? "Select a project image as style reference."
+                  : "Velg et prosjektbilde som stilreferanse."
+                : workflow !== "concept" && !selection.sourceAssetId
                   ? en
-                    ? "Select a project image as style reference."
-                    : "Velg et prosjektbilde som stilreferanse."
-                  : workflow !== "concept" && !selection.sourceAssetId
+                    ? "Choose a saved private project image."
+                    : "Velg et lagret privat prosjektbilde."
+                  : needsLocation && !prompt.trim()
                     ? en
-                      ? "Choose a saved private project image."
-                      : "Velg et lagret privat prosjektbilde."
-                    : needsLocation && !prompt.trim()
-                      ? en
-                        ? "Describe the object or area and the change you want."
-                        : "Beskriv området og ønsket endring."
-                      : ""}
+                      ? "Describe the object or area and the change you want."
+                      : "Beskriv området og ønsket endring."
+                    : ""}
       </p>
       {job && <p role="status">{statuses[job.state]}</p>}
-      {enabled && job?.state === "SUCCEEDED" && job.outputAssetId && <AssetSharingConsent key={job.outputAssetId} assetId={job.outputAssetId} locale={locale} />}
+      {enabled && job?.state === "SUCCEEDED" && job.outputAssetId && (
+        <AssetSharingConsent
+          key={job.outputAssetId}
+          assetId={job.outputAssetId}
+          locale={locale}
+        />
+      )}
       {error && <p role="status">{error}</p>}
       {waiting && error && (
         <button

@@ -1,5 +1,27 @@
 import { expect, test } from "@playwright/test";
 
+test("the film panel keeps playback optional and stops it when the tab closes", async ({ page }) => {
+  await page.route("**/api/prana/film", route => route.fulfill({ json: { videoId: "testFilm001" } }));
+  const players: string[] = [];
+  await page.route("https://www.youtube-nocookie.com/embed/**", route => {
+    players.push(route.request().url());
+    return route.fulfill({ contentType: "text/html", body: "<title>Test player</title>" });
+  });
+  await page.goto("/en?assistant=prana");
+  const panel = page.getByRole("dialog", { name: "VastuNord Prana" });
+  await panel.getByRole("tab", { name: "Film", exact: true }).click();
+  await expect(panel.getByRole("link", { name: /@VastuNord/ })).toHaveAttribute("href", "https://www.youtube.com/@VastuNord");
+  const play = panel.getByRole("button", { name: "Play here" });
+  await expect(play).toBeVisible();
+  await expect(panel.locator("iframe")).toHaveCount(0);
+  expect(players).toHaveLength(0);
+  await play.click();
+  await expect(panel.locator("iframe")).toHaveAttribute("src", /autoplay=1&mute=0&playsinline=1$/);
+  await expect.poll(() => players.length).toBe(1);
+  await panel.getByRole("tab", { name: "Quick Tips" }).click();
+  await expect(panel.locator("iframe")).toHaveCount(0);
+});
+
 test("consent defaults, changes, revocation and version renewal are independent of email", async ({
   page,
 }) => {
@@ -89,9 +111,7 @@ test("only eligible time opens the newsletter and dismissal survives scrolling, 
   await page.keyboard.press("ArrowRight");
   await expect(panel.getByRole("tabpanel")).toContainText("layered lighting");
   await page.keyboard.press("End");
-  await expect(panel.getByRole("tabpanel")).toContainText(
-    "No films have been published",
-  );
+  await expect(panel.getByRole("link", { name: /@VastuNord/ })).toHaveAttribute("href", "https://www.youtube.com/@VastuNord");
   await panel.getByRole("button", { name: "Close" }).focus();
   await page.keyboard.press("Shift+Tab");
   await expect(

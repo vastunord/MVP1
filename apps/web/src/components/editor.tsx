@@ -16,6 +16,8 @@ import { Button } from "./ui";
 import { PrivateUpload, RoomReferences } from "./private-upload";
 import { RoomSettings, roomLabel } from "./room-settings";
 import { StudioCanvas } from "./studio-canvas";
+import { StudioChoices } from "./studio-choices";
+import { StudioPrompt } from "./studio-prompt";
 import { StudioToolSwitcher } from "./studio-tool-switcher";
 import { StudioRenderAction } from "./studio-render-action";
 import {
@@ -84,54 +86,29 @@ function Field({
     );
   const options =
     control.kind === "toggle" ? ["On", "Off"] : (control.options ?? []);
-  if (
-    control.kind === "select" &&
-    ["style", "palette"].includes(control.id) &&
-    options.length > 1
-  )
-    return (
-      <div className="field">
-        <strong id={id}>{text(control.label)}</strong>
-        <div className="preset-options" role="group" aria-labelledby={id}>
-          {options.map((option) => (
-            <button
-              key={option}
-              type="button"
-              aria-pressed={value === option}
-              onClick={() => onChange(option)}
-            >
-              {text(option)}
-            </button>
-          ))}
-        </div>
-      </div>
-    );
   return (
-    <div className="field">
-      <label htmlFor={id}>{text(control.label)}</label>
-      <select
-        id={id}
-        value={
-          typeof value === "boolean" ? (value ? "On" : "Off") : (value ?? "")
-        }
-        onChange={(e) =>
-          onChange(
-            control.kind === "toggle"
-              ? e.target.value === "On"
-              : e.target.value,
-          )
-        }
-      >
-        <option value="" disabled>
-          {locale === "en" ? "Choose…" : "Velg …"}
-        </option>
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {text(o)}
-          </option>
-        ))}
-      </select>
-    </div>
+    <StudioChoices
+      label={text(control.label)}
+      value={String(
+        typeof value === "boolean" ? (value ? "On" : "Off") : (value ?? ""),
+      )}
+      kind={
+        [
+          "room",
+          "style",
+          "time",
+          "lighting",
+          "palette",
+          "medium",
+          "camera",
+          "viewpoint",
+        ].includes(control.id)
+          ? control.id
+          : "compact"
+      }
+      choices={options.map((v) => ({ value: v, label: text(v) }))}
+      onChange={(v) => onChange(control.kind === "toggle" ? v === "On" : v)}
+    />
   );
 }
 export function Editor({
@@ -139,14 +116,14 @@ export function Editor({
   locale,
   uploadsEnabled,
   renderEnabled,
-  videoEnabled,
+  improveEnabled,
   sample,
 }: {
   tool: ToolDefinition;
   locale: Locale;
   uploadsEnabled: boolean;
   renderEnabled: boolean;
-  videoEnabled: boolean;
+  improveEnabled: boolean;
   sample?: StudioSample;
 }) {
   const t = messages(locale);
@@ -161,7 +138,7 @@ export function Editor({
   );
   const [prompt, setPrompt] = useState("");
   const [avoid, setAvoid] = useState("");
-  const [engine, setEngine] = useState<RenderEngine>("v4.6-ultra");
+  const [engine, setEngine] = useState<RenderEngine>("high");
   const [selection, setSelection] = useState<RenderSelection>({
     projectId: "",
     sourceAssetId: "",
@@ -179,7 +156,7 @@ export function Editor({
   const unavailable = configured.filter(
     (control) => control.kind === "unknown",
   );
-  const startWithDesign = room && !sample && !uploadsEnabled;
+
   const settings = room && (
     <RoomSettings
       tool={tool}
@@ -213,211 +190,190 @@ export function Editor({
             tabIndex={0}
             aria-label={t.controls}
           >
-            <section className="inspector-group studio-engine">
-              {(renderMode(tool.id) || enhance) && (
-                <>
-                  <label className="studio-kicker" htmlFor="studio-workflow">
-                    {english ? "Workflow" : "Arbeidsmåte"}
-                  </label>
-                  <select
-                    id="studio-workflow"
+            <details className="inspector-group studio-engine room-drawer" open>
+              <summary>
+                {english ? "Workflow and engine" : "Arbeidsmåte og motor"}
+              </summary>
+              <div>
+                {(renderMode(tool.id) || enhance) && (
+                  <StudioChoices
+                    kind="workflow"
+                    label={english ? "Workflow" : "Arbeidsmåte"}
                     value={workflow}
-                    onChange={(e) => {
-                      setWorkflow(e.target.value as StudioWorkflow);
+                    choices={
+                      enhance
+                        ? [
+                            {
+                              value: "design",
+                              label: english
+                                ? "Automatic enhancement"
+                                : "Automatisk forbedring",
+                            },
+                            {
+                              value: "upscale",
+                              label: english
+                                ? "Upscale image"
+                                : "Oppskaler bilde",
+                            },
+                          ]
+                        : sceneWorkflows
+                            .filter((w) => w.id !== "style" || tool.reference)
+                            .map((w) => ({
+                              value: w.id,
+                              label: english ? w.en : w.nb,
+                            }))
+                    }
+                    onChange={(v) => {
+                      setWorkflow(v as StudioWorkflow);
                       setResult(null);
                     }}
-                  >
-                    {enhance ? (
-                      <>
-                        <option value="design">
-                          {english
-                            ? "Automatic enhancement"
-                            : "Automatisk forbedring"}
-                        </option>
-                        <option value="upscale">
-                          {english ? "Upscale image" : "Oppskaler bilde"}
-                        </option>
-                      </>
-                    ) : (
-                      sceneWorkflows
-                        .filter((w) => w.id !== "style" || tool.reference)
-                        .map((w) => (
-                          <option key={w.id} value={w.id}>
-                            {english ? w.en : w.nb}
-                          </option>
-                        ))
-                    )}
-                  </select>
-                </>
-              )}
-              <label className="studio-kicker" htmlFor="render-engine">
-                {english ? "Render engine" : "Rendermotor"}
-              </label>
-              {renderMode(tool.id) && !video ? (
-                <select
-                  id="render-engine"
-                  value={engine}
-                  onChange={(e) => setEngine(e.target.value as RenderEngine)}
-                >
-                  {renderEngines.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      MNML {item.label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <span id="render-engine">
-                  {video
-                    ? "MNML · Flash · 10 s"
-                    : enhance
-                      ? workflow === "upscale"
-                        ? "MNML · Upscale"
-                        : "MNML · Enhance"
-                      : "MNML · Edit"}
-                </span>
-              )}
-              {video && (
-                <p className="inspector-help">
-                  {english
-                    ? "A slow camera move into one still image."
-                    : "En rolig kamerabevegelse innover i ett stillbilde."}
-                </p>
-              )}
-              {workflow === "concept" && (
-                <p className="inspector-help">
-                  {english
-                    ? "Choose the destination project and describe your scene. The render uses text only."
-                    : "Velg målprosjekt og beskriv motivet. Rendringen bruker bare tekst."}
-                </p>
-              )}
-              {workflow === "upscale" && (
-                <p className="inspector-help">
-                  {english
-                    ? "Output dimensions depend on the source and provider."
-                    : "Resultatets størrelse avhenger av kilden og leverandøren."}
-                </p>
-              )}
-            </section>
-            {startWithDesign && !imageOnly && settings}
-            <section className="inspector-group" id="source-image">
-              <h2>{english ? "Source image" : "Kildebilde"}</h2>
-              {sample && !preview && (
-                <div className="selected-study">
-                  <strong>{translated(sample.name, locale)}</strong>
-                  <span>{english ? "Studio sample" : "Eksempel i Studio"}</span>
-                  <details>
-                    <summary>
-                      {english
-                        ? "Try another tool with this photo"
-                        : "Prøv et annet verktøy med dette bildet"}
-                    </summary>
-                    {(
-                      [
-                        [
-                          "room-reimagination",
-                          "Gi rommet ny form",
-                          "Reimagine the room",
-                        ],
-                        [
-                          "material-refinement",
-                          "Utforsk materialer",
-                          "Explore materials",
-                        ],
-                        [
-                          "lighting-reimagination",
-                          "Endre lyset",
-                          "Change the lighting",
-                        ],
-                      ] as const
-                    )
-                      .filter(([id]) => id !== tool.id)
-                      .map(([id, nb, en]) => (
-                        <Link key={id} href={studioSampleHref(sample, id)}>
-                          {english ? en : nb} ↗
-                        </Link>
-                      ))}
-                  </details>
-                </div>
-              )}
-              <div className={uploadsEnabled ? "" : "source-unavailable"}>
-                {!uploadsEnabled && (
-                  <>
-                    <span className="upload-glyph" aria-hidden="true">
-                      ↑
-                    </span>
-                    <strong>{t.upload}</strong>
-                  </>
+                  />
                 )}
-                <PrivateUpload
-                  locale={locale}
-                  enabled={uploadsEnabled}
-                  onPreview={(url) => {
-                    setPreview(url);
-                    setResult(null);
-                  }}
-                  onSelection={setSelection}
-                  withRoomReferences={
-                    Boolean(tool.reference) &&
-                    !["video", "concept"].includes(workflow)
-                  }
-                />
+                {renderMode(tool.id) && !video ? (
+                  <StudioChoices
+                    label="Prana V1"
+                    kind="level"
+                    value={engine}
+                    choices={renderEngines.map((e) => ({
+                      value: e.id,
+                      label: e.label,
+                    }))}
+                    onChange={(v) => setEngine(v as RenderEngine)}
+                  />
+                ) : (
+                  <p className="studio-kicker">
+                    Prana V1 ·{" "}
+                    {video
+                      ? "Film · 10 s"
+                      : enhance
+                        ? workflow === "upscale"
+                          ? english
+                            ? "Upscale"
+                            : "Oppskalering"
+                          : english
+                            ? "Enhance"
+                            : "Forbedring"
+                        : english
+                          ? "Edit"
+                          : "Redigering"}
+                  </p>
+                )}
+                {video && (
+                  <p className="inspector-help">
+                    {english
+                      ? "A slow camera move into one still image."
+                      : "En rolig kamerabevegelse innover i ett stillbilde."}
+                  </p>
+                )}
+                {workflow === "concept" && (
+                  <p className="inspector-help">
+                    {english
+                      ? "Choose the destination project and describe your scene. The render uses text only."
+                      : "Velg målprosjekt og beskriv motivet. Rendringen bruker bare tekst."}
+                  </p>
+                )}
+                {workflow === "upscale" && (
+                  <p className="inspector-help">
+                    {english
+                      ? "Output dimensions depend on the source and provider."
+                      : "Resultatets størrelse avhenger av kilden og leverandøren."}
+                  </p>
+                )}
               </div>
-              {tool.reference &&
-                !uploadsEnabled &&
-                !["video", "concept"].includes(workflow) && (
-                  <RoomReferences assets={[]} enabled={false} locale={locale} />
+            </details>
+            <details
+              className="inspector-group room-drawer"
+              id="source-image"
+              open
+            >
+              <summary>{english ? "Source image" : "Kildebilde"}</summary>
+              <div>
+                {sample && !preview && (
+                  <div className="selected-study">
+                    <strong>{translated(sample.name, locale)}</strong>
+                    <span>
+                      {english ? "Studio sample" : "Eksempel i Studio"}
+                    </span>
+                    <details>
+                      <summary>
+                        {english
+                          ? "Try another tool with this photo"
+                          : "Prøv et annet verktøy med dette bildet"}
+                      </summary>
+                      {(
+                        [
+                          [
+                            "room-reimagination",
+                            "Gi rommet ny form",
+                            "Reimagine the room",
+                          ],
+                          [
+                            "material-refinement",
+                            "Utforsk materialer",
+                            "Explore materials",
+                          ],
+                          [
+                            "lighting-reimagination",
+                            "Endre lyset",
+                            "Change the lighting",
+                          ],
+                        ] as const
+                      )
+                        .filter(([id]) => id !== tool.id)
+                        .map(([id, nb, en]) => (
+                          <Link key={id} href={studioSampleHref(sample, id)}>
+                            {english ? en : nb} ↗
+                          </Link>
+                        ))}
+                    </details>
+                  </div>
                 )}
-            </section>
+                <div className={uploadsEnabled ? "" : "source-unavailable"}>
+                  {!uploadsEnabled && (
+                    <>
+                      <span className="upload-glyph" aria-hidden="true">
+                        ↑
+                      </span>
+                      <strong>{t.upload}</strong>
+                    </>
+                  )}
+                  <PrivateUpload
+                    locale={locale}
+                    enabled={uploadsEnabled}
+                    onPreview={(url) => {
+                      setPreview(url);
+                      setResult(null);
+                    }}
+                    onSelection={setSelection}
+                    withRoomReferences={
+                      Boolean(tool.reference) &&
+                      !["video", "concept"].includes(workflow)
+                    }
+                  />
+                </div>
+                {tool.reference &&
+                  !uploadsEnabled &&
+                  !["video", "concept"].includes(workflow) && (
+                    <RoomReferences
+                      assets={[]}
+                      enabled={false}
+                      locale={locale}
+                    />
+                  )}
+              </div>
+            </details>
             {!imageOnly && (
               <section className="inspector-group">
-                <label className="studio-kicker" htmlFor="prompt">
-                  {t.prompt}
-                </label>
-                <p className="inspector-help" lang={room ? locale : "en"}>
-                  {room && !english ? "Beskriv rommet du ønsker" : tool.prompt}
-                </p>
-                <textarea
-                  id="prompt"
-                  maxLength={4000}
+                <StudioPrompt
                   value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  rows={3}
+                  change={setPrompt}
+                  label={t.prompt}
+                  help={
+                    room && !english ? "Beskriv rommet du ønsker" : tool.prompt
+                  }
+                  locale={locale}
+                  enabled={improveEnabled}
                 />
-                <div className="prompt-tools">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const summary = configured
-                        .filter(
-                          (c) =>
-                            ["select", "toggle"].includes(c.kind) &&
-                            values[c.id] !== undefined &&
-                            !["guides", "preview", "mode"].includes(c.id),
-                        )
-                        .map(
-                          (c) =>
-                            roomLabel(c.label, locale) +
-                            " — " +
-                            roomLabel(String(values[c.id]), locale),
-                        )
-                        .join(", ");
-                      const line =
-                        summary ||
-                        (english
-                          ? "Preserve the layout and show natural material textures."
-                          : "Behold planløsningen og vis naturlige materialteksturer.");
-                      if (!prompt.includes(line))
-                        setPrompt(
-                          (prompt.trim() + "\n" + line).trim().slice(0, 4000),
-                        );
-                    }}
-                  >
-                    {english
-                      ? "Add settings to brief"
-                      : "Legg valg i beskrivelsen"}
-                  </button>
-                  <small>{prompt.length} / 4000</small>
-                </div>
                 {tool.improve && (
                   <details className="avoid-detail">
                     <summary>{english ? "Writing tips" : "Skrivetips"}</summary>
@@ -443,49 +399,51 @@ export function Editor({
             {!video &&
               workflow !== "upscale" &&
               (room ? (
-                !startWithDesign && settings
+                settings
               ) : (
-                <section className="inspector-group">
-                  <h2>{t.controls}</h2>
-                  {configured
-                    .filter((control) => control.kind !== "unknown")
-                    .map((c) => (
-                      <fieldset
-                        key={c.id}
-                        disabled={
-                          tool.id === "garden-design" &&
-                          values.tidy === true &&
-                          ["style", "scope"].includes(c.id)
-                        }
-                      >
-                        <Field
-                          control={c}
-                          value={values[c.id]}
-                          locale={locale}
-                          onChange={(v) =>
-                            setValues((prev) => ({ ...prev, [c.id]: v }))
+                <details className="inspector-group room-drawer" open>
+                  <summary>{t.controls}</summary>
+                  <div>
+                    {configured
+                      .filter((control) => control.kind !== "unknown")
+                      .map((c) => (
+                        <fieldset
+                          key={c.id}
+                          disabled={
+                            tool.id === "garden-design" &&
+                            values.tidy === true &&
+                            ["style", "scope"].includes(c.id)
                           }
-                        />
-                      </fieldset>
-                    ))}
-                  {unavailable.length > 0 && (
-                    <details className="avoid-detail">
-                      <summary>
-                        {english
-                          ? "Unavailable settings"
-                          : "Utilgjengelige innstillinger"}{" "}
-                        ({unavailable.length})
-                      </summary>
-                      <ul>
-                        {unavailable.map((control) => (
-                          <li key={control.id}>
-                            {roomLabel(control.label, locale)}
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  )}
-                </section>
+                        >
+                          <Field
+                            control={c}
+                            value={values[c.id]}
+                            locale={locale}
+                            onChange={(v) =>
+                              setValues((prev) => ({ ...prev, [c.id]: v }))
+                            }
+                          />
+                        </fieldset>
+                      ))}
+                    {unavailable.length > 0 && (
+                      <details className="avoid-detail">
+                        <summary>
+                          {english
+                            ? "Unavailable settings"
+                            : "Utilgjengelige innstillinger"}{" "}
+                          ({unavailable.length})
+                        </summary>
+                        <ul>
+                          {unavailable.map((control) => (
+                            <li key={control.id}>
+                              {roomLabel(control.label, locale)}
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    )}
+                  </div>
+                </details>
               ))}
           </div>
           <StudioRenderAction
@@ -493,7 +451,6 @@ export function Editor({
             tool={tool}
             locale={locale}
             enabled={renderEnabled && uploadsEnabled}
-            videoEnabled={videoEnabled}
             workflow={workflow}
             selection={selection}
             onResult={setResult}

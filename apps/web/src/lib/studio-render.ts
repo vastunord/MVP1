@@ -1,7 +1,9 @@
 export const renderEngines = [
-  { id: "v4.6-ultra", label: "v4.6" },
-  { id: "v4.5-ultra", label: "v4.5 Ultra" },
-  { id: "v4.5-fast", label: "v4.5 Fast" },
+  { id: "low", label: "Low", providerId: "v4.3-fast" },
+  { id: "medium", label: "Medium", providerId: "v4.4-ultra" },
+  { id: "high", label: "High", providerId: "v4.5-ultra" },
+  { id: "ultra", label: "Ultra", providerId: "v4.6-ultra" },
+  { id: "fast", label: "Fast", providerId: "v4.5-fast" },
 ] as const;
 export type RenderEngine = (typeof renderEngines)[number]["id"];
 export type BriefValues = Record<string, string | number | boolean>;

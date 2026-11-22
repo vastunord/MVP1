@@ -2,16 +2,18 @@
 
 The existing Vercel site is a noncommercial demonstration. Development has passed signup, email verification, sign-in with the original password, project persistence, two-user isolation and private Blob tests. All 17 Studio editors are available for demonstration. The steps below cover the work between that baseline and a commercial release. Record the release commit and dated evidence for each enabled feature in the [release state](GO_LIVE_STATE.md).
 
+The [five-item owner checklist](../OWNER_ACTIONS_ONE_LIST.md) records the current external dependencies.
+
 ## Current launch decisions and engineering evidence
 
 | Area | Current position | What closes it |
 |---|---|---|
 | Business hosting | Owner intends to open registration and payments later. Vercel restricts Hobby to personal, noncommercial use, including before charging users. | Owner selects commercial-eligible hosting and a spending limit before business use. [Vercel terms](https://vercel.com/legal/terms#4-hobby-plan) |
-| Visitor experience | The photo changes at the divider edge. Section 01 links to Studio, the four subsequent numbered sections have been removed and 12 bilingual FAQs have individual photographs. Galleries hand off the selected photo to any of the 17 editors. | Final visual sign-off and commercial-use clearance for the chosen media and fonts. |
+| Visitor experience | The photo changes at the divider edge. The Possibility links to Studio, the four subsequent numbered sections have been removed and 12 bilingual FAQs have individual photographs. Galleries hand off the selected photo to any of the 17 editors. | Final visual sign-off and commercial-use clearance for the chosen media and fonts. |
 | Knowledge Hub | Five existing guides plus 500 illustrated bilingual studies, each tied to a different Vastu Nord Visuals photograph. A separate Payload service supports staff roles, reviewed publication and withdrawal. | Commercial editorial clearance and a dedicated CMS database, host and administrator. [Study source register](../KNOWLEDGE_STUDY_IMAGES.csv) |
 | Search discovery | Both languages have canonical links and alternates. The sitemap is empty and robots disallow indexing on the demo. | Verify translations, images and editorial approval on the public alias, then enable indexing on an eligible commercial release. |
-| Prana | OpenAI Responses integration, short scoped answers, polite redirects, a privacy notice and transactional visitor/global limits. PostgreSQL fixtures exercise both caps and the daily reset. | Vastu Nord provider key, daily limit and controlled live verification in both languages. A film needs an approved video. |
-| Studio provider | MNML v2 image, edit, enhancement and video requests use private project authorization, provider job IDs and a separate video budget. Confirmed provider results can be reopened. | Apply the reviewed render table changes to an authorized database, authorize a capped synthetic run, then inspect actual quality, charges, status and private output for each advertised workflow. |
+| Prana | Groq handles short, scoped consultation and room-brief suggestions. The official YouTube channel feed supplies Prana Film. | Verify live provider responses and publish an embeddable first film. |
+| Studio provider | Private MNML rendering uses provider-managed limits, scoped project authorization and an idempotent job. | Verify the two reviewed migrations, role grants and one complete provider job on the isolated target. |
 | Customer operations | Production sign-in origin configured. Development account, email and private storage journeys previously passed. Newsletter opt-in and withdrawal exercised against isolated PostgreSQL. | Protected Production migration and restore rehearsal, synthetic account/media/email tests, approved lead collection and operational monitoring. |
 | Public gallery, social and payments | Local reference gallery is available. Publishing customer images requires version-specific consent, rights and editorial review. Payments remain deferred by the founder. | Verify consent withdrawal, human moderation and external removals before any social distribution. Reserve checkout for its separately approved phase. |
 

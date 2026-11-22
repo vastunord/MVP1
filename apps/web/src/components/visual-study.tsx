@@ -58,7 +58,7 @@ export function VisualStudy({
             <h2>{translate("Prøv i ditt eget rom", "Try it in your space")}</h2>
             <p>{study.check}</p>
             <Action href="/app/library">
-              {translate("Utforsk Studio", "Explore Studio")}
+              {translate("Åpne Studio", "Open Studio")}
             </Action>
           </div>
           <aside

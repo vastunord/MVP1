@@ -14,7 +14,7 @@ import {
 } from "./mnml.ts";
 import { isStudioMp4 } from "./studio-video.ts";
 
-type Config = { key: string; limit: number; videoLimit: number };
+type Config = { key: string };
 type Actor = { userId: string; workspaceId: string };
 function status(row: RenderJob): RenderStatus {
   return {
@@ -87,8 +87,6 @@ export async function startJob(
 ) {
   const scope = { workspaceId: actor.workspaceId, projectId: brief.projectId };
   const video = brief.endpoint === "videos";
-  if (video && !(config.videoLimit > 0))
-    throw new RenderError(503, "Video generation is not enabled");
   const assetIds = brief.sourceAssetId
     ? [brief.sourceAssetId, ...brief.referenceIds]
     : [];
@@ -105,9 +103,10 @@ export async function startJob(
   if (assets.length !== assetIds.length)
     throw new RenderError(404, "Image unavailable in this project");
   const job = await db.$transaction(async (tx) => {
-    // Serialize the global budget reservation across concurrent requests and server instances.
-    await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(769381022)`;
+    // Serialize identical submissions across tabs, reloads and server instances.
+    await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(hashtext(${brief.projectId})::bigint)`;
     const project = await tx.project.findFirst({
+      select: { id: true },
       where: {
         id: brief.projectId,
         workspaceId: actor.workspaceId,
@@ -115,7 +114,6 @@ export async function startJob(
         deletedAt: null,
         workspace: { personalOwnerId: actor.userId },
       },
-      select: { id: true },
     });
     if (!project) throw new RenderError(404, "Project unavailable");
     const prior =
@@ -141,24 +139,6 @@ export async function startJob(
         );
       return prior;
     }
-    const since = new Date();
-    since.setUTCHours(0, 0, 0, 0);
-    const where = { requestHash: { not: null }, createdAt: { gte: since } };
-    const [globalCount, memberCount] = await Promise.all([
-      tx.renderJob.count({ where }),
-      tx.renderJob.count({
-        where: { ...where, workspaceId: scope.workspaceId },
-      }),
-    ]);
-    if (globalCount >= config.limit || memberCount >= Math.min(5, config.limit))
-      throw new RenderError(429, "Development render limit reached");
-    if (
-      video &&
-      (await tx.renderJob.count({
-        where: { ...where, outputMedia: "video" },
-      })) >= config.videoLimit
-    )
-      throw new RenderError(429, "Daily video limit reached");
     return tx.renderJob.create({
       data: {
         id: brief.id,
@@ -345,6 +325,7 @@ export async function syncJob(
       const current = await tx.renderJob.findUniqueOrThrow({ where: { id } });
       if (current.state === "SUCCEEDED") return status(current);
       const project = await tx.project.findFirst({
+        select: { id: true },
         where: {
           id: projectId,
           workspaceId: actor.workspaceId,

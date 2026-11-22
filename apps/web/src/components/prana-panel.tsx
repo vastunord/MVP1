@@ -6,6 +6,7 @@ import type { KeyboardEvent } from "react";
 import type { Locale } from "@/lib/i18n";
 import { guides } from "./workspace-experience-data";
 import { PranaConsultation } from "./prana-consultation";
+import { PranaFilm } from "./prana-film";
 import "./prana-panel.css";
 
 const tabs = ["Prana", "Quick Tips", "Film"] as const;
@@ -14,7 +15,6 @@ export function PranaPanel({ locale, enabled, filmId }: { locale: Locale; enable
   const t = (nb: string, en: string) => (locale === "en" ? en : nb);
   const [tab, setTab] = useState(0);
   const [topic, setTopic] = useState(0);
-  const [playFilm, setPlayFilm] = useState(false);
   const guide = guides[topic];
   const id = useId();
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
@@ -106,19 +106,9 @@ export function PranaPanel({ locale, enabled, filmId }: { locale: Locale; enable
                 </Link>
               </>
             )}
-            {index === 2 && (
+            {index === 2 && tab === 2 && (
               <>
-                <h2>{t("Filmbibliotek", "Film library")}</h2>
-                {filmId ? (
-                  tab === 2 && playFilm ?
-                    <iframe className="prana-film" title={t("Film fra Vastu Nord", "Vastu Nord film")} src={"https://www.youtube-nocookie.com/embed/"+filmId} referrerPolicy="strict-origin-when-cross-origin" allowFullScreen /> :
-                    <button type="button" className="prana-action" onClick={()=>setPlayFilm(true)}>{t("Last inn filmen fra YouTube","Load the film from YouTube")}</button>
-                ) : <p>
-                  {t(
-                    "Ingen filmer er publisert her ennå. Utforsk den guidede romstudien bilde for bilde.",
-                    "No films have been published here yet. Explore the guided room study one image at a time.",
-                  )}
-                </p>}
+                <PranaFilm locale={locale} featured={filmId} />
                 <Link className="prana-text-link" href="/app/home-experience">
                   {t("Åpne boligopplevelsen", "Open Home Experience")}{" "}
                   <span aria-hidden="true">↗</span>

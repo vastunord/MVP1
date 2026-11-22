@@ -2,6 +2,7 @@ import { MAX_IMAGE_MIB } from "./image-upload-policy.ts";
 export type Locale = "nb-NO" | "en";
 export const dictionaries = {
   "nb-NO": {
+    terms: "Bruksvilkår",
     home: "Hjem",
     tools: "Verktøy",
     files: "Filer",
@@ -41,7 +42,7 @@ export const dictionaries = {
     "Exterior & Landscape": "Eksteriør og landskap",
     "Virtual Staging": "Virtuell møblering",
     "Image Enhancement": "Bildeforbedring",
-    open: "Åpne verktøy",
+    open: "Åpne Studio",
     unavailable: "Ikke tilgjengelig ennå",
     empty: "Ingenting å vise ennå",
     emptyBody: "Denne delen kobles til en sikker tjeneste i en senere fase.",
@@ -74,6 +75,7 @@ export const dictionaries = {
     clear: "Tilbakestill",
   },
   en: {
+    terms: "Terms of use",
     home: "Home",
     tools: "Tools",
     files: "Files",
@@ -113,7 +115,7 @@ export const dictionaries = {
     "Exterior & Landscape": "Exterior & Landscape",
     "Virtual Staging": "Virtual Staging",
     "Image Enhancement": "Image Enhancement",
-    open: "Open tool",
+    open: "Open Studio",
     unavailable: "Not available yet",
     empty: "Nothing here yet",
     emptyBody: "This area will connect to a secure service in a later phase.",

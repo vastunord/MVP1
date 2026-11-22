@@ -113,7 +113,7 @@ export function Dashboard({
       </div>
       <StudyCards locale={locale} overview />
       <div className="vn-section-title">
-        <h2>{en ? "Explore Studio" : "Utforsk Studio"}</h2>
+        <h2>Studio</h2>
       </div>
       <div className="vn-discover">
         <Link href="/app/home-experience">

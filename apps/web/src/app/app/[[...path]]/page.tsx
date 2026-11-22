@@ -5,6 +5,8 @@ import { Header } from "@/components/header";
 import { StudioShell, Directory } from "@/components/workspace";
 import { Library } from "@/components/library";
 import { Editor } from "@/components/editor";
+import { pranaSettings } from "@/server/prana";
+import { studioPersistenceReady } from "@/server/studio-readiness";
 import { mnmlConfig } from "@/server/mnml";
 import { findStudioSample, studies } from "@/lib/workspace-catalog";
 import {
@@ -56,6 +58,7 @@ export default async function Page({
   const loginIntent =
     tool?.id === "room-reimagination" && !sample ? "?intent=room-upload" : "";
   let signedIn = false;
+  let renderReady = false;
   let hasWorkspace = false;
   if (authEnabled) {
     const requestHeaders = await headers();
@@ -71,8 +74,8 @@ export default async function Page({
       redirect(publicHref("/login" + loginIntent, locale));
     if (userId) {
       const db = createDatabase();
-      const personal = await db.workspace
-        .findUnique({
+      const [personal, canRender] = await Promise.all([
+        db.workspace.findUnique({
           where: { personalOwnerId: userId },
           select: {
             id: true,
@@ -83,8 +86,12 @@ export default async function Page({
               take: 3,
             },
           },
-        })
-        .finally(() => db.$disconnect());
+        }),
+        tool && mnmlConfig() && readServerConfig().uploadsEnabled
+          ? studioPersistenceReady(db)
+          : false,
+      ]).finally(() => db.$disconnect());
+      renderReady = canRender;
       hasWorkspace = Boolean(personal);
       if (!personal && !sample)
         redirect(publicHref("/onboarding" + loginIntent, locale));
@@ -101,8 +108,8 @@ export default async function Page({
         locale={locale}
         sample={sample}
         uploadsEnabled={hasWorkspace && readServerConfig().uploadsEnabled}
-        renderEnabled={hasWorkspace && Boolean(mnmlConfig())}
-        videoEnabled={hasWorkspace && (mnmlConfig()?.videoLimit ?? 0)>0}
+        renderEnabled={hasWorkspace && renderReady}
+        improveEnabled={Boolean(pranaSettings(process.env))}
       />
     );
   } else if (isDashboard)

@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { publicHref, type Locale } from "@/lib/i18n";
+import type { OAuthProvider } from "@/server/auth-readiness";
+
+const providerNames = { google: "Google", github: "GitHub", apple: "Apple" };
 
 type Mode =
   | "login"
@@ -16,12 +19,12 @@ export function AuthScreen({
   locale,
   mode,
   enabled,
-  googleReady,
+  providers,
 }: {
   locale: Locale;
   mode: Mode;
   enabled: boolean;
-  googleReady: boolean;
+  providers: OAuthProvider[];
 }) {
   const en = locale === "en";
   const router = useRouter();
@@ -186,6 +189,13 @@ export function AuthScreen({
               : "E-post bekreftet. Du kan logge inn."}
           </p>
         )}
+        {mode === "login" && query.get("oauth") === "incomplete" && (
+          <p role="alert">
+            {en
+              ? "Sign-in was not completed. Try again or sign in with your email."
+              : "Innloggingen ble ikke fullført. Prøv igjen eller logg inn med e-post."}
+          </p>
+        )}
         <form onSubmit={submit} className="auth-form">
           {(mode === "signup" || mode === "onboarding") && (
             <label>
@@ -277,20 +287,30 @@ export function AuthScreen({
             </Link>
           </p>
         )}
-        {mode === "login" && googleReady && enabled && (
+        {(mode === "login" || mode === "signup") && enabled && providers.map((provider) => (
           <button
+            key={provider}
             type="button"
             className="button"
+            disabled={pending}
             onClick={async () => {
-              await authClient.signIn.social({
-                provider: "google",
-                callbackURL: workspaceEntry,
-              });
+              setPending(true);
+              setError("");
+              try {
+                const result = await authClient.signIn.social({
+                  provider, callbackURL: workspaceEntry, errorCallbackURL: href("/login?oauth=incomplete"),
+                });
+                if (result.error) throw new Error();
+              } catch {
+                setError(en ? "Sign-in could not be started. Please try again." : "Innloggingen kunne ikke startes. Prøv igjen.");
+              } finally {
+                setPending(false);
+              }
             }}
           >
-            {en ? "Continue with Google" : "Fortsett med Google"}
+            {en ? "Continue with " : "Fortsett med "}{providerNames[provider]}
           </button>
-        )}
+        ))}
         <p className="small">
           {en
             ? "Account email is used for verification and recovery. Your media stays private until you explicitly approve each publication."

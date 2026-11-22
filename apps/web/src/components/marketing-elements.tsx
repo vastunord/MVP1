@@ -90,7 +90,7 @@ export function Closing({ locale, title, photo }: { locale: Locale; title: strin
       <div className="mk-wrap">
         <h2>{title}</h2>
         <Action href="/app/library">
-          {locale === "en" ? "Explore Studio" : "Utforsk Studio"}
+          {locale === "en" ? "Open Studio" : "Åpne Studio"}
         </Action>
       </div>
     </section>

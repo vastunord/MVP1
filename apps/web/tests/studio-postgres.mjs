@@ -1,3 +1,4 @@
+import { studioPersistenceReady } from "../src/server/studio-readiness.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -24,7 +25,7 @@ const dev = createRequire(
 const { PGlite } = dev("@electric-sql/pglite"),
   { PGLiteSocketServer } = dev("@electric-sql/pglite-socket");
 
-test("disposable PostgreSQL verifies owned inputs, replay, quota and private result persistence", async () => {
+test("disposable PostgreSQL verifies owned inputs, replay and private result persistence", async () => {
   const memory = await PGlite.create(),
     socket = new PGLiteSocketServer({ db: memory, host: "127.0.0.1", port: 0 });
   let db;
@@ -32,7 +33,6 @@ test("disposable PostgreSQL verifies owned inputs, replay, quota and private res
     for (const dir of [
       "20261121_phase02c_initial",
       "20261121_phase02d_auth_projects",
-      "20261122_studio_mnml",
     ]) {
       await memory.exec(
         await readFile(
@@ -54,6 +54,36 @@ test("disposable PostgreSQL verifies owned inputs, replay, quota and private res
         ssl: false,
         port: Number(socket.getServerConn().split(":").at(-1)),
       }),
+    });
+    assert.equal(
+      await studioPersistenceReady(db),
+      false,
+      "unapplied render migration",
+    );
+    await memory.exec(
+      await readFile(
+        new URL(
+          "../prisma/migrations/20261122_studio_mnml/migration.sql",
+          import.meta.url,
+        ),
+        "utf8",
+      ),
+    );
+    assert.equal(
+      await studioPersistenceReady(db),
+      true,
+      "complete schema with permitted writes",
+    );
+    await memory.exec(
+      "CREATE ROLE render_reader; GRANT SELECT ON ALL TABLES IN SCHEMA public TO render_reader",
+    );
+    await db.$transaction(async (tx) => {
+      await tx.$executeRawUnsafe("SET LOCAL ROLE render_reader");
+      assert.equal(
+        await studioPersistenceReady(tx),
+        false,
+        "SELECT alone cannot submit a paid job",
+      );
     });
     for (const id of ["a", "b"]) {
       await db.user.create({ data: { id, email: id + "@example.invalid" } });
@@ -89,7 +119,7 @@ test("disposable PostgreSQL verifies owned inputs, replay, quota and private res
     };
     const actor = { workspaceId: "wa", userId: "a" },
       other = { workspaceId: "wb", userId: "b" },
-      config = { key: "fixture", limit: 1, videoLimit: 0 };
+      config = { key: "fixture" };
     const photo = await sharp({
       create: { width: 32, height: 24, channels: 3, background: "#013c55" },
     })
@@ -188,16 +218,7 @@ test("disposable PostgreSQL verifies owned inputs, replay, quota and private res
       ),
       /conflicts/,
     );
-    await assert.rejects(
-      startJob(
-        db,
-        config,
-        actor,
-        parseRender({ ...input, id: randomUUID() }),
-        io,
-      ),
-      /limit/,
-    );
+
     assert.deepEqual(
       await projectJobs(db, other, "pb", "room-reimagination"),
       [],
@@ -251,8 +272,7 @@ test("disposable PostgreSQL verifies owned inputs, replay, quota and private res
       id: randomUUID(),
       workflow: "video",
     });
-    await assert.rejects(startJob(db, config, actor, video, io), /not enabled/);
-    const videoConfig = { ...config, limit: 20, videoLimit: 1 };
+
     let mime = "text/html",
       storedKey;
     const videoIo = {
@@ -282,13 +302,10 @@ test("disposable PostgreSQL verifies owned inputs, replay, quota and private res
       },
     };
     assert.equal(
-      (await startJob(db, videoConfig, actor, video, videoIo)).media,
+      (await startJob(db, config, actor, video, videoIo)).media,
       "video",
     );
-    await assert.rejects(
-      startJob(db, videoConfig, actor, { ...video, id: randomUUID() }, videoIo),
-      /limit/,
-    );
+
     await assert.rejects(
       syncJob(db, "fixture", actor, "pa", video.id, videoIo),
       /Invalid video file/,

@@ -1,5 +1,20 @@
 import { expect, test } from "@playwright/test";
 
+test("footer terms and privacy stay in the selected language", async ({ page }) => {
+  for (const [prefix, terms, privacy] of [["", "Bruksvilkår", "Personvern og informasjonskapsler"], ["/en", "Terms of use", "Privacy and cookies"]]) {
+    await page.goto(prefix + "/");
+    if (!prefix) {
+      await page.getByRole("button", { name: "Avvis valgfrie", exact: true }).click();
+    }
+    await page.getByRole("contentinfo").getByRole("link", { name: terms }).click();
+    await expect(page).toHaveURL(new RegExp(prefix + "/terms$"));
+    await expect(page.getByRole("heading", { name: terms, level: 1 })).toBeVisible();
+    await page.getByRole("main").getByRole("link", { name: privacy }).click();
+    await expect(page).toHaveURL(new RegExp(prefix + "/privacy$"));
+    await expect(page.getByRole("main").getByRole("link", { name: /Groq/ })).toHaveAttribute("href", "https://console.groq.com/docs/your-data");
+  }
+});
+
 test("resource search, topic filters and expandable articles work together", async ({
   page,
 }) => {
@@ -40,13 +55,13 @@ test("living-room directions, pricing and the closed contact form", async ({
     "/reference/editorial/feature-variant.webp",
   );
   await expect(main.locator(".mp-variant img")).toHaveClass(/mk-tone-evening/);
-  await main.locator(".mp-link-row").getByRole("link", { name: "Explore Studio" }).click();
+  await main.locator(".mp-link-row").getByRole("link", { name: "Open Studio" }).click();
   await expect(page).toHaveURL(/\/app\/tools\/room-reimagination$/);
   await page.goto("/en/pricing");
   await expect(
     main.getByText("Subscriptions unavailable", { exact: true }),
   ).toBeVisible();
-  await main.getByRole("link", { name: "Open demonstration" }).click();
+  await main.getByRole("link", { name: "Open Studio" }).first().click();
   await expect(page).toHaveURL(/\/app\/library$/);
   await page.goto("/en/contact");
   await main.getByRole("link", { name: /Partnerships/ }).click();

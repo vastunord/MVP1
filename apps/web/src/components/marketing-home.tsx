@@ -8,25 +8,25 @@ const directions = [
   {
     tool: "room-reimagination",
     no: "Gi rommet ny form",
-    en: "Reimagine a space",
+    en: "Reimagine a room",
     symbol: "⌂",
   },
   {
-    tool: "garden-design",
-    no: "Forvandle uterommet",
-    en: "Transform outdoors",
+    tool: "lighting-reimagination",
+    no: "Endre lyset i rommet",
+    en: "Change the lighting",
     symbol: "☼",
   },
   {
     tool: "material-refinement",
-    no: "Finjuster detaljene",
-    en: "Refine the details",
+    no: "Prøv nye materialer",
+    en: "Explore materials",
     symbol: "◈",
   },
   {
-    tool: "perspective-correction",
-    no: "Forbedre et bilde",
-    en: "Perfect an image",
+    tool: "furniture-refresh",
+    no: "Forny møblene",
+    en: "Refresh the furniture",
     symbol: "⌗",
   },
 ] as const;
@@ -61,7 +61,7 @@ export function MarketingHome({
         <div className="mk-split">
           <div>
             <p className="mk-label">
-              01 / {t("Muligheten", "The possibility")}
+              {t("Muligheten", "The possibility")}
             </p>
             <h2>
               {t(
@@ -76,7 +76,7 @@ export function MarketingHome({
               )}
             </p>
             <Action href="/app/library">
-              {t("Utforsk Studio", "Explore Studio")}
+              {t("Åpne Studio", "Open Studio")}
             </Action>
           </div>
           <div className="mk-mosaic">

@@ -8,9 +8,11 @@ import type { Locale } from "@/lib/i18n";
 import { studies, translated } from "@/lib/workspace-catalog";
 import {
   renderGallery,
+  subjects,
   fileExamples,
   type GalleryScene,
 } from "@/lib/render-gallery";
+import "./workspace.css";
 
 const favoritesKey = "vn-gallery-favorites";
 const validScenes = new Set(
@@ -124,27 +126,31 @@ export function Gallery({
   initialAlbum,
   assets = false,
   privateFilesEnabled = false,
+  publicCollection = false,
 }: {
   locale: Locale;
   initialAlbum?: string;
   assets?: boolean;
   privateFilesEnabled?: boolean;
+  publicCollection?: boolean;
 }) {
   const en = locale === "en";
   const [privatePreview, setPrivatePreview] = useState("");
   const [query, setQuery] = useState("");
   const [album, setAlbum] = useState(initialAlbum || "");
   const [kind, setKind] = useState("all");
+  const [subject, setSubject] = useState("");
   const favorites = parseFavorites(
     useSyncExternalStore(followFavorites, readFavorites, emptyFavorites),
   );
-  const collection = assets ? fileExamples : renderGallery;
+  const collection = assets && !publicCollection ? fileExamples : renderGallery;
   const [selected, setSelected] = useState<GalleryScene>(collection[0]);
   const dialog = useRef<HTMLDialogElement>(null);
   const [toolId, setToolId] = useState(tools[0].id);
   const shown = collection.filter(
     (s) =>
       (!album || s.study === album) &&
+      (!subject || s.style[1] === subject) &&
       (kind === "all" || (kind === "favorites" && favorites.includes(s.id))) &&
       [translated(s.title, locale), translated(s.style, locale)]
         .join(" ")
@@ -154,14 +160,14 @@ export function Gallery({
   const filters = [
     ["all", en ? "All images" : "Alle bilder"],
     ["favorites", en ? "Favourites" : "Favoritter"],
-    ["videos", en ? "Films" : "Film"],
+    ...(!publicCollection ? [["videos", en ? "Films" : "Film"]] : []),
   ];
   return (
     <section className="vn-collection">
       <header className="vn-pagehead">
-        <p className="eyebrow">{en ? "Studio collection" : "Studiosamling"}</p>
+        {!publicCollection && <p className="eyebrow">{en ? "Studio collection" : "Studiosamling"}</p>}
         <h1>
-          {assets
+          {publicCollection ? (en ? "Gallery" : "Galleri") : assets
             ? en
               ? "Files and assets"
               : "Filer og ressurser"
@@ -170,7 +176,11 @@ export function Gallery({
               : "Bildegalleri"}
         </h1>
         <p>
-          {assets
+          {publicCollection
+            ? en
+              ? "Explore Vastu Nord’s architectural studies by subject. Open a photo to see its details or use it in Studio."
+              : "Utforsk Vastu Nords arkitekturstudier etter tema. Åpne et bilde for å se detaljene eller bruke det i Studio."
+            : assets
             ? en
               ? "Browse reference files for your Studio studies."
               : "Se referansefiler til studiene dine i Studio."
@@ -179,7 +189,7 @@ export function Gallery({
               : "Åpne en av de 50 bildestudiene og velg et Studio-verktøy for bildet."}
         </p>
       </header>
-      {assets && privateFilesEnabled && (
+      {!publicCollection && assets && privateFilesEnabled && (
         <section className="vn-private-files">
           <PrivateUpload
             locale={locale}
@@ -200,7 +210,7 @@ export function Gallery({
           )}
         </section>
       )}
-      {assets && (
+      {!publicCollection && assets && (
         <h2 className="vn-section-heading">
           {en ? "Reference collection" : "Referansesamling"}
         </h2>
@@ -217,7 +227,15 @@ export function Gallery({
             </button>
           ))}
         </div>
-        <label>
+        {publicCollection ? <label>
+          <span className="sr-only">{en ? "Subject" : "Motiv"}</span>
+          <select value={subject} onChange={(event) => setSubject(event.target.value)}>
+            <option value="">{en ? "All subjects" : "Alle motiv"}</option>
+            {Object.values(subjects).map((label) => (
+              <option key={label[1]} value={label[1]}>{translated(label, locale)}</option>
+            ))}
+          </select>
+        </label> : <label>
           <span className="sr-only">{en ? "Album" : "Album"}</span>
           <select value={album} onChange={(e) => setAlbum(e.target.value)}>
             <option value="">{en ? "All albums" : "Alle album"}</option>
@@ -227,7 +245,7 @@ export function Gallery({
               </option>
             ))}
           </select>
-        </label>
+        </label>}
         <label>
           <span className="sr-only">
             {en ? "Search images" : "Søk etter bilder"}
@@ -302,6 +320,7 @@ export function Gallery({
             className="button"
             onClick={() => {
               setAlbum("");
+              setSubject("");
               setKind("all");
               setQuery("");
             }}
@@ -310,14 +329,14 @@ export function Gallery({
           </button>
         </div>
       )}
-      <div className="vn-related">
+      {!publicCollection && <div className="vn-related">
         <Link href="/app/albums">
           {en ? "Browse albums" : "Utforsk album"} ↗
         </Link>
         <Link href="/app/tools/room-reimagination">
           {en ? "Open Studio" : "Åpne Studio"} ↗
         </Link>
-      </div>
+      </div>}
       <dialog
         className="vn-scene-dialog"
         ref={dialog}
@@ -343,9 +362,9 @@ export function Gallery({
         </div>
         <div className="vn-related">
           <span>{translated(selected.style, locale)}</span>
-          <Link href={"/app/studies/" + selected.study}>
+          {!publicCollection && <Link href={"/app/studies/" + selected.study}>
             {en ? "View example project" : "Åpne eksempelprosjekt"} ↗
-          </Link>
+          </Link>}
         </div>
         <div className="vn-gallery-studio">
           <label>
@@ -365,7 +384,7 @@ export function Gallery({
             className="button"
             href={"/app/tools/" + toolId + "?sample=" + selected.id}
           >
-            {en ? "Open selected tool" : "Åpne valgt verktøy"} ↗
+            {en ? "Open Studio" : "Åpne Studio"} ↗
           </Link>
         </div>
       </dialog>

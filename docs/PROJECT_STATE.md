@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · Protected visitor and Studio rehearsal
+
+The homepage adds previous-photo navigation and interior-focused directions. English Studio entry links read “Open Studio” and Norwegian links read “Åpne Studio”. Studio offers photographic choices, five Prana V1 levels and editable Groq prompt suggestions. The public gallery uses 50 approved studies. Terms, privacy, disclaimers and the official YouTube channel are linked. The channel feed currently has zero public videos.
+
+GroqAPI and MNMLAPI are present in Vercel. Each provider controls its spending limits. Social sign-in requires client registrations with Google, GitHub and Apple. Email sign-up and newsletter opt-in remain independent. Preview database `br-summer-night-bh70tetr` uses `vastunord_preview_runtime` and separate private Blob store `store_FqCkmEg47WkbeoRZ`. Verified media version/withdrawal grants are scoped to the protected Preview branch. The runtime has no schema CREATE or gallery/editorial INSERT. The Development migration credential failed password authentication before executing SQL. The two reviewed newsletter/render migrations remain pending. [Release checklist](OWNER_ACTIONS_ONE_LIST.md)
+
 ## 22 November 2026 · Studio, Knowledge Hub and launch preparation
 
 Application commit `0a99e002adc9` is on the [Vastu Nord noncommercial demo](https://vastunord-web.vercel.app). Vercel marked deployment `dpl_HMXJBbuSXgDzs8a9YeQ2kucJqojW` ready. Web and CMS builds, TypeScript, ESLint, 44 web unit tests and 41 browser tests passed. The protected Production build rejected the existing database configuration before connection. Customer accounts, uploads, AI and newsletter collection remain closed. [Release verification](evidence/v7-studio-knowledge/README.md)

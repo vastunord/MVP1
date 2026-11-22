@@ -167,8 +167,9 @@ try {
     assert.equal(await hero.locator(".photo-hero-stage img").count(), 2);
     await photo(hero.locator(".photo-hero-stage img").first());
     const possibilities = page
+      .locator(".mk-split")
       .getByRole("link", {
-        name: width === 390 ? "Utforsk Studio" : "Explore Studio",
+        name: width === 390 ? "Åpne Studio" : "Open Studio",
         exact: true,
       })
       .filter({ visible: true });
@@ -204,19 +205,17 @@ try {
     }
     assert.equal(pictures.size, 12, "FAQ illustrations must be distinct");
     await faq.first().locator("summary").click();
-    await page
-      .locator("#questions h2")
-      .evaluate((el) =>
-        window.scrollTo({
-          top:
-            scrollY +
-            el.getBoundingClientRect().top -
-            (document.querySelector("header")?.getBoundingClientRect().height ||
-              0) -
-            20,
-          behavior: "instant",
-        }),
-      );
+    await page.locator("#questions h2").evaluate((el) =>
+      window.scrollTo({
+        top:
+          scrollY +
+          el.getBoundingClientRect().top -
+          (document.querySelector("header")?.getBoundingClientRect().height ||
+            0) -
+          20,
+        behavior: "instant",
+      }),
+    );
     if (width === 390 || width === 1440) await screenshot("faq-" + width);
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await screenshot("home-" + width);
@@ -251,49 +250,27 @@ try {
   await expect(slider).toHaveValue("51");
   await comparison.click();
   await expect(slider).toHaveCount(0);
-  await page.locator("#studio-workflow").selectOption("video");
+  await page.getByRole("radio", { name: "Videovandring", exact: true }).check();
   await expect(page.locator(".studio-engine")).toContainText("10 s");
-  await page.locator("#studio-workflow").selectOption("design");
+  await page
+    .getByRole("radio", { name: "Design fra bilde", exact: true })
+    .check();
   for (const [width, height] of [
     [390, 844],
     [1440, 900],
   ]) {
     await page.setViewportSize({ width, height });
     await page.evaluate(() => document.fonts.ready);
-    const boxes = await page
-      .locator(".studio-engine select")
-      .evaluateAll((controls) =>
-        controls.map((control) => {
-          const style = getComputedStyle(control);
-          const measure = document.createElement("canvas").getContext("2d");
-          measure.font =
-            style.fontWeight + " " + style.fontSize + " " + style.fontFamily;
-          const bounds = control.getBoundingClientRect();
-          return {
-            top: bounds.top,
-            bottom: bounds.bottom,
-            height: bounds.height,
-            width: bounds.width,
-            needed:
-              Math.ceil(
-                measure.measureText(control.selectedOptions[0].textContent)
-                  .width,
-              ) +
-              parseFloat(style.paddingLeft) +
-              parseFloat(style.paddingRight) +
-              24,
-          };
-        }),
+    const levels = page.getByRole("group", { name: "Prana V1", exact: true });
+    assert.equal(await levels.getByRole("radio").count(), 5);
+    await levels.getByRole("radio", { name: "Ultra", exact: true }).check();
+    for (const tile of await levels.locator("label").all()) {
+      const rect = await tile.boundingBox();
+      assert(
+        rect?.height >= 44 && rect.width > 42,
+        "Clipped Prana V1 tile at " + width,
       );
-    assert.equal(boxes.length, 2);
-    assert(
-      boxes.every((box) => box.width >= box.needed && box.height >= 44),
-      "Studio selected value is clipped at " + width + "px",
-    );
-    assert(
-      boxes[0].bottom <= boxes[1].top,
-      "Studio selectors overlap at " + width + "px",
-    );
+    }
     await noOverflow();
     if (width === 390) {
       await page.locator(".studio-engine").scrollIntoViewIfNeeded();

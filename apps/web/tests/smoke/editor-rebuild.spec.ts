@@ -1,25 +1,35 @@
 import { test, expect } from "@playwright/test";
 
-test("studio opens on a single image with optional comparison and tool selection", async ({ page }) => {
+test("studio opens on a single image with optional comparison and tool selection", async ({
+  page,
+}) => {
   await page.goto("/app/tools/room-reimagination");
-  const comparison = page.getByRole("slider", {name:"Sammenlign før og etter"});
+  const comparison = page.getByRole("slider", {
+    name: "Sammenlign før og etter",
+  });
   await expect(comparison).toHaveCount(0);
   await expect(page.locator(".studio-variants")).toHaveCount(0);
   await expect(page.locator("figcaption")).toContainText("Studioreferanse");
-  await page.getByRole("button",{name:"Sammenlign eksempel"}).click();
+  await page.getByRole("button", { name: "Sammenlign eksempel" }).click();
   await expect(comparison).toHaveValue("50");
   await comparison.focus();
   await comparison.press("ArrowRight");
   await expect(comparison).toHaveValue("51");
-  await page.getByRole("button",{name:"Enkeltbilde"}).click();
+  await page.getByRole("button", { name: "Enkeltbilde" }).click();
   await expect(comparison).toHaveCount(0);
   await page.locator(".studio-tool-switcher summary").click();
   await expect(page.locator(".studio-tool-switcher nav a")).toHaveCount(17);
   await page.locator(".studio-tool-switcher summary").click();
-  await page.getByLabel("Rendermotor").selectOption("v4.5-fast");
-  await expect(page.getByLabel("Rendermotor")).toHaveValue("v4.5-fast");
-  await page.getByRole("combobox", { name: "Interiørstil", exact: true }).selectOption("Japandi");
-  await expect(page.getByRole("combobox", { name: "Interiørstil", exact: true })).toHaveValue("Japandi");
+  await page
+    .getByRole("group", { name: "Prana V1", exact: true })
+    .getByRole("radio", { name: "Fast" })
+    .check();
+  await expect(page.getByRole("radio", { name: "Fast" })).toBeChecked();
+  await page
+    .getByRole("group", { name: "Interiørstil", exact: true })
+    .getByRole("radio", { name: "Japandi" })
+    .check();
+  await expect(page.getByRole("radio", { name: "Japandi" })).toBeChecked();
   await page.getByText("Skrivetips", { exact: true }).click();
   await expect(
     page.getByText("Angi hvilken del", { exact: false }),
@@ -27,52 +37,56 @@ test("studio opens on a single image with optional comparison and tool selection
   await expect(page.locator(".primary-action button")).toBeDisabled();
 });
 
-test("photographic room briefs apply editable settings and preserve all nine output media", async ({ page }) => {
+test("room choice images, output media, keyboard input and collapsed groups work on mobile", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/app/tools/room-reimagination");
-  const design = page.getByRole("region", { name: "Innstillinger for romdesign" });
-  const briefs = design.getByRole("group", { name: "Velg et romkonsept" });
-  const photos = briefs.locator("img");
-  await expect(photos).toHaveCount(3);
-  const sources = new Set<string>();
-  for (const photo of await photos.all()) {
-    await photo.scrollIntoViewIfNeeded();
-    sources.add(await photo.evaluate(async el => {
-      const image = el as HTMLImageElement;
-      await image.decode();
-      if (image.naturalWidth < 100) throw new Error("Room brief image did not load");
-      return image.src;
-    }));
-  }
-  expect(sources.size).toBe(3);
-  const family = briefs.getByRole("button", { name: /Hverdagsrytme/ });
-  await family.focus();
-  await page.keyboard.press("Enter");
-  await expect(family).toHaveAttribute("aria-pressed", "true");
+  const design = page.getByRole("region", {
+    name: "Innstillinger for romdesign",
+  });
+  const room = design.getByRole("group", { name: "Romtype", exact: true });
+  const bed = room.getByRole("radio", { name: "Soverom" });
+  await bed.focus();
+  await page.keyboard.press("Space");
+  await expect(bed).toBeChecked();
+  const photo = room
+    .locator("label")
+    .filter({ has: page.getByRole("radio", { name: "Soverom" }) })
+    .locator("img");
+  await photo.scrollIntoViewIfNeeded();
+  expect(
+    await photo.evaluate(async (image) => {
+      const element = image as HTMLImageElement;
+      await element.decode();
+      return element.naturalWidth;
+    }),
+  ).toBe(320);
   await design.getByText("Kamera og lys", { exact: true }).click();
-  await expect(design.getByRole("group", { name: "Synsvinkel" })).toHaveCount(0);
   await design.getByRole("radio", { name: "Nytt utsnitt" }).check();
-  await design.getByRole("radio", { name: "Lav vinkel" }).check();
-  await design.getByText("Romdetaljer", { exact: true }).click();
-  await expect(design.getByLabel("Barnevennlig innredning")).toBeChecked();
-  await expect(design.getByRole("combobox", { name: "Interiørstil", exact: true })).toHaveValue("Scandinavian");
-  await design.getByRole("group", { name: "Planter" }).getByRole("radio", { name: "Frodig" }).check();
-  await expect(family).toHaveAttribute("aria-pressed", "false");
+  await expect(design.getByRole("group", { name: "Synsvinkel" })).toBeVisible();
+  await design.getByRole("radio", { name: "Høyt ståsted" }).check();
+  await design.getByRole("radio", { name: "Blåtime" }).check();
   await design.getByText("Bildeinnstillinger", { exact: true }).click();
-  const media = design.getByRole("combobox", { name: "Bildestil" });
-  await expect(media.locator("option")).toHaveCount(9);
-  await media.selectOption("Watercolor");
-  await expect(media).toHaveValue("Watercolor");
+  const media = design.getByRole("group", { name: "Bildestil" });
+  await expect(media.getByRole("radio")).toHaveCount(9);
+  await media.getByRole("radio", { name: "Akvarell" }).check();
   await design.getByRole("radio", { name: "16:9" }).check();
-  await design.getByRole("button", { name: "Ny tilfeldig startverdi" }).click();
-  await expect(design.getByRole("textbox", { name: "Startverdi" })).toHaveValue(/^\d{1,10}$/);
-  await expect(design).not.toContainText("Standardvalg eller alternativer er ikke bekreftet");
-  await page.getByRole("link", { name: "Bilde og beskrivelse" }).click();
+  await expect(page.locator(".studio-editor select")).toHaveCount(0);
+  await expect(design).not.toContainText("Startverdi");
+  await expect(design).not.toContainText("Skogens ro");
   await page.getByText("Referansebilder", { exact: true }).click();
-  await expect(page.getByRole("combobox", { name: "Materialer", exact: true })).toBeDisabled();
-  await expect(page.getByRole("combobox", { name: "Stemning", exact: true })).toBeDisabled();
-  await expect(page.locator(".primary-action button")).toBeDisabled();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+  await expect(
+    page.getByRole("group", { name: "Første referanse" }).getByRole("radio"),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Forbedre med Prana" }),
+  ).toBeDisabled();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });
 
 test("library search and recovery from an empty result", async ({ page }) => {
@@ -91,10 +105,11 @@ test("library search and recovery from an empty result", async ({ page }) => {
   const sources = new Set<string>();
   for (const photo of await photos.all()) {
     await photo.scrollIntoViewIfNeeded();
-    const source = await photo.evaluate(async el => {
+    const source = await photo.evaluate(async (el) => {
       const image = el as HTMLImageElement;
       await image.decode();
-      if (!image.naturalWidth || !image.getBoundingClientRect().height) throw new Error("Tool photo is blank");
+      if (!image.naturalWidth || !image.getBoundingClientRect().height)
+        throw new Error("Tool photo is blank");
       return image.src;
     });
     sources.add(source);
@@ -104,7 +119,9 @@ test("library search and recovery from an empty result", async ({ page }) => {
 
 test("unspecified outdoor controls share one disclosure", async ({ page }) => {
   await page.goto("/app/tools/outdoor-visualization");
-  const unavailable = page.locator("details").filter({ hasText: "Utilgjengelige innstillinger" });
+  const unavailable = page
+    .locator("details.avoid-detail")
+    .filter({ hasText: "Utilgjengelige innstillinger" });
   await expect(unavailable).toHaveCount(1);
   await unavailable.locator("summary").click();
   await expect(unavailable.getByRole("listitem")).toHaveCount(5);

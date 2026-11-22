@@ -3,22 +3,9 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createDatabase } from "./db";
 import { sendAuthEmail } from "./auth-email";
-import { authBaseUrl } from "./auth-readiness";
+import { authBaseUrl, oauthConfiguration } from "./auth-readiness";
 
 const baseURL = authBaseUrl();
-
-const google =
-  process.env.GOOGLE_OAUTH_ENABLED === "true" &&
-  process.env.GOOGLE_CLIENT_ID &&
-  process.env.GOOGLE_CLIENT_SECRET
-    ? {
-        google: {
-          clientId: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          requireEmailVerification: true,
-        },
-      }
-    : {};
 
 export const auth = betterAuth({
   database: prismaAdapter(createDatabase(), { provider: "postgresql" }),
@@ -39,13 +26,15 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }, request) =>
       sendAuthEmail(user.email, "verification", url, request),
   },
-  socialProviders: google,
+  ...oauthConfiguration(process.env),
   user: { modelName: "User" },
   session: { modelName: "Session" },
   account: {
     modelName: "Account",
     encryptOAuthTokens: true,
     accountLinking: { enabled: false },
+    storeStateStrategy: "database",
+    skipStateCookieCheck: false,
   },
   verification: { modelName: "Verification" },
   rateLimit: {
@@ -55,5 +44,4 @@ export const auth = betterAuth({
     window: 60,
     max: 30,
   },
-  trustedOrigins: baseURL ? [baseURL] : [],
 });

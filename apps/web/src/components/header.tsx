@@ -182,7 +182,7 @@ export function Header({
     { href: publicHref("/features", locale), label: t.features },
     { href: publicHref("/about", locale), label: t.about },
     { href: publicHref("/pricing", locale), label: t.pricing },
-    { href: "/app/renders", label: en ? "Gallery" : "Galleri" },
+    { href: publicHref("/gallery", locale), label: en ? "Gallery" : "Galleri" },
     { href: publicHref("/resources", locale), label: t.resources },
     { href: publicHref("/contact", locale), label: t.contact },
   ];

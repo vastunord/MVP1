@@ -9,7 +9,7 @@ import {
   type CSSProperties,
 } from "react";
 import { homeComparisons } from "@/lib/home-comparisons";
-import type { Locale } from "@/lib/i18n";
+import { publicHref, type Locale } from "@/lib/i18n";
 import { translated } from "@/lib/workspace-catalog";
 import { Action } from "./marketing-elements";
 import "./home-photo-hero.css";
@@ -33,6 +33,7 @@ function ComparisonWindow({
   scene,
   locale,
   moving,
+  previousScene,
   nextScene,
   advance,
   children,
@@ -40,8 +41,9 @@ function ComparisonWindow({
   scene: Scene;
   locale: Locale;
   moving: boolean;
+  previousScene: Scene;
   nextScene: Scene;
-  advance: () => void;
+  advance: (step: -1 | 1) => void;
   children: React.ReactNode;
 }) {
   const frame = useRef<HTMLDivElement>(null);
@@ -51,7 +53,7 @@ function ComparisonWindow({
   const pointing = useRef(false);
   const [hovered, setHovered] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const [manualAdvance, setManualAdvance] = useState(false);
+  const [manualStep, setManualStep] = useState<-1 | 0 | 1>(0);
   const [keyboardFocus, setKeyboardFocus] = useState(false);
 
   function paint(value: number) {
@@ -63,7 +65,7 @@ function ComparisonWindow({
   }
 
   useEffect(() => {
-    if (!manualAdvance && (!moving || hovered || dragging || keyboardFocus))
+    if (!manualStep && (!moving || hovered || dragging || keyboardFocus))
       return;
     let active = true;
     let animation = 0;
@@ -75,29 +77,29 @@ function ComparisonWindow({
       delay = window.setTimeout(
         async () => {
           if (
-            !manualAdvance &&
+            !manualStep &&
             (document.hidden || document.querySelector("dialog[open]"))
           ) {
             if (active) finishSweep(edge);
             return;
           }
           try {
-            await loadPair(nextScene);
+            await loadPair(manualStep === -1 ? previousScene : nextScene);
             if (!active) return;
             direction.current = edge === 100 ? -1 : 1;
-            advance();
+            advance(manualStep || 1);
           } catch {
             // Keep a readable pair and let the next sweep or manual action retry.
-            if (active && !manualAdvance) {
+            if (active && !manualStep) {
               direction.current = edge === 100 ? -1 : 1;
               previous = performance.now();
               animation = requestAnimationFrame(tick);
             }
           } finally {
-            if (active && manualAdvance) setManualAdvance(false);
+            if (active && manualStep) setManualStep(0);
           }
         },
-        manualAdvance ? 0 : edgeHoldMs,
+        manualStep ? 0 : edgeHoldMs,
       );
     }
 
@@ -114,7 +116,7 @@ function ComparisonWindow({
       paint(next);
       animation = requestAnimationFrame(tick);
     }
-    if (manualAdvance) finishSweep(direction.current === 1 ? 100 : 0);
+    if (manualStep) finishSweep(direction.current === 1 ? 100 : 0);
     else animation = requestAnimationFrame(tick);
     return () => {
       active = false;
@@ -126,7 +128,8 @@ function ComparisonWindow({
     hovered,
     dragging,
     keyboardFocus,
-    manualAdvance,
+    manualStep,
+    previousScene,
     nextScene,
     advance,
   ]);
@@ -228,10 +231,19 @@ function ComparisonWindow({
         </div>
       </div>
       <div className="hero-sequence">
+        <button
+          type="button"
+          onClick={() => setManualStep(-1)}
+          aria-label={locale === "en" ? "Previous image pair" : "Forrige bildepar"}
+        >
+          <svg viewBox="0 0 24 16" width="23" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M22 8H3m7-6L3 8l7 6" />
+          </svg>
+        </button>
         {children}
         <button
           type="button"
-          onClick={() => setManualAdvance(true)}
+          onClick={() => setManualStep(1)}
           aria-label={locale === "en" ? "Next image pair" : "Neste bildepar"}
         >
           <svg
@@ -291,21 +303,14 @@ export function HomePhotoHero({
     };
   }, []);
 
-  const advance = useCallback(() => setIndex(next), [next]);
+  const advance = useCallback((step: -1 | 1) => {
+    setIndex(current => (current + step + homeComparisons.length) % homeComparisons.length);
+  }, []);
 
   const sample = {
     href: `/app/tools/room-reimagination?sample=hero-${scene.id}`,
-    label: t("Prøv dette bildet", "Try this image"),
+    label: t("Åpne Studio", "Open Studio"),
   };
-  const studio = {
-    href: "/app/tools/room-reimagination#source-image",
-    label: uploadsEnabled
-      ? t("Last opp ditt bilde", "Upload your photo")
-      : t("Åpne Studio", "Open Studio"),
-  };
-  const [primary, secondary] = uploadsEnabled
-    ? [studio, sample]
-    : [sample, studio];
 
   return (
     <section className="photo-hero" aria-labelledby="home-title">
@@ -330,10 +335,14 @@ export function HomePhotoHero({
               setChoosingSample(false);
           }}
         >
-          <Action href={primary.href}>{primary.label}</Action>
-          <Action secondary href={secondary.href}>
-            {secondary.label}
-          </Action>
+          <Action href={sample.href}>{sample.label}</Action>
+          {uploadsEnabled ? (
+            <Action secondary href="/app/tools/room-reimagination#source-image">
+              {t("Last opp ditt bilde", "Upload your photo")}
+            </Action>
+          ) : (
+            <Action secondary href={publicHref("/gallery", locale)}>{t("Se bildegalleriet", "View gallery")}</Action>
+          )}
         </div>
       </div>
       <div className="photo-hero-visual" ref={visual}>
@@ -341,6 +350,7 @@ export function HomePhotoHero({
           scene={scene}
           locale={locale}
           moving={playing && !choosingSample}
+          previousScene={homeComparisons[(index - 1 + homeComparisons.length) % homeComparisons.length]}
           nextScene={homeComparisons[next]}
           advance={advance}
         >

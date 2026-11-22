@@ -1,7 +1,10 @@
-.vn-workspace {
+.vn-workspace, .vn-public-gallery {
   --vn-line: color-mix(in srgb, var(--text) 18%, var(--bg));
   --vn-tint: color-mix(in srgb, var(--sage) 17%, var(--bg));
   --vn-panel: color-mix(in srgb, var(--paper) 5%, var(--bg));
+}
+.vn-public-gallery { padding-block: clamp(2rem, 5vw, 5rem); }
+.vn-workspace {
   grid-template-columns: 218px minmax(0, 1fr);
 }
 .vn-side.sidebar {

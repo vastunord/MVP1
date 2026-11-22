@@ -1,4 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { authBaseUrl } from "./auth-readiness.ts";
+import { isPreviewDatabase } from "./preview-target.ts";
 
 type Environment = Record<string, string | undefined>;
 export type NewsletterLocale = "nb-NO" | "en";
@@ -10,7 +12,8 @@ export const hour = 60 * 60 * 1000;
 
 export function newsletterSettings(env: Environment, unsubscribe = false) {
   const production = env.APP_ENV === "production" && env.VERCEL_ENV === "production";
-  if ((env.APP_ENV !== "development" && !production) ||
+  const preview = env.APP_ENV === "preview" && env.VERCEL_ENV === "preview" && isPreviewDatabase(env.DATABASE_URL);
+  if ((env.APP_ENV !== "development" && !production && !preview) ||
     ((env.VERCEL === "1" || env.VERCEL_ENV) && env.VERCEL_ENV !== env.APP_ENV) ||
     (production && !unsubscribe && env.COMMERCIAL_LAUNCH_APPROVED !== "true"))
     return null;
@@ -28,19 +31,8 @@ export function newsletterSettings(env: Environment, unsubscribe = false) {
       !env.AUTH_EMAIL_FROM)
   )
     return null;
-  try {
-    const url = new URL(env.BETTER_AUTH_URL ?? "");
-    const loopback = ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
-    if (
-      url.href !== url.origin + "/" ||
-      (production && url.protocol !== "https:") ||
-      (url.protocol !== "https:" && !(loopback && url.protocol === "http:"))
-    )
-      return null;
-    return { origin: url.origin, secret: env.NEWSLETTER_TOKEN_SECRET };
-  } catch {
-    return null;
-  }
+  const origin = authBaseUrl(env);
+  return origin ? { origin, secret: env.NEWSLETTER_TOKEN_SECRET } : null;
 }
 
 export function consentRequest(

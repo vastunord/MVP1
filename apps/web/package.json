@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "prisma generate",
     "dev": "next dev --hostname 127.0.0.1",
-    "build": "node --experimental-strip-types scripts/verify-production-target.mjs && prisma generate && next build",
+    "build": "node --experimental-strip-types scripts/verify-production-target.mjs && node --experimental-strip-types scripts/verify-testing.mjs && prisma generate && next build",
     "build:webpack": "prisma generate && next build --webpack",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
@@ -12,7 +12,7 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "test:newsletter-db": "node --experimental-strip-types --test tests/newsletter-postgres.mjs",
     "test:consent-db": "node --experimental-strip-types --test tests/publication-consent-postgres.mjs",
-    "test:provider-db": "node --experimental-strip-types --test tests/prana-postgres.mjs && node --conditions=react-server --experimental-strip-types --test tests/studio-postgres.mjs",
+    "test:provider-db": "node --conditions=react-server --experimental-strip-types --test tests/studio-postgres.mjs",
     "test:smoke": "playwright test"
   },
   "dependencies": {

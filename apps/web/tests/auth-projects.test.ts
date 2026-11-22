@@ -179,24 +179,11 @@ test("authentication is closed without database, secret and email delivery", () 
     authReadiness({
       DATABASE_URL: "postgresql://test",
       BETTER_AUTH_SECRET: "x".repeat(32),
+      BETTER_AUTH_URL: "http://127.0.0.1:3100",
       AUTH_EMAIL_PROVIDER: "resend",
       RESEND_API_KEY: "test",
       AUTH_EMAIL_FROM: "test@example.test",
     }).ready,
-    true,
-  );
-  assert.equal(authReadiness({ GOOGLE_CLIENT_ID: "one" }).googleReady, false);
-  assert.equal(
-    authReadiness({ GOOGLE_CLIENT_ID: "one", GOOGLE_CLIENT_SECRET: "two" })
-      .googleReady,
-    false,
-  );
-  assert.equal(
-    authReadiness({
-      GOOGLE_OAUTH_ENABLED: "true",
-      GOOGLE_CLIENT_ID: "one",
-      GOOGLE_CLIENT_SECRET: "two",
-    }).googleReady,
     true,
   );
   assert.equal(verifiedSessionUserId(null), null);

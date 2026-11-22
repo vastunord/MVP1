@@ -51,6 +51,10 @@ test("the homepage cycles through all eleven photo pairs and honors a motion pau
   const stage = hero.locator(".photo-hero-stage");
   await hero.getByRole("button", { name: "Pause slideshow" }).click();
   const first = await stage.getAttribute("data-scene");
+  await hero.getByRole("button", { name: "Previous image pair" }).click();
+  await expect(stage).not.toHaveAttribute("data-scene", first!);
+  await hero.getByRole("button", { name: "Next image pair" }).click();
+  await expect(stage).toHaveAttribute("data-scene", first!);
   const visited = new Set([first]);
   for (let index = 0; index < 11; index++) {
     const previous = await stage.getAttribute("data-scene");
@@ -161,7 +165,7 @@ test("home study controls and transformation directions lead into the Studio", a
     .locator("section")
     .filter({ has: page.getByRole("heading", { name: /The hardest part/ }) });
   await expect(
-    possibility.getByRole("link", { name: "Explore Studio" }),
+    possibility.getByRole("link", { name: "Open Studio" }),
   ).toHaveAttribute("href", "/app/library");
   for (const label of [
     "Choose a direction",
@@ -189,8 +193,8 @@ test("home study controls and transformation directions lead into the Studio", a
     sources.add((await image.getAttribute("src"))!);
   }
   expect(sources.size).toBe(12);
-  await page.getByRole("link", { name: "Transform outdoors" }).click();
-  await expect(page).toHaveURL(/app\/tools\/garden-design$/);
+  await page.getByRole("link", { name: "Change the lighting" }).click();
+  await expect(page).toHaveURL(/app\/tools\/lighting-reimagination$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 });
 
@@ -206,7 +210,7 @@ test("a selected public study remains the source when reopening or switching too
   await page.goto("/en");
   const hero = page.locator(".photo-hero");
   await expect(hero.locator(".photo-hero-actions a").first()).toHaveText(
-    /Try this image/,
+    /Open Studio/,
   );
   const frame = hero.locator(".photo-hero-stage");
   const first = await frame.getAttribute("data-scene");
@@ -214,9 +218,9 @@ test("a selected public study remains the source when reopening or switching too
   await expect(frame).not.toHaveAttribute("data-scene", first!);
   const original = await hero.locator(".hero-images > img").getAttribute("src");
   const href = await hero
-    .getByRole("link", { name: "Try this image" })
+    .getByRole("link", { name: "Open Studio" })
     .getAttribute("href");
-  await hero.getByRole("link", { name: "Try this image" }).click();
+  await hero.getByRole("link", { name: "Open Studio" }).click();
   await expect(page).toHaveURL(new URL(href!, page.url()).href);
   const canvas = page.locator(".studio-canvas");
   const source = canvas.locator(".selected-stage img");
@@ -288,14 +292,6 @@ test("the Norwegian photo entry works on a narrow screen with private uploads cl
   await page.getByRole("button", { name: /Avvis/ }).first().click();
   const primary = hero.getByRole("link", { name: "Åpne Studio" });
   await primary.click();
-  await expect(page).toHaveURL(
-    /\/app\/tools\/room-reimagination#source-image$/,
-  );
-  await expect(page.locator("#source-image")).toContainText(
-    "Privat opplasting er ikke tilgjengelig.",
-  );
-  await page.goBack();
-  await hero.getByRole("link", { name: "Prøv dette bildet" }).click();
   await expect(page).toHaveURL(
     /\/app\/tools\/room-reimagination\?sample=hero-[\w-]+$/,
   );

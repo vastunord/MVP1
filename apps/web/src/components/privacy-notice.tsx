@@ -50,7 +50,7 @@ export function PrivacyNotice({ locale, newsletterEnabled }: { locale: Locale; n
       </section>
       <section>
         <h2>Prana</h2>
-        <p>{t("Når direktesvar er aktivert, sender vi spørsmålet ditt til OpenAI for å gi et kort svar. Ikke oppgi adresser eller personopplysninger. Vi lagrer ikke samtaleteksten i appdatabasen. For å begrense bruken teller vi spørsmål med en nettverksidentifikator som skifter daglig.", "When live answers are enabled, we send your question to OpenAI for a short response. Leave out addresses and personal details. The app database does not store conversations. To limit usage, we count requests using a network identifier that changes daily.")} <a href="https://developers.openai.com/api/docs/guides/your-data">{t("OpenAIs databehandling", "OpenAI data controls")}</a></p>
+        <p>{t("Når du ber om et direktesvar, sendes spørsmålet til Groq for å lage svaret. Unngå adresser og andre personopplysninger. Spørsmål og svar vises midlertidig i appen. Vastu Nord lagrer ingen samtalehistorikk i appdatabasen. Groq håndterer trafikkgrenser og beskriver sin egen databehandling her.", "When you request a live answer, your question goes to Groq to generate a response. Leave out addresses and other personal details. The app displays the exchange temporarily. Vastu Nord does not save a conversation history in its database. Groq manages service limits and describes its own data handling here.")} <a href="https://console.groq.com/docs/your-data">{t("Groqs databehandling", "Groq’s data policy")}</a></p>
       </section>
       <section>
         <h2>{t("Bilder, film og favoritter", "Images, films and favourites")}</h2>
@@ -73,6 +73,10 @@ export function PrivacyNotice({ locale, newsletterEnabled }: { locale: Locale; n
         </p>
       </section>
       <section>
+        <h2>{t("Konto og privat lagring", "Accounts and private storage")}</h2>
+        <p>{t("Der kontofunksjonene er åpne, brukes e-postadressen din til bekreftelse og gjenoppretting gjennom Resend. Neon lagrer kontoen, prosjektinformasjon og metadata om filer. Private bilder lagres i Vercel Blob. Et valg om offentlig galleri, Pinterest eller YouTube gjelder bare den valgte kanalen og krever redaksjonell godkjenning før publisering.", "Where accounts are enabled, your email address is used for verification and recovery through Resend. Neon stores account and project records and file metadata. Private images are kept in Vercel Blob. A choice to share with the public gallery, Pinterest or YouTube applies only to that destination and requires editorial approval before publication.")}</p>
+      </section>
+      <section>
         <h2>{t("Kontakt om personvern", "Privacy enquiries")}</h2>
         <p>
           {t(
@@ -81,6 +85,7 @@ export function PrivacyNotice({ locale, newsletterEnabled }: { locale: Locale; n
           )}{" "}
           <a href="mailto:contact@vastu.no">contact@vastu.no</a>
         </p>
+        <p>{t("Du kan trekke tilbake samtykke og be oss vurdere begrensning av behandling. Hvis du mener at opplysningene dine er behandlet ulovlig, kan du klage til Datatilsynet.", "You can withdraw consent and request a restriction on processing. If you believe your data has been handled unlawfully, you can complain to the Norwegian Data Protection Authority.")} <a href={locale === "en" ? "https://www.datatilsynet.no/en/about-us/contact-us/how-to-complain-to-the-norwegian-dpa/" : "https://www.datatilsynet.no/om-datatilsynet/kontakt-oss/klage-til-datatilsynet/"}>{t("Klage til Datatilsynet", "How to make a complaint")}</a></p>
       </section>
     </article>
   );

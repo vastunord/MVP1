@@ -2,11 +2,13 @@ export const publicOrigin = "https://vastunord-web.vercel.app";
 export const indexableSections = [
   "",
   "features",
+  "gallery",
   "about",
   "pricing",
   "resources",
   "contact",
   "privacy",
+  "terms",
 ] as const;
 export function publicIndexingEnabled(env: Record<string, string | undefined>) {
   return (
@@ -16,9 +18,9 @@ export function publicIndexingEnabled(env: Record<string, string | undefined>) {
     env.PUBLIC_INDEXING_ENABLED === "true"
   );
 }
-export function publicPageUrls(path: string) {
+export function publicPageUrls(path: string, origin = publicOrigin) {
   return {
-    "nb-NO": publicOrigin + path,
-    en: publicOrigin + "/en" + (path === "/" ? "" : path),
+    "nb-NO": origin + path,
+    en: origin + "/en" + (path === "/" ? "" : path),
   };
 }

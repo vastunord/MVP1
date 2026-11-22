@@ -1,5 +1,12 @@
 # Development change log (compact)
 
+## 22 November 2026 · Development journey updates
+
+- Added previous-photo navigation, interior-only directions, consistent Studio entry links, bilingual terms and a public gallery of 50 approved studies.
+- Replaced Studio dropdowns and scripted briefs with visual choices, editable Groq suggestions, five Prana V1 levels and private rendering readiness checks. Prana uses the same Groq credential for short housing-related answers.
+- Added per-provider sign-in configuration for Google, GitHub and Apple, protected Preview discovery and the official YouTube channel feed.
+- Verified the isolated Preview database, scoped private media consent grants, and independent newsletter signing keys for Development and Preview. Added a Preview build verification and a checksum-pinned runner for the pending Development migrations. [Remaining release steps](OWNER_ACTIONS_ONE_LIST.md)
+
 ## 22 November 2026 · Studio workflows, Prana and illustrated Knowledge Hub
 
 - Deployed `0a99e002adc9` to the [assigned noncommercial site](https://vastunord-web.vercel.app). A protected check rejected the existing Production database configuration and skipped the connection. The normal application refuses an unexpected target. [Verification record](evidence/v7-studio-knowledge/README.md)

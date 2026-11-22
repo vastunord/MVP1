@@ -1,46 +1,34 @@
+import { authBaseUrl } from "./auth-readiness.ts";
+
 type Environment = Record<string, string | undefined>;
 export type PranaLanguage = "en" | "nb-NO";
 type Decision = "home" | "outside" | "abuse" | "unsafe";
 type Consultation = { kind: Decision; answer: string };
 
 export function pranaSettings(env: Environment) {
-  const dailyLimit = Number(env.PRANA_DAILY_QUERY_LIMIT);
   const stage = env.APP_ENV;
+  const key = (env.GroqAPI || env.GROQ_API_KEY)?.trim();
   if (
-    env.PRANA_ENABLED !== "true" ||
-    !env.OPENAI_API_KEY?.trim() ||
-    !env.DATABASE_URL ||
-    !env.BETTER_AUTH_SECRET ||
-    env.BETTER_AUTH_SECRET.length < 32 ||
-    !Number.isSafeInteger(dailyLimit) ||
-    dailyLimit < 1 ||
-    dailyLimit > 10000 ||
-    (stage !== "development" && stage !== "production") ||
+    !key ||
+    !["development", "preview", "production"].includes(stage || "") ||
     (env.VERCEL_ENV && env.VERCEL_ENV !== stage) ||
+    (stage === "preview" && env.VERCEL_ENV !== "preview") ||
     (stage === "production" &&
       (env.AUTH_ENABLED !== "true" ||
         env.COMMERCIAL_LAUNCH_APPROVED !== "true"))
   )
     return null;
   try {
-    const origin = new URL(env.BETTER_AUTH_URL || "");
+    const origin = new URL(authBaseUrl(env) || "");
+    const local =
+      stage === "development" &&
+      ["localhost", "127.0.0.1", "[::1]"].includes(origin.hostname);
     if (
-      origin.origin !== env.BETTER_AUTH_URL?.replace(/\/$/, "") ||
-      (stage === "production"
-        ? origin.protocol !== "https:"
-        : !(
-            origin.protocol === "https:" ||
-            (origin.protocol === "http:" &&
-              ["localhost", "127.0.0.1"].includes(origin.hostname))
-          ))
+      origin.href !== origin.origin + "/" ||
+      (origin.protocol !== "https:" && !(local && origin.protocol === "http:"))
     )
       return null;
-    return {
-      key: env.OPENAI_API_KEY,
-      dailyLimit,
-      secret: env.BETTER_AUTH_SECRET,
-      origin: origin.origin,
-    };
+    return { key, origin: origin.origin };
   } catch {
     return null;
   }
@@ -68,11 +56,14 @@ export function pranaRedirect(
   return { kind, answer: messages[kind][language === "en" ? 1 : 0] };
 }
 
-export function validQuestion(value: unknown): value is string {
+export function validQuestion(
+  value: unknown,
+  maxLength = 600,
+): value is string {
   return (
     typeof value === "string" &&
     value.trim().length >= 3 &&
-    value.length <= 600 &&
+    value.length <= maxLength &&
     !/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/u.test(value)
   );
 }
@@ -129,67 +120,78 @@ function readAnswer(value: unknown, language: PranaLanguage): Consultation {
   return { kind: "home", answer };
 }
 
+export class GroqLimitReached extends Error {}
+
 export async function askPrana(
   input: {
     question: string;
     language: PranaLanguage;
     key: string;
-    notes: string;
+    notes?: string;
+    mode?: "improve";
   },
   send: typeof fetch = fetch,
 ): Promise<Consultation> {
-  const response = await send("https://api.openai.com/v1/responses", {
-    method: "POST",
-    cache: "no-store",
-    redirect: "error",
-    signal: AbortSignal.timeout(18_000),
-    headers: {
-      Authorization: "Bearer " + input.key,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "gpt-4.1-mini",
-      store: false,
-      max_output_tokens: 220,
-      instructions:
-        system +
-        "\nReply in " +
-        (input.language === "en" ? "English." : "Norwegian Bokmål.") +
-        "\nPublished notes:\n" +
-        input.notes,
-      input: [{ role: "user", content: input.question }],
-      text: {
-        format: {
+  const instructions =
+    system +
+    "\n" +
+    (input.language === "en"
+      ? "Reply in English."
+      : "Reply in Norwegian Bokmål.") +
+    (input.mode === "improve"
+      ? " For home design briefs only, rewrite the visitor's text as a concise render prompt. Preserve requested room, constraints, materials, furniture and style. Do not invent dimensions, identify people or append a follow-up question. Refuse unrelated or abusive content using its classification."
+      : "\nPublished Vastu Nord notes:\n" + (input.notes || ""));
+  const response = await send(
+    "https://api.groq.com/openai/v1/chat/completions",
+    {
+      method: "POST",
+      cache: "no-store",
+      redirect: "error",
+      signal: AbortSignal.timeout(20000),
+      headers: {
+        Authorization: "Bearer " + input.key,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-oss-20b",
+        reasoning_effort: "low",
+        max_completion_tokens: 900,
+        messages: [
+          { role: "system", content: instructions },
+          { role: "user", content: input.question },
+        ],
+        response_format: {
           type: "json_schema",
-          name: "prana_reply",
-          strict: true,
-          schema: {
-            type: "object",
-            additionalProperties: false,
-            required: ["kind", "sentences"],
-            properties: {
-              kind: {
-                type: "string",
-                enum: ["home", "outside", "abuse", "unsafe"],
+          json_schema: {
+            name: "vastunord_reply",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              required: ["kind", "sentences"],
+              properties: {
+                kind: {
+                  type: "string",
+                  enum: ["home", "outside", "abuse", "unsafe"],
+                },
+                sentences: { type: "array", items: { type: "string" } },
               },
-              sentences: { type: "array", items: { type: "string" } },
             },
           },
         },
-      },
-    }),
-  });
+      }),
+    },
+  );
+  if (response.status === 429) throw new GroqLimitReached();
   if (!response.ok) throw new Error("Consultation unavailable");
   const result = await response.json();
-  if (result.status !== "completed" || !Array.isArray(result.output))
-    throw new Error("Incomplete response");
-  const content = result.output.find(
-    (item: { type?: string }) => item?.type === "message",
-  )?.content;
-  if (!Array.isArray(content)) throw new Error("Incomplete response");
-  if (content.some((item) => item?.type === "refusal"))
+  const choice = result?.choices?.[0];
+  if (choice?.message?.refusal || choice?.finish_reason === "content_filter")
     return pranaRedirect("unsafe", input.language);
-  const text = content.find((item) => item?.type === "output_text")?.text;
-  if (typeof text !== "string") throw new Error("Incomplete response");
-  return readAnswer(JSON.parse(text), input.language);
+  if (
+    choice?.finish_reason !== "stop" ||
+    typeof choice.message?.content !== "string"
+  )
+    throw new Error("Incomplete response");
+  return readAnswer(JSON.parse(choice.message.content), input.language);
 }

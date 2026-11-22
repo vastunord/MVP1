@@ -76,9 +76,18 @@
 .prana-action {
   border: 0;
   background: var(--brand-action);
-  color: var(--on-brand);
+  color: var(--brand-action-text);
   padding: 0.6rem 1rem;
   border-radius: 0.4rem;
+}
+.prana-reader .prana-play {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--paper);
+  margin-inline-end: .75rem;
+}
+.prana-reader .prana-text-link {
+  margin-inline-end: .75rem;
 }
 .prana-text-link {
   color: var(--text);

@@ -35,8 +35,8 @@ export function PranaConsultation({
       if (response.status === 429) {
         setError(
           en
-            ? "Today’s question limit has been reached. You can still explore Quick Tips."
-            : "Dagens spørsmålsgrense er nådd. Du kan fortsatt utforske Quick Tips.",
+            ? "Prana is at capacity. Try again shortly or open Quick Tips."
+            : "Prana har stor pågang. Prøv igjen snart, eller åpne Quick Tips.",
         );
         return;
       }
@@ -85,8 +85,8 @@ export function PranaConsultation({
           />
           <small id={id + "-privacy"}>
             {en
-              ? "Your question goes to OpenAI. Leave out addresses and personal details."
-              : "Spørsmålet sendes til OpenAI. Utelat adresser og personopplysninger."}
+              ? "Your question goes to Groq. Leave out addresses and personal details."
+              : "Spørsmålet sendes til Groq. Utelat adresser og personopplysninger."}
           </small>
           <button
             className="prana-action"

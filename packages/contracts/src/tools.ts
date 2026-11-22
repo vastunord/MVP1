@@ -128,7 +128,6 @@ const roomDesign: Control[] = [
   select("people", "People", ["Auto", "None", "A few", "Many"], "Auto"),
   select("markings", "Annotations", ["Keep existing", "Remove text"], "Keep existing"),
   ratio,
-  { id: "seed", label: "Seed", kind: "integer", min: 0, max: 4294967295 },
 ];
 const season = select(
   "season",

@@ -1,16 +1,32 @@
 "use client";
+import { StudioChoices } from "./studio-choices";
 import { AssetSharingConsent } from "./asset-sharing-consent";
 import { useEffect, useState, type ChangeEvent, type DragEvent } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
-import { IMAGE_TYPES, MAX_IMAGE_BYTES, MAX_IMAGE_MIB } from "@/lib/image-upload-policy";
+import {
+  IMAGE_TYPES,
+  MAX_IMAGE_BYTES,
+  MAX_IMAGE_MIB,
+} from "@/lib/image-upload-policy";
 import type { RenderSelection } from "@/lib/studio-render";
 
 type Project = { id: string; name: string };
-type Asset = { id: string; createdAt: string; mimeType:string };
-const isPhoto=(asset:Asset)=>["image/jpeg","image/png","image/webp"].includes(asset.mimeType);
+type Asset = { id: string; createdAt: string; mimeType: string };
+const isPhoto = (asset: Asset) =>
+  ["image/jpeg", "image/png", "image/webp"].includes(asset.mimeType);
 
-export function RoomReferences({ assets, locale, enabled, onChange }: { assets: Asset[]; locale: Locale; enabled: boolean; onChange?: (ids:string[])=>void }) {
+export function RoomReferences({
+  assets,
+  locale,
+  enabled,
+  onChange,
+}: {
+  assets: Asset[];
+  locale: Locale;
+  enabled: boolean;
+  onChange?: (ids: string[]) => void;
+}) {
   const en = locale === "en";
   const [references, setReferences] = useState(["", ""]);
   return (
@@ -18,34 +34,54 @@ export function RoomReferences({ assets, locale, enabled, onChange }: { assets: 
       <summary>{en ? "Reference images" : "Referansebilder"}</summary>
       <div>
         <div className="room-reference-pair">
-          {(en ? ["Materials", "Atmosphere"] : ["Materialer", "Stemning"]).map((label, index) => {
-            const id = assets.some(asset => asset.id === references[index]) ? references[index] : "";
-            return <label key={index}>
-              {label}
-              {id && (
-                // This protected asset is served through the existing authenticated endpoint.
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={`/api/assets/${encodeURIComponent(id)}/download`} alt="" />
-              )}
-              <select value={id} disabled={!enabled || assets.length === 0}
-                onChange={event => {
-                  const next = references.map((item,slot)=>slot===index?event.target.value:item);
-                  setReferences(next); onChange?.(next);
-                }}>
-                <option value="">{en ? "None" : "Ingen"}</option>
-                {assets.map((asset, n) => <option key={asset.id} value={asset.id}
-                  disabled={asset.id === references[1 - index]}>
-                  {en ? "Image" : "Bilde"} {n + 1} · {new Date(asset.createdAt).toLocaleDateString(locale)}
-                </option>)}
-              </select>
-            </label>;
+          {(en
+            ? ["First reference", "Second reference"]
+            : ["Første referanse", "Andre referanse"]
+          ).map((label, index) => {
+            const id = assets.some((asset) => asset.id === references[index])
+              ? references[index]
+              : "";
+            return (
+              <StudioChoices
+                key={label}
+                label={label}
+                kind="reference"
+                value={id}
+                disabled={!enabled || !assets.length}
+                choices={[
+                  { value: "", label: en ? "None" : "Ingen" },
+                  ...assets.map((asset, n) => ({
+                    value: asset.id,
+                    label: (en ? "Image " : "Bilde ") + (n + 1),
+                    image:
+                      "/api/assets/" +
+                      encodeURIComponent(asset.id) +
+                      "/download",
+                    disabled: asset.id === references[1 - index],
+                  })),
+                ]}
+                onChange={(v) => {
+                  const next = references.map((item, slot) =>
+                    slot === index ? v : item,
+                  );
+                  setReferences(next);
+                  onChange?.(next);
+                }}
+              />
+            );
           })}
         </div>
-        {(!enabled || assets.length === 0) && <p className="inspector-help">
-          {enabled
-            ? (en ? "Save a project image to use it as a reference." : "Lagre et prosjektbilde for å bruke det som referanse.")
-            : (en ? "Private project references are unavailable in this demo." : "Private prosjektreferanser er utilgjengelige i denne demoen.")}
-        </p>}
+        {(!enabled || assets.length === 0) && (
+          <p className="inspector-help">
+            {enabled
+              ? en
+                ? "Save a project image to use it as a reference."
+                : "Lagre et prosjektbilde for å bruke det som referanse."
+              : en
+                ? "Private project references are unavailable in this demo."
+                : "Private prosjektreferanser er utilgjengelige i denne demoen."}
+          </p>
+        )}
       </div>
     </details>
   );
@@ -62,15 +98,24 @@ export function PrivateUpload({
   enabled: boolean;
   onPreview: (url: string) => void;
   withRoomReferences?: boolean;
-  onSelection?: (selection:RenderSelection)=>void;
+  onSelection?: (selection: RenderSelection) => void;
 }) {
   const en = locale === "en";
   const [projects, setProjects] = useState<Project[]>([]);
   const [project, setProject] = useState("");
   const [assets, setAssets] = useState<Asset[]>([]);
   const [selectedAsset, setSelectedAsset] = useState("");
-  const [referenceIds,setReferenceIds] = useState<string[]>([]);
-  useEffect(()=>{onSelection?.({projectId:project,sourceAssetId:selectedAsset,referenceIds:referenceIds.filter(id=>id && id !== selectedAsset && assets.some(asset=>asset.id === id))});},[project,selectedAsset,referenceIds,assets,onSelection]);
+  const [referenceIds, setReferenceIds] = useState<string[]>([]);
+  useEffect(() => {
+    onSelection?.({
+      projectId: project,
+      sourceAssetId: selectedAsset,
+      referenceIds: referenceIds.filter(
+        (id) =>
+          id && id !== selectedAsset && assets.some((asset) => asset.id === id),
+      ),
+    });
+  }, [project, selectedAsset, referenceIds, assets, onSelection]);
   const [file, setFile] = useState<File | null>(null);
   const [localUrl, setLocalUrl] = useState("");
   const [busy, setBusy] = useState(false);
@@ -228,31 +273,21 @@ export function PrivateUpload({
       onDrop={drop}
     >
       <h2>{en ? "Private image" : "Privat bilde"}</h2>
-      <label>
-        {en ? "Project" : "Prosjekt"}
-        <select
-          value={project}
-          onChange={(event) => {
-            setAssets([]);
-            setProject(event.target.value);
-            setSelectedAsset("");
-            setReferenceIds([]);
-            setFile(null);
-            setLocalUrl("");
-            onPreview("");
-          }}
-          disabled={busy || !projects.length}
-        >
-          <option value="">
-            {en ? "Choose a project" : "Velg et prosjekt"}
-          </option>
-          {projects.map((item) => (
-            <option value={item.id} key={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <StudioChoices
+        label={en ? "Project" : "Prosjekt"}
+        value={project}
+        disabled={busy || !projects.length}
+        choices={projects.map((item) => ({ value: item.id, label: item.name }))}
+        onChange={(id) => {
+          setAssets([]);
+          setProject(id);
+          setSelectedAsset("");
+          setReferenceIds([]);
+          setFile(null);
+          setLocalUrl("");
+          onPreview("");
+        }}
+      />
       {!projects.length && (
         <p className="small">
           {en
@@ -292,32 +327,22 @@ export function PrivateUpload({
       </button>
       {status && <p role="status">{status}</p>}
       {assets.length > 0 && (
-        <label>
-          {en ? "Saved images" : "Lagrede bilder"}
-          <select
-            value={selectedAsset}
-            onChange={(event) => {
-              if (event.target.value) {
-                setSelectedAsset(event.target.value);
-                onPreview(
-                  `/api/assets/${encodeURIComponent(event.target.value)}/download`,
-                );
-                setFile(null);
-                setLocalUrl("");
-              }
-            }}
-          >
-            <option value="">{en ? "Select an image" : "Velg et bilde"}</option>
-            {assets.map((asset, index) => (
-              <option key={asset.id} value={asset.id}>
-                {en ? "Image" : "Bilde"} {index + 1} ·{" "}
-                {new Date(asset.createdAt).toLocaleDateString(
-                  en ? "en-GB" : "nb-NO",
-                )}
-              </option>
-            ))}
-          </select>
-        </label>
+        <StudioChoices
+          label={en ? "Saved images" : "Lagrede bilder"}
+          kind="reference"
+          value={selectedAsset}
+          choices={assets.map((asset, n) => ({
+            value: asset.id,
+            label: (en ? "Image " : "Bilde ") + (n + 1),
+            image: "/api/assets/" + encodeURIComponent(asset.id) + "/download",
+          }))}
+          onChange={(id) => {
+            setSelectedAsset(id);
+            onPreview("/api/assets/" + encodeURIComponent(id) + "/download");
+            setFile(null);
+            setLocalUrl("");
+          }}
+        />
       )}
       {selectedAsset && (
         <button
@@ -329,8 +354,22 @@ export function PrivateUpload({
           {en ? "Delete selected image" : "Slett valgt bilde"}
         </button>
       )}
-      {selectedAsset && <AssetSharingConsent key={selectedAsset} assetId={selectedAsset} locale={locale} />}
-      {withRoomReferences && <RoomReferences key={project} assets={assets.filter(asset=>asset.id!==selectedAsset)} locale={locale} enabled onChange={setReferenceIds} />}
+      {selectedAsset && (
+        <AssetSharingConsent
+          key={selectedAsset}
+          assetId={selectedAsset}
+          locale={locale}
+        />
+      )}
+      {withRoomReferences && (
+        <RoomReferences
+          key={project}
+          assets={assets.filter((asset) => asset.id !== selectedAsset)}
+          locale={locale}
+          enabled
+          onChange={setReferenceIds}
+        />
+      )}
     </div>
   );
 }

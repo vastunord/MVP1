@@ -1,3 +1,4 @@
+import { studioPersistenceReady } from "@/server/studio-readiness";
 import { requestBody, requestContext, apiError } from "@/server/request-auth";
 import { readServerConfig } from "@/server/config";
 import {
@@ -22,6 +23,8 @@ async function handle(request: Request, write: boolean) {
   const ctx = await requestContext(request, write);
   if ("response" in ctx) return ctx.response;
   try {
+    if (!(await studioPersistenceReady(ctx.db)))
+      throw new RenderError(503, "Render storage is unavailable");
     const query = new URL(request.url).searchParams;
     const input = write ? await requestBody(request) : {};
     const id = write ? input.projectId : query.get("projectId");

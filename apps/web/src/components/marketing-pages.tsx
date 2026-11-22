@@ -161,7 +161,7 @@ function About({ locale, t }: PageContext) {
       >
         <div className="mp-link-row">
           <Action href="/app/library">
-            {t("Utforsk Studio", "Explore Studio")}
+            {t("Åpne Studio", "Open Studio")}
           </Action>
           <Action href="#decisions" secondary>
             {t("Se eksempler", "See examples")}
@@ -302,7 +302,7 @@ function Features({ locale, t }: PageContext) {
       >
         <div className="mp-link-row">
           <Action href="/app/tools/room-reimagination">
-            {t("Utforsk Studio", "Explore Studio")}
+            {t("Åpne Studio", "Open Studio")}
           </Action>
           <Action href="#variations" secondary>
             {t("Se eksempler", "See examples")}
@@ -484,7 +484,7 @@ function Pricing({ locale, t }: PageContext) {
                 </span>
               ) : (
                 <Action href="/app/library">
-                  {t("Åpne demonstrasjonen", "Open demonstration")}
+                  {t("Åpne Studio", "Open Studio")}
                 </Action>
               )}
             </article>
@@ -548,8 +548,8 @@ function Pricing({ locale, t }: PageContext) {
         photo="pricing-close"
         locale={locale}
         title={t(
-          "Utforsk Studio i ditt tempo.",
-          "Explore Studio at your own pace.",
+          "Ditt neste interiørprosjekt",
+          "Your next interior project",
         )}
       />
     </>
@@ -851,7 +851,7 @@ export function MarketingPages({
             <div className="mp-article-body">
               <p>{article.body}</p>
               <Action href="/app/library">
-                {t("Utforsk verktøyene", "Explore the tools")}
+                {t("Åpne Studio", "Open Studio")}
               </Action>
             </div>
           </Section>

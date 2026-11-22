@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { indexableSections, publicIndexingEnabled, publicPageUrls } from "@/lib/public-index";
+import { sitemapOrigin } from "@/server/discovery";
 import { marketingResources } from "@/lib/marketing-resources";
 import { visualStudy } from "@/lib/visual-studies";
 import { Journal, readJournalEntry } from "@/components/journal";
@@ -31,14 +32,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : undefined;
   const journal = page === "resources" && segments[1] === "journal" && Boolean(journalOrigin(process.env));
   const journalArticle = journal && segments.length === 3 ? await readJournalEntry(segments[2],locale) : null;
-  const alternateUrls = publicPageUrls("/" + segments.join("/"));
+  const alternateUrls = publicPageUrls("/" + segments.join("/"), sitemapOrigin(process.env));
   const index = publicIndexingEnabled(process.env) &&
     (segments.length <= 1 ? indexableSections.some(section => section === (page || "")) : Boolean(article || journalArticle || (journal && segments.length===2)));
   return {
     title:
       journalArticle?.title ?? article?.name ?? (journal ? (locale==="en"?"Journal":"Tidsskrift") : undefined) ??
-      (page === "privacy" ? privacyTitle(locale) : page && page in t ? t[page as MessageKey] : "Vastu Nord"),
-    description: journalArticle?.summary ?? article?.intro ?? t.intro,
+      (page === "gallery" ? (locale === "en" ? "Gallery" : "Galleri") : page === "privacy" ? privacyTitle(locale) : page && page in t ? t[page as MessageKey] : "Vastu Nord"),
+    description: journalArticle?.summary ?? article?.intro ?? (page === "gallery"
+      ? (locale === "en" ? "Browse Vastu Nord’s architectural studies by subject and explore a photo in Studio." : "Bla i Vastu Nords arkitekturstudier etter motiv og utforsk et bilde i Studio.")
+      : t.intro),
     alternates: {
       canonical: alternateUrls[locale],
       languages: alternateUrls,
@@ -104,7 +107,7 @@ export default async function Page({ params, searchParams }: Props) {
           locale={locale}
           mode={authPage}
           enabled={authState.ready}
-          googleReady={authState.googleReady}
+          providers={authState.providers}
         />
       ) : (
         <Marketing

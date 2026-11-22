@@ -4,21 +4,25 @@ import { messages, publicHref, type Locale } from "@/lib/i18n";
 import { MarketingHome } from "./marketing-home";
 import { CookieSettingsButton } from "./visitor-overlays";
 import { PrivacyNotice } from "./privacy-notice";
+import { TermsNotice } from "./terms-notice";
 import { MarketingPages } from "./marketing-pages";
 import { VisualStudy } from "./visual-study";
 import { visualStudy, visualStudyCards } from "@/lib/visual-studies";
 import { readServerConfig } from "@/server/config";
 import { newsletterAvailable } from "@/server/newsletter-runtime";
+import { Gallery } from "./workspace-gallery";
 import { journalOrigin } from "@/server/journal";
 import "./marketing-v5.css";
 
 export const publicPages = [
   "features",
+  "gallery",
   "about",
   "pricing",
   "resources",
   "contact",
   "privacy",
+  "terms",
   "login",
   "signup",
   "forgot-password",
@@ -39,8 +43,12 @@ export function Marketing({
   const study = page.startsWith("resources/") ? visualStudy(page.slice(10), locale) : undefined;
   return (
     <main id="main" className="mk-site">
-      {page === "privacy" ? (
+      {page === "gallery" ? (
+        <div className="mk-wrap vn-public-gallery"><Gallery locale={locale} publicCollection /></div>
+      ) : page === "privacy" ? (
         <PrivacyNotice locale={locale} newsletterEnabled={newsletterAvailable()} />
+      ) : page === "terms" ? (
+        <TermsNotice locale={locale} />
       ) : study ? (
         <VisualStudy study={study} locale={locale} />
       ) : page ? (
@@ -73,7 +81,7 @@ export function Footer({ locale }: { locale: Locale }) {
       "Studio",
       [
         [t.home, "/app"],
-        [locale === "en" ? "Image studies" : "Bildestudier", "/app/renders"],
+        [locale === "en" ? "Gallery" : "Galleri", publicHref("/gallery", locale)],
       ],
     ],
     [
@@ -111,10 +119,13 @@ export function Footer({ locale }: { locale: Locale }) {
           ))}
         </div>
         <div className="vn-footer-privacy">
+          <Link href={publicHref("/terms", locale)}>{locale === "en" ? "Terms of use" : "Bruksvilkår"}</Link>
           <Link href={publicHref("/privacy", locale)}>{locale === "en" ? "Privacy and cookies" : "Personvern og informasjonskapsler"}</Link>
           <CookieSettingsButton locale={locale} />
         </div>
-        <small>{t.foundation}</small>
+        <small>{t.foundation}. {locale === "en"
+          ? "Images and AI suggestions illustrate design ideas. Verify dimensions, costs and safety with a qualified professional."
+          : "Bilder og AI-forslag illustrerer designideer. Avklar mål, kostnader og sikkerhet med fagfolk."}</small>
       </div>
     </footer>
   );

@@ -47,7 +47,7 @@ test("knowledge and Prana offer local reading and accessible empty states", asyn
     panel.getByRole("heading", { name: "Plass til å bevege seg" }),
   ).toBeVisible();
   await panel.getByRole("tab", { name: "Film", exact: true }).click();
-  await expect(panel.getByText(/Ingen filmer er publisert/)).toBeVisible();
+  await expect(panel.getByRole("link", { name: /@VastuNord/ })).toHaveAttribute("href", "https://www.youtube.com/@VastuNord");
 });
 
 test("sample budget and wallet work without payments", async ({ page }) => {

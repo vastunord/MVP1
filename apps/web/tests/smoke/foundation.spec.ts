@@ -16,8 +16,10 @@ test("unconfigured account forms and private APIs stay closed", async ({
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBeTruthy();
-  await page.goto("/en/login");
+  await page.goto("/en/login?oauth=incomplete");
   await expect(page.getByRole("button", { name: "Sign in" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: /Continue with (Google|GitHub|Apple)/ })).toHaveCount(0);
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("Sign-in was not completed.");
   const projects = await page.request.get("/api/projects");
   expect(projects.status()).toBe(503);
   const auth = await page.request.get("/api/auth/get-session");
@@ -104,8 +106,8 @@ test("filters, routing, locale and theme persist", async ({ page }) => {
 });
 test("conditional editor controls, keyboard and dialog", async ({ page }) => {
   await page.goto("/app/tools/seasonal-transformation");
-  await page.getByLabel("Season", { exact: true }).selectOption("Winter");
-  await expect(page.getByLabel("Snow", { exact: true })).toBeVisible();
+  await page.getByRole("group",{name:"Season",exact:true}).getByRole("radio",{name:"Winter",exact:true}).check();
+  await expect(page.getByRole("group",{name:"Snow",exact:true})).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Show it in winter", exact: true }),
   ).toBeDisabled();

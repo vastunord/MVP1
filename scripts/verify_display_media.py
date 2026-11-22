@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "apps/web/public"
 REGISTER = ROOT / "docs/VISUALS_PLACEMENTS.csv"
 STUDY_REGISTER = ROOT / "docs/KNOWLEDGE_STUDY_IMAGES.csv"
-FOLDERS = ("media/hero", "media/tools", "media/canvas", "media/gallery", "media/briefs", "reference/editorial", "reference/studies")
+FOLDERS = ("media/hero", "media/tools", "media/canvas", "media/gallery", "media/briefs", "media/options", "reference/editorial", "reference/studies")
 
 
 def digest(path):
@@ -34,7 +34,7 @@ def verify(check_sources):
         raise ValueError("Expected 500 distinct illustrated Knowledge studies")
     rows.extend(dict(row, placement="knowledge study", max_width=768) for row in studies)
     counts = Counter(row["placement"] for row in rows)
-    for group, count in (("render gallery", 50), ("tool thumbnail", 17), ("tool editor sample", 17), ("room brief", 3)):
+    for group, count in (("render gallery", 50), ("tool thumbnail", 17), ("tool editor sample", 17), ("room brief", 3), ("Studio option", 27)):
         if counts[group] != count:
             raise ValueError(f"{group} has {counts[group]} entries, expected {count}")
     if counts["hero before"] != counts["hero after"] or not counts["hero before"]:

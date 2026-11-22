@@ -33,12 +33,12 @@ const questions = [
     illustration: "home-tone-comparison",
     no: [
       "Kan jeg ta med et eksempel inn i Studio?",
-      "Ja. Dra skillet i bildet øverst på siden. Velg «Prøv dette bildet» når rommet du ønsker vises. Studio åpner med utgangsbildet du valgte.",
+      "Ja. Dra skillet i bildet øverst på siden. Velg «Åpne Studio» når rommet du ønsker vises. Studio åpner med utgangsbildet du valgte.",
       "Åpen stue og spisestue med sofa, spisebord og opplyst vegg.",
     ],
     en: [
       "Can I take a sample photo into Studio?",
-      "Yes. Drag the divider at the top of this page. When you find a room you like, select “Try this image”. Studio opens with that scene’s original photo.",
+      "Yes. Drag the divider at the top of this page. When you find a room you like, select “Open Studio”. Studio opens with that scene’s original photo.",
       "Open-plan living and dining space with seating, a dining table and illuminated wall.",
     ],
   },

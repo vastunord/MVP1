@@ -1,5 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { renderEngines } from "../src/lib/studio-render.ts";
+import {
+  previewPool,
+  previewRole,
+  previewStore,
+} from "../src/server/preview-target.ts";
 import { tools } from "@vastunord/contracts/tools";
 import {
   parseRender,
@@ -20,23 +26,53 @@ const input = {
   prompt: "Light oak shelving",
   avoid: "",
 };
-test("MNML is opt-in and restricted to a development environment with a finite daily budget", () => {
-  const env = {
-    APP_ENV: "development",
-    MNML_RENDERING_ENABLED: "true",
-    MNML_API_KEY: "test-key",
-    MNML_DAILY_JOB_LIMIT: "2",
+test("MNML reads the provider key only in Development and the pinned Preview", () => {
+  const env = { APP_ENV: "development", MNMLAPI: "fixture" };
+  assert.deepEqual(mnmlConfig(env), { key: "fixture" });
+  assert.deepEqual(
+    mnmlConfig({ APP_ENV: "development", MNML_API_KEY: "alias" }),
+    { key: "alias" },
+  );
+  assert.equal(mnmlConfig({ ...env, MNML_RENDERING_ENABLED: "false" }), null);
+  assert.equal(mnmlConfig({ ...env, VERCEL_ENV: "production" }), null);
+  assert.equal(
+    mnmlConfig({ ...env, APP_ENV: "production", VERCEL_ENV: "production" }),
+    null,
+  );
+  assert.equal(
+    mnmlConfig({ ...env, APP_ENV: "preview", VERCEL_ENV: "preview" }),
+    null,
+  );
+  const preview = {
+    ...env,
+    APP_ENV: "preview",
+    VERCEL_ENV: "preview",
+    BLOB_STORE_ID: previewStore,
+    DATABASE_URL:
+      "postgresql://" +
+      previewRole +
+      ":fixture@" +
+      previewPool +
+      "/neondb?sslmode=require",
   };
-  assert(mnmlConfig(env));
-  for (const change of [
-    { VERCEL_ENV: "production" },
-    { APP_ENV: "preview" },
-    { MNML_DAILY_JOB_LIMIT: "0" },
-    { MNML_DAILY_JOB_LIMIT: "1001" },
-    { MNML_API_KEY: "" },
-    { MNML_RENDERING_ENABLED: "false" },
-  ])
-    assert.equal(mnmlConfig({ ...env, ...change }), null);
+  assert(mnmlConfig(preview));
+  assert.equal(mnmlConfig({ ...preview, BLOB_STORE_ID: "other" }), null);
+  assert.equal(
+    mnmlConfig({
+      ...preview,
+      DATABASE_URL: "postgresql://other@localhost/neondb",
+    }),
+    null,
+  );
+  assert.equal(mnmlConfig({ ...env, MNMLAPI: "" }), null);
+});
+test("Each Prana V1 level sends its documented MNML engine", () => {
+  assert.equal(new Set(renderEngines.map((e) => e.providerId)).size, 5);
+  for (const level of renderEngines)
+    assert.equal(
+      parseRender({ ...input, engine: level.id }).fields.engine,
+      level.providerId,
+    );
 });
 test("All 17 editors select an appropriate provider operation", () => {
   for (const tool of tools) {
@@ -48,11 +84,7 @@ test("All 17 editors select an appropriate provider operation", () => {
     });
     assert(["renders", "edits", "enhancements"].includes(spec.endpoint));
   }
-  assert.equal(
-    parseRender({ ...input, values: { seed: "123", ratio: "16:9" } }).fields
-      .seed,
-    123,
-  );
+  assert.throws(() => parseRender({ ...input, values: { seed: "123" } }));
   assert.equal(
     parseRender({ ...input, toolId: "object-placement" }).endpoint,
     "edits",

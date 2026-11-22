@@ -241,7 +241,7 @@ export function ProjectsScreen({
                 </form>
               </details>
               <Link className="button" href="/app/library">
-                {en ? "Open Studio tools" : "Åpne Studio-verktøy"}
+                {en ? "Open Studio" : "Åpne Studio"}
               </Link>
             </>
           )}

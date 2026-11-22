@@ -10,28 +10,28 @@ import {
 
 const development = {
   APP_ENV: "development",
-  DATABASE_URL: "postgres://localhost/fixture",
-  OPENAI_API_KEY: "fixture",
-  BETTER_AUTH_SECRET: "a".repeat(40),
+  GroqAPI: "fixture",
   BETTER_AUTH_URL: "http://127.0.0.1:3100",
-  PRANA_ENABLED: "true",
-  PRANA_DAILY_QUERY_LIMIT: "5",
 };
-test("consultation requires an explicit environment, cap, quota database and key", () => {
-  assert.equal(pranaSettings(development)?.dailyLimit, 5);
+test("Groq uses the server credential and the matching environment origin", () => {
+  assert.equal(pranaSettings(development)?.origin, development.BETTER_AUTH_URL);
+  assert.equal(
+    pranaSettings({
+      ...development,
+      APP_ENV: "preview",
+      VERCEL_ENV: "preview",
+      VERCEL_URL: "vastunord-fixture.vercel.app",
+    })?.origin,
+    "https://vastunord-fixture.vercel.app",
+  );
   for (const config of [
-    { PRANA_ENABLED: "false" },
-    { PRANA_DAILY_QUERY_LIMIT: "0" },
-    { PRANA_DAILY_QUERY_LIMIT: "other" },
-    { DATABASE_URL: "" },
-    { OPENAI_API_KEY: "" },
+    { GroqAPI: "" },
     { BETTER_AUTH_URL: "https://example.org/path" },
     { APP_ENV: "preview" },
     { APP_ENV: "production", VERCEL_ENV: "production" },
     { APP_ENV: "development", VERCEL_ENV: "production" },
-  ]) {
+  ])
     assert.equal(pranaSettings({ ...development, ...config }), null);
-  }
   assert(!validQuestion("  "));
   assert(!validQuestion("x".repeat(601)));
   assert(validQuestion("Hva er god stuebelysning?"));
@@ -51,16 +51,13 @@ function respond(
   observe?: (request: RequestInit) => void,
 ): typeof fetch {
   return async (url, init) => {
-    assert.equal(url, "https://api.openai.com/v1/responses");
+    assert.equal(url, "https://api.groq.com/openai/v1/chat/completions");
     observe?.(init!);
     return Response.json({
-      status: "completed",
-      output: [
+      choices: [
         {
-          type: "message",
-          content: [
-            { type: "output_text", text: JSON.stringify({ kind, sentences }) },
-          ],
+          finish_reason: "stop",
+          message: { content: JSON.stringify({ kind, sentences }) },
         },
       ],
     });
@@ -72,13 +69,15 @@ test("a short provider answer uses a server-side key, private single-turn input 
     consultation,
     respond("home", [answer], (init) => {
       const sent = JSON.parse(String(init.body));
-      assert.equal(sent.store, false);
-      assert.equal(sent.text.format.strict, true);
-      assert.equal(sent.input.length, 1);
-      assert.equal(sent.input[0].content, consultation.question);
-      assert.equal(sent.model, "gpt-4.1-mini");
-      assert.ok(sent.instructions.includes(consultation.notes));
-      assert.ok(!sent.instructions.includes(consultation.question));
+      assert.equal(sent.response_format.json_schema.strict, true);
+      assert.equal(sent.messages.length, 2);
+      assert.deepEqual(sent.messages[1], {
+        role: "user",
+        content: consultation.question,
+      });
+      assert.equal(sent.model, "openai/gpt-oss-20b");
+      assert.ok(sent.messages[0].content.includes(consultation.notes));
+      assert.ok(!sent.messages[0].content.includes(consultation.question));
     }),
   );
   assert.deepEqual(result, { kind: "home", answer });
@@ -103,4 +102,15 @@ test("overlong, malformed or unavailable answers do not become chat replies", as
   ]) {
     await assert.rejects(askPrana(consultation, result));
   }
+});
+test("Studio uses the same provider and requests a brief rewrite preserving visitor constraints", async () => {
+  const result = await askPrana(
+    { ...consultation, mode: "improve" },
+    respond("home", ["Keep the oak floor and warm light."], (request) => {
+      const { messages } = JSON.parse(String(request.body));
+      assert.match(messages[0].content, /Preserve requested room/);
+      assert.equal(messages[1].content, consultation.question);
+    }),
+  );
+  assert.equal(result.answer, "Keep the oak floor and warm light.");
 });

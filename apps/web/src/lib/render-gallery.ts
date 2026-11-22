@@ -10,7 +10,7 @@ export type GalleryScene = {
   study: Album;
 };
 
-const subjects = {
+export const subjects = {
   architecture: ["Arkitektur", "Architecture"],
   bedroom: ["Soverom", "Bedrooms"],
   living: ["Oppholdsrom", "Living spaces"],

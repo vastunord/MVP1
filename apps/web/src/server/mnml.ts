@@ -1,3 +1,4 @@
+import { isPreviewDatabase, previewStore } from "./preview-target.ts";
 import { createHash } from "node:crypto";
 import { findTool, visibleControls } from "@vastunord/contracts/tools";
 import {
@@ -23,24 +24,22 @@ export class RenderError extends Error {
 export function mnmlConfig(
   env: Record<string, string | undefined> = process.env,
 ) {
-  const limit = Number(env.MNML_DAILY_JOB_LIMIT);
+  const key = env.MNMLAPI?.trim() || env.MNML_API_KEY?.trim();
+  const development =
+    env.APP_ENV === "development" &&
+    (!env.VERCEL_ENV || env.VERCEL_ENV === "development");
+  const preview =
+    env.APP_ENV === "preview" &&
+    env.VERCEL_ENV === "preview" &&
+    env.BLOB_STORE_ID === previewStore &&
+    isPreviewDatabase(env.DATABASE_URL);
   if (
-    env.APP_ENV !== "development" ||
-    (env.VERCEL_ENV && env.VERCEL_ENV !== "development") ||
-    env.MNML_RENDERING_ENABLED !== "true" ||
-    !env.MNML_API_KEY?.trim() ||
-    !Number.isSafeInteger(limit) ||
-    limit < 1 ||
-    limit > 1000
+    !key ||
+    (!development && !preview) ||
+    env.MNML_RENDERING_ENABLED === "false"
   )
     return null;
-  const video = Number(env.MNML_DAILY_VIDEO_JOB_LIMIT || 0);
-  return {
-    key: env.MNML_API_KEY.trim(),
-    limit,
-    videoLimit:
-      Number.isSafeInteger(video) && video > 0 && video <= limit ? video : 0,
-  };
+  return { key };
 }
 function text(value: unknown, limit: number) {
   if (typeof value !== "string" || value.length > limit)
@@ -71,8 +70,10 @@ export function parseRender(input: Record<string, unknown>) {
   )
     throw new RenderError(400, "Duplicate references");
   const tool = findTool(text(input.toolId, 100));
-  if (!tool || !renderEngines.some((engine) => engine.id === input.engine))
-    throw new RenderError(400, "Invalid tool or engine");
+  const engine = renderEngines.find(
+    (level) => level.id === input.engine || level.providerId === input.engine,
+  );
+  if (!tool || !engine) throw new RenderError(400, "Invalid tool or engine");
   const prompt = text(input.prompt, 4000),
     avoid = text(input.avoid ?? "", 1000);
   if (
@@ -154,14 +155,12 @@ export function parseRender(input: Record<string, unknown>) {
           : mode;
     fields = {
       mode: actualMode,
-      engine: input.engine,
+      engine: engine.providerId,
       prompt: description,
       aspect_ratio:
         values.ratio && values.ratio !== "Original" ? values.ratio : "auto",
       count: 1,
     };
-    if (values.seed !== undefined && values.seed !== "")
-      fields.seed = Number(values.seed);
   } else if (workflow !== "design")
     throw new RenderError(400, "Workflow unavailable for this tool");
   else if (tool.id === "resolution-enhancement") {
@@ -223,7 +222,7 @@ export async function mnmlRequest(
   });
   if (!response.ok) {
     throw new RenderError(
-      response.status === 429 ? 429 : 502,
+      [402, 403, 429].includes(response.status) ? response.status : 502,
       "The rendering provider could not complete this request",
       [400, 401, 402, 403, 404, 422, 429].includes(response.status),
     );

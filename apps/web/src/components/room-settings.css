@@ -1,127 +1,236 @@
 .studio-editor .room-settings {
-  gap: .85rem;
-  color: #fff;
+  gap: 0.2rem;
+  color: white;
 }
-.room-settings :is(fieldset, label) { min-width: 0; }
-.room-settings legend, .room-select, .room-seed > label, .room-reference legend {
-  font-size: .77rem;
-  font-weight: 600;
-  line-height: 1.4;
+.room-settings :is(fieldset, label),
+.studio-choices {
+  min-width: 0;
 }
-.room-settings legend { margin: 0 0 .4rem; padding: 0; }
-.room-selects, .room-reference-pair {
-  display: grid;
-  gap: .4rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.room-drawer {
+  border-block-start: 1px solid var(--border);
+  font-size: 0.8rem;
 }
-.room-chip {
-  cursor: pointer;
-  position: relative;
+.room-drawer summary {
   display: flex;
   align-items: center;
-  border: 1px solid var(--border);
-  color: #fff;
-  background: var(--bg);
-  border-radius: .42rem;
-  overflow: hidden;
-  font-size: .73rem;
-  line-height: 1.25;
+  justify-content: space-between;
+  min-height: 44px;
+  gap: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: inherit;
 }
-.room-chip input {
+.room-drawer summary::-webkit-details-marker {
+  display: none;
+}
+.room-drawer summary::after {
+  content: "+";
+  font-size: 1.12rem;
+}
+.room-drawer[open] > summary::after {
+  content: "−";
+}
+.room-drawer > div,
+.room-reference {
+  display: grid;
+  gap: 0.95rem;
+  padding-block: 0.3rem 0.8rem;
+}
+.room-section-links {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--navy);
+  color: white;
+  font-size: 0.77rem;
+}
+.room-section-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.room-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+.studio-editor :is(#source-image, #room-settings) {
+  scroll-margin-block-start: 8rem;
+}
+.studio-editor .studio-choices {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.studio-choices legend {
+  margin-block-end: 0.45rem;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.studio-choices > div {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.studio-choice {
+  position: relative;
+  min-width: 0;
+  min-height: 44px;
+  align-content: start;
+  display: grid;
+  border: 1px solid var(--border);
+  background: var(--ink);
+  border-radius: 0.48rem;
+  overflow: hidden;
+  cursor: pointer;
+  color: white;
+}
+.studio-choice input {
   position: absolute;
   inset: 0;
   z-index: 1;
   width: 100%;
   height: 100%;
-  min-height: 0;
   margin: 0;
-  padding: 0;
   opacity: 0;
-  cursor: pointer;
+  cursor: inherit;
 }
-.room-directions button:focus-visible, .room-chip:has(:focus-visible) {
-  outline: 3px solid #fff;
+.studio-choice:has(:focus-visible) {
+  outline: 3px solid white;
   outline-offset: 2px;
 }
-.room-chip:has(:checked) {
+.studio-choice:has(:checked) {
   border-color: var(--orange);
-  background: var(--navy);
   box-shadow: inset 0 0 0 1px var(--orange);
+  background: var(--navy);
 }
-.room-chip-list { display: flex; flex-wrap: wrap; gap: .3rem; }
-.room-chip {
-  min-height: 2rem;
-  padding: .28rem .55rem;
-  font-size: .73rem;
+.studio-choice:has(:checked)::after {
+  pointer-events: none;
+  content: "✓";
+  position: absolute;
+  right: 0.2rem;
+  top: 0.2rem;
+  border-radius: 50%;
+  background: var(--navy);
+  color: white;
+  padding: 0.08rem 0.2rem;
+  font-size: 0.65rem;
+  font-weight: 700;
 }
-.room-directions { display: grid; gap: .38rem; }
-.room-directions button {
-  position: relative;
+.studio-choice:has(:disabled) {
+  cursor: default;
+  opacity: 0.65;
+}
+.choice-label {
+  padding: 0.35rem 0.4rem;
+  line-height: 1.25;
+  font-size: 0.71rem;
+  overflow-wrap: anywhere;
+  color: white;
+}
+.choices-compact > div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.choices-compact .studio-choice {
+  align-content: center;
+  padding-inline: 0.22rem;
+  min-height: 36px;
+}
+.choices-compact .studio-choice:has(:checked)::after {
+  display: none;
+}
+.choice-art {
+  background: linear-gradient(132deg, #d5c6b0, #f2eadf);
+  height: clamp(2.15rem, 4vw, 3.8rem);
   display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr) .85rem;
-  align-items: center;
-  gap: .65rem;
-  padding: .3rem .55rem .3rem .3rem;
-  text-align: start;
-  border: 1px solid var(--border);
-  border-radius: .55rem;
-  background: var(--bg);
-  color: #fff;
+  place-items: center;
+  overflow: hidden;
+  color: var(--navy);
 }
-.room-directions img {
+.choice-art img {
   width: 100%;
-  height: 3.15rem;
-  border-radius: .3rem;
+  height: 100%;
   object-fit: cover;
 }
-.room-direction-copy { display: grid; gap: .22rem; overflow-wrap: anywhere; }
-.room-direction-copy strong { font-size: .84rem; line-height: 1.2; }
-.room-direction-copy small { font-size: .71rem; line-height: 1.35; }
-.room-directions button:hover { border-color: var(--sage); }
-.room-directions button[aria-pressed="true"] {
-  border-color: var(--orange);
+.choice-mark {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.art-medium,
+.art-workflow:has(.choice-mark) {
+  background:
+    repeating-linear-gradient(35deg, transparent 0 5px, #efe1d137 6px 7px),
+    linear-gradient(130deg, #d4c0a5, #f3e8d9);
+}
+.choices-level > div {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.choices-level .choice-art {
+  height: 2.1rem;
   background: var(--navy);
 }
-.room-direction-check { font-size: .9rem; }
-.room-select, .room-reference label { display: grid; align-content: start; gap: .3rem; }
-.room-select select, .room-reference select { min-width: 0; width: 100%; font-size: .77rem; min-height: 2.5rem; }
-.room-drawer { border-block-start: 1px solid var(--border); }
-.room-drawer summary {
+.level-bars {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 2.7rem;
-  cursor: pointer;
-  list-style: none;
-  font-size: .85rem;
-  font-weight: 600;
+  align-items: flex-end;
+  gap: 2px;
+  height: 1rem;
 }
-.room-drawer summary::-webkit-details-marker { display: none; }
-.room-drawer summary::after { content: "+"; font-size: 1.15rem; }
-.room-drawer[open] summary::after { content: "−"; }
-.room-drawer > div, .room-reference { display: grid; gap: .85rem; }
-.room-check { display: flex; align-items: center; gap: .5rem; font-size: .8rem; }
-.room-seed { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .3rem; }
-.room-seed > label { grid-column: 1 / -1; }
-.room-seed button {
-  min-width: 2.75rem; border: 1px solid var(--border); border-radius: .42rem; font-size: 1.25rem;
+.level-bars i {
+  width: 0.24rem;
+  height: 35%;
+  background: #fff;
+  opacity: 0.28;
 }
-.room-reference { margin-block-start: .6rem; font-size: .77rem; }
-.room-reference-pair label { padding: .5rem; border: 1px dashed var(--border); border-radius: .42rem; }
-.room-reference-pair img { width: 100%; height: 3.4rem; object-fit: contain; }
-.room-reference-pair select:disabled { opacity: .72; }
-.room-section-links {
-  display: flex;
-  gap: 1rem;
-  padding: .5rem 1rem;
-  border-bottom: 1px solid var(--border);
+.level-bars i:nth-child(2) {
+  height: 58%;
+}
+.level-bars i:nth-child(3) {
+  height: 77%;
+}
+.level-bars i:nth-child(4) {
+  height: 100%;
+}
+.level-low i:first-child,
+.level-medium i:nth-child(-n + 2),
+.level-high i:nth-child(-n + 3),
+.level-ultra i {
+  opacity: 1;
+}
+.level-fast {
+  transform: skew(-22deg);
+}
+.level-fast i {
+  height: 90%;
+  opacity: 1;
+}
+.prompt-tools button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.prompt-proposal {
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+}
+.prompt-proposal button {
+  font: inherit;
+  color: white;
   background: var(--navy);
-  color: #fff;
-  font-size: .77rem;
+  padding: 0.45rem;
+  border-radius: 0.4rem;
+  margin: 0.15rem;
 }
-.room-section-links a { display: inline-flex; align-items: center; min-height: 2rem; text-decoration: underline; text-underline-offset: .2em; }
-.studio-editor :is(#room-settings, #source-image) { scroll-margin-block-start: 7.75rem; }
-
 @media (pointer: coarse) {
-  .room-chip, .room-directions button, .room-section-links a { min-height: 2.75rem; }
+  .choices-compact .studio-choice {
+    min-height: 44px;
+  }
 }

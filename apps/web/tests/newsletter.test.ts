@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { randomBytes, randomUUID } from "node:crypto";
 import { test } from "node:test";
+import { previewPool, previewRole } from "../src/server/preview-target.ts";
 import {
   consentRequest,
   hour,
@@ -27,6 +28,20 @@ const enabled = {
   NEWSLETTER_ENABLED: "true",
   NEWSLETTER_TOKEN_SECRET: secret,
 };
+
+test("Preview enrollment and withdrawal use the isolated pool and exact deployment origin", () => {
+  const preview = {
+    ...enabled, APP_ENV: "preview", VERCEL_ENV: "preview",
+    VERCEL_URL: "vastunord-web-fixture.vercel.app",
+    DATABASE_URL: `postgresql://${previewRole}:fixture@${previewPool}/neondb?sslmode=require`,
+  };
+  assert.equal(newsletterSettings(preview)?.origin, "https://" + preview.VERCEL_URL);
+  assert.equal(newsletterSettings({ ...preview, DATABASE_URL: enabled.DATABASE_URL }), null);
+  assert.equal(newsletterSettings({ ...preview, VERCEL_URL: "example.invalid" }), null);
+  assert.equal(newsletterSettings({ ...preview, VERCEL_ENV: "production" }), null);
+  assert.equal(newsletterSettings({ ...preview, NEWSLETTER_ENABLED: "false" }), null);
+  assert.ok(newsletterSettings({ ...preview, NEWSLETTER_ENABLED: "false" }, true));
+});
 
 test("newsletter activation requires a scoped origin, sender, database and key and an approved commercial Production release", () => {
   assert.deepEqual(newsletterSettings(enabled), { origin, secret });
