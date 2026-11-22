@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+## 22 November 2026 · MNML single-user test continuation
+
+- Separated the saved-render owner journey from optional second-user isolation and added local regression checks. The diagnostic harness preserves successful checkpoints and existing test data.
+- Prepared a protected Preview diagnostic and requested recovery for the verified contact test account; a successful HTTP response is not proof of delivery or sign-in. The existing provider output remains unattached pending authentication. No new MNML render was requested.
+- TypeScript, ESLint, the isolated PostgreSQL persistence test, stage tests and Webpack production build passed. The standard local Turbopack build failed starting its CSS worker; the hosted Preview build succeeded.
+
 ## 22 November 2026 · MNML Preview account test
 
 - Requested the two owner-authorized test verification messages. The contact account verified and signed in. The owner reported that the second address does not exist; the test timed out before project creation and no new MNML render was requested. Live attachment, comparison and cross-user testing remain incomplete.

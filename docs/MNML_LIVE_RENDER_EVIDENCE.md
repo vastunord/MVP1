@@ -1,5 +1,11 @@
 # MNML live render evidence
 
+## Single-user continuation — 22 November 2026
+
+`apps/web/scripts/test-preview-mnml-journey.mjs` separates the owner workflow from the optional second-user stage. It uses protected process environment credentials, creates only a named synthetic project with a UUID idempotency key, and does not submit a provider request or delete test data. Stage checkpoints precede the independent isolation result. Unit tests cover stage independence and preserving owner evidence; an isolated PostgreSQL test covers authorization and persistence. Neither substitutes for the live journey.
+
+Protected diagnostic Preview `dpl_Gi6MEKWCQtJcMtese89GoydWZWBc` is available. The deployed diagnostic page's project-creation key is invalid; create the synthetic project through the normal project UI before using that page. The account-recovery request for the verified contact inbox returned HTTP 200, which does not by itself establish delivery. Live owner authentication and project attachment, gallery, comparison, reopening and anonymous denial are pending. The second-account check is independent and pending. No additional render was purchased.
+
 The live two-account test requested verification messages for the owner-approved inboxes. The contact test account verified and created an authenticated session. The owner reported that the other address does not exist. The harness waited for both users and stopped before project creation or attachment. No second provider render was made. Live project history, before/after, sign-out/sign-in reopening and cross-user access remain unverified.
 
 The replacement Preview API key passed `GET /v2/account` and `GET /v2/engines`. MNML accepted one synthetic interior job, ID `674349`, with engine `v4.5-fast`. The job succeeded and reported a charge of USD 0.099. The provider result was copied to the dedicated private Preview Blob store, read back and validated as a 2528 × 1696 WebP. This diagnostic did not use or create a project record. Project persistence, a Studio comparison and reopening remain unverified until the Preview migration and grants are available.

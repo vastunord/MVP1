@@ -1,5 +1,13 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · MNML single-user continuation
+
+The live test harness now separates the owner journey from optional cross-user isolation. A missing second account no longer prevents the owner stage, and completed checkpoints are reported before a later failure. Existing synthetic data is not deleted by the harness. Local stage tests and the isolated PostgreSQL ownership/persistence test passed; these are not evidence of a live attachment.
+
+The existing MNML proof remains documented in private Preview Blob. Protected diagnostic Preview `dpl_Gi6MEKWCQtJcMtese89GoydWZWBc` is ready. A recovery request for the already-verified `contact@vastu.no` account returned HTTP 200; actual email delivery and renewed sign-in are not yet confirmed. The deployed diagnostic page needs the synthetic project created through the normal project UI first: its project-creation idempotency key is invalid. The fixed local harness uses a UUID. After sign-in, create or select the named private project and attach the existing synthetic proof; no new provider request is authorized. Live project attachment, gallery, comparison, reopening, anonymous denial and cross-user checks remain unverified. Do not claim completion from local tests.
+
+Local Turbopack build failed while starting its CSS worker, including outside the sandbox; the existing Webpack production-build fallback passed. No Production or NRide resources were changed.
+
 ## 22 November 2026 · MNML live integration test
 
 The protected Preview requested the two authorized verification emails. The contact test account verified its email and established an authenticated session. The owner reported that the second Gmail address does not exist. The test could not verify the second account and stopped before creating a project or attaching the private synthetic MNML result. No additional provider render was requested. The existing result remains in private Preview Blob. A live owner-project attachment, before/after reopening and second-user denial are still pending.

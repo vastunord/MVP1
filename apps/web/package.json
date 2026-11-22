@@ -13,6 +13,7 @@
     "test:newsletter-db": "node --experimental-strip-types --test tests/newsletter-postgres.mjs",
     "test:consent-db": "node --experimental-strip-types --test tests/publication-consent-postgres.mjs",
     "test:provider-db": "node --conditions=react-server --experimental-strip-types --test tests/studio-postgres.mjs",
+    "test:mnml-journey": "node --test tests/mnml-journey-stages.test.mjs",
     "test:smoke": "playwright test"
   },
   "dependencies": {
