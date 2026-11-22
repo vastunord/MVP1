@@ -11,7 +11,8 @@ from PIL import Image, ImageChops, ImageOps, ImageStat
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "apps/web/public"
 REGISTER = ROOT / "docs/VISUALS_PLACEMENTS.csv"
-FOLDERS = ("media/hero", "media/tools", "media/canvas", "media/gallery", "media/briefs", "reference/editorial")
+STUDY_REGISTER = ROOT / "docs/KNOWLEDGE_STUDY_IMAGES.csv"
+FOLDERS = ("media/hero", "media/tools", "media/canvas", "media/gallery", "media/briefs", "reference/editorial", "reference/studies")
 
 
 def digest(path):
@@ -27,6 +28,11 @@ def scene_signature(path):
 def verify(check_sources):
     with REGISTER.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.DictReader(stream))
+    with STUDY_REGISTER.open(encoding="utf-8", newline="") as stream:
+        studies = list(csv.DictReader(stream))
+    if len(studies) != 500 or len({row["article_slug"] for row in studies}) != 500:
+        raise ValueError("Expected 500 distinct illustrated Knowledge studies")
+    rows.extend(dict(row, placement="knowledge study", max_width=768) for row in studies)
     counts = Counter(row["placement"] for row in rows)
     for group, count in (("render gallery", 50), ("tool thumbnail", 17), ("tool editor sample", 17), ("room brief", 3)):
         if counts[group] != count:
@@ -43,6 +49,8 @@ def verify(check_sources):
             raise ValueError(f"Invalid or repeated placement {site_path}")
         registered.add(site_path)
         output_hash = digest(target)
+        if row.get("derivative_sha256") and row["derivative_sha256"] != output_hash:
+            raise ValueError(f"Changed public image at {site_path}")
         if row["source_sha256"] in sources or output_hash in public_hashes:
             raise ValueError(f"Repeated source or output at {site_path}")
         sources.add(row["source_sha256"])

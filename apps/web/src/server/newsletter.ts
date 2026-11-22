@@ -9,10 +9,10 @@ export const requestSource = "marketing-newsletter";
 export const hour = 60 * 60 * 1000;
 
 export function newsletterSettings(env: Environment, unsubscribe = false) {
-  if (
-    env.APP_ENV !== "development" ||
-    ((env.VERCEL === "1" || env.VERCEL_ENV) && env.VERCEL_ENV !== "development")
-  )
+  const production = env.APP_ENV === "production" && env.VERCEL_ENV === "production";
+  if ((env.APP_ENV !== "development" && !production) ||
+    ((env.VERCEL === "1" || env.VERCEL_ENV) && env.VERCEL_ENV !== env.APP_ENV) ||
+    (production && !unsubscribe && env.COMMERCIAL_LAUNCH_APPROVED !== "true"))
     return null;
   if (
     !env.DATABASE_URL ||
@@ -33,6 +33,7 @@ export function newsletterSettings(env: Environment, unsubscribe = false) {
     const loopback = ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
     if (
       url.href !== url.origin + "/" ||
+      (production && url.protocol !== "https:") ||
       (url.protocol !== "https:" && !(loopback && url.protocol === "http:"))
     )
       return null;

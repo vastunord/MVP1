@@ -4,7 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { ReactNode } from "react";
-import type { Locale } from "@/lib/i18n";
+import { publicHref, type Locale } from "@/lib/i18n";
+import type { StudyCard } from "@/lib/visual-studies";
+import { StudyPagination, studyPageSize } from "./study-pagination";
+import "./visual-study.css";
 import type { ExperienceRoute } from "./workspace-experience";
 import {
   guides,
@@ -188,9 +191,17 @@ function RoomTour({ t }: ViewProps) {
   );
 }
 
-function Knowledge({ t }: ViewProps) {
+function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; studyCards: StudyCard[] }) {
   const [topic, setTopic] = useState("all");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
+  const tags = ["budget", "staging", "interiors", "tools", "design", "material", "light", "floor"];
+  const topicLabels = [...guides.map(g => ({id:g.id, name:t(g.topic[0],g.topic[1])})),
+    {id:"interiors", name:t("Interiør","Interiors")}, {id:"design",name:t("Design","Design")}];
+  const studyMatches = studyCards.filter(card =>
+    (topic === "all" || card.tags.some(tag => tags[tag] === topic)) &&
+    [card.name,card.intro,...card.tags.map(tag => topicLabels.find(item => item.id === tags[tag])?.name ?? "")].join(" ").toLocaleLowerCase().includes(search.trim().toLocaleLowerCase())
+  );
   const matches = guides.filter(
     (g) =>
       (topic === "all" || topic === g.id) &&
@@ -203,13 +214,17 @@ function Knowledge({ t }: ViewProps) {
         .toLocaleLowerCase()
         .includes(search.trim().toLocaleLowerCase()),
   );
+  const total = matches.length + studyMatches.length;
+  const start = page * studyPageSize;
+  const guidePage = matches.slice(start, start + studyPageSize);
+  const studyPage = studyMatches.slice(Math.max(0, start - matches.length), Math.max(0, start + studyPageSize - matches.length));
   return (
     <>
       <Heading
         title={t("Kunnskapsbibliotek", "Knowledge library")}
         description={t(
-          "Utforsk korte eksempelguider om materialer, dagslys og rommet rundt deg.",
-          "Explore short sample guides to materials, daylight and the spaces around you.",
+          "Utforsk guider og 500 illustrerte designstudier om materialer, dagslys og rommet rundt deg.",
+          "Explore guides and 500 illustrated design studies on materials, daylight and the spaces around you.",
         )}
       >
       </Heading>
@@ -219,7 +234,7 @@ function Knowledge({ t }: ViewProps) {
           <input
             type="search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {setSearch(e.target.value); setPage(0);}}
           />
         </label>
         <label>
@@ -227,19 +242,19 @@ function Knowledge({ t }: ViewProps) {
           <select
             aria-labelledby="knowledge-topic-label"
             value={topic}
-            onChange={(e) => setTopic(e.target.value)}
+            onChange={(e) => {setTopic(e.target.value); setPage(0);}}
           >
             <option value="all">{t("Alle temaer", "All topics")}</option>
-            {guides.map((g) => (
+            {topicLabels.map((g) => (
               <option key={g.id} value={g.id}>
-                {t(g.topic[0], g.topic[1])}
+                {g.name}
               </option>
             ))}
           </select>
         </label>
       </div>
       <div className="xp-grid">
-        {matches.map((g) => (
+        {guidePage.map((g) => (
           <details key={g.id} className="xp-guide">
             <summary>
               <span className="xp-thumb">
@@ -258,8 +273,15 @@ function Knowledge({ t }: ViewProps) {
             <p>{t(g.body[0], g.body[1])}</p>
           </details>
         ))}
+        {studyPage.map(card => <Link className="xp-guide xp-study-card" href={publicHref("/resources/"+card.id, locale)} key={card.id}>
+          <span className="xp-thumb"><ReferencePhoto image={card.image}/></span>
+          <span className="xp-guide-label">{topicLabels.find(item => item.id === tags[card.tags[0]])?.name}</span>
+          <span className="xp-guide-title">{card.name}</span>
+          <p>{card.intro}</p>
+        </Link>)}
       </div>
-      {!matches.length && (
+      <StudyPagination page={page} count={total} locale={locale} move={setPage}/>
+      {!total && (
         <div className="xp-panel" role="status">
           <h2>{t("Ingen treff", "No matching guides")}</h2>
           <button
@@ -268,6 +290,7 @@ function Knowledge({ t }: ViewProps) {
             onClick={() => {
               setTopic("all");
               setSearch("");
+              setPage(0);
             }}
           >
             {t("Vis alle guider", "Show all guides")}
@@ -451,9 +474,11 @@ function AccountPreview({ t, wallet }: ViewProps & { wallet: boolean }) {
 export function ExperienceView({
   section,
   locale,
+  studyCards = [],
 }: {
   section: ExperienceRoute;
   locale: Locale;
+  studyCards?: StudyCard[];
 }) {
   const t: Translate = (nb, en) => (locale === "en" ? en : nb);
   let body: ReactNode;
@@ -462,7 +487,7 @@ export function ExperienceView({
       body = <RoomTour t={t} />;
       break;
     case "knowledge":
-      body = <Knowledge t={t} />;
+      body = <Knowledge t={t} locale={locale} studyCards={studyCards} />;
       break;
     case "budget":
       body = <Budget t={t} locale={locale} />;

@@ -1,0 +1,30 @@
+{
+  "name": "@vastunord/cms",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1 --port 3101",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1 --port 3101",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "payload": "payload",
+    "test:editorial": "node --experimental-strip-types --test tests/editorial-postgres.mjs",
+    "cms:migrations": "node scripts/migrations.mjs",
+    "cms:first-admin": "node --experimental-strip-types scripts/first-administrator.ts"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "3.94.1",
+    "@payloadcms/next": "3.94.1",
+    "graphql": "^16.8.1",
+    "next": "16.4.6",
+    "payload": "3.94.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "typescript": "5.9.3"
+  }
+}

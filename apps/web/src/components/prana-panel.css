@@ -1,6 +1,13 @@
 .prana-content {
   color: var(--text);
 }
+.prana-film { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; border: 0; }
+.prana-question { display: grid; gap: .65rem; }
+.prana-question label { font-weight: 650; }
+.prana-question textarea { width: 100%; padding: .75rem; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: .4rem; resize: vertical; font: inherit; }
+.prana-question small { line-height: 1.45; }
+.prana-question button { justify-self: start; }
+.prana-answer { border-inline-start: 3px solid var(--orange); padding-inline-start: .85rem; }
 .vn-prana-dialog .prana-reader {
   padding: 0.25rem clamp(1rem, 4vw, 1.35rem) 1.25rem;
 }

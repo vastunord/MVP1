@@ -2,6 +2,7 @@ type Caption = readonly [string, string];
 type Album = "fjord" | "atelier" | "cabin";
 
 export type GalleryScene = {
+  id: string;
   image: string;
   thumbnail?: string;
   title: Caption;
@@ -73,6 +74,7 @@ const entries: ReadonlyArray<readonly [string, Album, keyof typeof subjects, str
 ];
 
 export const renderGallery: GalleryScene[] = entries.map(([id, study, subject, nb, en]) => ({
+  id: "gallery-" + id,
   image: `/media/gallery/scene-${id}.webp`,
   thumbnail: `/media/gallery/thumbs/scene-${id}.webp`,
   title: [nb, en],
@@ -81,7 +83,7 @@ export const renderGallery: GalleryScene[] = entries.map(([id, study, subject, n
 }));
 
 export const fileExamples: GalleryScene[] = [
-  { image: "/reference/editorial/files-fjord.webp", title: ["Terrasse mot fjorden", "Fjord terrace"], style: subjects.outdoors, study: "fjord" },
-  { image: "/reference/editorial/files-atelier.webp", title: ["Lys fra peisen", "Firelight study"], style: subjects.living, study: "atelier" },
-  { image: "/reference/editorial/files-cabin.webp", title: ["Soverom med utsikt", "Bedroom with a view"], style: subjects.bedroom, study: "cabin" },
+  { id: "file-fjord", image: "/reference/editorial/files-fjord.webp", title: ["Terrasse mot fjorden", "Fjord terrace"], style: subjects.outdoors, study: "fjord" },
+  { id: "file-atelier", image: "/reference/editorial/files-atelier.webp", title: ["Lys fra peisen", "Firelight study"], style: subjects.living, study: "atelier" },
+  { id: "file-cabin", image: "/reference/editorial/files-cabin.webp", title: ["Soverom med utsikt", "Bedroom with a view"], style: subjects.bedroom, study: "cabin" },
 ];

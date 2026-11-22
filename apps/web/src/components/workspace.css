@@ -17,6 +17,12 @@
 .vn-side nav {
   display: block;
 }
+.vn-side .vn-nav-copy { display: grid; gap: .15rem; }
+.vn-nav-copy small { font-weight: 400; font-size: .69rem; line-height: 1.4; color: var(--muted); }
+.vn-side .vn-nav-group svg { flex-shrink: 0; }
+.vn-gallery-studio { display: flex; align-items: end; flex-wrap: wrap; gap: .75rem; padding-block: 1rem .25rem; }
+.vn-gallery-studio label { display: grid; gap: .35rem; }
+.vn-gallery-studio select { min-height: 44px; max-width: 100%; background: var(--surface); color: var(--text); }
 .vn-nav-group h2,
 .vn-pagehead .eyebrow {
   font-size: 0.69rem;

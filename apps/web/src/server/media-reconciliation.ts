@@ -56,7 +56,7 @@ export async function reconcileOrphanedObjects(
   for (const object of page.objects.slice(0, 20)) {
     result.examined++;
     if (
-      !/^private\/[a-zA-Z0-9_-]+\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)$/i.test(
+      !/^private\/[a-zA-Z0-9_-]+\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp|mp4)$/i.test(
         object.key,
       ) ||
       !Number.isFinite(object.uploadedAt.getTime()) ||

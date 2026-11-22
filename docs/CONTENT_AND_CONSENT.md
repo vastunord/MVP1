@@ -1,5 +1,11 @@
 # Content, gallery, consent and publishing specification
 
+## Current implementation
+
+The public-facing demo gallery uses company-provided reference images. The 500 Knowledge Hub studies have a separate [image register](KNOWLEDGE_STUDY_IMAGES.csv). Commercial publication needs a rights review. Private uploads and generated results remain in the owning project.
+
+Owners can grant or withdraw permission for a specific asset version and destination from the private project. Gallery and Pinterest have independent choices. YouTube permission applies to video. A revoked gallery listing is withdrawn, and a new grant requires fresh review. Isolated PostgreSQL tests cover two owners, asset versions, withdrawal and deletion. Editorial review of customer images and any external publication still require a human operator. The separate Payload service provides staff roles and publication review for bilingual Knowledge Hub articles. [CMS instructions](../apps/cms/README.md)
+
 ## Phase 02C model status
 
 The local app schema now separates private user assets from company demos, records version-specific consent by gallery/Pinterest/YouTube channel, and records channel-specific editorial decisions. The pure eligibility check requires validated media, verified rights, no withdrawal, editorial approval, and both gallery plus destination consent for user social distribution. A disabled social-publisher interface has no posting implementation. These are model and isolated test foundations only: there is no public gallery route, moderator workflow, active consent UI, persistence, automated posting or distribution service. Company demo rights and editorial approval must be verified before any publication; the local Visuals files are all unapproved.

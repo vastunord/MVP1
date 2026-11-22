@@ -61,7 +61,7 @@ export function Directory({
     ...destinations.map((d) => ({
       label: translated(d.title, locale),
       href: d.href,
-      caption: "Studio",
+      caption: translated(d.description, locale),
     })),
     ...tools.map((tool) => ({
       label: tool.name,
@@ -69,7 +69,7 @@ export function Directory({
       caption: en ? "Tool" : "Verktøy",
     })),
   ].filter((d) =>
-    (d.label + " " + d.href)
+    (d.label + " " + d.href + " " + d.caption)
       .toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase()),
   );
@@ -148,9 +148,13 @@ export function StudioShell({
                     key={d.href}
                     aria-current={d.href === active?.href ? "page" : undefined}
                     href={d.href}
+                    aria-label={translated(d.title, locale)}
+                    aria-describedby={"nav-" + d.icon + "-" + d.href.split("/").pop()}
                   >
                     <WorkspaceIcon name={d.icon} />
-                    {translated(d.title, locale)}
+                    <span className="vn-nav-copy">{translated(d.title, locale)}
+                      <small id={"nav-" + d.icon + "-" + d.href.split("/").pop()}>{translated(d.description, locale)}</small>
+                    </span>
                   </Link>
                 ))}
             </div>

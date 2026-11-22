@@ -1,5 +1,15 @@
 # Vastu Nord — current project handoff (living document)
 
+## 22 November 2026 · Studio, Knowledge Hub and launch preparation
+
+The homepage uses an edge-triggered photo sequence, keeps section 01 with a direct Studio link, and offers 12 illustrated questions. In the gallery, each of 50 scenes opens directly in any of the 17 editors. Studio starts with a single image and offers comparison on request. The workspace navigation explains the purpose of each destination. The Knowledge Hub now includes 500 new illustrated bilingual studies alongside its five existing guides. [Studies and image provenance](KNOWLEDGE_STUDY_IMAGES.csv)
+
+Prana has a real server-side OpenAI integration with short, topic-limited responses, polite redirection and daily usage limits. Studio has an authenticated MNML v2 job path for private inputs and results with idempotency, bounded operation counts and separate video activation. Both were exercised with isolated services. A live funded answer or render awaits provider credentials, an approved spend limit and the appropriate database schema. [AI integration](AI_AND_WORKERS.md)
+
+A separate Payload editorial service supports reviewed bilingual publication and withdrawal. The web app consumes only the published journal projection when the dedicated CMS origin is configured. New asset-sharing controls record the owner's permission for each version and destination. There is no automatic social posting. [CMS operation](../apps/cms/README.md) · [Privacy and consent](CONTENT_AND_CONSENT.md)
+
+Commercial hosting, production data recovery and migrations, live customer-service verification, rights/terms sign-off and provider budgets remain release requirements. The public web project has its assigned HTTPS sign-in origin. The Production build and app check the database pool and runtime role before opening private services. [Release checklist](go-live/RELEASE_CHECKLIST.md) · [One owner action list](OWNER_ACTIONS_ONE_LIST.md)
+
 ## Windowed homepage comparison and Studio photographs
 
 Application commit `7cd700f` is live. Vercel marked deployment `dpl_DJ7VrHAcw8SoNvsoYN6SWBRKxHEW` ready and assigned the [Vastu Nord demo](https://vastunord-web.vercel.app). TypeScript, ESLint, the production build, all 30 unit tests and all 38 browser tests passed.

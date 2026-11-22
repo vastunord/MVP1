@@ -1,4 +1,12 @@
-# AI and workers — proposed
+# AI and workers
+
+## Implemented provider paths
+
+Prana uses OpenAI Responses with a structured classification, a three-sentence limit and Norwegian or English replies. Abusive, unrelated and unsafe questions receive a localized redirect. The server sends only the individual question and published guidance. It requests no provider response storage. The application stores daily counters with keyed visitor identifiers. One transaction enforces both the visitor and global limits across server instances. Private project information stays outside consultation. [OpenAI Responses](https://platform.openai.com/docs/api-reference/responses/create)
+
+Studio uses MNML v2 through the authenticated project API. Development requires a server-side key, an approved daily allowance, private project access and explicit approval to send selected material. The render record ties the idempotency key, requester, input, provider job and private output together. An additional limit controls video. Reopening the project can resume status checks. Provider pricing, quality, retention and funded real responses still require controlled verification. [MNML API](https://developers.mnml.ai/docs) · [Configuration](ENVIRONMENT_VARIABLE_INVENTORY.md)
+
+## Earlier architecture and remaining worker requirements
 
 Azure AI Foundry / Azure OpenAI is the recorded preference; primary/backup require owner-approved deployments. No account, model entitlement, region, quota or credential verified. [Official model availability](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure) is not proof of owner access. Choose models only after capability, quality, retention and cost checks.
 

@@ -237,6 +237,13 @@ model RenderJob {
   workspaceId String
   projectId String
   toolId String
+  sourceAssetId String?
+  outputAssetId String?
+  outputMedia String @default("image")
+  requestHash String?
+  providerJobId String? @unique
+  chargedUsd Decimal? @db.Decimal(10, 6)
+  refundedUsd Decimal? @db.Decimal(10, 6)
   state JobState @default(QUEUED)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -28,8 +28,13 @@ const enabled = {
   NEWSLETTER_TOKEN_SECRET: secret,
 };
 
-test("newsletter activation is development-only with an explicit origin, sender, database and key", () => {
+test("newsletter activation requires a scoped origin, sender, database and key and an approved commercial Production release", () => {
   assert.deepEqual(newsletterSettings(enabled), { origin, secret });
+  const production = {...enabled, APP_ENV:"production", VERCEL_ENV:"production", BETTER_AUTH_URL:"https://vastunord-web.vercel.app", COMMERCIAL_LAUNCH_APPROVED:"true"};
+  assert.equal(newsletterSettings(production)?.origin, production.BETTER_AUTH_URL);
+  assert.equal(newsletterSettings({...production, COMMERCIAL_LAUNCH_APPROVED:"false"}), null);
+  assert.equal(newsletterSettings({...production, BETTER_AUTH_URL:origin}), null);
+  assert.ok(newsletterSettings({...production, NEWSLETTER_ENABLED:"false", COMMERCIAL_LAUNCH_APPROVED:"false"}, true));
   assert.equal(newsletterSettings({ ...enabled, VERCEL: "1" }), null);
   for (const key of Object.keys(enabled))
     assert.equal(newsletterSettings({ ...enabled, [key]: "" }), null);

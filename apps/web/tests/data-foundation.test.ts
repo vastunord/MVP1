@@ -195,6 +195,17 @@ test("gallery requires rights, editorial review, and separate user consents", ()
     approvedReviewChannels: ["GALLERY", "PINTEREST"] as const,
     withdrawn: false,
   };
+  const clip = {
+    ...base,
+    mimeType: "video/mp4",
+    activeConsentChannels: ["GALLERY", "YOUTUBE"] as const,
+    approvedReviewChannels: ["YOUTUBE"] as const,
+  };
+  assert.equal(canPublish(clip, "YOUTUBE"), true);
+  assert.equal(
+    canPublish({ ...clip, mimeType: "image/jpeg" }, "YOUTUBE"),
+    false,
+  );
   assert.equal(canPublish(base, "GALLERY"), true);
   assert.equal(canPublish(base, "PINTEREST"), false);
   assert.equal(
@@ -231,8 +242,13 @@ test("cloud configuration remains closed without dedicated resources", () => {
   );
   assert.throws(
     () =>
-      readServerConfig({ APP_ENV: "production", DATABASE_URL: "not-a-url" }),
-    /Invalid URL/,
+      readServerConfig({
+        APP_ENV: "production",
+        DATABASE_URL: "synthetic-malformed-secret-do-not-echo",
+      }),
+    (error: Error) =>
+      error.message === "Invalid PostgreSQL URL" &&
+      !error.message.includes("synthetic-malformed-secret-do-not-echo"),
   );
   assert.equal(
     readServerConfig({

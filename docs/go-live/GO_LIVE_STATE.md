@@ -1,5 +1,11 @@
 # Vastu Nord v7 release state
 
+## Studio and Knowledge Hub release
+
+The new candidate includes edge-triggered homepage photo changes, 12 illustrated FAQs, a single-photo Studio start, 17 gallery-to-editor handoffs and 500 bilingual visual studies. Prana and rendering provider paths are implemented behind server-side gates. The commercial release checklist records sign-off, provider funding, tested cloud dependencies and the hosting decision. [Release checklist](RELEASE_CHECKLIST.md) · [Owner actions](../OWNER_ACTIONS_ONE_LIST.md)
+
+## Previous windowed comparison release
+
 Application commit `7cd700f` on `feat/v7-brand-photo-entry` is live on the existing Vastu Nord Hobby project. Vercel assigned deployment `dpl_DJ7VrHAcw8SoNvsoYN6SWBRKxHEW` to the [noncommercial demonstration](https://vastunord-web.vercel.app). The 11 homepage comparisons now occupy a separate window beside the desktop introduction. Studio offers photographic room briefs and tone previews. The render gallery contains 50 curated images. [Commercial launch checklist](RELEASE_CHECKLIST.md)
 
 TypeScript, ESLint, the production build, 30 unit tests and 38 Playwright tests passed locally. Browser coverage includes a complete carousel loop, keyboard and touch controls, reduced motion, hover with independent scene rotation, the selected photo handoff, editor inputs, gallery search, cookie settings and the delayed newsletter. The media verifier matched all 180 independent source assignments and checked 230 published derivatives. [Media register](../VISUALS_PLACEMENTS.csv)

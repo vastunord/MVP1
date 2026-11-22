@@ -1,10 +1,11 @@
 "use client";
-import { useState, type CSSProperties } from "react";
 import Image from "next/image";
+import { useState, type CSSProperties } from "react";
 import type { ToolDefinition } from "@vastunord/contracts/tools";
 import { messages, type Locale } from "@/lib/i18n";
 import { translated, type StudioSample } from "@/lib/workspace-catalog";
-import { canvasDescription, sampleTones, toolDescription } from "./tool-presentation";
+import { homeComparisons } from "@/lib/home-comparisons";
+import { canvasDescription, toolDescription } from "./tool-presentation";
 
 export function StudioCanvas({
   tool,
@@ -12,30 +13,50 @@ export function StudioCanvas({
   preview,
   sample,
   guides,
+  output,
+  outputMedia,
 }: {
   tool: ToolDefinition;
   locale: Locale;
   preview: string;
   sample?: StudioSample;
   guides: boolean;
+  output?: string;
+  outputMedia?: "image" | "video";
 }) {
-  const english = locale === "en";
-  const t = messages(locale);
-  const [toneIndex, setToneIndex] = useState(
-    tool.id === "lighting-reimagination" ? 1 : 0,
-  );
-  const [compare, setCompare] = useState(true);
-  const [position, setPosition] = useState(
-    ["sky-transformation", "seasonal-transformation"].includes(tool.id)
-      ? 42
-      : tool.id === "resolution-enhancement"
-        ? 45
-        : 46,
-  );
-  const tone = sampleTones[toneIndex];
-  const toneName = english ? tone.en : tone.nb;
-  const staticExample = !tool.comparison;
-  const canvasPhoto = `/media/canvas/${tool.id}.webp`;
+  const en = locale === "en",
+    t = messages(locale);
+  const [compare, setCompare] = useState(false);
+  const [position, setPosition] = useState(50);
+  const source =
+    preview ||
+    (sample
+      ? sample.image.startsWith("/")
+        ? sample.image
+        : "/reference/" + sample.image
+      : "/media/canvas/" + tool.id + ".webp");
+  const study =
+    homeComparisons.find((item) => sample?.id === "hero-" + item.id) ??
+    homeComparisons.find(
+      (item) =>
+        item.id ===
+        (tool.category === "Exterior & Landscape"
+          ? "white-villa"
+          : "city-living"),
+    )!;
+  const canCompare = output
+    ? Boolean(preview) && outputMedia !== "video"
+    : !preview && (!sample || sample.id.startsWith("hero-"));
+  const comparing = compare && canCompare;
+  const after = output || study.after;
+  const before = output ? source : study.before;
+  const sourceAlt = preview
+    ? en
+      ? "Selected private image"
+      : "Valgt privatbilde"
+    : sample
+      ? translated(sample.sampleAlt, locale)
+      : canvasDescription(tool.id, locale);
   return (
     <section className="studio-canvas" aria-label={t.canvas}>
       <div className="canvas-heading">
@@ -44,157 +65,119 @@ export function StudioCanvas({
         <p>{toolDescription(tool.id, locale)}</p>
       </div>
       <figure className="canvas-figure">
-        {preview ? (
-          <div className="sample-stage private-stage">
-            {/* Authenticated, server-authorized endpoint or ephemeral local blob. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={preview}
-              alt={english ? "Selected project image" : "Valgt prosjektbilde"}
+        <div
+          className={
+            "sample-stage " +
+            (preview || output
+              ? "private-stage"
+              : sample
+                ? "selected-stage"
+                : "")
+          }
+          style={{ "--divider": position + "%" } as CSSProperties}
+        >
+          {output && outputMedia === "video" ? (
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              src={output}
+              aria-label={en ? "Project walkthrough" : "Prosjektvandring"}
             />
-          </div>
-        ) : sample ? (
-          <div className="sample-stage selected-stage">
+          ) : (
             <Image
-              src={sample.image.startsWith("/") ? sample.image : "/reference/" + sample.image}
-              alt={translated(sample.sampleAlt, locale)}
-              fill
-              priority
-              sizes="(max-width: 850px) 95vw, 65vw"
-            />
-          </div>
-        ) : (
-          <div
-            className="sample-stage"
-            style={{ "--divider": position + "%" } as CSSProperties}
-          >
-            <Image
-              src={canvasPhoto}
+              src={comparing ? after : output || source}
+              alt={
+                output
+                  ? en
+                    ? "Private render result"
+                    : "Privat renderresultat"
+                  : comparing
+                    ? translated(study.afterAlt, locale)
+                    : sourceAlt
+              }
               unoptimized
-              className={staticExample ? undefined : "tone-" + tone.id}
-              alt={canvasDescription(tool.id, locale)}
               fill
               priority
-              sizes="(max-width: 850px) 95vw, 65vw"
+              sizes="(max-width:850px) 95vw, 65vw"
             />
-            {!staticExample && compare && (
-              <>
-                <div className="sample-before">
-                  <Image
-                    src={canvasPhoto}
-                    unoptimized
-                    alt=""
-                    fill
-                    sizes="(max-width: 850px) 95vw, 65vw"
-                  />
-                </div>
-                <div className="sample-divider" aria-hidden="true">
-                  <span>↔</span>
-                </div>
-                <input
-                  className="sample-range"
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={position}
-                  onChange={(e) => setPosition(Number(e.target.value))}
-                  aria-label={
-                    english
-                      ? "Before and after comparison"
-                      : "Sammenlign før og etter"
-                  }
-                  aria-valuetext={
-                    (english ? "Original image " : "Originalbilde ") +
-                    position +
-                    " %"
-                  }
+          )}
+          {comparing && (
+            <>
+              <div className="sample-before">
+                <Image
+                  src={before}
+                  alt={output ? sourceAlt : translated(study.beforeAlt, locale)}
+                  unoptimized
+                  fill
+                  sizes="(max-width:850px) 95vw, 65vw"
                 />
-              </>
-            )}
-            {staticExample &&
-              tool.id === "perspective-correction" &&
-              guides && <div className="sample-guides" aria-hidden="true" />}
-            {staticExample && tool.id === "object-placement" && (
-              <div className="sample-pins" aria-hidden="true">
-                <span>1</span>
-                <span>2</span>
               </div>
-            )}
-            {tool.id === "visual-cleanup" && (
-              <div className="example-mask" aria-hidden="true" />
-            )}
-          </div>
-        )}
+              <div className="sample-divider" aria-hidden="true">
+                <span>↔</span>
+              </div>
+              <input
+                className="sample-range"
+                type="range"
+                min="0"
+                max="100"
+                value={position}
+                onChange={(e) => setPosition(e.currentTarget.valueAsNumber)}
+                aria-label={
+                  en ? "Before and after comparison" : "Sammenlign før og etter"
+                }
+              />
+            </>
+          )}
+          {!comparing &&
+            !output &&
+            tool.id === "perspective-correction" &&
+            guides && <div className="sample-guides" aria-hidden="true" />}
+        </div>
         <figcaption className="sample-caption">
           <span>
-            {preview
-              ? english
-                ? "Private project photo"
-                : "Privat prosjektbilde"
-              : sample
-                ? translated(sample.name, locale)
-                : english ? "Brand sample" : "Merkevareeksempel"}
+            {output
+              ? en
+                ? "Project render"
+                : "Prosjektrender"
+              : comparing
+                ? translated(study.title, locale)
+                : preview
+                  ? en
+                    ? "Private project photo"
+                    : "Privat prosjektbilde"
+                  : sample
+                    ? translated(sample.name, locale)
+                    : en
+                      ? "Studio reference"
+                      : "Studioreferanse"}
           </span>
-          {preview
-            ? null
-            : sample
-              ? english ? "Selected source photo" : "Valgt kildebilde"
-            : staticExample
-              ? tool.id === "visual-cleanup"
-                ? english
-                  ? "Example brush selection"
-                  : "Eksempel på penselmarkering"
-                : tool.id === "object-placement"
-                  ? english
-                    ? "Example placement markers"
-                    : "Eksempel på plasseringspunkter"
-                  : english
-                    ? "Perspective guide study"
-                    : "Studie av perspektivlinjer"
-              : (english ? "Curated tone study" : "Ferdig tonestudie") +
-                " · " +
-                toneName}
+          {sample &&
+            !comparing &&
+            !output &&
+            (en ? "Selected source photo" : "Valgt kildebilde")}
+          {canCompare && (
+            <button
+              type="button"
+              className="compare-toggle"
+              aria-pressed={comparing}
+              onClick={() => setCompare(!comparing)}
+            >
+              {comparing
+                ? en
+                  ? "Single image"
+                  : "Enkeltbilde"
+                : output
+                  ? en
+                    ? "Compare with source"
+                    : "Sammenlign med original"
+                  : en
+                    ? "Compare example"
+                    : "Sammenlign eksempel"}
+            </button>
+          )}
         </figcaption>
       </figure>
-      {!preview && !sample && !staticExample && (
-        <div className="studio-variants">
-          <div
-            role="group"
-            aria-label={english ? "Sample tones" : "Eksempeltoner"}
-          >
-            {sampleTones.map((s, i) => (
-              <button
-                type="button"
-                key={s.id}
-                aria-pressed={toneIndex === i}
-                onClick={() => setToneIndex(i)}
-              >
-                <Image
-                  src={canvasPhoto}
-                  unoptimized
-                  className={"studio-tone-chip tone-" + s.id}
-                  width={80}
-                  height={48}
-                  alt=""
-                />
-                <span>{english ? s.en : s.nb}</span>
-              </button>
-            ))}
-          </div>
-          <button
-            className="compare-toggle"
-            aria-pressed={compare}
-            onClick={() => setCompare(!compare)}
-          >
-            {english ? "Compare" : "Sammenlign"}
-          </button>
-        </div>
-      )}
-      <ol className="studio-steps">
-        <li>{t.step1}</li>
-        <li>{t.step2}</li>
-        <li>{t.step3}</li>
-      </ol>
     </section>
   );
 }

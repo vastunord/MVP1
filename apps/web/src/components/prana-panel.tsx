@@ -5,14 +5,16 @@ import { useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import type { Locale } from "@/lib/i18n";
 import { guides } from "./workspace-experience-data";
+import { PranaConsultation } from "./prana-consultation";
 import "./prana-panel.css";
 
 const tabs = ["Prana", "Quick Tips", "Film"] as const;
 
-export function PranaPanel({ locale }: { locale: Locale }) {
+export function PranaPanel({ locale, enabled, filmId }: { locale: Locale; enabled: boolean; filmId?: string }) {
   const t = (nb: string, en: string) => (locale === "en" ? en : nb);
   const [tab, setTab] = useState(0);
   const [topic, setTopic] = useState(0);
+  const [playFilm, setPlayFilm] = useState(false);
   const guide = guides[topic];
   const id = useId();
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
@@ -70,13 +72,7 @@ export function PranaPanel({ locale }: { locale: Locale }) {
           >
             {index === 0 && (
               <>
-                <h2>{t("AI-konsultasjon", "AI consultation")}</h2>
-                <p>
-                  {t(
-                    "Personlig konsultasjon er utilgjengelig i demonstrasjonen. Utforsk tips om lys, materialer og planløsning mens du planlegger rommet ditt.",
-                    "Personal consultation is unavailable in this demo. Explore tips on light, materials and layout as you plan your room.",
-                  )}
-                </p>
+                <PranaConsultation key={locale} locale={locale} enabled={enabled} />
                 <button
                   className="prana-action"
                   type="button"
@@ -113,12 +109,16 @@ export function PranaPanel({ locale }: { locale: Locale }) {
             {index === 2 && (
               <>
                 <h2>{t("Filmbibliotek", "Film library")}</h2>
-                <p>
+                {filmId ? (
+                  tab === 2 && playFilm ?
+                    <iframe className="prana-film" title={t("Film fra Vastu Nord", "Vastu Nord film")} src={"https://www.youtube-nocookie.com/embed/"+filmId} referrerPolicy="strict-origin-when-cross-origin" allowFullScreen /> :
+                    <button type="button" className="prana-action" onClick={()=>setPlayFilm(true)}>{t("Last inn filmen fra YouTube","Load the film from YouTube")}</button>
+                ) : <p>
                   {t(
                     "Ingen filmer er publisert her ennå. Utforsk den guidede romstudien bilde for bilde.",
                     "No films have been published here yet. Explore the guided room study one image at a time.",
                   )}
-                </p>
+                </p>}
                 <Link className="prana-text-link" href="/app/home-experience">
                   {t("Åpne boligopplevelsen", "Open Home Experience")}{" "}
                   <span aria-hidden="true">↗</span>

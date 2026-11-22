@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { homeComparisons } from "@/lib/home-comparisons";
 import type { Locale } from "@/lib/i18n";
 import { translated } from "@/lib/workspace-catalog";
@@ -9,8 +15,8 @@ import { Action } from "./marketing-elements";
 import "./home-photo-hero.css";
 
 type Scene = (typeof homeComparisons)[number];
-const dwellMs = 12_000;
-const sweepPerSecond = 1.4;
+const sweepPerSecond = 8;
+const edgeHoldMs = 350;
 const initialSplit = 50;
 
 async function loadPair(scene: Scene) {
@@ -27,10 +33,16 @@ function ComparisonWindow({
   scene,
   locale,
   moving,
+  nextScene,
+  advance,
+  children,
 }: {
   scene: Scene;
   locale: Locale;
   moving: boolean;
+  nextScene: Scene;
+  advance: () => void;
+  children: React.ReactNode;
 }) {
   const frame = useRef<HTMLDivElement>(null);
   const range = useRef<HTMLInputElement>(null);
@@ -39,6 +51,7 @@ function ComparisonWindow({
   const pointing = useRef(false);
   const [hovered, setHovered] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [manualAdvance, setManualAdvance] = useState(false);
   const [keyboardFocus, setKeyboardFocus] = useState(false);
 
   function paint(value: number) {
@@ -50,120 +63,193 @@ function ComparisonWindow({
   }
 
   useEffect(() => {
-    if (!moving || hovered || dragging || keyboardFocus) return;
-    let handle = 0;
+    if (!manualAdvance && (!moving || hovered || dragging || keyboardFocus))
+      return;
+    let active = true;
+    let animation = 0;
+    let delay = 0;
     let previous = performance.now();
+
+    function finishSweep(edge: number) {
+      paint(edge);
+      delay = window.setTimeout(
+        async () => {
+          if (
+            !manualAdvance &&
+            (document.hidden || document.querySelector("dialog[open]"))
+          ) {
+            if (active) finishSweep(edge);
+            return;
+          }
+          try {
+            await loadPair(nextScene);
+            if (!active) return;
+            direction.current = edge === 100 ? -1 : 1;
+            advance();
+          } catch {
+            // Keep a readable pair and let the next sweep or manual action retry.
+            if (active && !manualAdvance) {
+              direction.current = edge === 100 ? -1 : 1;
+              previous = performance.now();
+              animation = requestAnimationFrame(tick);
+            }
+          } finally {
+            if (active && manualAdvance) setManualAdvance(false);
+          }
+        },
+        manualAdvance ? 0 : edgeHoldMs,
+      );
+    }
+
     function tick(time: number) {
       const elapsed = Math.min(Math.max(0, time - previous), 100);
       previous = time;
-      if (!document.hidden) {
-        const next =
-          position.current +
-          (direction.current * sweepPerSecond * elapsed) / 1000;
-        if (next >= 100 || next <= 0) direction.current = next >= 100 ? -1 : 1;
-        paint(Math.min(100, Math.max(0, next)));
+      const next =
+        position.current +
+        (direction.current * sweepPerSecond * elapsed) / 1000;
+      if (next >= 100 || next <= 0) {
+        finishSweep(next >= 100 ? 100 : 0);
+        return;
       }
-      handle = requestAnimationFrame(tick);
+      paint(next);
+      animation = requestAnimationFrame(tick);
     }
-    handle = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(handle);
-  }, [moving, hovered, dragging, keyboardFocus]);
+    if (manualAdvance) finishSweep(direction.current === 1 ? 100 : 0);
+    else animation = requestAnimationFrame(tick);
+    return () => {
+      active = false;
+      cancelAnimationFrame(animation);
+      window.clearTimeout(delay);
+    };
+  }, [
+    moving,
+    hovered,
+    dragging,
+    keyboardFocus,
+    manualAdvance,
+    nextScene,
+    advance,
+  ]);
 
   return (
-    <div
-      className="photo-hero-mat"
-      onPointerEnter={(event) => {
-        if (event.pointerType !== "touch") setHovered(true);
-      }}
-      onPointerLeave={() => setHovered(false)}
-    >
+    <>
       <div
-        className="photo-hero-stage"
-        data-scene={scene.id}
-        ref={frame}
-        style={{ "--scene-ratio": scene.aspectRatio } as CSSProperties}
+        className="photo-hero-mat"
+        onPointerEnter={(event) => {
+          if (event.pointerType !== "touch") setHovered(true);
+        }}
+        onPointerLeave={() => setHovered(false)}
       >
-        <div className="hero-images">
-          <Image
-            unoptimized
-            src={scene.before}
-            alt={translated(scene.beforeAlt, locale)}
-            fill
-            loading="eager"
-            fetchPriority="high"
-            sizes="(max-width: 899px) 95vw, 68vw"
-          />
-          <div className="hero-after">
+        <div
+          className="photo-hero-stage"
+          data-scene={scene.id}
+          ref={frame}
+          style={{ "--scene-ratio": scene.aspectRatio } as CSSProperties}
+        >
+          <div className="hero-images">
             <Image
               unoptimized
-              src={scene.after}
-              alt={translated(scene.afterAlt, locale)}
+              src={scene.before}
+              alt={translated(scene.beforeAlt, locale)}
               fill
               loading="eager"
+              fetchPriority="high"
               sizes="(max-width: 899px) 95vw, 68vw"
             />
+            <div className="hero-after">
+              <Image
+                unoptimized
+                src={scene.after}
+                alt={translated(scene.afterAlt, locale)}
+                fill
+                loading="eager"
+                sizes="(max-width: 899px) 95vw, 68vw"
+              />
+            </div>
           </div>
-        </div>
-        <span className="photo-hero-line" aria-hidden="true">
-          <span>
-            <svg
-              viewBox="0 0 24 16"
-              width="23"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m8 3-5 5 5 5m8-10 5 5-5 5" />
-            </svg>
+          <span className="photo-hero-line" aria-hidden="true">
+            <span>
+              <svg
+                viewBox="0 0 24 16"
+                width="23"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m8 3-5 5 5 5m8-10 5 5-5 5" />
+              </svg>
+            </span>
           </span>
-        </span>
-        <input
-          ref={range}
-          className="photo-hero-range"
-          type="range"
-          min="0"
-          max="100"
-          defaultValue={initialSplit}
-          aria-label={
-            locale === "en"
-              ? "Compare before and after"
-              : "Sammenlign før og etter"
-          }
-          onChange={(e) => paint(e.currentTarget.valueAsNumber)}
-          onPointerDown={(e) => {
-            pointing.current = true;
-            e.currentTarget.setPointerCapture(e.pointerId);
-            setKeyboardFocus(false);
-            setDragging(true);
-          }}
-          onPointerUp={() => {
-            pointing.current = false;
-            setDragging(false);
-          }}
-          onLostPointerCapture={() => {
-            pointing.current = false;
-            setDragging(false);
-          }}
-          onPointerCancel={() => {
-            pointing.current = false;
-            setDragging(false);
-          }}
-          onFocus={(e) =>
-            setKeyboardFocus(
-              !pointing.current && e.currentTarget.matches(":focus-visible"),
-            )
-          }
-          onKeyDown={() => setKeyboardFocus(true)}
-          onBlur={() => {
-            setKeyboardFocus(false);
-            setDragging(false);
-          }}
-        />
+          <input
+            ref={range}
+            className="photo-hero-range"
+            type="range"
+            min="0"
+            max="100"
+            defaultValue={initialSplit}
+            aria-label={
+              locale === "en"
+                ? "Compare before and after"
+                : "Sammenlign før og etter"
+            }
+            onChange={(e) => paint(e.currentTarget.valueAsNumber)}
+            onPointerDown={(e) => {
+              pointing.current = true;
+              e.currentTarget.setPointerCapture(e.pointerId);
+              setKeyboardFocus(false);
+              setDragging(true);
+            }}
+            onPointerUp={() => {
+              pointing.current = false;
+              setDragging(false);
+            }}
+            onLostPointerCapture={() => {
+              pointing.current = false;
+              setDragging(false);
+            }}
+            onPointerCancel={() => {
+              pointing.current = false;
+              setDragging(false);
+            }}
+            onFocus={(e) =>
+              setKeyboardFocus(
+                !pointing.current && e.currentTarget.matches(":focus-visible"),
+              )
+            }
+            onKeyDown={() => setKeyboardFocus(true)}
+            onBlur={() => {
+              setKeyboardFocus(false);
+              setDragging(false);
+            }}
+          />
+        </div>
       </div>
-    </div>
+      <div className="hero-sequence">
+        {children}
+        <button
+          type="button"
+          onClick={() => setManualAdvance(true)}
+          aria-label={locale === "en" ? "Next image pair" : "Neste bildepar"}
+        >
+          <svg
+            viewBox="0 0 24 16"
+            width="23"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M2 8h19m-7-6 7 6-7 6" />
+          </svg>
+        </button>
+      </div>
+    </>
   );
 }
 
@@ -205,37 +291,7 @@ export function HomePhotoHero({
     };
   }, []);
 
-  useEffect(() => {
-    if (!playing || choosingSample) return;
-    let active = true;
-    const timer = window.setInterval(async () => {
-      if (document.querySelector("dialog[open]")) return;
-      try {
-        await loadPair(homeComparisons[next]);
-        if (
-          active &&
-          !document.hidden &&
-          !document.querySelector("dialog[open]")
-        )
-          setIndex(next);
-      } catch {
-        /* Keep the visible pair until the next one loads. */
-      }
-    }, dwellMs);
-    return () => {
-      active = false;
-      window.clearInterval(timer);
-    };
-  }, [playing, choosingSample, next]);
-
-  async function advance() {
-    try {
-      await loadPair(homeComparisons[next]);
-      setIndex(next);
-    } catch {
-      /* The visitor can retry without losing the current pair. */
-    }
-  }
+  const advance = useCallback(() => setIndex(next), [next]);
 
   const sample = {
     href: `/app/tools/room-reimagination?sample=hero-${scene.id}`,
@@ -281,8 +337,13 @@ export function HomePhotoHero({
         </div>
       </div>
       <div className="photo-hero-visual" ref={visual}>
-        <ComparisonWindow scene={scene} locale={locale} moving={playing} />
-        <div className="hero-sequence">
+        <ComparisonWindow
+          scene={scene}
+          locale={locale}
+          moving={playing && !choosingSample}
+          nextScene={homeComparisons[next]}
+          advance={advance}
+        >
           {!reduceMotion && (
             <button
               type="button"
@@ -308,26 +369,7 @@ export function HomePhotoHero({
               </svg>
             </button>
           )}
-          <button
-            type="button"
-            onClick={advance}
-            aria-label={t("Neste bildepar", "Next image pair")}
-          >
-            <svg
-              viewBox="0 0 24 16"
-              width="23"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M2 8h19m-7-6 7 6-7 6" />
-            </svg>
-          </button>
-        </div>
+        </ComparisonWindow>
       </div>
     </section>
   );

@@ -1,5 +1,12 @@
 # Development change log (compact)
 
+## 22 November 2026 · Studio workflows, Prana and illustrated Knowledge Hub
+
+- Revised the homepage sequence, section links and illustrated FAQs. Added a gallery-to-editor handoff for all 17 tools, workspace menu descriptions and on-demand comparison.
+- Added 500 Norwegian and English visual studies with original observations, exercises, palettes, light analysis and distinct illustrated covers. Recorded each source and derivative. [Image register](KNOWLEDGE_STUDY_IMAGES.csv)
+- Implemented capped, server-side OpenAI consultations and MNML v2 render jobs, including private result handling and independent video activation. Added tests for cost controls, isolation and failure states. Provider acceptance requires protected Development keys and an approved test budget.
+- Added a separate Payload editorial application, published-only journal reader, per-version gallery and social consents, localized search metadata and a pinned Production database check. Configured the assigned Production authentication origin. [Commercial release decisions](go-live/RELEASE_CHECKLIST.md)
+
 ## 22 November 2026 · Windowed homepage and Studio image controls
 
 - Released application commit `7cd700f` to the [Vastu Nord demo](https://vastunord-web.vercel.app). The live browser checks covered all 11 photo pairs, four homepage widths and all 17 editor canvases. [Live screenshots and test results](evidence/v7-windowed-studio/README.md)

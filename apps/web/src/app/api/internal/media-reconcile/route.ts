@@ -9,8 +9,11 @@ import {
   reconcilePrivateMedia,
 } from "@/server/media-reconciliation";
 import { list } from "@vercel/blob";
+import { mnmlConfig } from "@/server/mnml";
+import { reconcileStudioOutput } from "@/server/studio-jobs";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 export async function GET(request: Request) {
   if (
     !isAuthorizedReconciliation(
@@ -40,6 +43,18 @@ export async function GET(request: Request) {
       )
     )
       throw Error("Target mismatch");
+    if (new URL(request.url).searchParams.get("task") === "renders") {
+      const provider = mnmlConfig();
+      if (!provider || !config.uploadsEnabled)
+        return new Response(null, {
+          status: 404,
+          headers: { "Cache-Control": "no-store" },
+        });
+      const progress = await reconcileStudioOutput(client, provider.key);
+      return Response.json(progress, {
+        headers: { "Cache-Control": "no-store" },
+      });
+    }
     const repo = createPrismaMediaRepository(client);
     const driver = createVercelPrivateDriver(process.env.BLOB_READ_WRITE_TOKEN);
     const result = await reconcilePrivateMedia({

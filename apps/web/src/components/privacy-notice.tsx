@@ -4,7 +4,7 @@ import "./privacy-notice.css";
 export const privacyTitle = (locale: Locale) =>
   locale === "en" ? "Privacy and cookies" : "Personvern og informasjonskapsler";
 
-export function PrivacyNotice({ locale }: { locale: Locale }) {
+export function PrivacyNotice({ locale, newsletterEnabled }: { locale: Locale; newsletterEnabled: boolean }) {
   const t = (nb: string, en: string) => (locale === "en" ? en : nb);
   return (
     <article className="vn-privacy">
@@ -49,6 +49,15 @@ export function PrivacyNotice({ locale }: { locale: Locale }) {
         </p>
       </section>
       <section>
+        <h2>Prana</h2>
+        <p>{t("Når direktesvar er aktivert, sender vi spørsmålet ditt til OpenAI for å gi et kort svar. Ikke oppgi adresser eller personopplysninger. Vi lagrer ikke samtaleteksten i appdatabasen. For å begrense bruken teller vi spørsmål med en nettverksidentifikator som skifter daglig.", "When live answers are enabled, we send your question to OpenAI for a short response. Leave out addresses and personal details. The app database does not store conversations. To limit usage, we count requests using a network identifier that changes daily.")} <a href="https://developers.openai.com/api/docs/guides/your-data">{t("OpenAIs databehandling", "OpenAI data controls")}</a></p>
+      </section>
+      <section>
+        <h2>{t("Bilder, film og favoritter", "Images, films and favourites")}</h2>
+        <p>{t("Favorittene dine i galleriet lagres i denne nettleseren. Du kan fjerne dem med hjerteknappen. Hvis du velger å spille en redaksjonell film fra YouTube, kobler nettleseren seg til YouTube når du trykker på knappen.", "Gallery favourites are saved in this browser. Select the heart again to remove a favourite. If you choose to load an editorial film from YouTube, your browser connects to YouTube when you press the play button.")}</p>
+        <p>{t("Der generering er aktivert, kan du velge å sende prosjektbildet, referansebilder og instruksjonen til MNML. Du må godkjenne overføringen før du starter. Resultatet lagres i det private prosjektet. Bruk bare bilder du har rett til å sende.", "Where rendering is available, you can choose to send your project photo, selected reference images and design brief to MNML. You must confirm this transfer before starting. The result is saved in the private project. Use only images you have permission to share with the provider.")}</p>
+      </section>
+      <section>
         <h2>{t("Nyhetsbrev", "Newsletter")}</h2>
         <p>
           {t(
@@ -58,8 +67,8 @@ export function PrivacyNotice({ locale }: { locale: Locale }) {
         </p>
         <p>
           {t(
-            "Den offentlige demonstrasjonen tar ikke imot e-postadresser til nyhetsbrevet.",
-            "The public demonstration does not collect newsletter email addresses.",
+            newsletterEnabled ? "Bruk nyhetsbrevfanen for å melde deg på." : "Påmelding til nyhetsbrevet er stengt her.",
+            newsletterEnabled ? "Use the newsletter tab to subscribe." : "Newsletter signup is closed here.",
           )}
         </p>
       </section>

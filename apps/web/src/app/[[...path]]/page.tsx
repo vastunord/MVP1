@@ -1,5 +1,9 @@
 import { notFound, redirect } from "next/navigation";
+import { indexableSections, publicIndexingEnabled, publicPageUrls } from "@/lib/public-index";
 import { marketingResources } from "@/lib/marketing-resources";
+import { visualStudy } from "@/lib/visual-studies";
+import { Journal, readJournalEntry } from "@/components/journal";
+import { journalOrigin } from "@/server/journal";
 import { cookies, headers } from "next/headers";
 import { getSessionCookie } from "better-auth/cookies";
 import type { Metadata } from "next";
@@ -10,7 +14,7 @@ import { AuthScreen } from "@/components/auth-screens";
 import { privacyTitle } from "@/components/privacy-notice";
 import { authReadiness, verifiedSessionUserId } from "@/server/auth-readiness";
 import { messages, publicHref, type Locale, type MessageKey } from "@/lib/i18n";
-type Props = { params: Promise<{ path?: string[] }> };
+type Props = { params: Promise<{ path?: string[] }>; searchParams: Promise<{page?:string | string[]}> };
 function resolve(path: string[] = []) {
   const locale: Locale = path[0] === "en" ? "en" : "nb-NO";
   return { locale, segments: locale === "en" ? path.slice(1) : path };
@@ -21,33 +25,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = messages(locale);
   const article =
     page === "resources" && segments.length === 2
-      ? marketingResources(locale).articles.find(
+      ? visualStudy(segments[1], locale) ?? marketingResources(locale).articles.find(
           (item) => item.id === segments[1],
         )
       : undefined;
+  const journal = page === "resources" && segments[1] === "journal" && Boolean(journalOrigin(process.env));
+  const journalArticle = journal && segments.length === 3 ? await readJournalEntry(segments[2],locale) : null;
+  const alternateUrls = publicPageUrls("/" + segments.join("/"));
+  const index = publicIndexingEnabled(process.env) &&
+    (segments.length <= 1 ? indexableSections.some(section => section === (page || "")) : Boolean(article || journalArticle || (journal && segments.length===2)));
   return {
     title:
-      article?.name ??
+      journalArticle?.title ?? article?.name ?? (journal ? (locale==="en"?"Journal":"Tidsskrift") : undefined) ??
       (page === "privacy" ? privacyTitle(locale) : page && page in t ? t[page as MessageKey] : "Vastu Nord"),
-    description: article?.intro ?? t.intro,
+    description: journalArticle?.summary ?? article?.intro ?? t.intro,
     alternates: {
-      languages: {
-        "nb-NO": publicHref("/" + segments.join("/"), "nb-NO"),
-        en: publicHref("/" + segments.join("/"), "en"),
-      },
+      canonical: alternateUrls[locale],
+      languages: alternateUrls,
     },
+    robots: { index, follow: index },
   };
 }
-export default async function Page({ params }: Props) {
+export default async function Page({ params, searchParams }: Props) {
   const { locale, segments } = resolve((await params).path);
   if (segments.join("/") === "solutions/living-room-design")
     redirect(publicHref("/features", locale));
+  const journal = segments[0]==="resources" && segments[1]==="journal" && segments.length<=3 && Boolean(journalOrigin(process.env));
+  const pageNumber = journal ? Number((await searchParams).page ?? 1) : 1;
+  if (!Number.isSafeInteger(pageNumber) || pageNumber<1 || pageNumber>10000) notFound();
   const supportedArticle =
     segments.length === 2 &&
     segments[0] === "resources" &&
-    marketingResources(locale).articles.some((item) => item.id === segments[1]);
+    (Boolean(visualStudy(segments[1], locale)) ||
+      marketingResources(locale).articles.some((item) => item.id === segments[1]));
   if (
-    (segments.length > 1 && !supportedArticle) ||
+    (segments.length > 1 && !supportedArticle && !journal) ||
     (segments[0] &&
       !publicPages.includes(segments[0] as (typeof publicPages)[number]))
   )
@@ -87,7 +99,7 @@ export default async function Page({ params }: Props) {
         signedIn={signedIn}
       />
       <CookieNotice locale={locale} />
-      {authPage ? (
+      {journal ? <main id="main" className="mk-site"><Journal locale={locale} slug={segments[2]} page={pageNumber}/></main> : authPage ? (
         <AuthScreen
           locale={locale}
           mode={authPage}

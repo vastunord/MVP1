@@ -1,11 +1,65 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { tools } from "@vastunord/contracts/tools";
 import { PrivateUpload } from "./private-upload";
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import type { Locale } from "@/lib/i18n";
 import { studies, translated } from "@/lib/workspace-catalog";
-import { renderGallery, fileExamples, type GalleryScene } from "@/lib/render-gallery";
+import {
+  renderGallery,
+  fileExamples,
+  type GalleryScene,
+} from "@/lib/render-gallery";
+
+const favoritesKey = "vn-gallery-favorites";
+const validScenes = new Set(
+  [...renderGallery, ...fileExamples].map((scene) => scene.id),
+);
+let fallbackFavorites = "[]";
+let useMemoryFavorites = false;
+const emptyFavorites = () => "[]";
+function readFavorites() {
+  if (useMemoryFavorites) return fallbackFavorites;
+  try {
+    return localStorage.getItem(favoritesKey) ?? "[]";
+  } catch {
+    return fallbackFavorites;
+  }
+}
+function parseFavorites(raw: string): string[] {
+  try {
+    const values: unknown = JSON.parse(raw);
+    return Array.isArray(values)
+      ? values.filter(
+          (id): id is string => typeof id === "string" && validScenes.has(id),
+        )
+      : [];
+  } catch {
+    return [];
+  }
+}
+function followFavorites(notify: () => void) {
+  window.addEventListener("storage", notify);
+  window.addEventListener("vn:favorites", notify);
+  return () => {
+    window.removeEventListener("storage", notify);
+    window.removeEventListener("vn:favorites", notify);
+  };
+}
+function toggleFavorite(id: string) {
+  const values = new Set(parseFavorites(readFavorites()));
+  if (values.has(id)) values.delete(id);
+  else values.add(id);
+  fallbackFavorites = JSON.stringify([...values]);
+  try {
+    localStorage.setItem(favoritesKey, fallbackFavorites);
+    useMemoryFavorites = false;
+  } catch {
+    useMemoryFavorites = true;
+  }
+  window.dispatchEvent(new Event("vn:favorites"));
+}
 
 export function StudyCards({
   locale,
@@ -81,15 +135,17 @@ export function Gallery({
   const [query, setQuery] = useState("");
   const [album, setAlbum] = useState(initialAlbum || "");
   const [kind, setKind] = useState("all");
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const favorites = parseFavorites(
+    useSyncExternalStore(followFavorites, readFavorites, emptyFavorites),
+  );
   const collection = assets ? fileExamples : renderGallery;
   const [selected, setSelected] = useState<GalleryScene>(collection[0]);
   const dialog = useRef<HTMLDialogElement>(null);
+  const [toolId, setToolId] = useState(tools[0].id);
   const shown = collection.filter(
     (s) =>
       (!album || s.study === album) &&
-      (kind === "all" ||
-        (kind === "favorites" && favorites.includes(s.image))) &&
+      (kind === "all" || (kind === "favorites" && favorites.includes(s.id))) &&
       [translated(s.title, locale), translated(s.style, locale)]
         .join(" ")
         .toLowerCase()
@@ -115,8 +171,12 @@ export function Gallery({
         </h1>
         <p>
           {assets
-            ? en ? "Browse reference files for your Studio studies." : "Se referansefiler til studiene dine i Studio."
-            : en ? "Explore 50 architectural and interior studies from the Vastu Nord collection." : "Utforsk 50 arkitektur- og interiørstudier fra Vastu Nords samling."}
+            ? en
+              ? "Browse reference files for your Studio studies."
+              : "Se referansefiler til studiene dine i Studio."
+            : en
+              ? "Open any of the 50 studies, then choose a Studio tool to work with its photo."
+              : "Åpne en av de 50 bildestudiene og velg et Studio-verktøy for bildet."}
         </p>
       </header>
       {assets && privateFilesEnabled && (
@@ -183,15 +243,15 @@ export function Gallery({
       {kind === "favorites" && (
         <p className="vn-muted">
           {en
-            ? "Selections last while this gallery is open."
-            : "Valgene beholdes mens galleriet er åpent."}
+            ? "Your favourites are saved on this device when browser storage is available."
+            : "Favoritter lagres på denne enheten når nettleseren tillater lagring."}
         </p>
       )}
       {shown.length ? (
         <div className="vn-study-grid">
           {shown.map((scene) => {
             const title = translated(scene.title, locale);
-            const liked = favorites.includes(scene.image);
+            const liked = favorites.includes(scene.id);
             return (
               <article className="vn-study vn-tile" key={scene.image}>
                 <button
@@ -219,13 +279,7 @@ export function Gallery({
                   aria-pressed={liked}
                   className="vn-favourite"
                   aria-label={(en ? "Favourite " : "Favoritt ") + title}
-                  onClick={() =>
-                    setFavorites((list) =>
-                      list.includes(scene.image)
-                        ? list.filter((i) => i !== scene.image)
-                        : [...list, scene.image],
-                    )
-                  }
+                  onClick={() => toggleFavorite(scene.id)}
                 >
                   <span aria-hidden="true">{liked ? "♥" : "♡"}</span>
                 </button>
@@ -291,6 +345,27 @@ export function Gallery({
           <span>{translated(selected.style, locale)}</span>
           <Link href={"/app/studies/" + selected.study}>
             {en ? "View example project" : "Åpne eksempelprosjekt"} ↗
+          </Link>
+        </div>
+        <div className="vn-gallery-studio">
+          <label>
+            {en ? "Use this photo in Studio" : "Bruk dette bildet i Studio"}
+            <select
+              value={toolId}
+              onChange={(event) => setToolId(event.target.value)}
+            >
+              {tools.map((tool) => (
+                <option key={tool.id} value={tool.id}>
+                  {tool.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <Link
+            className="button"
+            href={"/app/tools/" + toolId + "?sample=" + selected.id}
+          >
+            {en ? "Open selected tool" : "Åpne valgt verktøy"} ↗
           </Link>
         </div>
       </dialog>

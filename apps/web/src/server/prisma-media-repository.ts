@@ -1,4 +1,5 @@
 import "server-only";
+import { withdrawDeletedAsset } from "./asset-consent.ts";
 import type { PrismaClient } from "@/generated/prisma/client";
 import type { Actor, MediaRepository } from "./media";
 
@@ -98,9 +99,12 @@ export function createPrismaMediaRepository(db: PrismaClient): MediaRepository {
       });
     },
     async markDeleted(id) {
-      await db.asset.update({
-        where: { id, state: "VALIDATED" },
-        data: { state: "DELETED" },
+      await db.$transaction(async (tx) => {
+        await tx.asset.update({
+          where: { id, state: "VALIDATED" },
+          data: { state: "DELETED" },
+        });
+        await withdrawDeletedAsset(tx, id);
       });
     },
     async discardPending(id) {

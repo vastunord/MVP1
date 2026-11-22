@@ -49,11 +49,12 @@ test("the homepage cycles through all eleven photo pairs and honors a motion pau
   await page.locator(".vn-cookie-notice").waitFor();
   const hero = page.locator(".photo-hero");
   const stage = hero.locator(".photo-hero-stage");
+  await hero.getByRole("button", { name: "Pause slideshow" }).click();
   const first = await stage.getAttribute("data-scene");
   const visited = new Set([first]);
   for (let index = 0; index < 11; index++) {
     const previous = await stage.getAttribute("data-scene");
-    await page.clock.fastForward(12100);
+    await hero.getByRole("button", { name: "Next image pair" }).click();
     await expect(stage).not.toHaveAttribute("data-scene", previous!);
     const imageRatio = await stage
       .locator(".hero-images > img")
@@ -68,7 +69,6 @@ test("the homepage cycles through all eleven photo pairs and honors a motion pau
   }
   expect(visited.size).toBe(11);
   await expect(stage).toHaveAttribute("data-scene", first!);
-  await hero.getByRole("button", { name: "Pause slideshow" }).click();
   await page.clock.fastForward(20000);
   await expect(stage).toHaveAttribute("data-scene", first!);
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -86,9 +86,16 @@ test("the homepage cycles through all eleven photo pairs and honors a motion pau
   await expect(stage).not.toHaveAttribute("data-scene", first!);
 });
 
-test("the slow divider pauses inside the photo while the image pairs keep changing", async ({
+test("a complete sweep advances the pair at alternating edges and hover holds the current view", async ({
   page,
 }) => {
+  // Isolate the continuous sweep from the separately tested timed newsletter dialog.
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      "vn-newsletter-display",
+      JSON.stringify({ version: 1, state: "minimized" }),
+    ),
+  );
   await page.clock.install();
   await page.goto("/en");
   await page.getByRole("button", { name: /Reject optional/ }).click();
@@ -96,24 +103,39 @@ test("the slow divider pauses inside the photo while the image pairs keep changi
   const slider = frame.getByRole("slider");
   const copy = page.locator(".photo-hero-copy");
   await copy.hover();
+  const first = await frame.getAttribute("data-scene");
   const initial = Number(await slider.inputValue());
   await page.clock.runFor(2000);
-  const distance = Math.abs(Number(await slider.inputValue()) - initial);
-  expect(distance).toBeGreaterThan(0);
-  expect(distance).toBeLessThanOrEqual(6);
+  const travel = Number(await slider.inputValue()) - initial;
+  expect(travel).toBeGreaterThanOrEqual(14);
+  expect(travel).toBeLessThanOrEqual(18);
+  await expect(frame).toHaveAttribute("data-scene", first!);
+
   await frame.hover();
   const held = await slider.inputValue();
-  const previous = await frame.getAttribute("data-scene");
-  await page.clock.fastForward(13000);
-  await expect(frame).not.toHaveAttribute("data-scene", previous!);
+  await page.clock.fastForward(15000);
+  await expect(frame).toHaveAttribute("data-scene", first!);
   await expect(slider).toHaveValue(held);
-  await copy.hover();
-  await page.clock.runFor(2000);
-  const resumed = Math.abs(Number(await slider.inputValue()) - Number(held));
-  expect(resumed).toBeGreaterThan(0);
-  expect(resumed).toBeLessThanOrEqual(6);
-});
 
+  // Record the actual position at each DOM scene change, independently of timer precision.
+  await frame.evaluate((element) => {
+    const edges: string[] = [];
+    new MutationObserver(() => {
+      edges.push(element.querySelector("input")!.value);
+      element.dataset.observedEdges = edges.join(",");
+    }).observe(element, { attributes: true, attributeFilter: ["data-scene"] });
+  });
+  await copy.hover();
+  await page.clock.runFor(5200);
+  await expect(frame).not.toHaveAttribute("data-scene", first!);
+  const second = await frame.getAttribute("data-scene");
+  await expect(frame).toHaveAttribute("data-observed-edges", "100");
+  await page.clock.runFor(3500);
+  await expect(frame).toHaveAttribute("data-scene", second!);
+  await page.clock.runFor(9700);
+  await expect(frame).not.toHaveAttribute("data-scene", second!);
+  await expect(frame).toHaveAttribute("data-observed-edges", "100,0");
+});
 test("home study controls and transformation directions lead into the Studio", async ({
   page,
 }) => {
@@ -135,21 +157,39 @@ test("home study controls and transformation directions lead into the Studio", a
   const first = await stage.getAttribute("data-scene");
   await hero.getByRole("button", { name: "Next image pair" }).click();
   await expect(stage).not.toHaveAttribute("data-scene", first!);
+  const possibility = page
+    .locator("section")
+    .filter({ has: page.getByRole("heading", { name: /The hardest part/ }) });
+  await expect(
+    possibility.getByRole("link", { name: "Explore Studio" }),
+  ).toHaveAttribute("href", "/app/library");
+  for (const label of [
+    "Choose a direction",
+    "Image studies",
+    "How it works",
+    "Who it’s for",
+  ]) {
+    await expect(
+      page.getByRole("main").locator(".mk-label").filter({ hasText: label }),
+    ).toHaveCount(0);
+  }
+  const faqs = page.locator("#questions details");
+  await expect(faqs).toHaveCount(12);
+  const sources = new Set<string>();
+  for (const faq of await faqs.all()) {
+    if (
+      !(await faq.evaluate((element) => (element as HTMLDetailsElement).open))
+    )
+      await faq.locator("summary").click();
+    const image = faq.locator("img");
+    await expect(image).toBeVisible();
+    await image.evaluate((node) => (node as HTMLImageElement).decode());
+    await expect(image).toHaveAttribute("alt", /.+/);
+    expect(await faq.locator("p").innerText()).not.toBe("");
+    sources.add((await image.getAttribute("src"))!);
+  }
+  expect(sources.size).toBe(12);
   await page.getByRole("link", { name: "Transform outdoors" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Garden Design", exact: true }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Evening", exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: "Evening", exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await page.getByText("Do I need design experience?", { exact: true }).click();
-  await expect(
-    page.getByText(
-      "Explore the tools and studies without prior design training.",
-    ),
-  ).toBeVisible();
-  await page.getByRole("link", { name: "Explore this tool" }).click();
   await expect(page).toHaveURL(/app\/tools\/garden-design$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 });
@@ -201,6 +241,7 @@ test("a selected public study remains the source when reopening or switching too
     .getByRole("banner")
     .getByRole("button", { name: "NO – Norsk bokmål" })
     .click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "nb-NO");
   await expect(page).toHaveURL(
     /\/app\/tools\/lighting-reimagination\?sample=hero-[\w-]+$/,
   );
@@ -209,8 +250,9 @@ test("a selected public study remains the source when reopening or switching too
     .getByRole("banner")
     .getByRole("button", { name: "EN – English" })
     .click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.goto("/app/tools/lighting-reimagination?sample=unknown");
-  await expect(canvas.locator("figcaption")).toContainText("Brand sample");
+  await expect(canvas.locator("figcaption")).toContainText("Studio reference");
   expect(privateRequests).toEqual([]);
 });
 

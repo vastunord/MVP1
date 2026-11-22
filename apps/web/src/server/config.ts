@@ -8,6 +8,7 @@ export function readServerConfig(env: Record<string, string | undefined> = proce
   const migrationUrl = env.DIRECT_DATABASE_URL || undefined;
   for (const url of [databaseUrl, migrationUrl]) {
     if (!url) continue;
+    if (!URL.canParse(url)) throw new Error('Invalid PostgreSQL URL');
     const parsed = new URL(url);
     if (!['postgresql:', 'postgres:'].includes(parsed.protocol) || !parsed.hostname || !parsed.username || !parsed.pathname || parsed.pathname === '/') throw new Error('Invalid PostgreSQL URL');
   }

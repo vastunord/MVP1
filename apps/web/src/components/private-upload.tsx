@@ -1,13 +1,16 @@
 "use client";
+import { AssetSharingConsent } from "./asset-sharing-consent";
 import { useEffect, useState, type ChangeEvent, type DragEvent } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n";
 import { IMAGE_TYPES, MAX_IMAGE_BYTES, MAX_IMAGE_MIB } from "@/lib/image-upload-policy";
+import type { RenderSelection } from "@/lib/studio-render";
 
 type Project = { id: string; name: string };
-type Asset = { id: string; createdAt: string };
+type Asset = { id: string; createdAt: string; mimeType:string };
+const isPhoto=(asset:Asset)=>["image/jpeg","image/png","image/webp"].includes(asset.mimeType);
 
-export function RoomReferences({ assets, locale, enabled }: { assets: Asset[]; locale: Locale; enabled: boolean }) {
+export function RoomReferences({ assets, locale, enabled, onChange }: { assets: Asset[]; locale: Locale; enabled: boolean; onChange?: (ids:string[])=>void }) {
   const en = locale === "en";
   const [references, setReferences] = useState(["", ""]);
   return (
@@ -25,8 +28,10 @@ export function RoomReferences({ assets, locale, enabled }: { assets: Asset[]; l
                 <img src={`/api/assets/${encodeURIComponent(id)}/download`} alt="" />
               )}
               <select value={id} disabled={!enabled || assets.length === 0}
-                onChange={event => setReferences(previous =>
-                  previous.map((item, slot) => slot === index ? event.target.value : item))}>
+                onChange={event => {
+                  const next = references.map((item,slot)=>slot===index?event.target.value:item);
+                  setReferences(next); onChange?.(next);
+                }}>
                 <option value="">{en ? "None" : "Ingen"}</option>
                 {assets.map((asset, n) => <option key={asset.id} value={asset.id}
                   disabled={asset.id === references[1 - index]}>
@@ -51,17 +56,21 @@ export function PrivateUpload({
   enabled,
   onPreview,
   withRoomReferences = false,
+  onSelection,
 }: {
   locale: Locale;
   enabled: boolean;
   onPreview: (url: string) => void;
   withRoomReferences?: boolean;
+  onSelection?: (selection:RenderSelection)=>void;
 }) {
   const en = locale === "en";
   const [projects, setProjects] = useState<Project[]>([]);
   const [project, setProject] = useState("");
   const [assets, setAssets] = useState<Asset[]>([]);
   const [selectedAsset, setSelectedAsset] = useState("");
+  const [referenceIds,setReferenceIds] = useState<string[]>([]);
+  useEffect(()=>{onSelection?.({projectId:project,sourceAssetId:selectedAsset,referenceIds:referenceIds.filter(id=>id && id !== selectedAsset && assets.some(asset=>asset.id === id))});},[project,selectedAsset,referenceIds,assets,onSelection]);
   const [file, setFile] = useState<File | null>(null);
   const [localUrl, setLocalUrl] = useState("");
   const [busy, setBusy] = useState(false);
@@ -99,7 +108,7 @@ export function PrivateUpload({
         return response.json() as Promise<Asset[]>;
       })
       .then((rows) => {
-        if (active) setAssets(rows);
+        if (active) setAssets(rows.filter(isPhoto));
       })
       .catch(() => {
         if (active)
@@ -159,7 +168,7 @@ export function PrivateUpload({
       const list = await fetch(
         `/api/projects/${encodeURIComponent(project)}/assets`,
       );
-      if (list.ok) setAssets((await list.json()) as Asset[]);
+      if (list.ok) setAssets(((await list.json()) as Asset[]).filter(isPhoto));
       onPreview(`/api/assets/${encodeURIComponent(result.assetId)}/download`);
       setFile(null);
       setLocalUrl("");
@@ -227,6 +236,9 @@ export function PrivateUpload({
             setAssets([]);
             setProject(event.target.value);
             setSelectedAsset("");
+            setReferenceIds([]);
+            setFile(null);
+            setLocalUrl("");
             onPreview("");
           }}
           disabled={busy || !projects.length}
@@ -317,7 +329,8 @@ export function PrivateUpload({
           {en ? "Delete selected image" : "Slett valgt bilde"}
         </button>
       )}
-      {withRoomReferences && <RoomReferences key={project} assets={assets} locale={locale} enabled />}
+      {selectedAsset && <AssetSharingConsent key={selectedAsset} assetId={selectedAsset} locale={locale} />}
+      {withRoomReferences && <RoomReferences key={project} assets={assets.filter(asset=>asset.id!==selectedAsset)} locale={locale} enabled onChange={setReferenceIds} />}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { StudioShell, Directory } from "@/components/workspace";
 import { Library } from "@/components/library";
 import { Editor } from "@/components/editor";
+import { mnmlConfig } from "@/server/mnml";
 import { findStudioSample, studies } from "@/lib/workspace-catalog";
 import {
   Dashboard,
@@ -100,6 +101,8 @@ export default async function Page({
         locale={locale}
         sample={sample}
         uploadsEnabled={hasWorkspace && readServerConfig().uploadsEnabled}
+        renderEnabled={hasWorkspace && Boolean(mnmlConfig())}
+        videoEnabled={hasWorkspace && (mnmlConfig()?.videoLimit ?? 0)>0}
       />
     );
   } else if (isDashboard)

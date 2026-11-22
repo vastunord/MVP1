@@ -5,7 +5,11 @@ import { MarketingHome } from "./marketing-home";
 import { CookieSettingsButton } from "./visitor-overlays";
 import { PrivacyNotice } from "./privacy-notice";
 import { MarketingPages } from "./marketing-pages";
+import { VisualStudy } from "./visual-study";
+import { visualStudy, visualStudyCards } from "@/lib/visual-studies";
 import { readServerConfig } from "@/server/config";
+import { newsletterAvailable } from "@/server/newsletter-runtime";
+import { journalOrigin } from "@/server/journal";
 import "./marketing-v5.css";
 
 export const publicPages = [
@@ -32,12 +36,19 @@ export function Marketing({
   page?: string;
   authReady?: boolean;
 }) {
+  const study = page.startsWith("resources/") ? visualStudy(page.slice(10), locale) : undefined;
   return (
     <main id="main" className="mk-site">
       {page === "privacy" ? (
-        <PrivacyNotice locale={locale} />
+        <PrivacyNotice locale={locale} newsletterEnabled={newsletterAvailable()} />
+      ) : study ? (
+        <VisualStudy study={study} locale={locale} />
       ) : page ? (
-        <MarketingPages locale={locale} page={page} authReady={authReady} />
+        <>
+          <MarketingPages locale={locale} page={page} authReady={authReady}
+            studyCards={page === "resources" ? visualStudyCards(locale) : undefined} />
+          {page === "resources" && journalOrigin(process.env) && <div className="mk-wrap"><Link className="mk-action" href={publicHref("/resources/journal",locale)}>{locale==="en"?"Read the editorial journal":"Les tidsskriftet"} ↗</Link></div>}
+        </>
       ) : (
         <MarketingHome
           locale={locale}

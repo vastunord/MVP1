@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n";
 import { ExperienceView } from "./workspace-experience-view";
+import { visualStudyCards } from "@/lib/visual-studies";
 
 const sections = [
   "home-experience",
@@ -21,5 +22,6 @@ export function WorkspaceExperience({
   section: ExperienceRoute;
   locale: Locale;
 }) {
-  return <ExperienceView key={section} section={section} locale={locale} />;
+  return <ExperienceView key={section} section={section} locale={locale}
+    studyCards={section === "knowledge" ? visualStudyCards(locale) : undefined} />;
 }

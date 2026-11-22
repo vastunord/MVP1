@@ -1,28 +1,23 @@
 import { test, expect } from "@playwright/test";
 
-test("studio sample tones, accessible comparison and independent editor settings", async ({
-  page,
-}) => {
+test("studio opens on a single image with optional comparison and tool selection", async ({ page }) => {
   await page.goto("/app/tools/room-reimagination");
-  const comparison = page.getByRole("slider", {
-    name: "Sammenlign før og etter",
-  });
-  await expect(comparison).toHaveValue("46");
-  await expect(page.locator(".sample-stage")).not.toContainText(/Today|Reimagined/);
-  const variants = page.getByRole("group", { name: "Eksempeltoner" });
-  const tonePhotos = variants.locator("img");
-  await expect(tonePhotos).toHaveCount(4);
-  for (const img of await tonePhotos.all()) {
-    await expect(img).toHaveAttribute("src", "/media/canvas/room-reimagination.webp");
-    await img.evaluate(photo => (photo as HTMLImageElement).decode());
-  }
+  const comparison = page.getByRole("slider", {name:"Sammenlign før og etter"});
+  await expect(comparison).toHaveCount(0);
+  await expect(page.locator(".studio-variants")).toHaveCount(0);
+  await expect(page.locator("figcaption")).toContainText("Studioreferanse");
+  await page.getByRole("button",{name:"Sammenlign eksempel"}).click();
+  await expect(comparison).toHaveValue("50");
   await comparison.focus();
   await comparison.press("ArrowRight");
-  await expect(comparison).toHaveValue("47");
-  await page.getByRole("button", { name: "Kveldslys", exact: true }).click();
-  await expect(page.locator("figcaption")).toContainText("Kveldslys");
-  await page.getByRole("button", { name: "Sammenlign", exact: true }).click();
+  await expect(comparison).toHaveValue("51");
+  await page.getByRole("button",{name:"Enkeltbilde"}).click();
   await expect(comparison).toHaveCount(0);
+  await page.locator(".studio-tool-switcher summary").click();
+  await expect(page.locator(".studio-tool-switcher nav a")).toHaveCount(17);
+  await page.locator(".studio-tool-switcher summary").click();
+  await page.getByLabel("Rendermotor").selectOption("v4.5-fast");
+  await expect(page.getByLabel("Rendermotor")).toHaveValue("v4.5-fast");
   await page.getByRole("combobox", { name: "Interiørstil", exact: true }).selectOption("Japandi");
   await expect(page.getByRole("combobox", { name: "Interiørstil", exact: true })).toHaveValue("Japandi");
   await page.getByText("Skrivetips", { exact: true }).click();

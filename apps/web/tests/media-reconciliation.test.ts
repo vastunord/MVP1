@@ -93,6 +93,8 @@ test("orphan scan only removes old generated keys without active asset records",
     `private/c/${id}.png`,
     `private/d/${id}.png`,
     "private/a/unrelated.png",
+    `private/e/${id}.mp4`,
+    `private/f/${id}.mp4`,
   ];
   const now = new Date("2026-11-21T12:00:00Z");
   const old = new Date("2026-11-21T10:00:00Z");
@@ -111,6 +113,7 @@ test("orphan scan only removes old generated keys without active asset records",
       },
       async stateFor(key) {
         if (key === keys[0]) return null;
+        if (key === keys[5]) return null;
         if (key === keys[1]) return "DELETED";
         return "VALIDATED";
       },
@@ -120,10 +123,10 @@ test("orphan scan only removes old generated keys without active asset records",
     },
     now,
   );
-  assert.equal(result.examined, 5);
-  assert.equal(result.removed, 2);
+  assert.equal(result.examined, 7);
+  assert.equal(result.removed, 3);
   assert.equal(result.nextCursor, "next-page");
-  assert.deepEqual(removed, [keys[0], keys[1]]);
+  assert.deepEqual(removed, [keys[0], keys[1],keys[5]]);
 });
 
 test("reconciliation is bounded, refuses unsafe keys, and is retryable", async () => {

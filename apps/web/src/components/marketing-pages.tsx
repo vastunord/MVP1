@@ -5,6 +5,8 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { publicHref, type Locale } from "@/lib/i18n";
 import { marketingResources } from "@/lib/marketing-resources";
+import type { StudyCard } from "@/lib/visual-studies";
+import { StudyPagination, studyPageSize } from "./study-pagination";
 import { Action, Closing, FAQ, Photo, Section } from "./marketing-elements";
 import "./marketing-pages.css";
 
@@ -553,11 +555,12 @@ function Pricing({ locale, t }: PageContext) {
     </>
   );
 }
-function Resources({ locale, t }: PageContext) {
+function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyCard[] }) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState(-1);
+  const [page, setPage] = useState(0);
   const { categories, articles } = marketingResources(locale);
-  const results = articles.filter(
+  const results = [...articles, ...studyCards].filter(
     (a) =>
       (filter < 0 || a.tags.includes(filter)) &&
       [a.name, a.intro, ...a.tags.map((i) => categories[i])]
@@ -584,7 +587,7 @@ function Resources({ locale, t }: PageContext) {
           <input
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => { setQuery(e.target.value); setPage(0); }}
             placeholder={t(
               "Søk etter guider og temaer",
               "Search guides and topics",
@@ -594,7 +597,7 @@ function Resources({ locale, t }: PageContext) {
       </Hero>
       <Section id="articles">
         <div className="mp-section-line">
-          <h2>{t("Begynn med disse.", "Start with these.")}</h2>
+          <h2>{t("Guider og bildestudier", "Guides and visual studies")} ({results.length})</h2>
           <label>
             <span id="resource-topic-label">
               {t("Filtrer på tema", "Filter by topic")}
@@ -602,7 +605,7 @@ function Resources({ locale, t }: PageContext) {
             <select
               aria-labelledby="resource-topic-label"
               value={filter}
-              onChange={(e) => setFilter(Number(e.target.value))}
+              onChange={(e) => { setFilter(Number(e.target.value)); setPage(0); }}
             >
               <option value={-1}>{t("Alle temaer", "All topics")}</option>
               {categories.map((c, i) => (
@@ -614,7 +617,7 @@ function Resources({ locale, t }: PageContext) {
           </label>
         </div>
         <div className="mp-reads">
-          {results.map((a) => (
+          {results.slice(page * studyPageSize, (page + 1) * studyPageSize).map((a) => (
             <details key={a.id} className="mp-read">
               <summary>
                 <span className="mp-read-image">
@@ -627,7 +630,7 @@ function Resources({ locale, t }: PageContext) {
                   <u>{t("Les guiden", "Read guide")}</u>
                 </span>
               </summary>
-              <p>{a.body}</p>
+              {a.body && <p>{a.body}</p>}
               <Link
                 className="mp-permalink"
                 href={publicHref("/resources/" + a.id, locale)}
@@ -637,6 +640,7 @@ function Resources({ locale, t }: PageContext) {
             </details>
           ))}
         </div>
+        <StudyPagination page={page} count={results.length} locale={locale} move={setPage}/>
         {!results.length && (
           <div role="status">
             <p>
@@ -650,6 +654,7 @@ function Resources({ locale, t }: PageContext) {
               onClick={() => {
                 setFilter(-1);
                 setQuery("");
+                setPage(0);
               }}
             >
               {t("Vis alle guider", "Show all guides")}
@@ -667,6 +672,7 @@ function Resources({ locale, t }: PageContext) {
               onClick={() => {
                 setFilter(i);
                 setQuery("");
+                setPage(0);
               }}
             >
               {c} <span aria-hidden="true">↗</span>
@@ -812,10 +818,12 @@ function Contact({ locale, t }: PageContext) {
 export function MarketingPages({
   locale,
   page,
+  studyCards = [],
 }: {
   locale: Locale;
   page: string;
   authReady?: boolean;
+  studyCards?: StudyCard[];
 }) {
   const t: T = (nb, en) => (locale === "en" ? en : nb);
   if (page.startsWith("resources/")) {
@@ -861,11 +869,11 @@ export function MarketingPages({
       </div>
     );
   }
+  if (page === "resources") return <div className="mp-pages"><Resources locale={locale} t={t} studyCards={studyCards}/></div>;
   const views: Record<string, (props: PageContext) => ReactNode> = {
     about: About,
     features: Features,
     pricing: Pricing,
-    resources: Resources,
     contact: Contact,
   };
   const View = views[page];

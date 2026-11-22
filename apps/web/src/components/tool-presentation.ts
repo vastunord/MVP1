@@ -98,10 +98,3 @@ const canvasDescriptions: Record<string, [string, string]> = {
 export function canvasDescription(id: string, locale: Locale) {
   return canvasDescriptions[id]?.[locale === "en" ? 1 : 0] ?? "";
 }
-
-export const sampleTones = [
-  { id: "soft-day", nb: "Dagslys", en: "Daylight" },
-  { id: "soft-evening", nb: "Kveldslys", en: "Evening" },
-  { id: "soft-moss", nb: "Mosegrønn", en: "Moss" },
-  { id: "soft-bright", nb: "Lys", en: "Bright" },
-] as const;

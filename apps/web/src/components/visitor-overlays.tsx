@@ -328,10 +328,14 @@ export function VisitorExperience({
   children,
   initialLocale,
   newsletterEnabled,
+  pranaEnabled,
+  filmId,
 }: {
   children: ReactNode;
   initialLocale: Locale;
   newsletterEnabled: boolean;
+  pranaEnabled: boolean;
+  filmId?: string;
 }) {
   const pathname = usePathname();
   const language = useSyncExternalStore(
@@ -498,7 +502,7 @@ export function VisitorExperience({
           dismiss={close}
         >
           {layer === "prana" ? (
-            <PranaPanel locale={locale} />
+            <PranaPanel locale={locale} enabled={pranaEnabled} filmId={filmId} />
           ) : layer === "newsletter" ? (
             <NewsletterInvitation
               locale={locale}

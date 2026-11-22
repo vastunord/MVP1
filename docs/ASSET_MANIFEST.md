@@ -2,7 +2,7 @@
 
 ## Current demo placements
 
-The owner supplied 11 paired scenes in `assets/BeforeAfter/` and approved use of the local Visuals collection on the noncommercial Vastu Nord site. Each displayed scene has a recorded original, SHA-256, public derivative, maximum width and WebP quality. The source inventory records the limited site use of the 158 selected Visuals files. New uses, including social publishing, have their own approval process. [Placement register](VISUALS_PLACEMENTS.csv) · [Source inventory](VISUALS_ASSET_MANIFEST.csv)
+The owner supplied 11 paired scenes in `assets/BeforeAfter/` and approved use of the local Visuals collection on the noncommercial Vastu Nord site. Each displayed scene has a recorded original, SHA-256 and public derivative. The source inventory records the limited site use of 158 Visuals files across the initial site placements and 500 additional originals for Knowledge studies. New uses, including social publishing, have their own approval process. [Placement register](VISUALS_PLACEMENTS.csv) · [Knowledge study register](KNOWLEDGE_STUDY_IMAGES.csv) · [Source inventory](VISUALS_ASSET_MANIFEST.csv)
 
 | Placement | Unique originals | Selection and display |
 |---|---:|---|
@@ -11,6 +11,7 @@ The owner supplied 11 paired scenes in `assets/BeforeAfter/` and approved use of
 | Studio tools | 34 | Each of the 17 tools has an individual 720 px card and a separate editor reference, chosen by subject. Studio compares visual treatments of its selected reference within the same canvas. |
 | Room briefs | 3 | Three 240 px photographs show a timber meditation room, a daylight family kitchen and a fireplace seating area. Each belongs to one editable Room Reimagination brief. |
 | Other site photography | 71 | Separate images for marketing sections, articles, Studio project and album covers, the room tour, files and guides. Related assets use distinct compositions. A selected photo follows the visitor through its own preview or into Studio. |
+| Knowledge studies | 500 | One individually selected still per bilingual article, exported to WebP at quality 70 and at most 768 px on the long edge. [Editorial details and checks](KNOWLEDGE_STUDIES.md) |
 
 The homepage and Studio images are illustrative studies. Original camera files, metadata, video files and the full source folders are excluded from release archives. To validate all derivatives, run `python scripts/verify_display_media.py` with Pillow available. On an authorized checkout containing the originals, add `--sources` to check every original hash. When replacing a photograph, review its subject, source permission and possible duplicates, then update its row, derivative and localized caption together.
 
