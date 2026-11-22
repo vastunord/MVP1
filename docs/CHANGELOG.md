@@ -2,6 +2,12 @@
 
 ## 22 November 2026 · Development journey updates
 
+The [current protected Preview](https://vastunord-67rdd27lp-vastu-nord.vercel.app) runs `b35bbb28dd9f`. Gallery visitors can select any of 17 editors by photo. Prana, the two Knowledge Hub views and gallery filters use visible choices in both languages. All 44 browser tests passed on the rebuilt interface. [Browser evidence](evidence/test-preview-studio/README.md)
+
+- A real Preview registration verified its email, signed in with its original password, created a private project and passed private Blob upload, listing, byte-for-byte retrieval, anonymous denial and deletion. The tester signed out and the session was invalidated.
+
+Released `f106938dafb3` to [protected Preview](https://vastunord-dwj7afpcd-vastu-nord.vercel.app). Verified 15 hosted routes and AI behaviors, 52 unit tests, 44 browser tests, three disposable PostgreSQL integration suites, TypeScript, ESLint, Prisma validation, build and 707 source-image assignments. Requests to private projects without an application session returned 401. Provider, account and media test results belong to this environment.
+
 - Added previous-photo navigation, interior-only directions, consistent Studio entry links, bilingual terms and a public gallery of 50 approved studies.
 - Replaced Studio dropdowns and scripted briefs with visual choices, editable Groq suggestions, five Prana V1 levels and private rendering readiness checks. Prana uses the same Groq credential for short housing-related answers.
 - Added per-provider sign-in configuration for Google, GitHub and Apple, protected Preview discovery and the official YouTube channel feed.

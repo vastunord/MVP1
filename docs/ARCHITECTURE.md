@@ -1,6 +1,6 @@
 # Vastu Nord architecture — Phase 02A
 
-**Target architecture, 2026-11-21.** Phase 02B local frontend is implemented; all cloud/backend setup remains planned and unverified. Phase 01 documentation passed with limitations; exact visual parity remains BLOCKED. Decisions and approval status: [DECISIONS.md](DECISIONS.md).
+**Target architecture, 2026-11-21.** This document captures the initial design. The [current project state](PROJECT_STATE.md) records implemented and cloud-tested capabilities by environment. Phase 01 documentation passed with limitations; exact visual parity remains BLOCKED. Decisions and approval status: [DECISIONS.md](DECISIONS.md).
 
 ## Boundaries
 
@@ -14,7 +14,8 @@ flowchart TD
  Web --> AppDB[("Neon app / Prisma")]
  Web --> Private["Private media adapter"]
  Web --> Workflow["Durable workflow steps"]
- Workflow --> AI["Approved Azure image/video adapters"]
+ Workflow --> AI["MNML private rendering"]
+ Web --> TextAI["Groq consultation and prompt improvement"]
  Workflow --> AppDB
  Workflow --> Private
  Web --> CMS["Payload / separate Vercel deployment"]

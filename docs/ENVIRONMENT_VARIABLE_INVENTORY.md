@@ -2,25 +2,25 @@
 
 The assigned [Vastu Nord site](https://vastunord-web.vercel.app) serves the noncommercial demonstration. Its Production sign-in origin is configured. Account creation, private uploads, provider spending, newsletter enrollment and search indexing each require separate verification and activation.
 
-Updated 22 November 2026. Vastu Nord owns the configurations below. Status refers to the named environment.
+Updated 22 November 2026. Vastu Nord owns the configurations below. Preview runs with Vercel Authentication for development testing. The two AI credential names are case-sensitive. The application reads them only on the server.
 
 | Name / configuration | Purpose | Development | Preview (optional) | Production |
 |---|---|---|---|---|
-| DATABASE_URL | Neon pooled application connection | VERIFIED development endpoint; temporary development owner role | CONFIGURED, owner confirmed branch/role; runtime UNVERIFIED | BLOCKED. The actual Production build failed the expected pool/database/role/TLS check and skipped connecting. Current target undisclosed. |
-| DIRECT_DATABASE_URL | Migration connection; protected context only | Separate protected development helper | OPTIONAL-DEFERRED | MISSING protected Production migration handoff |
-| BETTER_AUTH_SECRET | Session signing | CONFIGURED; live Development tested | CONFIGURED, distinct; not deployed | CONFIGURED, distinct strong secret; runtime UNVERIFIED |
+| DATABASE_URL | Neon pooled application connection | VERIFIED development endpoint; temporary development owner role | VERIFIED by the protected build against the exact Preview branch, pool, restricted role and database | BLOCKED. The actual Production build failed the expected pool/database/role/TLS check and skipped connecting. Current target undisclosed. |
+| DIRECT_DATABASE_URL | Migration connection; protected context only | Protected development helper; current credential rejected (28P01) | Protected Preview migration credential missing | MISSING protected Production migration handoff |
+| BETTER_AUTH_SECRET | Session signing | CONFIGURED; live Development tested | CONFIGURED and available to the protected build | CONFIGURED, distinct strong secret; runtime UNVERIFIED |
 | BETTER_AUTH_URL | Canonical auth origin | CONFIGURED for local testing | Derived from validated VERCEL_URL | CONFIGURED for the assigned HTTPS site. Live sign-in remains closed. |
 | AUTH_ENABLED | Production authentication gate | Not required | Not required | CONFIGURED false |
-| AUTH_EMAIL_PROVIDER, AUTH_EMAIL_FROM, RESEND_API_KEY | Transactional email | CONFIGURED; controlled live signup passed | CONFIGURED; delivery UNVERIFIED | CONFIGURED approved sender and domain-scoped key; delivery UNVERIFIED |
+| AUTH_EMAIL_PROVIDER, AUTH_EMAIL_FROM, RESEND_API_KEY | Transactional email | CONFIGURED; controlled live signup passed | Verified Preview email-delivered signup flow and first sign-in | CONFIGURED approved sender and domain-scoped key; delivery UNVERIFIED |
 | NEWSLETTER_ENABLED, NEWSLETTER_TOKEN_SECRET | Double opt-in and signed withdrawal links with Resend. | Isolated signing secret configured. Enrollment awaits migration and delivery test. | Separate secret configured. Enrollment awaits migration and limited role grants. | Off. Enrollment requires commercial approval. |
-| BLOB_STORE_ID, VERCEL_OIDC_TOKEN | Private Blob and server identity | VERIFIED private store and synthetic tests | CONFIGURED separate private store; live use UNVERIFIED | CONFIGURED separate private store and association; live use UNVERIFIED |
+| BLOB_STORE_ID, VERCEL_OIDC_TOKEN | Private Blob and server identity | VERIFIED private store and synthetic tests | VERIFIED separate store and authenticated upload, retrieval and deletion | CONFIGURED separate private store and association; live use UNVERIFIED |
 | BLOB_READ_WRITE_TOKEN | Alternative static Blob credential | OPTIONAL-DEFERRED; OIDC used | OPTIONAL-DEFERRED | OPTIONAL-DEFERRED; OIDC used |
-| MEDIA_UPLOADS_ENABLED | Private uploads | CONFIGURED true; tested | CONFIGURED; live use UNVERIFIED | CONFIGURED false |
+| MEDIA_UPLOADS_ENABLED | Private uploads | CONFIGURED true; tested | CONFIGURED true; synthetic private media journey passed | CONFIGURED false |
 | MEDIA_RECONCILIATION_ENABLED, MEDIA_RECONCILIATION_SECRET | Protected cleanup | CONFIGURED; no schedule | CONFIGURED; no schedule | CONFIGURED false; no secret or schedule |
 | APP_ENV, VERCEL_ENV, VERCEL_URL | Environment and deployment origin | Configured | Configured. Preview deployment optional. | Configured on assigned Vercel site |
 | GOOGLE_OAUTH_ENABLED, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET; GITHUB_OAUTH_ENABLED, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET; APPLE_OAUTH_ENABLED, APPLE_CLIENT_ID, APPLE_CLIENT_SECRET | Independently configured consumer login options. Apple requires a Service ID and expiring signed client secret. | Provider credentials missing | Provider credentials missing | Disabled |
 | VASTUNORD_DEV_MIGRATOR_PASSWORD | Development-only migration secret | Protected local migration context; absent from app runtime | REMOVED from Vercel | REMOVED from Vercel |
-| GroqAPI | Shared server credential for bilingual Prana and Studio brief improvement. Spending controls live in Groq. | Hidden variable present | Secret present | Present, commercial activation gated |
+| GroqAPI | Shared server credential for bilingual Prana and Studio brief improvement. Spending controls live in Groq. | Server-side secret present | Live consultation and brief improvement verified | Present, commercial activation gated |
 | PRANA_FILM_VIDEO_ID | Optional approved film override. Otherwise Prana looks up the latest public upload from the verified Vastu Nord channel. | Optional | Optional | Optional |
 | MNMLAPI | Private Studio rendering through MNML v2. The five Prana V1 quality choices map to provider models. Provider-account limits apply. | Hidden variable present | Secret present; render schema and application access required | Present, adapter disabled |
 | COMMERCIAL_LAUNCH_APPROVED, PUBLIC_INDEXING_ENABLED | Gate business-only features and bilingual indexing | Off | Off | Off on Hobby |

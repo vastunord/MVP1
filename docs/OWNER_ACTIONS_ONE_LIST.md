@@ -1,6 +1,6 @@
 # Commercial release checklist
 
-The protected test deployment is for technical evaluation. The following items remain before public commercial use.
+The protected test environment has passed email registration and verification, first sign-in, private project creation, image upload, retrieval and deletion. Google, GitHub and Apple account login and newsletter subscription are separate features. The following items remain before public commercial use.
 
 1. **Hosting and Production isolation.** Choose an eligible business plan for the Vastu Nord project. Replace the unverified Production database setting with its restricted Frankfurt pool, verify private Blob access, rehearse recovery and test signing in, deleting an account and restoring service. [Vercel Hobby terms](https://vercel.com/docs/plans/hobby)
 2. **Rendering and newsletter.** Refresh the protected Development migrator credential, and supply a separate migration-only direct credential for the Preview branch. Run the two reviewed Prisma migrations, confirm checksums and grant the application only the required DML. Test one private MNML job from upload through deletion and one controlled Resend opt-in, confirmation and unsubscribe. GroqAPI and MNMLAPI already exist. Provider spending controls are managed in those accounts.
