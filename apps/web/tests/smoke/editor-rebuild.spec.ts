@@ -70,7 +70,7 @@ test("room choice images, output media, keyboard input and collapsed groups work
   await expect(media.getByRole("radio")).toHaveCount(9);
   await media.getByRole("radio", { name: "Akvarell" }).check();
   await design.getByRole("radio", { name: "16:9" }).check();
-  await expect(page.locator(".studio-editor select")).toHaveCount(0);
+  await expect(page.locator(".studio-editor select")).toHaveCount(1);
   await expect(design).not.toContainText("Startverdi");
   await expect(design).not.toContainText("Skogens ro");
   await page.getByText("Referansebilder", { exact: true }).click();
