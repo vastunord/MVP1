@@ -7,6 +7,7 @@ import { publicHref, type Locale } from "@/lib/i18n";
 import { marketingResources } from "@/lib/marketing-resources";
 import type { StudyCard } from "@/lib/visual-studies";
 import { StudyPagination, studyPageSize } from "./study-pagination";
+import { TopicChoices } from "./topic-choices";
 import { Action, Closing, FAQ, Photo, Section } from "./marketing-elements";
 import "./marketing-pages.css";
 
@@ -598,23 +599,12 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
       <Section id="articles">
         <div className="mp-section-line">
           <h2>{t("Guider og bildestudier", "Guides and visual studies")} ({results.length})</h2>
-          <label>
-            <span id="resource-topic-label">
-              {t("Filtrer på tema", "Filter by topic")}
-            </span>{" "}
-            <select
-              aria-labelledby="resource-topic-label"
-              value={filter}
-              onChange={(e) => { setFilter(Number(e.target.value)); setPage(0); }}
-            >
-              <option value={-1}>{t("Alle temaer", "All topics")}</option>
-              {categories.map((c, i) => (
-                <option key={c} value={i}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </label>
+          <TopicChoices
+            label={t("Filtrer på tema", "Filter by topic")}
+            options={[{ id: -1, name: t("Alle temaer", "All topics") }, ...categories.map((name, id) => ({ id, name }))]}
+            value={filter}
+            onChange={(id) => { setFilter(id); setPage(0); }}
+          />
         </div>
         <div className="mp-reads">
           {results.slice(page * studyPageSize, (page + 1) * studyPageSize).map((a) => (

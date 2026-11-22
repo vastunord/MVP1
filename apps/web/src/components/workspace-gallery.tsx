@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { tools } from "@vastunord/contracts/tools";
+import { StudioChoices } from "./studio-choices";
 import { PrivateUpload } from "./private-upload";
 import { useRef, useState, useSyncExternalStore } from "react";
 import type { Locale } from "@/lib/i18n";
@@ -165,15 +166,23 @@ export function Gallery({
   return (
     <section className="vn-collection">
       <header className="vn-pagehead">
-        {!publicCollection && <p className="eyebrow">{en ? "Studio collection" : "Studiosamling"}</p>}
+        {!publicCollection && (
+          <p className="eyebrow">
+            {en ? "Studio collection" : "Studiosamling"}
+          </p>
+        )}
         <h1>
-          {publicCollection ? (en ? "Gallery" : "Galleri") : assets
+          {publicCollection
             ? en
-              ? "Files and assets"
-              : "Filer og ressurser"
-            : en
-              ? "Render gallery"
-              : "Bildegalleri"}
+              ? "Gallery"
+              : "Galleri"
+            : assets
+              ? en
+                ? "Files and assets"
+                : "Filer og ressurser"
+              : en
+                ? "Render gallery"
+                : "Bildegalleri"}
         </h1>
         <p>
           {publicCollection
@@ -181,12 +190,12 @@ export function Gallery({
               ? "Explore Vastu Nord’s architectural studies by subject. Open a photo to see its details or use it in Studio."
               : "Utforsk Vastu Nords arkitekturstudier etter tema. Åpne et bilde for å se detaljene eller bruke det i Studio."
             : assets
-            ? en
-              ? "Browse reference files for your Studio studies."
-              : "Se referansefiler til studiene dine i Studio."
-            : en
-              ? "Open any of the 50 studies, then choose a Studio tool to work with its photo."
-              : "Åpne en av de 50 bildestudiene og velg et Studio-verktøy for bildet."}
+              ? en
+                ? "Browse reference files for your Studio studies."
+                : "Se referansefiler til studiene dine i Studio."
+              : en
+                ? "Open any of the 50 studies, then choose a Studio tool to work with its photo."
+                : "Åpne en av de 50 bildestudiene og velg et Studio-verktøy for bildet."}
         </p>
       </header>
       {!publicCollection && assets && privateFilesEnabled && (
@@ -227,25 +236,28 @@ export function Gallery({
             </button>
           ))}
         </div>
-        {publicCollection ? <label>
-          <span className="sr-only">{en ? "Subject" : "Motiv"}</span>
-          <select value={subject} onChange={(event) => setSubject(event.target.value)}>
-            <option value="">{en ? "All subjects" : "Alle motiv"}</option>
-            {Object.values(subjects).map((label) => (
-              <option key={label[1]} value={label[1]}>{translated(label, locale)}</option>
-            ))}
-          </select>
-        </label> : <label>
-          <span className="sr-only">{en ? "Album" : "Album"}</span>
-          <select value={album} onChange={(e) => setAlbum(e.target.value)}>
-            <option value="">{en ? "All albums" : "Alle album"}</option>
-            {studies.map((s) => (
-              <option key={s.id} value={s.id}>
-                {translated(s.name, locale)}
-              </option>
-            ))}
-          </select>
-        </label>}
+        <StudioChoices
+          label={publicCollection ? (en ? "Subject" : "Motiv") : "Album"}
+          value={publicCollection ? subject : album}
+          onChange={publicCollection ? setSubject : setAlbum}
+          choices={
+            publicCollection
+              ? [
+                  { value: "", label: en ? "All subjects" : "Alle motiv" },
+                  ...Object.values(subjects).map((label) => ({
+                    value: label[1],
+                    label: translated(label, locale),
+                  })),
+                ]
+              : [
+                  { value: "", label: en ? "All albums" : "Alle album" },
+                  ...studies.map((study) => ({
+                    value: study.id,
+                    label: translated(study.name, locale),
+                  })),
+                ]
+          }
+        />
         <label>
           <span className="sr-only">
             {en ? "Search images" : "Søk etter bilder"}
@@ -329,14 +341,16 @@ export function Gallery({
           </button>
         </div>
       )}
-      {!publicCollection && <div className="vn-related">
-        <Link href="/app/albums">
-          {en ? "Browse albums" : "Utforsk album"} ↗
-        </Link>
-        <Link href="/app/tools/room-reimagination">
-          {en ? "Open Studio" : "Åpne Studio"} ↗
-        </Link>
-      </div>}
+      {!publicCollection && (
+        <div className="vn-related">
+          <Link href="/app/albums">
+            {en ? "Browse albums" : "Utforsk album"} ↗
+          </Link>
+          <Link href="/app/tools/room-reimagination">
+            {en ? "Open Studio" : "Åpne Studio"} ↗
+          </Link>
+        </div>
+      )}
       <dialog
         className="vn-scene-dialog"
         ref={dialog}
@@ -362,24 +376,26 @@ export function Gallery({
         </div>
         <div className="vn-related">
           <span>{translated(selected.style, locale)}</span>
-          {!publicCollection && <Link href={"/app/studies/" + selected.study}>
-            {en ? "View example project" : "Åpne eksempelprosjekt"} ↗
-          </Link>}
+          {!publicCollection && (
+            <Link href={"/app/studies/" + selected.study}>
+              {en ? "View example project" : "Åpne eksempelprosjekt"} ↗
+            </Link>
+          )}
         </div>
         <div className="vn-gallery-studio">
-          <label>
-            {en ? "Use this photo in Studio" : "Bruk dette bildet i Studio"}
-            <select
-              value={toolId}
-              onChange={(event) => setToolId(event.target.value)}
-            >
-              {tools.map((tool) => (
-                <option key={tool.id} value={tool.id}>
-                  {tool.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <StudioChoices
+            kind="tool"
+            label={
+              en ? "Use this photo in Studio" : "Bruk dette bildet i Studio"
+            }
+            value={toolId}
+            onChange={setToolId}
+            choices={tools.map((tool) => ({
+              value: tool.id,
+              label: tool.name,
+              image: `/media/tools/${tool.id}.webp`,
+            }))}
+          />
           <Link
             className="button"
             href={"/app/tools/" + toolId + "?sample=" + selected.id}

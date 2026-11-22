@@ -31,8 +31,8 @@ test("knowledge and Prana offer local reading and accessible empty states", asyn
   ).toBeVisible();
   await main.getByRole("button", { name: "Vis alle guider" }).click();
   await main
-    .getByRole("combobox", { name: "Tema", exact: true })
-    .selectOption("material");
+    .getByRole("group", { name: "Tema", exact: true })
+    .getByRole("button", { name: "Materialer", exact: true }).click();
   await expect(main.locator("details")).toHaveCount(1);
   await main.locator("summary").click();
   await expect(main.getByText(/Legg prøver av tre/)).toBeVisible();
@@ -41,8 +41,8 @@ test("knowledge and Prana offer local reading and accessible empty states", asyn
   const panel = page.getByRole("dialog", { name: "VastuNord Prana" });
   await panel.getByRole("button", { name: "Utforsk tips" }).click();
   await panel
-    .getByRole("combobox", { name: "Velg tema", exact: true })
-    .selectOption("2");
+    .getByRole("group", { name: "Velg tema", exact: true })
+    .getByRole("button", { name: "Planløsning", exact: true }).click();
   await expect(
     panel.getByRole("heading", { name: "Plass til å bevege seg" }),
   ).toBeVisible();

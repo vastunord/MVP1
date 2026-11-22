@@ -7,6 +7,7 @@ import type { Locale } from "@/lib/i18n";
 import { guides } from "./workspace-experience-data";
 import { PranaConsultation } from "./prana-consultation";
 import { PranaFilm } from "./prana-film";
+import { TopicChoices } from "./topic-choices";
 import "./prana-panel.css";
 
 const tabs = ["Prana", "Quick Tips", "Film"] as const;
@@ -85,19 +86,12 @@ export function PranaPanel({ locale, enabled, filmId }: { locale: Locale; enable
             )}
             {index === 1 && (
               <>
-                <label className="prana-topic">
-                  {t("Velg tema", "Choose a topic")}
-                  <select
-                    value={topic}
-                    onChange={(e) => setTopic(Number(e.target.value))}
-                  >
-                    {guides.map((g, i) => (
-                      <option key={g.id} value={i}>
-                        {t(...g.topic)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <TopicChoices
+                  label={t("Velg tema", "Choose a topic")}
+                  options={guides.map((guide, id) => ({ id, name: t(...guide.topic) }))}
+                  value={topic}
+                  onChange={setTopic}
+                />
                 <h2>{t(...guide.title)}</h2>
                 <p>{t(...guide.body)}</p>
                 <Link className="prana-text-link" href="/app/knowledge">

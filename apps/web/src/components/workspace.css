@@ -23,9 +23,18 @@
 .vn-side .vn-nav-copy { display: grid; gap: .15rem; }
 .vn-nav-copy small { font-weight: 400; font-size: .69rem; line-height: 1.4; color: var(--muted); }
 .vn-side .vn-nav-group svg { flex-shrink: 0; }
-.vn-gallery-studio { display: flex; align-items: end; flex-wrap: wrap; gap: .75rem; padding-block: 1rem .25rem; }
-.vn-gallery-studio label { display: grid; gap: .35rem; }
-.vn-gallery-studio select { min-height: 44px; max-width: 100%; background: var(--surface); color: var(--text); }
+.vn-gallery-studio { display: grid; gap: .8rem; padding-block: 1rem .25rem; }
+.vn-gallery-studio > .button { justify-self: start; position: sticky; bottom: .3rem; z-index: 2; background: var(--navy); color: white; }
+.vn-collection .studio-choices { padding: 0; margin: 0; min-width: 0; border: 0; }
+.vn-collection .studio-choices legend { color: var(--text); }
+.vn-gallery-studio .choices-tool > div { grid-template-columns: repeat(auto-fit,minmax(min(100%,8.5rem),1fr)); }
+.vn-gallery-studio .choice-art { height: 3.6rem; }
+.vn-gallery-tools .studio-choices { order: 1; flex-basis: 100%; }
+.vn-gallery-tools .choices-compact .studio-choice { min-height: 44px; align-content: center; background: var(--vn-panel); border-color: var(--vn-line); }
+.vn-gallery-tools .choice-label { color: var(--text); font-size: .8rem; }
+.vn-gallery-tools .studio-choice:has(:checked) { background: var(--navy); }
+.vn-gallery-tools .studio-choice:has(:checked) .choice-label { color: white; }
+.vn-gallery-tools .studio-choice:has(:focus-visible) { outline-color: var(--text); }
 .vn-nav-group h2,
 .vn-pagehead .eyebrow {
   font-size: 0.69rem;
@@ -304,11 +313,10 @@
 .vn-gallery-tools {
   margin: 17px 0 22px;
 }
-.vn-gallery-tools input {
+.vn-gallery-tools input[type="search"] {
   width: clamp(145px, 15vw, 215px);
 }
-.vn-gallery-tools select,
-.vn-gallery-tools input,
+.vn-gallery-tools input[type="search"],
 .vn-pills button {
   font-size: 0.82rem;
 }

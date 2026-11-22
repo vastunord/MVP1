@@ -1,0 +1,37 @@
+.vn-topic-choices {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.vn-topic-choices legend {
+  padding: 0;
+  margin-block-end: .45rem;
+  font-size: .9rem;
+  font-weight: 600;
+}
+.vn-topic-choices > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+.vn-topic-choices button {
+  min-height: 44px;
+  padding: .35rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  background: transparent;
+  color: inherit;
+  line-height: 1.25;
+  cursor: pointer;
+}
+.vn-topic-choices button[aria-pressed="true"] {
+  color: var(--bg);
+  background: var(--text);
+  border-color: var(--text);
+}
+.vn-topic-choices button:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}

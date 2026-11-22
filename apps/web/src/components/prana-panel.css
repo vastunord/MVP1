@@ -50,19 +50,8 @@
   line-height: 1.55;
   max-width: 54ch;
 }
-.prana-topic {
-  display: grid;
-  gap: 0.25rem;
-  font-size: 0.82rem;
+.prana-reader .vn-topic-choices {
   margin: 0.25rem 0 1rem;
-}
-.prana-topic select {
-  min-height: 44px;
-  padding: 0.4rem 0.65rem;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0.35rem;
 }
 .prana-action,
 .prana-text-link {

@@ -270,6 +270,15 @@ try {
         rect?.height >= 44 && rect.width > 42,
         "Clipped Prana V1 tile at " + width,
       );
+      const fits = await tile.locator(".choice-label").evaluate((el) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return (
+          range.getClientRects().length === 1 &&
+          el.scrollWidth <= el.clientWidth
+        );
+      });
+      assert(fits, "Prana V1 level label breaks or clips at " + width);
     }
     await noOverflow();
     if (width === 390) {
@@ -282,9 +291,11 @@ try {
   await open("/app/renders");
   await page.locator(".vn-tile-open").first().click();
   const gallery = page.locator(".vn-scene-dialog");
-  const select = gallery.getByRole("combobox");
+  const toolChoices = gallery.getByRole("group");
   for (const tool of tools) {
-    await select.selectOption(tool.id);
+    await toolChoices
+      .getByRole("radio", { name: tool.name, exact: true })
+      .check();
     const link = gallery.locator('a[href*="?sample=gallery-"]').first();
     assert.equal(
       await link.getAttribute("href"),

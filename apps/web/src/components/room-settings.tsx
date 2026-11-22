@@ -4,7 +4,6 @@ import {
 } from "@vastunord/contracts/tools";
 import { StudioChoices } from "./studio-choices";
 import type { Locale } from "@/lib/i18n";
-import "./room-settings.css";
 
 type Values = Record<string, string | number | boolean>;
 

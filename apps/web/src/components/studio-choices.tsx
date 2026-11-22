@@ -1,4 +1,5 @@
 import Image from "next/image";
+import "./room-settings.css";
 import { useId, type CSSProperties } from "react";
 
 const photos: Record<string, string> = {

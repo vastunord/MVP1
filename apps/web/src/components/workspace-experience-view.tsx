@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { publicHref, type Locale } from "@/lib/i18n";
 import type { StudyCard } from "@/lib/visual-studies";
 import { StudyPagination, studyPageSize } from "./study-pagination";
+import { TopicChoices } from "./topic-choices";
 import "./visual-study.css";
 import type { ExperienceRoute } from "./workspace-experience";
 import {
@@ -237,21 +238,12 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
             onChange={(e) => {setSearch(e.target.value); setPage(0);}}
           />
         </label>
-        <label>
-          <span id="knowledge-topic-label">{t("Tema", "Topic")}</span>
-          <select
-            aria-labelledby="knowledge-topic-label"
-            value={topic}
-            onChange={(e) => {setTopic(e.target.value); setPage(0);}}
-          >
-            <option value="all">{t("Alle temaer", "All topics")}</option>
-            {topicLabels.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <TopicChoices
+          label={t("Tema", "Topic")}
+          options={[{ id: "all", name: t("Alle temaer", "All topics") }, ...topicLabels]}
+          value={topic}
+          onChange={(id) => { setTopic(id); setPage(0); }}
+        />
       </div>
       <div className="xp-grid">
         {guidePage.map((g) => (

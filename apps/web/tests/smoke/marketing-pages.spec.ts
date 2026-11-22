@@ -29,8 +29,9 @@ test("resource search, topic filters and expandable articles work together", asy
   await main.getByRole("button", { name: "Show all guides" }).click();
   await main.getByRole("link", { name: "Materials" }).click();
   await expect(
-    main.getByRole("combobox", { name: "Filter by topic", exact: true }),
-  ).toHaveValue("5");
+    main.getByRole("group", { name: "Filter by topic", exact: true })
+      .getByRole("button", { name: "Materials", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   const results = main.locator(".mp-read");
   await expect(results).toHaveCount(12);
   const firstPageTitles = await results.locator("strong").allTextContents();
@@ -40,6 +41,11 @@ test("resource search, topic filters and expandable articles work together", asy
   await expect(results.locator("strong").first()).not.toHaveText(firstPageTitles[0]);
   await pages.getByRole("button", { name: "Previous" }).click();
   await expect(results.locator("strong").first()).toHaveText(firstPageTitles[0]);
+  const allTopics = main.getByRole("group", { name: "Filter by topic" })
+    .getByRole("button", { name: "All topics", exact: true });
+  await allTopics.focus();
+  await page.keyboard.press("Space");
+  await expect(allTopics).toHaveAttribute("aria-pressed", "true");
 });
 
 test("living-room directions, pricing and the closed contact form", async ({

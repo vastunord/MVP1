@@ -19,8 +19,9 @@ test("visitors can filter approved studies and open a captioned photo without a 
   ).toBeVisible();
   await expect(page.locator(".vn-tile-open")).toHaveCount(renderGallery.length);
   await page
-    .getByRole("combobox", { name: "Subject" })
-    .selectOption("Bedrooms");
+    .getByRole("group", { name: "Subject" })
+    .getByRole("radio", { name: "Bedrooms", exact: true })
+    .check();
   const bedrooms = renderGallery.filter(
     (scene) => scene.style[1] === "Bedrooms",
   );
@@ -58,10 +59,14 @@ test("a gallery photo opens with each of the 17 Studio tools and favourites surv
   );
   await page.locator(".vn-tile-open").first().click();
   const dialog = page.locator(".vn-scene-dialog");
-  const menu = dialog.getByRole("combobox");
+  const menu = dialog.getByRole("group", {
+    name: "Bruk dette bildet i Studio",
+  });
+  await expect(menu.getByRole("radio")).toHaveCount(17);
+  await expect(menu.locator("img")).toHaveCount(17);
   const link = dialog.getByRole("link", { name: /Åpne Studio/ });
   for (const tool of tools) {
-    await menu.selectOption(tool.id);
+    await menu.getByRole("radio", { name: tool.name, exact: true }).check();
     await expect(link).toHaveAttribute(
       "href",
       tool.route + "?sample=gallery-01",
