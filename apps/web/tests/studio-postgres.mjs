@@ -166,6 +166,21 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         assert.equal((await sharp(bytes).metadata()).format, "webp");
       },
     };
+    await db.asset.update({
+      where: { id: "asseta" },
+      data: { byteSize: 15_000_001 },
+    });
+    await assert.rejects(
+      startJob(db, config, actor, parseRender(input), io),
+      /15 MB/,
+    );
+    assert.equal(
+      await db.renderJob.count(),
+      0,
+      "oversized image creates no job",
+    );
+    assert.equal(submissions, 0, "oversized image is never sent to MNML");
+    await db.asset.update({ where: { id: "asseta" }, data: { byteSize: 64 } });
     await assert.rejects(
       startJob(
         db,
@@ -230,7 +245,10 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     );
     assert.deepEqual(await projectJobs(db, wrongUser, "pa"), []);
     assert.deepEqual(await projectJobs(db, actor, "pa"), []);
-    assert.equal((await projectJobs(db, actor, "pa", "room-reimagination"))[0].state, "RUNNING");
+    assert.equal(
+      (await projectJobs(db, actor, "pa", "room-reimagination"))[0].state,
+      "RUNNING",
+    );
     await assert.rejects(
       syncJob(db, "fixture", wrongUser, "pa", input.id, io),
       /unavailable/,

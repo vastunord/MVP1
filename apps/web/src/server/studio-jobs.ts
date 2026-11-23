@@ -103,6 +103,13 @@ export async function startJob(
   });
   if (assets.length !== assetIds.length)
     throw new RenderError(404, "Image unavailable in this project");
+  // MNML accepts at most 15 MB per image; reject before creating a job or
+  // sending any provider request, including for style reference images.
+  if (
+    (brief.endpoint === "renders" || brief.endpoint === "videos") &&
+    assets.some((asset) => asset.byteSize > 15_000_000)
+  )
+    throw new RenderError(413, "MNML accepts images up to 15 MB");
   const job = await db.$transaction(async (tx) => {
     // Serialize identical submissions across tabs, reloads and server instances.
     await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(hashtext(${brief.projectId})::bigint)`;

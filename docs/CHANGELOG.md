@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 23 November 2026 · MNML compatibility
+
+- Documented the existing 17-tool provider mapping and its unverified controls. Reject oversized render/video images before job creation or provider submission; added an isolated PostgreSQL regression check. The live saved-render attachment remains pending.
+
 ## 22 November 2026 · Private saved-render gallery
 
 - Added a project-scoped private render gallery with original/result comparison, download, empty, loading and retry states. Tool-specific job history is preserved; cross-tool gallery queries include completed results only and retain ownership checks.
