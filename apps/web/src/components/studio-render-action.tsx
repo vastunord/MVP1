@@ -297,6 +297,9 @@ export function StudioRenderAction({
                     : ""}
       </p>
       {job && <p role="status">{statuses[job.state]}</p>}
+      {job?.waitingForSubmission && <p role="status">{en
+        ? "Submission is not confirmed. This job will not be submitted automatically; check your project history before starting another."
+        : "Innsendingen er ikke bekreftet. Denne jobben sendes ikke automatisk; sjekk prosjekthistorikken før du starter en ny."}</p>}
       {enabled && job?.state === "SUCCEEDED" && job.outputAssetId && (
         <AssetSharingConsent
           key={job.outputAssetId}
@@ -316,7 +319,10 @@ export function StudioRenderAction({
           {en ? "Check again" : "Sjekk på nytt"}
         </button>
       )}
-      {enabled && projectId && (
+      {enabled && projectId && <>
+        <p className="inspector-help">{en
+          ? "To revisit or check an existing job, open Project renders and select it. This does not start a new render."
+          : "For å åpne eller sjekke en eksisterende jobb, åpne Prosjektrendere og velg den. Dette starter ikke en ny rendring."}</p>
         <details
           className="render-history"
           onToggle={(e) => {
@@ -338,7 +344,7 @@ export function StudioRenderAction({
             </button>
           ))}
         </details>
-      )}
+      </>}
     </div>
   );
 }

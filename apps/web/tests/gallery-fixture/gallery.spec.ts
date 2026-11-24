@@ -107,3 +107,19 @@ test("a late response from the previous project cannot replace the new project's
   await expect(page.getByTestId("result")).toBeEmpty();
   await expect.poll(() => posts).toBe(1);
 });
+
+test("unconfirmed submissions remain explicit and are not sent automatically", async ({ page }) => {
+  let posts = 0;
+  await page.route("**/api/studio/renders**", route => {
+    if (route.request().method() === "POST") { posts++; return route.fulfill({ status: 500 }); }
+    return route.fulfill({ json: [{ id: "uncertain-job", toolId: "room-reimagination", state: "QUEUED", media: "image", waitingForSubmission: true, sourceAssetId: "source", outputAssetId: null }] });
+  });
+  await page.clock.install();
+  await page.goto("/poll");
+  await expect(page.getByText("To revisit or check an existing job", { exact: false })).toBeVisible();
+  await page.getByText("Project renders", { exact: true }).click();
+  await page.getByRole("button", { name: /Queued · uncertai/ }).click();
+  await expect(page.getByText("Submission is not confirmed", { exact: false })).toBeVisible();
+  await page.clock.fastForward(60000);
+  expect(posts).toBe(0);
+});
