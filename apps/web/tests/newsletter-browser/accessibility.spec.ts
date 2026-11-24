@@ -86,6 +86,47 @@ for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/
   });
 }
 
+test("newsletter modal traps keyboard focus and restores its launcher", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
+    localStorage.setItem("vn-newsletter-display", JSON.stringify({ version: 1, state: "minimized" }));
+  });
+  await page.goto("/en");
+  const launcher = page.getByRole("button", { name: "Newsletter", exact: true });
+  await launcher.click();
+  const dialog = page.getByRole("dialog", { name: "Vastu Nord newsletter" });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole("button", { name: "Close", exact: true }).first().focus();
+  for (let i = 0; i < 10; i++) {
+    await page.keyboard.press("Tab");
+    expect(await dialog.evaluate((node) => node.contains(document.activeElement))).toBe(true);
+  }
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(launcher).toBeFocused();
+});
+
+test("newsletter controls remain reachable in a short viewport", async ({ page }) => {
+  // A short viewport models constrained space only; it is not a physical keyboard test.
+  await page.setViewportSize({ width: 390, height: 360 });
+  await page.addInitScript(() => {
+    localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
+    localStorage.setItem("vn-newsletter-display", JSON.stringify({ version: 1, state: "minimized" }));
+  });
+  await page.goto("/en");
+  await page.getByRole("button", { name: "Newsletter", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Vastu Nord newsletter" });
+  const email = dialog.getByLabel("Email address");
+  await email.focus();
+  await expect(email).toBeFocused();
+  const consent = dialog.getByRole("checkbox");
+  await consent.focus();
+  await expect(consent).toBeFocused();
+  await dialog.getByRole("button", { name: "Close", exact: true }).first().click();
+  await expect(dialog).toHaveCount(0);
+});
+
 for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
   test(`a main-content action can receive visible keyboard focus on ${route}`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });

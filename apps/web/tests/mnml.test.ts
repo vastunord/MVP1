@@ -125,6 +125,22 @@ test("unsupported manual controls share the same client and server policy", () =
   assert.equal(unsupportedStudioOption("visual-cleanup", "mode", "AI object editing"), false);
   assert.equal(unsupportedStudioOption("resolution-enhancement", "mode", "Auto enhance"), false);
 });
+test("every visible unconditional supported choice is accepted by the same server contract", () => {
+  for (const tool of tools) {
+    for (const control of tool.controls) {
+      if (control.kind !== "select" || control.when || control.id === "palette") continue;
+      for (const choice of control.options ?? []) {
+        if (unsupportedStudioOption(tool.id, control.id, choice)) continue;
+        assert.doesNotThrow(() => parseRender({
+          ...input,
+          toolId: tool.id,
+          prompt: tool.id === "resolution-enhancement" ? "" : "Describe the change",
+          values: { [control.id]: choice },
+        }), `${tool.id} / ${control.id} / ${choice}`);
+      }
+    }
+  }
+});
 test("MNML validates asset selection, options, consent and single-image mode before dispatch", () => {
   for (const change of [
     { consent: false },
