@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 24 November 2026 · Current responsive capture matrix
+
+- Saved 24 signed-out local screenshots of `0b8c924` at six widths. The initial 390px Studio navigation is clear; the login capture still shows launchers covering part of static copy near the viewport bottom. Actual devices, zoom, screen readers, authenticated states and exact design parity remain unverified.
+
 ## 24 November 2026 · Mobile Studio section links
 
 - Candidate `0b8c924` passed 126 browser smoke tests and an offline locked-dependency Webpack build from its exact archive. Earlier unit and isolated recovery results predate this CSS change.

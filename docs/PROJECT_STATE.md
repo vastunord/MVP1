@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Current responsive capture matrix
+
+Saved 24 signed-out local full-page screenshots of current source `0b8c924` at six widths across home, login, Studio editor and gallery in `docs/evidence/responsive-local/0b8c924/`. All returned HTTP 200 without horizontal document overflow or unresolved images. The 390px editor's section links are clear in the initial capture; the login capture still shows fixed launchers covering part of static privacy copy near the viewport bottom, which can be exposed by scrolling. This does not establish arbitrary-scroll, real-device, actual-zoom, screen-reader, authenticated or Figma-parity behavior.
+
 ## 24 November 2026 · Mobile Studio section links
 
 Current local source candidate `0b8c924efbe0ce4af4873614b2364a0be9ed3a1f` passed 126 browser smoke tests and built from its exact Git archive using offline locked dependencies. This is local evidence, not a remote checkout or deployment.
