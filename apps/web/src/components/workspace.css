@@ -58,11 +58,11 @@
   font-weight: 500;
 }
 .vn-side.sidebar .vn-nav-group a:hover,
-.vn-side.sidebar a[aria-current="page"] {
+.vn-side.sidebar a[aria-current] {
   background: color-mix(in srgb, var(--sage) 38%, var(--bg));
   text-decoration: none;
 }
-.vn-side.sidebar a[aria-current="page"] {
+.vn-side.sidebar a[aria-current] {
   box-shadow: inset 3px 0 var(--focus);
   font-weight: 750;
 }

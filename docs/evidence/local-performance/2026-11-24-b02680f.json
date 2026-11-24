@@ -1,0 +1,258 @@
+{
+  "source": "b02680fd7822a12e41e851582c2cd0536a930f63",
+  "description": "Local production build, signed-out synthetic laboratory, Edge headless, no network throttling; localhost has no cloud region. Per viewport one browser context and reused page; three successive navigations per route, with warm caches after the first. LCP and layout-shift sum are observations through 1.5 seconds after load; they are not field CWV or p75. Transfer sizes use browser-reported transferSize and can omit cross-origin data or cached resource bytes. The gallery route has no authenticated saved result and does not test its latency.",
+  "runs": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/en",
+      "run": 1,
+      "status": 200,
+      "ttfbMs": 669,
+      "lcpWithinWindowMs": 1188,
+      "layoutShiftSumWithinWindow": 0.0238,
+      "transferredBytes": 979235,
+      "resourceCount": 47
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/en",
+      "run": 2,
+      "status": 200,
+      "ttfbMs": 34,
+      "lcpWithinWindowMs": 152,
+      "layoutShiftSumWithinWindow": 0.0005,
+      "transferredBytes": 27989,
+      "resourceCount": 48
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/en",
+      "run": 3,
+      "status": 200,
+      "ttfbMs": 17,
+      "lcpWithinWindowMs": 92,
+      "layoutShiftSumWithinWindow": 0.0005,
+      "transferredBytes": 26930,
+      "resourceCount": 46
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/app/tools/room-reimagination",
+      "run": 1,
+      "status": 200,
+      "ttfbMs": 30,
+      "lcpWithinWindowMs": 136,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 154490,
+      "resourceCount": 35
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/app/tools/room-reimagination",
+      "run": 2,
+      "status": 200,
+      "ttfbMs": 15,
+      "lcpWithinWindowMs": 80,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 19555,
+      "resourceCount": 35
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/app/tools/room-reimagination",
+      "run": 3,
+      "status": 200,
+      "ttfbMs": 13,
+      "lcpWithinWindowMs": 84,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 19544,
+      "resourceCount": 35
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/app/renders",
+      "run": 1,
+      "status": 200,
+      "ttfbMs": 15,
+      "lcpWithinWindowMs": 152,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 296924,
+      "resourceCount": 42
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/app/renders",
+      "run": 2,
+      "status": 200,
+      "ttfbMs": 13,
+      "lcpWithinWindowMs": 92,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 20079,
+      "resourceCount": 42
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "route": "/app/renders",
+      "run": 3,
+      "status": 200,
+      "ttfbMs": 16,
+      "lcpWithinWindowMs": 76,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 20080,
+      "resourceCount": 42
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/en",
+      "run": 1,
+      "status": 200,
+      "ttfbMs": 11,
+      "lcpWithinWindowMs": 156,
+      "layoutShiftSumWithinWindow": 0.0045,
+      "transferredBytes": 988757,
+      "resourceCount": 58
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/en",
+      "run": 2,
+      "status": 200,
+      "ttfbMs": 12,
+      "lcpWithinWindowMs": 76,
+      "layoutShiftSumWithinWindow": 0.0001,
+      "transferredBytes": 36992,
+      "resourceCount": 58
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/en",
+      "run": 3,
+      "status": 200,
+      "ttfbMs": 12,
+      "lcpWithinWindowMs": 72,
+      "layoutShiftSumWithinWindow": 0.0001,
+      "transferredBytes": 36987,
+      "resourceCount": 58
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/app/tools/room-reimagination",
+      "run": 1,
+      "status": 200,
+      "ttfbMs": 12,
+      "lcpWithinWindowMs": 124,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 251082,
+      "resourceCount": 46
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/app/tools/room-reimagination",
+      "run": 2,
+      "status": 200,
+      "ttfbMs": 14,
+      "lcpWithinWindowMs": 92,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 24362,
+      "resourceCount": 46
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/app/tools/room-reimagination",
+      "run": 3,
+      "status": 200,
+      "ttfbMs": 13,
+      "lcpWithinWindowMs": 80,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 24353,
+      "resourceCount": 46
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/app/renders",
+      "run": 1,
+      "status": 200,
+      "ttfbMs": 13,
+      "lcpWithinWindowMs": 124,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 359793,
+      "resourceCount": 55
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/app/renders",
+      "run": 2,
+      "status": 200,
+      "ttfbMs": 14,
+      "lcpWithinWindowMs": 92,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 31526,
+      "resourceCount": 55
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/app/renders",
+      "run": 3,
+      "status": 200,
+      "ttfbMs": 14,
+      "lcpWithinWindowMs": 92,
+      "layoutShiftSumWithinWindow": 0,
+      "transferredBytes": 31514,
+      "resourceCount": 55
+    }
+  ]
+}

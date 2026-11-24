@@ -147,8 +147,12 @@ test("private media authorizes only project editors and accepted image metadata"
   const ticket = await media.authorizeUpload(actor, request);
   assert.match(ticket.uploadUrl, /^signed-put:private\/vastu-workspace\//);
   assert.equal(getAsset()?.state, "PENDING");
+  const workspacePeer = { userId: "another-member", workspaceId: actor.workspaceId };
+  await assert.rejects(media.complete(workspacePeer, ticket.assetId), /access denied/);
   await assert.rejects(media.complete(other, ticket.assetId), /access denied/);
   await media.complete(actor, ticket.assetId);
+  await assert.rejects(media.authorizeDownload(workspacePeer, ticket.assetId), /access denied/);
+  await assert.rejects(media.deleteOwned(workspacePeer, ticket.assetId), /access denied/);
   await assert.rejects(
     media.authorizeDownload(other, ticket.assetId),
     /access denied/,
@@ -157,6 +161,8 @@ test("private media authorizes only project editors and accepted image metadata"
     await media.authorizeDownload(actor, ticket.assetId),
     /^signed-get:private\//,
   );
+  await media.deleteOwned(actor, ticket.assetId);
+  await assert.rejects(media.authorizeDownload(actor, ticket.assetId), /access denied/);
 });
 
 test("media validation rejects a mismatched object and deletion revokes access", async () => {

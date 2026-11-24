@@ -11,7 +11,8 @@ test("all 17 Studio workflows open directly and identify their active library", 
     const response = await page.goto(tool.route);
     expect(response?.status(), tool.route).toBe(200);
     await expect(page.locator(".studio-tool-switcher summary")).toContainText(tool.name);
-    await expect(page.locator("aside nav a[aria-current='page']")).toHaveAttribute("href", "/app/library");
+    await expect(page.locator("aside nav a[aria-current='location']")).toHaveAttribute("href", "/app/library");
+    await expect(page.locator("aside nav a[aria-current='page']")).toHaveCount(0);
     await expect(page).toHaveTitle(/Studio.*Vastu Nord/);
     await expect(page.locator(".inspector [role='status']").first()).toContainText("Bildegenerering er ikke aktivert");
     await expect(page.locator(".primary-action > button").first()).toBeDisabled();
@@ -33,4 +34,7 @@ test("Studio breadcrumb identifies the location without misnaming its destinatio
   await expect(breadcrumb).toContainText("Studio-bibliotek");
   await page.goto("/app");
   await expect(page.locator(".vn-workspace-bar > span").first()).not.toContainText(" / ");
+  await expect(page.locator("aside nav a[aria-current='page']")).toHaveAttribute("href", "/app");
+  await page.goto("/app/library");
+  await expect(page.locator("aside nav a[aria-current='page']")).toHaveAttribute("href", "/app/library");
 });

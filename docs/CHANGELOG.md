@@ -1,5 +1,10 @@
 # Development change log (compact)
 
+## 24 November 2026 · Navigation, privacy and performance follow-up
+
+- Corrected nested Studio navigation semantics while preserving active styling; focused local browser tests passed on all 17 editor routes. Extended isolated private-media tests for a second member in the same workspace and post-deletion denial.
+- Extended the local performance lab to cover the Studio editor and browser-reported transferred bytes. Eighteen signed-out, unthrottled localhost measurements are recorded for `b02680f`; they are not field or authenticated saved-result metrics.
+
 ## 24 November 2026 · Wide layouts, contrast and failure cases
 
 - Candidate source `b02680f` passed all 90 smoke tests, 62 unit tests and a locked-dependency offline Webpack build from its exact Git archive. This does not verify a remote checkout or Preview deployment.

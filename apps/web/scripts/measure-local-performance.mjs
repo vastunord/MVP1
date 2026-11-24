@@ -51,7 +51,9 @@ try {
           }
         }).observe({ type: "layout-shift", buffered: true });
       });
-      for (const route of (process.env.VN_PERF_QUICK ? [quickRoute] : ["/en", "/app", "/app/renders"])) {
+      // /app/renders is the signed-out shell only. A real saved-result journey
+      // needs an authenticated, owned artifact and is not measured by this lab.
+      for (const route of (process.env.VN_PERF_QUICK ? [quickRoute] : ["/en", "/app/tools/room-reimagination", "/app/renders"])) {
         for (let run = 1; run <= (process.env.VN_PERF_QUICK ? 1 : 3); run++) {
           const response = await page.goto(base + route, { waitUntil: "load" });
           // Fixed measurement window, not a test retry or readiness heuristic.
@@ -66,9 +68,10 @@ try {
             }
             const preload = [...document.querySelectorAll('link[rel="preload"][as="font"]')].length;
             const fontRequests = performance.getEntriesByType("resource").filter(entry => entry.name.includes("fonts.gstatic.com")).map(entry => ({initiator: entry.initiatorType, start: Math.round(entry.startTime), end: Math.round(entry.responseEnd)}));
-            return { ttfbMs: Math.round(navigation.responseStart), lcpWithinWindowMs: Math.round(window.__vnLab.lcp), layoutShiftSumWithinWindow: Number(window.__vnLab.cls.toFixed(4)), shifts: window.__vnLab.shifts, fontEvents: window.__vnLab.fontEvents, geometry: window.__vnLab.geometry, fontWidths, preload, fontRequests };
+            const resources = performance.getEntriesByType("resource");
+            return { ttfbMs: Math.round(navigation.responseStart), lcpWithinWindowMs: Math.round(window.__vnLab.lcp), layoutShiftSumWithinWindow: Number(window.__vnLab.cls.toFixed(4)), transferredBytes: navigation.transferSize + resources.reduce((sum, entry) => sum + entry.transferSize, 0), resourceCount: resources.length, shifts: window.__vnLab.shifts, fontEvents: window.__vnLab.fontEvents, geometry: window.__vnLab.geometry, fontWidths, preload, fontRequests };
           });
-          console.log(JSON.stringify({ viewport, route, run, status: response?.status(), ...data }));
+          console.log(JSON.stringify({ environment: "localhost lab; signed out; no network throttling; 1.5s post-load window; not field CWV", viewport, route, run, status: response?.status(), ...data }));
         }
       }
     } finally { await context.close(); }

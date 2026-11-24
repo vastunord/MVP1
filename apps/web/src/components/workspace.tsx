@@ -146,7 +146,7 @@ export function StudioShell({
                 .map((d) => (
                   <Link
                     key={d.href}
-                    aria-current={d.href === active?.href ? "page" : undefined}
+                    aria-current={d.href === active?.href ? (d.href === path ? "page" : "location") : undefined}
                     href={d.href}
                     aria-label={translated(d.title, locale)}
                     aria-describedby={"nav-" + d.icon + "-" + d.href.split("/").pop()}
