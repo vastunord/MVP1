@@ -1,4 +1,9 @@
 export const knowledgeTopics = ["budget", "staging", "interiors", "tools", "design", "material", "light", "floor"] as const;
+// Studio quick tips retain their editorial names; Nordic and Vastu are Design
+// subtopics in the same public/Studio filter taxonomy.
+export function quickTipTopic(id: string): string {
+  return id === "nordic" || id === "vastu" ? "design" : id;
+}
 export type KnowledgeState = { query: string; topic: number; page: number };
 
 export function readKnowledgeState(search: string): KnowledgeState {

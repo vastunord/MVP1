@@ -336,6 +336,16 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       return { id: "race-provider-2", status: "failed" };
     } };
     assert.equal((await syncJob(db, "fixture", actor, "pa", failedBrief.id, lateFailure)).state, "CANCELLED");
+    // Provider-reported cancellation is terminal; subsequent reads must not
+    // query the provider or attach a result. There is no user cancel API.
+    const cancelledBrief = parseRender({ ...input, id: randomUUID(), prompt: "Provider cancellation fixture" });
+    const cancellationIo = { ...io, async submit() { return { id: "cancel-provider", status: "queued" }; },
+      async check() { return { id: "cancel-provider", status: "canceled" }; } };
+    await startJob(db, config, actor, cancelledBrief, cancellationIo);
+    assert.equal((await syncJob(db, "fixture", actor, "pa", cancelledBrief.id, cancellationIo)).state, "CANCELLED");
+    const noRepoll = { ...cancellationIo, async check() { throw new Error("terminal job was polled again"); } };
+    assert.equal((await syncJob(db, "fixture", actor, "pa", cancelledBrief.id, noRepoll)).state, "CANCELLED");
+    assert.equal(writes.length, beforeRaceWrites, "cancellation does not attach output");
     // Structural fixture for trusted provider file intake. Actual codec playback requires a live job.
     function box(type, bytes) {
       const header = Buffer.alloc(8);

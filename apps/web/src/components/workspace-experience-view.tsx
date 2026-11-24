@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { publicHref, type Locale } from "@/lib/i18n";
-import { knowledgeSearch, knowledgeTopics, readKnowledgeState, type KnowledgeState } from "@/lib/knowledge-state";
+import { knowledgeSearch, knowledgeTopics, quickTipTopic, readKnowledgeState, type KnowledgeState } from "@/lib/knowledge-state";
 import { marketingResources } from "@/lib/marketing-resources";
 import type { StudyCard } from "@/lib/visual-studies";
 import { StudyPagination, studyPageSize } from "./study-pagination";
@@ -221,7 +221,7 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
   );
   const matches = guides.filter(
     (g) =>
-      (topic === "all" || topic === (g.id === "nordic" || g.id === "vastu" ? "design" : g.id)) &&
+      (topic === "all" || topic === quickTipTopic(g.id)) &&
       [
         t(g.topic[0], g.topic[1]),
         t(g.title[0], g.title[1]),

@@ -58,3 +58,28 @@ test("a failed status check retries the same job without another submission", as
   await expect.poll(() => checks).toBe(2);
   expect(submissions).toBe(1);
 });
+
+test("after reload a running job can be resumed from project history without another submission", async ({ page }) => {
+  let submissions = 0, checks = 0;
+  const row = { id: "synthetic-job", toolId: "room-reimagination", state: "RUNNING", media: "image", waitingForSubmission: false, sourceAssetId: "source", outputAssetId: null };
+  await page.route("**/api/studio/renders**", async route => {
+    if (route.request().method() === "GET") return route.fulfill({ json: [row] });
+    const input = route.request().postDataJSON();
+    if (input.action === "status") {
+      checks++;
+      expect(input.id).toBe(row.id);
+    } else submissions++;
+    return route.fulfill({ json: row });
+  });
+  await page.clock.install();
+  await page.goto("/poll");
+  await page.getByRole("checkbox").check();
+  await page.locator(".primary-action > button").first().click();
+  await expect(page.getByRole("status")).toHaveText("Rendering");
+  await page.reload();
+  await page.getByText("Project renders", { exact: true }).click();
+  await page.getByRole("button", { name: /Rendering · syntheti/ }).click();
+  await page.clock.fastForward(3000);
+  await expect.poll(() => checks).toBe(1);
+  expect(submissions).toBe(1);
+});

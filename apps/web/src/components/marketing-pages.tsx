@@ -474,8 +474,8 @@ function Pricing({ locale, t }: PageContext) {
               <p>
                 {i
                   ? t(
-                      "Betalte abonnement åpner først når priser og vilkår er godkjent.",
-                      "Paid subscriptions will open once prices and terms are approved.",
+                      "Betalte abonnement er ikke tilgjengelige i demonstrasjonen. Fremtidige planer og vilkår er ikke avklart.",
+                      "Paid subscriptions are unavailable in this demonstration. Future plans and terms have not been confirmed.",
                     )
                   : t(
                       "Bli kjent med de 17 arbeidsflytene og utforsk eksempelrom i Studio.",

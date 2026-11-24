@@ -16,3 +16,13 @@ for (const route of ["/", "/en", "/contact", "/en/contact", "/resources", "/en/r
     }
   });
 }
+
+for (const example of [
+  { route: "/pricing", copy: "Betalte abonnement er ikke tilgjengelige i demonstrasjonen. Fremtidige planer og vilkår er ikke avklart." },
+  { route: "/en/pricing", copy: "Paid subscriptions are unavailable in this demonstration. Future plans and terms have not been confirmed." },
+]) {
+  test(`${example.route} describes deferred subscriptions without promising a launch`, async ({ page }) => {
+    await page.goto(example.route);
+    await expect(page.getByText(example.copy, { exact: true })).toBeVisible();
+  });
+}
