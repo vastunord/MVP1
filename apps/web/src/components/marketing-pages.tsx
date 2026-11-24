@@ -749,11 +749,11 @@ function Contact({ locale, t }: PageContext) {
             <h2>{t("Send en melding", "Send a message")}</h2>
             <p>
               {t(
-                "Kontaktskjemaet er stengt i demonstrasjonen. Du kan lese guidene eller utforske Studio.",
-                "The contact form is closed in this demonstration. You can browse the guides or explore Studio.",
+                "Kontaktskjemaet er stengt i demonstrasjonen. Send oss gjerne en e-post, eller les guidene.",
+                "The contact form is closed in this demonstration. You can email us or browse the guides.",
               )}
             </p>
-            <p><a href="mailto:contact@vastu.no">contact@vastu.no</a></p>
+            <p><a href={`mailto:contact@vastu.no?subject=${encodeURIComponent(paths[subject][0])}`}>contact@vastu.no</a></p>
             <Action href={publicHref("/resources", locale)} secondary>
               {t("Se ressursene", "Browse resources")}
             </Action>
@@ -798,8 +798,8 @@ function Contact({ locale, t }: PageContext) {
               "Can I send project photos here?",
             ),
             t(
-              "Demonstrasjonen tar ikke imot prosjektbilder eller kontakthenvendelser.",
-              "This demonstration does not accept project photos or contact messages.",
+              "Demonstrasjonen tar ikke imot prosjektbilder eller meldinger via skjemaet. Du kan kontakte oss på e-post.",
+              "This demonstration does not accept project photos or messages through the form. You can contact us by email.",
             ),
           ],
         ]}
