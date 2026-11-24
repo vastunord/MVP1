@@ -157,3 +157,22 @@ test("a delayed previous-project image list cannot replace the selected project'
   await expect(page.getByTestId("selection")).toContainText('"projectId":"project-b"');
   await expect(page.getByTestId("selection")).toContainText('"sourceAssetId":"asset-b"');
 });
+
+test("actual Editor warns after reload and navigation when unsaved text and choices reset", async ({ page }) => {
+  await page.route("**/api/projects**", route => route.fulfill({ json: [] }));
+  await page.goto("/editor");
+  await page.locator("#prompt").fill("Private synthetic brief");
+  await page.getByRole("radio", { name: "Japandi" }).check();
+  const stored = await page.evaluate(() => JSON.stringify(sessionStorage));
+  expect(stored).not.toContain("Private synthetic brief");
+  await page.reload();
+  await expect(page.getByRole("status").filter({ hasText: "previous unsaved description and settings" })).toBeVisible();
+  await expect(page.locator("#prompt")).toHaveValue("");
+  await expect(page.getByRole("radio", { name: "Japandi" })).not.toBeChecked();
+  await page.locator("#prompt").fill("Another private fixture");
+  await page.getByRole("link", { name: "Other fixture page" }).click();
+  await expect(page.getByRole("heading", { name: "Other fixture page" })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("status").filter({ hasText: "previous unsaved description and settings" })).toBeVisible();
+  await expect(page.locator("#prompt")).toHaveValue("");
+});

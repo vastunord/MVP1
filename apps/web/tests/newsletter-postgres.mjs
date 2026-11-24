@@ -119,7 +119,21 @@ test("newsletter DDL, consent, withdrawal, retry and rate limits work in isolate
       await request("bounded", input, new Date(+now + hour)),
       "duplicate",
     );
-    assert.equal(await db.newsletterSubscriber.count(), 2);
+    const parallel = { email: "parallel@example.invalid", locale: "nb-NO" };
+    const beforeParallel = messages.length;
+    const concurrent = await Promise.all(
+      Array.from({ length: 4 }, (_, index) => request(`parallel-${index}`, parallel)),
+    );
+    assert.equal(concurrent.filter((outcome) => outcome === "requested").length, 1);
+    assert.equal(concurrent.filter((outcome) => outcome === "duplicate").length, 3);
+    assert.equal(messages.length, beforeParallel + 1, "parallel requests send one synthetic confirmation");
+    const reserved = await db.newsletterSubscriber.findUniqueOrThrow({ where: { email: parallel.email } });
+    assert.equal(reserved.locale, "nb-NO");
+    assert.equal(await request("parallel-retry", parallel, new Date(+now + hour / 6 + 1)), "requested");
+    const retried = await db.newsletterSubscriber.findUniqueOrThrow({ where: { email: parallel.email } });
+    assert.equal(retried.id, reserved.id, "retry reuses the existing pending subscriber");
+    assert.equal(messages.length, beforeParallel + 2);
+    assert.equal(await db.newsletterSubscriber.count(), 3);
   } finally {
     await db?.$disconnect();
     await socket.stop();

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   visibleControls,
@@ -167,7 +167,21 @@ export function Editor({
   const [result, setResult] = useState<StudioResult | null>(null);
   const [workflow, setWorkflow] = useState<StudioWorkflow>("design");
   const [preview, setPreview] = useState("");
+  const [draftNotice, setDraftNotice] = useState(false);
   const english = locale === "en";
+  useEffect(() => {
+    let active = true;
+    queueMicrotask(() => {
+      if (!active) return;
+      try {
+        if (sessionStorage.getItem("vn-unsaved-editor-settings") === "yes") {
+          sessionStorage.removeItem("vn-unsaved-editor-settings");
+          setDraftNotice(true);
+        }
+      } catch { /* Optional notice only. */ }
+    });
+    return () => { active = false; };
+  }, []);
   const room = tool.id === "room-reimagination";
   const enhance = tool.id === "resolution-enhancement";
   const video = workflow === "video";
@@ -186,7 +200,12 @@ export function Editor({
     />
   );
   return (
-    <div className="studio-editor">
+    <div className="studio-editor" onInputCapture={(event) => {
+      if (event.target instanceof Element && event.target.closest(".studio-prompt, .room-settings, .avoid-detail, .inspector-group .studio-choices")) {
+        try { sessionStorage.setItem("vn-unsaved-editor-settings", "yes"); } catch { /* Optional notice only. */ }
+      }
+    }}>
+      {draftNotice && <p role="status" className="inspector-help">{english ? "Your previous unsaved description and settings were not retained. Please review and enter them again." : "Den forrige ulagrede beskrivelsen og innstillingene ble ikke beholdt. Kontroller og legg dem inn på nytt."}</p>}
       <div className="editor-topbar">
         <Link href="/app/library"><span aria-hidden="true">← </span>{t.open}</Link>
         <StudioToolSwitcher tool={tool} locale={locale} sample={sample} />
