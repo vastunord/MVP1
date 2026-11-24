@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation checkpoint
 
+At local source `b8c274a`, a delayed response from an old project can no longer update a newly selected project's canvas; controlled browser and isolated partial-storage retry tests passed without a new provider submission. Privacy copy now says results are saved only after storage completes. Fresh build, four localized marketing checks and 18 sampled contrast/reflow checks passed. The initial narrow reflow and stale-selector failures are retained below; these results are not live rendering, actual browser zoom or WCAG conformance.
+
 Local checkpoint `7f0cc02` adds repeat-safe provider-reported cancellation and manual recovery of a running job after reload in synthetic tests; it does not claim automatic recovery or user cancellation. All eight Knowledge topic filters were checked in both languages in public and Studio views on the current build. Pricing copy no longer promises a subscription launch; two localized browser checks passed. Webpack build passed; the full smoke suite needs a final rerun after these later source changes.
 
 At local source `9ff3a51f0ab09c8ddfc30ec6443fe4b88f51da4d`, conditional Studio selections and hidden unsupported values are tested against the same server contract, and route-specific Studio titles avoid private identifiers. Webpack build and nine focused browser checks passed; a separate controlled newsletter/overlay suite passed 30/30. The prior complete smoke suite passed 78/78 before these later source changes, so the final integrated regression remains required. These are local checks only; the older Preview was not updated.

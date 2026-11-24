@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Fixed a reproduced project-switch race without cancelling the accepted server job; synthetic browser/database recovery tests passed. Qualified privacy copy and passed sampled contrast/reflow checks. Remaining live and assistive-device gates are unchanged.
+
 - Verified both-language Knowledge taxonomy, provider-reported cancellation and manual same-job recovery using local synthetic tests. Pricing now describes deferred subscriptions without promising a launch. Fresh build and focused browser checks passed; final combined regression remains pending.
 
 - Added server/client conditional-control checks and privacy-safe route-specific Studio titles; current build and nine focused browser checks passed. The controlled newsletter and overlay suite passed 30/30 without delivery. A final combined regression remains necessary after later work.
