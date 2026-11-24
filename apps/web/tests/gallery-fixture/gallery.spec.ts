@@ -75,11 +75,35 @@ test("after reload a running job can be resumed from project history without ano
   await page.goto("/poll");
   await page.getByRole("checkbox").check();
   await page.locator(".primary-action > button").first().click();
-  await expect(page.getByRole("status")).toHaveText("Rendering");
+  await expect(page.locator(".primary-action").getByRole("status")).toHaveText("Rendering");
   await page.reload();
   await page.getByText("Project renders", { exact: true }).click();
   await page.getByRole("button", { name: /Rendering · syntheti/ }).click();
   await page.clock.fastForward(3000);
   await expect.poll(() => checks).toBe(1);
   expect(submissions).toBe(1);
+});
+
+test("a late response from the previous project cannot replace the new project's canvas", async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  let posts = 0;
+  await page.route("**/api/studio/renders", async route => {
+    posts++;
+    const request = route.request().postDataJSON();
+    expect(request.projectId).toBe("project");
+    await gate;
+    return route.fulfill({ json: { id: "old-job", state: "SUCCEEDED", media: "image", sourceAssetId: "old-source", outputAssetId: "old-result", waitingForSubmission: false } });
+  });
+  await page.goto("/poll");
+  await page.getByRole("checkbox").check();
+  await page.locator(".primary-action > button").first().click();
+  await expect(page.locator(".primary-action > button").first()).toBeDisabled();
+  await page.getByRole("button", { name: "Switch project" }).click();
+  const response = page.waitForResponse("**/api/studio/renders");
+  release();
+  await response;
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+  await expect(page.getByTestId("result")).toBeEmpty();
+  await expect.poll(() => posts).toBe(1);
 });

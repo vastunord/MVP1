@@ -52,6 +52,11 @@ export function StudioRenderAction({
     [error, setError] = useState("");
   const requestKey = useRef({ id: "", body: "" });
   const submitting = useRef(false);
+  const mounted = useRef(false);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
   const [resync, setResync] = useState(0);
   const projectId = selection.projectId;
   const needsLocation = [
@@ -157,6 +162,9 @@ export function StudioRenderAction({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...payload, id: requestKey.current.id }),
       });
+      // A project switch remounts this action. The accepted server-side job
+      // remains in its original project; do not move its result to the new UI.
+      if (!mounted.current) return;
       if (!response.ok) {
         setError(
           response.status === 402
@@ -178,10 +186,12 @@ export function StudioRenderAction({
         return;
       }
       const result: RenderStatus = await response.json();
+      if (!mounted.current) return;
       setJob(result);
       onResult(null);
       if (result.outputAssetId) onResult(renderResult(result));
     } catch {
+      if (!mounted.current) return;
       setError(
         en
           ? "Connection interrupted. Retry the same brief."
@@ -189,7 +199,7 @@ export function StudioRenderAction({
       );
     } finally {
       submitting.current = false;
-      setBusy(false);
+      if (mounted.current) setBusy(false);
     }
   }
   async function list() {

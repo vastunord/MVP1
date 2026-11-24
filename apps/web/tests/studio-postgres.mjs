@@ -283,12 +283,40 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     await assert.rejects(syncJob(db, "fixture", actor, "pa", input.id, expiredOutput), /temporarily unavailable/);
     assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
     assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).outputAssetId } }), 0);
+    // Simulate the Blob write succeeding before the database attachment fails.
+    let writtenBeforeDbFailure;
+    const dbFailureIo = { ...io, async writeOutput(key) { writtenBeforeDbFailure = key; } };
+    const failingDatabase = { renderJob: db.renderJob, async $transaction(callback, options) {
+      return db.$transaction(tx => callback(new Proxy(tx, { get(target, key) {
+        if (key === "asset") return new Proxy(target.asset, { get(asset, operation) {
+          if (operation === "create") return async () => { throw new Error("synthetic database attachment failure"); };
+          return Reflect.get(asset, operation, asset);
+        } });
+        return Reflect.get(target, key, target);
+      } })), options);
+    } };
+    await assert.rejects(syncJob(failingDatabase, "fixture", actor, "pa", input.id, dbFailureIo), /database attachment failure/);
+    assert.equal(writtenBeforeDbFailure, "private/wa/" + (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).outputAssetId + ".webp");
+    assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
+    assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).outputAssetId } }), 0);
     assert.equal(submissions, 2, "an expired provider URL must not trigger a new submission");
     const failingStorage = { ...io, async writeOutput() { throw new Error("synthetic storage interruption"); } };
     await assert.rejects(syncJob(db, "fixture", actor, "pa", input.id, failingStorage), /storage interruption/);
     assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
     assert.equal(submissions, 2, "saving failure must not submit another provider job");
-    const done = await syncJob(db, "fixture", actor, "pa", input.id, io);
+    let partiallyWrittenKey;
+    const partialStorage = { ...io, async writeOutput(key) {
+      partiallyWrittenKey = key;
+      throw new Error("synthetic interruption after writing the object");
+    } };
+    await assert.rejects(syncJob(db, "fixture", actor, "pa", input.id, partialStorage), /after writing/);
+    assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
+    assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).outputAssetId } }), 0);
+    const resumedStorage = { ...io, async writeOutput(key, bytes, mime) {
+      assert.equal(key, partiallyWrittenKey, "retry reuses the deterministic private object key");
+      return io.writeOutput(key, bytes, mime);
+    } };
+    const done = await syncJob(db, "fixture", actor, "pa", input.id, resumedStorage);
     assert.equal(submissions, 2, "saving retry must reuse the provider job");
     assert.equal(done.state, "SUCCEEDED");
     assert.ok(
