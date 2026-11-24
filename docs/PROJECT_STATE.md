@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation checkpoint
 
+Later local source `588f5fae31fb9b0e6be6950b2c2e761dce755e34` adds explicit project-history recovery guidance and states that an unconfirmed submission will not be sent automatically. A controlled gallery/poll fixture passed 7/7, public-route metadata passed 2/2 in both languages, and sampled reject/accept consent-network checks passed with external requests blocked. These are local/synthetic checks. Webpack build passed; the full 83-test smoke and isolated archive build were on earlier source `a1d7c16` and must not be attributed to this later source. The actual Editor fixture separately passed 6/6, with a localized notice when unsaved prompt/settings were lost; no draft text was stored.
+
 At `a1d7c16dd73d8ce86899fb580181f4cbbaa187ed`, fresh Webpack build, 83 smoke tests, 61 unit tests, TypeScript, ESLint and isolated Prisma/project/render tests passed. An isolated Git archive installed the lockfile from cache offline and built successfully; this does not verify the remote repository or any deployed target. The temporary archive was removed. `go-live/RELEASE_CHECKLIST.md` records this source SHA and rollback/gate guidance as a draft, not a commercial release.
 
 At local source `b8c274a`, a delayed response from an old project can no longer update a newly selected project's canvas; controlled browser and isolated partial-storage retry tests passed without a new provider submission. Privacy copy now says results are saved only after storage completes. Fresh build, four localized marketing checks and 18 sampled contrast/reflow checks passed. The initial narrow reflow and stale-selector failures are retained below; these results are not live rendering, actual browser zoom or WCAG conformance.
