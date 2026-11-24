@@ -63,3 +63,44 @@ test("saved project image is cleared when switching to a different project", asy
   await expect(page.getByTestId("preview")).toBeEmpty();
   await expect(page.getByTestId("selection")).toContainText('"sourceAssetId":""');
 });
+
+test("delayed creation prevents duplicates; locale switch retains draft and client navigation requests reselection", async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  let posts = 0;
+  const projects: { id: string; name: string }[] = [];
+  await page.route("**/api/workspaces/personal", route => route.fulfill({ status: 201, json: { id: "workspace" } }));
+  await page.route("**/api/projects**", async route => {
+    if (route.request().url().includes("/assets")) return route.fulfill({ json: [] });
+    if (route.request().method() === "GET") return route.fulfill({ json: projects });
+    posts++;
+    await gate;
+    projects.push({ id: "project-a", name: "Living room" });
+    return route.fulfill({ status: 201, json: projects[0] });
+  });
+  await page.goto("/");
+  await page.getByLabel("Describe the room").fill("Retain draft");
+  await page.getByLabel("Room setting").fill("Oak");
+  await page.getByText("Create project", { exact: true }).click();
+  await page.getByLabel("Project name").fill("Living room");
+  const create = page.getByRole("button", { name: "Create project and continue" });
+  await create.click();
+  await expect(page.getByRole("button", { name: "Creating…" })).toBeDisabled();
+  expect(posts).toBe(1);
+  release();
+  await expect(page.getByText("Project created. Choose an image.")).toBeVisible();
+  await page.getByLabel("Choose or drop an image").setInputFiles({ name: "synthetic.png", mimeType: "image/png", buffer: Buffer.from("fixture") });
+  await page.getByRole("button", { name: "Switch language" }).click();
+  await expect(page.getByText("synthetic.png")).toBeVisible();
+  await expect(page.getByLabel("Describe the room")).toHaveValue("Retain draft");
+  await expect(page.getByLabel("Room setting")).toHaveValue("Oak");
+  await expect(page.getByRole("radio", { name: "Living room" })).toBeChecked();
+  await page.getByRole("link", { name: "Other page" }).click();
+  await expect(page.getByRole("heading", { name: "Other fixture page" })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByText("Your unsaved image was not retained. Choose it again.")).toBeVisible();
+  await expect(page.getByText("synthetic.png")).toHaveCount(0);
+  await expect(page.getByLabel("Describe the room")).toHaveValue("");
+  await expect(page.getByLabel("Room setting")).toHaveValue("Warm");
+  await expect(page.getByRole("radio", { name: "Living room" })).toBeChecked();
+});

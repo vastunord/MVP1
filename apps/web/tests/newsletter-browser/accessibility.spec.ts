@@ -56,10 +56,10 @@ test("cookie and Prana controls reflow in a 195 by 225 CSS-pixel viewport", asyn
 });
 
 for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
-  test(`keyboard focus stays visible on ${route} at a 640px reflow viewport`, async ({ page }) => {
-    // 640 CSS pixels is equivalent to a 1280px layout viewport at 200% zoom,
-    // but does not exercise the browser's zoom control or assistive technology.
-    await page.setViewportSize({ width: 640, height: 512 });
+  for (const width of [390, 640, 768]) test(`keyboard focus stays visible on ${route} at ${width}px`, async ({ page }) => {
+    // 640 CSS pixels also exercises a 1280px layout's 200% reflow equivalent;
+    // it does not exercise the browser's zoom control or assistive technology.
+    await page.setViewportSize({ width, height: 512 });
     await page.addInitScript(() => {
       localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
       localStorage.setItem("vn-newsletter-display", JSON.stringify({ version: 1, state: "confirmed" }));
@@ -83,5 +83,30 @@ for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/
       expect(state.visible, `Focused element outside viewport: ${state.description}`).toBe(true);
       expect(state.unobscured, `Focused element obscured: ${state.description}`).toBe(true);
     }
+  });
+}
+
+for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
+  test(`a main-content action can receive visible keyboard focus on ${route}`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => {
+      localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
+      localStorage.setItem("vn-newsletter-display", JSON.stringify({ version: 1, state: "confirmed" }));
+    });
+    await page.goto(route);
+    const target = route.includes("room-reimagination")
+      ? page.locator("#prompt")
+      : page.locator("main a:visible, main button:visible:not(:disabled), main input:visible:not(:disabled), main textarea:visible:not(:disabled)").first();
+    await expect(target).toBeVisible();
+    await target.focus();
+    await expect(target).toBeFocused();
+    const visible = await target.evaluate((node) => {
+      const rect = node.getBoundingClientRect();
+      const x = Math.max(0, Math.min(innerWidth - 1, rect.left + rect.width / 2));
+      const y = Math.max(0, Math.min(innerHeight - 1, rect.top + rect.height / 2));
+      const hit = document.elementFromPoint(x, y);
+      return rect.top < innerHeight && rect.bottom > 0 && !!hit && (node === hit || node.contains(hit));
+    });
+    expect(visible).toBe(true);
   });
 }
