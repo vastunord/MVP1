@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Verified both-language Knowledge taxonomy, provider-reported cancellation and manual same-job recovery using local synthetic tests. Pricing now describes deferred subscriptions without promising a launch. Fresh build and focused browser checks passed; final combined regression remains pending.
+
 - Added server/client conditional-control checks and privacy-safe route-specific Studio titles; current build and nine focused browser checks passed. The controlled newsletter and overlay suite passed 30/30 without delivery. A final combined regression remains necessary after later work.
 
 - Verified unavailable generation across all 17 Studio routes with zero intercepted provider submissions; added select-value contract coverage. Corrected duplicate brand titles on localized account recovery/verification pages and passed fresh-build browser checks.

@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation checkpoint
 
+Local checkpoint `7f0cc02` adds repeat-safe provider-reported cancellation and manual recovery of a running job after reload in synthetic tests; it does not claim automatic recovery or user cancellation. All eight Knowledge topic filters were checked in both languages in public and Studio views on the current build. Pricing copy no longer promises a subscription launch; two localized browser checks passed. Webpack build passed; the full smoke suite needs a final rerun after these later source changes.
+
 At local source `9ff3a51f0ab09c8ddfc30ec6443fe4b88f51da4d`, conditional Studio selections and hidden unsupported values are tested against the same server contract, and route-specific Studio titles avoid private identifiers. Webpack build and nine focused browser checks passed; a separate controlled newsletter/overlay suite passed 30/30. The prior complete smoke suite passed 78/78 before these later source changes, so the final integrated regression remains required. These are local checks only; the older Preview was not updated.
 
 At local source `ef34e18c35f332386b6e9aa2a3d44efe15eda863`, the current Webpack build passed; all 17 signed-out Studio routes displayed the unavailable-generation state and disabled action with zero intercepted provider POSTs. Localized recovery/verification page-title tests passed after correcting duplicate brand titles. The complete 78-test smoke pass was on the immediately preceding product revision, before the account-title change; a four-test focused rerun including those titles and the 17-route check passed on the new build. Prisma schema validation and ESLint passed locally. No new MNML request or deployment occurred.
