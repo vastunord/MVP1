@@ -2,7 +2,7 @@
 
 ## Local remediation candidate — not approved for release
 
-Current local source candidate `78f78f1047b026b40b0592a73d2803e7f56fee80` passed 107 smoke tests, targeted accessibility checks and a Webpack build from its exact isolated Git archive using offline locked dependencies. The 62-unit-test and recovery results were recorded on an earlier source. These are local results; the archive does not verify a remote checkout. The protected Preview remains the older `a048c9d` diagnostic build. Before any authorized release, verify the chosen remote SHA, target configuration and migration history, then smoke-test that deployment and retain the rollback procedure below.
+Current local source candidate `0b8c924efbe0ce4af4873614b2364a0be9ed3a1f` passed 126 smoke tests, targeted accessibility checks and a Webpack build from its exact isolated Git archive using offline locked dependencies. The 62-unit-test and recovery results were recorded on an earlier source. These are local results; the archive does not verify a remote checkout. The protected Preview remains the older `a048c9d` diagnostic build. Before any authorized release, verify the chosen remote SHA, target configuration and migration history, then smoke-test that deployment and retain the rollback procedure below.
 
 The candidate is on `feat/v7-brand-photo-entry`. An authorized remote publication and target-specific deployment decision remain required. No migration or paid generation was introduced by these local increments.
 

@@ -2,6 +2,7 @@
 
 ## 24 November 2026 · Mobile Studio section links
 
+- Candidate `0b8c924` passed 126 browser smoke tests and an offline locked-dependency Webpack build from its exact archive. Earlier unit and isolated recovery results predate this CSS change.
 - Adjusted mobile section-navigation spacing and wrapping after fixed launchers covered portions of both links at narrow widths. Local geometry/clipping checks passed in both languages across three widths and heights; pointer, simulated-touch and keyboard checks passed separately. Physical devices and arbitrary scrolling remain unverified.
 
 ## 24 November 2026 · Mobile pointer activation and evidence
