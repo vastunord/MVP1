@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Mobile Studio focus and fixed controls
 
+Current local source candidate `c9499cfdd4b18d846a7e330dfda9fd102448a980` passed 102 browser smoke tests and an offline locked-dependency Webpack build from its exact Git archive. The archive is local evidence, not a remote checkout or deployment.
+
 A stricter local keyboard check found partial overlaps between focused Studio controls and fixed cookie/Prana launchers at 390px width. CSS scroll padding alone and padding plus scroll margin each left a failure, because an element can be inside the viewport while underneath a launcher. The mobile editor now centers an actionable focused control only if its rectangle intersects a launcher; already-clear controls and the scroll region are left alone. A fresh Webpack build, TypeScript, targeted ESLint and seven focused browser checks passed at heights 600, 750 and 900px. This does not prove arbitrary static content or real-device behavior.
 
 ## 24 November 2026 · Responsive evidence and mobile notice
