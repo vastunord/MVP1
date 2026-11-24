@@ -17,6 +17,8 @@ import {
 import { isStudioMp4 } from "../src/server/studio-video.ts";
 import { createPrivateMedia } from "../src/server/media.ts";
 import { createPrismaMediaRepository } from "../src/server/prisma-media-repository.ts";
+import { projectService } from "../src/server/projects.ts";
+import { prismaProjectStore } from "../src/server/prisma-project-store.ts";
 
 const require = createRequire(import.meta.url);
 const dev = createRequire(
@@ -106,6 +108,21 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         },
       });
     }
+    // Exercise the actual project service and Prisma store with synthetic users.
+    for (const id of ["project-owner", "project-other"]) {
+      await db.user.create({ data: { id, email: `${id}@example.invalid`, emailVerified: true } });
+    }
+    const projects = projectService(prismaProjectStore(db));
+    const space = await projects.createWorkspace("project-owner", "Synthetic home");
+    assert.deepEqual(await projects.createWorkspace("project-owner", "Synthetic home"), space);
+    await projects.createWorkspace("project-other", "Other home");
+    const projectKey = randomUUID();
+    const createdProject = await projects.create("project-owner", "Synthetic room", null, projectKey);
+    assert.deepEqual(await projects.create("project-owner", "Synthetic room", null, projectKey), createdProject);
+    assert.equal((await projects.list("project-owner")).length, 1);
+    assert.deepEqual(await projects.list("project-other"), []);
+    await assert.rejects(projects.get("project-other", createdProject.id), /Project not found/);
+    await assert.rejects(projects.update("project-other", createdProject.id, { name: "Unauthorized" }), /Project not found/);
     const input = {
       id: randomUUID(),
       toolId: "room-reimagination",
