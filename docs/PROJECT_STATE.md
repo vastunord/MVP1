@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Mobile Studio section links
+
+The Studio section navigation now uses a mobile inset and narrow-screen wrapping to keep its links clear of the fixed corner launchers in sampled initial views. Local geometry/clipping checks passed 18/18 for Norwegian and English at widths 320, 360 and 390px and heights 600, 750 and 900px; the related pointer, simulated-touch, keyboard and availability suite passed 21/21 before the final locale assertions. The first inset alone failed two Norwegian narrow cases and was adjusted. A local build passed. Arbitrary scroll positions, physical devices and screen readers remain unverified.
+
 ## 24 November 2026 · Mobile pointer activation and refreshed evidence
 
 Current local source candidate `78f78f1047b026b40b0592a73d2803e7f56fee80` passed 107 browser smoke tests and built from its exact Git archive using offline locked dependencies. This does not establish a remote checkout or deployment.

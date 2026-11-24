@@ -47,6 +47,17 @@
   color: white;
   font-size: 0.77rem;
 }
+@media (max-width: 767px) {
+  .room-section-links {
+    padding-inline-start: 3rem;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 375px) {
+  .room-section-links {
+    padding-inline-end: 7rem;
+  }
+}
 .room-section-links a {
   display: inline-flex;
   align-items: center;
