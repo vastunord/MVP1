@@ -34,6 +34,16 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
           setStatus("signin");
           return;
         }
+        // A verified first-time user has no personal workspace yet; the
+        // projects API reports that case as 403. Offer the empty state.
+        if (response.status === 403) {
+          setProjects([]);
+          setProject("");
+          setRenders([]);
+          setSelected(null);
+          setStatus("ready");
+          return;
+        }
         if (!response.ok) throw new Error("Projects unavailable");
         const rows = (await response.json()) as Project[];
         setProjects(rows);

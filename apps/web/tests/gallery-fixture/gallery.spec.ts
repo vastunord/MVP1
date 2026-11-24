@@ -2,6 +2,41 @@ import { expect, test } from "@playwright/test";
 
 // Synthetic browser responses exercise gallery UI only, not API authorization.
 const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64");
+test("gallery distinguishes sign-in, first workspace, loading and error recovery", async ({ page }) => {
+  let current = 401;
+  let release!: () => void;
+  let gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route("**/api/projects", async route => {
+    const status = current;
+    await gate;
+    return status === 200 ? route.fulfill({ json: [] }) : route.fulfill({ status });
+  });
+  await page.goto("/");
+  await expect(page.getByText("Loading projects…")).toBeVisible();
+  release();
+  await expect(page.getByRole("link", { name: "Sign in to see your renders" })).toBeVisible();
+  current = 403;
+  gate = new Promise<void>(resolve => { release = resolve; });
+  await page.reload();
+  await expect(page.getByText("Loading projects…")).toBeVisible();
+  release();
+  await expect(page.getByText("Create a project to save renders.")).toBeVisible();
+  current = 500;
+  gate = new Promise<void>(resolve => { release = resolve; });
+  await page.reload();
+  release();
+  await expect(page.getByText("Could not load saved renders.")).toBeVisible();
+  current = 200;
+  await page.getByRole("button", { name: "Try again" }).click();
+  await expect(page.getByText("Create a project to save renders.")).toBeVisible();
+});
+test("an owned project with no completed renders has a distinct empty state", async ({ page }) => {
+  await page.route("**/api/projects", route => route.fulfill({ json: [{ id: "project", name: "Synthetic project" }] }));
+  await page.route("**/api/studio/renders?**", route => route.fulfill({ json: [] }));
+  await page.goto("/");
+  await expect(page.getByText("No saved renders in this project yet.")).toBeVisible();
+  await expect(page.getByRole("button", { name: /View result/ })).toHaveCount(0);
+});
 for (const missing of ["source", "output"] as const) {
   test(`gallery explains a missing ${missing} separately`, async ({ page }) => {
     await page.route("**/api/projects", route => route.fulfill({ json: [{ id: "project", name: "Synthetic project" }] }));
