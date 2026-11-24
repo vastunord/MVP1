@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Aligned two unsupported Studio choices with server validation; corrected untrusted verification-status copy; tested synthetic OAuth cancellation/return paths; expanded five bilingual guides. The integrated build, 57 unit tests and 7 Studio/Knowledge browser checks passed. Further synthetic intake and keyboard checks pass; actual zoom and live onboarding remain open.
+
 - Tightened publication eligibility for missing/unsupported MIME and unknown origins; local consent and editorial fixtures pass. Added expired-output, deleted-source and same-job retry coverage without new provider submissions. Added sampled unobscured-focus checks; live publication, actual zoom and assistive technology remain unverified.
 
 - Gallery result errors now distinguish a missing original from a missing output and hide an unusable comparison; 3 controlled UI-only tests passed. A proposed font preload was removed after an unbuffered rebuild failed to reproduce the earlier buffered test's improvement; the cold-load shift remains open.
