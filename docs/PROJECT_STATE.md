@@ -2,7 +2,7 @@
 
 ## 24 November 2026 · Additional accessibility and recovery evidence
 
-Source checkpoint `364dd2519851e013d75c8a7172222c4156158046` passed a fresh Webpack build and 90/90 integrated browser smoke tests. The offline archive recorded below was performed on earlier source `2787993`. Subsequent local changes add a contrasting edge to homepage and Studio comparison dividers, tested against synthetic white and black image backgrounds, and an isolated Google state-cookie rejection test. Their full integrated regression and exact-candidate archive verification remain outstanding.
+Source candidate `b02680fd7822a12e41e851582c2cd0536a930f63` passed 90/90 integrated browser smoke tests, 62 unit tests and an offline locked-dependency Webpack build from its exact Git archive. It includes a contrasting edge to homepage and Studio comparison dividers, tested against synthetic white and black backgrounds, and an isolated Google state-cookie rejection test. The archive is local evidence and is not proof of a remote checkout or deployment.
 
 The local closing-image overlay was strengthened after a conservative rendered-pixel sample found the white heading's worst-background contrast bound below 4.5:1 at 390 and 768px. After the change, the bound passed at 390, 768 and 1440px; this is not a glyph-by-glyph or full accessibility audit. Four signed-out journeys passed the added 2560px reflow check; the Studio inspector stayed at or below 400px. The homepage slider remained keyboard-operable while Prana was open. These are local browser checks, not physical-device, zoom or screen-reader evidence.
 
