@@ -91,7 +91,7 @@ test("optional providers gate independently of working email authentication", ()
   );
 });
 
-test("Better Auth starts each browser flow and rejects Google and Apple cancellations without creating accounts", async () => {
+test("Better Auth starts each browser flow and rejects provider cancellations without creating accounts", async () => {
   const config = oauthConfiguration(configured);
   const records = { verification: [], user: [], account: [], session: [] };
   const auth = betterAuth({
@@ -131,7 +131,7 @@ test("Better Auth starts each browser flow and rejects Google and Apple cancella
     assert.equal(destination.searchParams.get("redirect_uri"), callback);
     const state = destination.searchParams.get("state");
     assert.ok(state);
-    if (provider === "google") {
+    if (provider === "google" || provider === "github") {
       const cookie = response.headers.getSetCookie().find((entry) => entry.includes(".state="));
       assert.ok(cookie);
       const cancellation = new URL(callback);
@@ -193,5 +193,27 @@ test("Better Auth starts each browser flow and rejects Google and Apple cancella
       records.user.length + records.account.length + records.session.length,
       0,
     );
+  }
+});
+
+test("social sign-in rejects an external callback destination", async () => {
+  const records = { verification: [], user: [], account: [], session: [] };
+  const auth = betterAuth({
+    ...oauthConfiguration(configured),
+    database: memoryAdapter(records),
+    baseURL: origin,
+    secret: email.BETTER_AUTH_SECRET,
+    account: { accountLinking: { enabled: false }, storeStateStrategy: "database", skipStateCookieCheck: false },
+    logger: { disabled: true },
+  });
+  for (const field of ["callbackURL", "errorCallbackURL"] as const) {
+    const body = { provider: "google", callbackURL: "/app", errorCallbackURL: "/en/login?oauth=incomplete", disableRedirect: true, [field]: "https://untrusted.example.invalid/return" };
+    const response = await auth.handler(new Request(origin + "/api/auth/sign-in/social", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: origin },
+      body: JSON.stringify(body),
+    }));
+    assert.equal(response.status, 403, `${field} must not accept an external origin`);
+    assert.equal(records.user.length + records.account.length + records.session.length, 0);
   }
 });

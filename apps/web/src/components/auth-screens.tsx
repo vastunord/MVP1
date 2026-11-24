@@ -185,8 +185,8 @@ export function AuthScreen({
         {query.get("verified") === "1" && mode === "login" && (
           <p role="status">
             {en
-              ? "Email verified. You can sign in."
-              : "E-post bekreftet. Du kan logge inn."}
+              ? "If you verified your email, you can now try signing in."
+              : "Hvis du har bekreftet e-posten, kan du nå prøve å logge inn."}
           </p>
         )}
         {mode === "login" && query.get("oauth") === "incomplete" && (
