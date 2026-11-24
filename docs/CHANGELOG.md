@@ -1,5 +1,10 @@
 # Development change log (compact)
 
+## 24 November 2026 · Wide layouts, contrast and failure cases
+
+- Strengthened the existing closing-image gradient; conservative rendered-background contrast checks pass at 390, 768 and 1440px. Added 2560px reflow and bounded inspector checks, plus homepage slider keyboard operation with Prana open. These are local checks and do not establish physical-device or screen-reader conformance.
+- Added isolated provider-failure and ambiguous-timeout cases. An initial synthetic fixture interfered with later reconciliation; it passed after closing that fixture. No live provider failure or network outage was tested.
+
 ## 24 November 2026 · Current remediation candidate
 
 - Source `2787993` includes Studio intake and recovery, private-gallery empty/error handling, overlay and accessibility fixes, qualified content and localized metadata. Smoke passed 85/85, newsletter/accessibility fixtures 80/80, intake 7/7, gallery/recovery 9/9, and 61 unit tests, TypeScript, ESLint and Prisma schema validation passed. An isolated archive of that exact source built with offline locked dependencies. These local fixtures are distinct from live cloud evidence.

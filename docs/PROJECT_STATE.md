@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Additional accessibility and recovery evidence
+
+The local closing-image overlay was strengthened after a conservative rendered-pixel sample found the white heading's worst-background contrast bound below 4.5:1 at 390 and 768px. After the change, the bound passed at 390, 768 and 1440px; this is not a glyph-by-glyph or full accessibility audit. Four signed-out journeys passed the added 2560px reflow check; the Studio inspector stayed at or below 400px. The homepage slider remained keyboard-operable while Prana was open. These are local browser checks, not physical-device, zoom or screen-reader evidence.
+
+An isolated PGlite/Prisma fixture now tests provider-reported failure as terminal and an ambiguous synthetic submission timeout without automatic resend; an explicit replay preserves the job ID and payload. The first fixture run exposed interference with a later reconciler and passed after closing the synthetic job. This does not prove actual provider behavior or network recovery. No paid generation or cloud action occurred.
+
 ## 24 November 2026 · Current local candidate
 
 Source candidate `2787993e6ce43a34ddf12c665f0848dfa68ee11b` on `feat/v7-brand-photo-entry` includes first-project intake and draft/race recovery, guarded Studio choices, private-gallery empty and missing-image states, consent/newsletter/Prana overlay fixes, localized Knowledge and metadata improvements, and qualified public claims. All 17 Studio routes remain. The full browser smoke suite passed 85/85, newsletter/accessibility fixtures 80/80, gallery/recovery fixtures 9/9, and 61 unit tests, TypeScript, ESLint and Prisma schema validation passed. An isolated archive of that source installed offline from the lockfile and passed the Webpack build. Local mocked browser checks, isolated database/service checks and live Preview evidence are separate; none proves an authenticated saved-render journey.

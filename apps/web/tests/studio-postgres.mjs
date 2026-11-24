@@ -374,6 +374,46 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     const noRepoll = { ...cancellationIo, async check() { throw new Error("terminal job was polled again"); } };
     assert.equal((await syncJob(db, "fixture", actor, "pa", cancelledBrief.id, noRepoll)).state, "CANCELLED");
     assert.equal(writes.length, beforeRaceWrites, "cancellation does not attach output");
+    // A provider-reported failure is terminal and must not fetch or attach an output.
+    const providerFailure = parseRender({ ...input, id: randomUUID(), prompt: "Provider failure fixture" });
+    let failedSubmissions = 0, failedChecks = 0;
+    const providerFailureIo = { ...io,
+      async submit() { failedSubmissions++; return { id: "failed-provider", status: "queued" }; },
+      async check() { failedChecks++; return { id: "failed-provider", status: "failed", charged_usd: 0.2, refunded_usd: 0.2 }; },
+      async fetchFile() { throw new Error("failed job fetched output"); },
+      async writeOutput() { throw new Error("failed job stored output"); },
+    };
+    await startJob(db, config, actor, providerFailure, providerFailureIo);
+    const failedResult = await syncJob(db, "fixture", actor, "pa", providerFailure.id, providerFailureIo);
+    assert.equal(failedResult.state, "FAILED");
+    assert.equal((await syncJob(db, "fixture", actor, "pa", providerFailure.id, providerFailureIo)).state, "FAILED");
+    assert.equal((await startJob(db, config, actor, providerFailure, providerFailureIo)).state, "FAILED");
+    assert.equal(failedChecks, 1, "terminal failure is not polled again");
+    assert.equal(failedSubmissions, 1, "terminal failure is not resubmitted");
+    assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: providerFailure.id } })).outputAssetId } }), 0);
+
+    // An ambiguous provider timeout is not a confirmed rejection. Only an explicit
+    // replay uses the same persisted job ID and byte-identical request payload.
+    const timeoutBrief = parseRender({ ...input, id: randomUUID(), prompt: "Submission timeout fixture" });
+    const timeoutPayloads = [];
+    const timeoutIo = { ...io, async submit(_key, brief, source, references) {
+      timeoutPayloads.push(JSON.stringify({ brief, source, references }));
+      if (timeoutPayloads.length === 1) throw new DOMException("Synthetic timeout", "TimeoutError");
+      return { id: "timeout-provider", status: "queued" };
+    } };
+    await assert.rejects(startJob(db, config, actor, timeoutBrief, timeoutIo), { name: "TimeoutError" });
+    const timedOut = await db.renderJob.findUniqueOrThrow({ where: { id: timeoutBrief.id } });
+    assert.equal(timedOut.state, "QUEUED");
+    assert.equal(timedOut.providerJobId, null);
+    assert.equal(timeoutPayloads.length, 1, "timeout is not automatically resubmitted");
+    const resumed = await startJob(db, config, actor, timeoutBrief, timeoutIo);
+    assert.equal(resumed.id, timeoutBrief.id);
+    assert.equal(resumed.state, "RUNNING");
+    assert.equal(timeoutPayloads.length, 2);
+    assert.equal(timeoutPayloads[0], timeoutPayloads[1], "explicit replay keeps provider idempotency payload stable");
+    await syncJob(db, "fixture", actor, "pa", timeoutBrief.id, {
+      ...timeoutIo, async check() { return { id: "timeout-provider", status: "canceled" }; },
+    });
     // Structural fixture for trusted provider file intake. Actual codec playback requires a live job.
     function box(type, bytes) {
       const header = Buffer.alloc(8);

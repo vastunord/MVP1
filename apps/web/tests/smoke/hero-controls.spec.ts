@@ -26,3 +26,22 @@ for (const item of [
     await expect(slider).toHaveValue("1");
   });
 }
+
+test("homepage comparison remains keyboard-operable while Prana is open", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => {
+    localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
+    localStorage.setItem("vn-newsletter-display", JSON.stringify({ version: 1, state: "confirmed" }));
+  });
+  await page.goto("/en");
+  await page.getByRole("button", { name: "Open Prana assistant", exact: true }).click();
+  const panel = page.getByRole("dialog", { name: "VastuNord Prana" });
+  await expect(panel).toBeVisible();
+  const slider = page.locator(".photo-hero-stage").getByRole("slider", { name: "Compare before and after" });
+  await slider.focus();
+  await slider.press("Home");
+  await slider.press("ArrowRight");
+  await expect(slider).toHaveValue("1");
+  await expect(panel).toBeVisible();
+});

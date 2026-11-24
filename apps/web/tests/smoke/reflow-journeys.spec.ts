@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 
 // 640 CSS pixels approximates the layout viewport of a 1280px screen at 200%
 // zoom. It does not claim to test browser zoom or a physical touch device.
-for (const width of [390, 640, 768, 1280, 1440, 1920]) {
+for (const width of [390, 640, 768, 1280, 1440, 1920, 2560]) {
   for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
-    test(`local ${route} reflows at ${width}px with keyboard access`, async ({ page }) => {
+    test(`local ${route} reflows at ${width}px with keyboard access`, async ({ page }, testInfo) => {
       await page.setViewportSize({ width, height: 900 });
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.addInitScript(() => {
@@ -13,6 +13,16 @@ for (const width of [390, 640, 768, 1280, 1440, 1920]) {
       await page.goto(route);
       await expect(page.locator("body")).toBeVisible();
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+      if (width === 2560) {
+        if (route.includes("/tools/")) {
+          const inspector = page.locator(".inspector");
+          await expect(inspector).toBeVisible();
+          const bounds = await inspector.boundingBox();
+          expect(bounds).not.toBeNull();
+          expect(bounds!.width).toBeLessThanOrEqual(400);
+        }
+        await page.screenshot({ path: testInfo.outputPath("wide-viewport.png"), fullPage: true });
+      }
       for (let index = 0; index < 4; index++) {
         await page.keyboard.press("Tab");
         const focus = page.locator(":focus-visible");

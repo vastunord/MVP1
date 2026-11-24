@@ -389,7 +389,7 @@
 }
 .mk-closing::before {
   background:
-    linear-gradient(90deg, color-mix(in srgb, var(--navy) 92%, transparent), color-mix(in srgb, var(--navy) 36%, transparent)),
+    linear-gradient(90deg, color-mix(in srgb, var(--navy) 92%, transparent), color-mix(in srgb, var(--navy) 75%, transparent)),
     var(--closing-photo) center 60% / cover;
 }
 .mk-closing h2 {
