@@ -164,8 +164,8 @@ export function StudioShell({
       <main id="main" className="workspace-main vn-main">
         <div className="vn-workspace-bar">
           <span>
-            <Link href="/app">{en ? "Open Studio" : "Åpne Studio"}</Link>
-            {active && <> / {active.href === "/app/library" ? (en ? "Workflow" : "Arbeidsflyt") : translated(active.title, locale)}</>}
+            <Link href="/app">Studio</Link>
+            {active && active.href !== "/app" && <> / {translated(active.title, locale)}</>}
           </span>
           <button
             className="vn-search-button"

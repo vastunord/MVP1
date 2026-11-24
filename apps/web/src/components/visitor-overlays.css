@@ -191,6 +191,8 @@ body:has(.vn-workspace) {
 }
 .vn-panel-heading h2 {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font: 620 1.13rem/1.25 var(--font-brand);
   letter-spacing: -0.035em;
   display: flex;

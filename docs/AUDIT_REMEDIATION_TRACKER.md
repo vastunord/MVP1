@@ -21,7 +21,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | VN-10: OAuth cancellation and forged state | VERIFIED_LOCAL with Better Auth memory adapter | Real Google linking, callback and returning sign-in require controlled interactive account. |
 | VN-11: cross-user private asset | VERIFIED_LOCAL in isolated fixtures | Test the exact existing synthetic Preview artifact with a second verified account when available. |
 | VN-12/13: full accessibility and responsive journeys | PARTIAL: 24 local width/reflow and keyboard-focus checks passed on signed-out states | Test actual zoom, focus obscuration, authenticated states and real assistive devices. |
-| VN-14/15: navigation labels and personal/example distinction | IMPLEMENTED_UNVERIFIED in full | Verify all routes, empty/error states and ownership. |
+| VN-14/15: navigation labels and personal/example distinction | PARTIAL: all 17 direct routes, breadcrumb and signed-out example labeling VERIFIED_LOCAL | Verify authenticated private-gallery empty/error states and ownership. |
 | VN-19: newsletter delay/consent/retry/dismissal | VERIFIED_LOCAL with intercepted synthetic responses | Verify real delivery only when separately authorized and configured. |
 | VN-21: shared Knowledge filtering and return state | VERIFIED_LOCAL: state unit tests and public/Studio browser return journeys | Review remaining taxonomy/locales and editorial depth. |
 | VN-22/23: provenance and operator information | PARTIAL: removed unsourced numeric claims; contact is present | Confirm image rights, Payload publication rules, legal entity and qualified policy review. |

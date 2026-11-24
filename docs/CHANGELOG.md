@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Fixed Prana heading reflow at a very narrow CSS viewport and clarified Studio breadcrumbs. Fresh-build browser tests passed for the overlay and all 17 routes. The initial breadcrumb assertion included the search shortcut; a scoped selector passed on rerun. Investigated, but have not yet changed, the measured font-swap layout shift.
+
 - Localized contact fallback now includes the chosen topic; 2 browser tests passed without sending messages. Reflow/keyboard checks passed 24 scenarios; real zoom, touch and assistive technology remain unverified. Cold mobile layout shift was reproduced in a local lab and remains under investigation, without a field-metric claim.
 
 - Corrected project-creation focus and added an unsaved-image reselection notice. Two isolated browser tests pass with controlled HTTP responses; the real project service and Prisma store separately pass isolated two-user and idempotency checks.
