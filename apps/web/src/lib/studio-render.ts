@@ -9,6 +9,13 @@ export const renderEngines = [
 ] as const;
 export type RenderEngine = (typeof renderEngines)[number]["id"];
 export type BriefValues = Record<string, string | number | boolean>;
+// These modes need capabilities that are not implemented in the shared editor.
+export function unsupportedStudioOption(toolId: string, controlId: string, value: string) {
+  return controlId === "mode" && (
+    (toolId === "visual-cleanup" && value === "Brush & delete") ||
+    (toolId === "resolution-enhancement" && value === "Manual controls")
+  );
+}
 export const sceneWorkflows = [
   { id: "design", en: "Design from photo", nb: "Design fra bilde" },
   { id: "sketch", en: "Sketch to scene", nb: "Fra skisse til motiv" },

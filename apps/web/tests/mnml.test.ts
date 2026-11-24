@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { renderEngines } from "../src/lib/studio-render.ts";
+import { renderEngines, unsupportedStudioOption } from "../src/lib/studio-render.ts";
 import {
   previewPool,
   previewRole,
@@ -116,6 +116,14 @@ test("Only tool-compatible workflows are accepted", () => {
     "upscale",
   );
   assert.throws(() => parseRender({ ...input, workflow: "upscale" }));
+});
+test("unsupported manual controls share the same client and server policy", () => {
+  for (const [toolId, value] of [["visual-cleanup", "Brush & delete"], ["resolution-enhancement", "Manual controls"]]) {
+    assert.equal(unsupportedStudioOption(toolId, "mode", value), true);
+    assert.throws(() => parseRender({ ...input, toolId, values: { mode: value } }));
+  }
+  assert.equal(unsupportedStudioOption("visual-cleanup", "mode", "AI object editing"), false);
+  assert.equal(unsupportedStudioOption("resolution-enhancement", "mode", "Auto enhance"), false);
 });
 test("MNML validates asset selection, options, consent and single-image mode before dispatch", () => {
   for (const change of [

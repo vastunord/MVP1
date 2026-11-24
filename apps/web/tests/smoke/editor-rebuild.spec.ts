@@ -126,3 +126,12 @@ test("unspecified outdoor controls share one disclosure", async ({ page }) => {
   await expect(unavailable).toContainText("Omgivelser");
   await expect(page.locator(".primary-action button")).toBeDisabled();
 });
+
+test("unsupported manual modes are explained and cannot be selected", async ({ page }) => {
+  await page.goto("/app/tools/visual-cleanup");
+  await expect(page.getByRole("radio", { name: "Brush & delete (utilgjengelig)" })).toBeDisabled();
+  await expect(page.getByRole("radio", { name: "AI object editing" })).toBeEnabled();
+  await page.goto("/app/tools/resolution-enhancement");
+  await expect(page.getByRole("radio", { name: "Manual controls (utilgjengelig)" })).toBeDisabled();
+  await expect(page.getByRole("radio", { name: "Auto enhance" })).toBeEnabled();
+});

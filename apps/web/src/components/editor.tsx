@@ -25,6 +25,7 @@ import {
   renderMode,
   sceneWorkflows,
   supportedWorkflows,
+  unsupportedStudioOption,
   type StudioWorkflow,
   type StudioResult,
   type RenderEngine,
@@ -36,11 +37,13 @@ function Field({
   value,
   onChange,
   locale,
+  toolId,
 }: {
   control: Control;
   value: string | number | boolean | undefined;
   onChange: (value: string | number | boolean) => void;
   locale: Locale;
+  toolId: string;
 }) {
   const id = "option-" + control.id;
   const text = (label: string) => roomLabel(label, locale);
@@ -117,7 +120,11 @@ function Field({
           ? control.id
           : "compact"
       }
-      choices={options.map((v) => ({ value: v, label: text(v) }))}
+      choices={options.map((v) => ({
+        value: v,
+        label: text(v) + (unsupportedStudioOption(toolId, control.id, v) ? (locale === "en" ? " (unavailable)" : " (utilgjengelig)") : ""),
+        disabled: unsupportedStudioOption(toolId, control.id, v),
+      }))}
       onChange={(v) => onChange(control.kind === "toggle" ? v === "On" : v)}
     />
   );
@@ -431,6 +438,7 @@ export function Editor({
                         >
                           <Field
                             control={c}
+                            toolId={tool.id}
                             value={values[c.id]}
                             locale={locale}
                             onChange={(v) =>

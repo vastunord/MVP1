@@ -6,6 +6,7 @@ import {
   renderMode,
   sceneWorkflows,
   supportedWorkflows,
+  unsupportedStudioOption,
   type BriefValues,
 } from "../lib/studio-render.ts";
 
@@ -179,7 +180,7 @@ export function parseRender(input: Record<string, unknown>) {
   } else if (workflow !== "design")
     throw new RenderError(400, "Workflow unavailable for this tool");
   else if (tool.id === "resolution-enhancement") {
-    if (values.mode === "Manual controls" || prompt || avoid)
+    if (unsupportedStudioOption(tool.id, "mode", String(values.mode)) || prompt || avoid)
       throw new RenderError(
         400,
         "Automatic enhancement uses the source image only",
@@ -187,7 +188,7 @@ export function parseRender(input: Record<string, unknown>) {
     endpoint = "enhancements";
     fields = { kind: "enhance" };
   } else {
-    if (tool.id === "visual-cleanup" && values.mode === "Brush & delete")
+    if (unsupportedStudioOption(tool.id, "mode", String(values.mode)))
       throw new RenderError(400, "This operation requires a brush mask");
     if (!prompt)
       throw new RenderError(400, "Describe the change and its location");
