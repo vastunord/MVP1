@@ -127,14 +127,18 @@ export function PrivateUpload({
   const focusUploadAfterCreate = useRef(false);
   const checkedReloadHint = useRef(false);
   useEffect(() => {
-    if (checkedReloadHint.current) return;
-    checkedReloadHint.current = true;
-    try {
-      if (sessionStorage.getItem("vn-unsaved-studio-image") === "yes") {
-        sessionStorage.removeItem("vn-unsaved-studio-image");
-        setStatus(en ? "Your unsaved image was not retained. Choose it again." : "Det ulagrede bildet ble ikke beholdt. Velg det på nytt.");
-      }
-    } catch { /* Storage may be unavailable in private browsing. */ }
+    let active = true;
+    queueMicrotask(() => {
+      if (!active || checkedReloadHint.current) return;
+      checkedReloadHint.current = true;
+      try {
+        if (sessionStorage.getItem("vn-unsaved-studio-image") === "yes") {
+          sessionStorage.removeItem("vn-unsaved-studio-image");
+          setStatus(en ? "Your unsaved image was not retained. Choose it again." : "Det ulagrede bildet ble ikke beholdt. Velg det på nytt.");
+        }
+      } catch { /* Storage may be unavailable in private browsing. */ }
+    });
+    return () => { active = false; };
   }, [en]);
   useEffect(() => {
     if (focusUploadAfterCreate.current && project && !creating) {

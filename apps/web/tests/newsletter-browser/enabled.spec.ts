@@ -103,24 +103,44 @@ test("Norwegian dark theme has a usable invitation and dismissal", async ({ page
   await expect(page.getByRole("button", { name: "Nyhetsbrev", exact: true })).toBeFocused();
 });
 
-test("the offer waits while Prana is open and never interrupts Studio or sign-in", async ({ page }) => {
+test("Prana pauses the newsletter timer and the offer resumes after closing", async ({ page }) => {
   await page.clock.install();
   await page.addInitScript(() => {
     localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
   });
   await page.goto("/en");
   await page.bringToFront();
+  const launcher = page.getByRole("button", { name: "Open Prana assistant" });
+  await expect(launcher).toBeVisible();
+  await page.clock.runFor(100);
   await page.clock.fastForward(10_000);
-  await page.getByRole("button", { name: "Open Prana assistant" }).click();
+  await launcher.click();
+  await expect(page.getByRole("dialog", { name: "VastuNord Prana" })).toBeVisible();
   await page.clock.fastForward(40_000);
-  await expect(page.getByRole("dialog", { name: "Vastu Nord newsletter" })).toHaveCount(0);
+  const offer = page.getByRole("dialog", { name: "Vastu Nord newsletter" });
+  await expect(offer).toHaveCount(0);
   await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "VastuNord Prana" })).toHaveCount(0);
+  // Run the next animation frame so the close handler restores focus before
+  // advancing the offer timer; real users also get that frame before 27s elapse.
+  await page.clock.runFor(100);
+  await expect(launcher).toBeFocused();
   await page.clock.fastForward(18_000);
-  await expect(page.getByRole("dialog", { name: "Vastu Nord newsletter" })).toBeVisible();
-  await page.keyboard.press("Escape");
-  for (const route of ["/en/signin", "/app/tools/room-reimagination"]) {
+  await expect(offer).toBeVisible();
+});
+
+test("enabled newsletter does not interrupt sign-in or Studio", async ({ page }) => {
+  await page.clock.install();
+  await page.addInitScript(() => {
+    localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
+  });
+  for (const route of ["/en/login", "/app/tools/room-reimagination"]) {
     await page.goto(route);
+    await page.bringToFront();
+    await page.clock.runFor(100);
     await page.clock.fastForward(60_000);
-    await expect(page.getByRole("dialog", { name: "Vastu Nord newsletter" })).toHaveCount(0);
+    await expect(page.getByRole("dialog", { name: /Vastu Nord newsletter|Nyhetsbrev fra Vastu Nord/ })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /Newsletter|Nyhetsbrev/, exact: true })).toHaveCount(0);
   }
 });
+

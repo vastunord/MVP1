@@ -1,5 +1,12 @@
 # Development change log (compact)
 
+## 24 November 2026 · Single-run remediation
+
+- Corrected project-creation focus and added an unsaved-image reselection notice. Two isolated browser tests pass with controlled HTTP responses; the real project service and Prisma store separately pass isolated two-user and idempotency checks.
+- Restricted unverified model choices and ignored controls; added boundary and OAuth cancellation/forged-state tests. Added Knowledge filter/return persistence and removed unsupported numeric image claims.
+- Local results: 54 unit tests; TypeScript, full ESLint and Webpack build; 24 combined browser checks, 8 enabled-newsletter checks and 9 hero checks passed. The last reload-effect correction needs inclusion in the final combined build. Newsletter and browser responses were synthetic; no live provider claim.
+- Initial local fixture and lint failures and repairs are recorded in project state. Approved visual assets, exact Figma parity and the live saved-result flow remain open.
+
 ## 24 November 2026 · Remediation continuation
 
 - Added a file-backed PGlite close/reopen test for synthetic owner, project, private asset and job records. It passes locally and is not a network-reconnection or outage test.

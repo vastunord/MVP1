@@ -1,1 +1,2 @@
-export default { devIndicators: false, agentRules: false };
+const config = { devIndicators: false, agentRules: false };
+export default config;
