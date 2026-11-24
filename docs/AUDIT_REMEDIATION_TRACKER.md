@@ -17,10 +17,10 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | VN-06: local persistence and retry | VERIFIED_LOCAL: file-backed PGlite reopen and simulated history/storage failures | Genuine Prisma/network reconnection and live recovery remain unverified. |
 | VN-07/20: Prana and overlay separation | VERIFIED_LOCAL: non-modal browser checks and newsletter tests at three widths | Assess active uploads, zoom, keyboard and real assistive devices. |
 | VN-08/18: matching before/after visual authority | BLOCKED_EXTERNAL for final pair and exact Figma comparison; keyboard, reduced-motion and slider-extreme behavior VERIFIED_LOCAL in 9 hero tests | Obtain owner-approved same-room pair and frames; separately assess real touch and crops. |
-| VN-09: usable contact fallback | IMPLEMENTED_UNVERIFIED for full topic/form paths | Test both locales and enabled/error paths without sending email. |
+| VN-09: usable contact fallback | VERIFIED_LOCAL: all four topic-specific mail links in both locales; no message sent | The disabled website form has no implemented live success/error path. |
 | VN-10: OAuth cancellation and forged state | VERIFIED_LOCAL with Better Auth memory adapter | Real Google linking, callback and returning sign-in require controlled interactive account. |
 | VN-11: cross-user private asset | VERIFIED_LOCAL in isolated fixtures | Test the exact existing synthetic Preview artifact with a second verified account when available. |
-| VN-12/13: full accessibility and responsive journeys | READY | Execute keyboard, zoom, reflow and viewport checks; separately record real assistive-device gaps. |
+| VN-12/13: full accessibility and responsive journeys | PARTIAL: 24 local width/reflow and keyboard-focus checks passed on signed-out states | Test actual zoom, focus obscuration, authenticated states and real assistive devices. |
 | VN-14/15: navigation labels and personal/example distinction | IMPLEMENTED_UNVERIFIED in full | Verify all routes, empty/error states and ownership. |
 | VN-19: newsletter delay/consent/retry/dismissal | VERIFIED_LOCAL with intercepted synthetic responses | Verify real delivery only when separately authorized and configured. |
 | VN-21: shared Knowledge filtering and return state | VERIFIED_LOCAL: state unit tests and public/Studio browser return journeys | Review remaining taxonomy/locales and editorial depth. |

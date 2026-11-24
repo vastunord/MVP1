@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Localized contact fallback now includes the chosen topic; 2 browser tests passed without sending messages. Reflow/keyboard checks passed 24 scenarios; real zoom, touch and assistive technology remain unverified. Cold mobile layout shift was reproduced in a local lab and remains under investigation, without a field-metric claim.
+
 - Corrected project-creation focus and added an unsaved-image reselection notice. Two isolated browser tests pass with controlled HTTP responses; the real project service and Prisma store separately pass isolated two-user and idempotency checks.
 - Restricted unverified model choices and ignored controls; added boundary and OAuth cancellation/forged-state tests. Added Knowledge filter/return persistence and removed unsupported numeric image claims.
 - Local results: 54 unit tests; TypeScript, full ESLint and Webpack build; 24 combined browser checks, 8 enabled-newsletter checks and 9 hero checks passed. The last reload-effect correction needs inclusion in the final combined build. Newsletter and browser responses were synthetic; no live provider claim.
