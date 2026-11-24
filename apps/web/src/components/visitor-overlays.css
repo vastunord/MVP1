@@ -175,6 +175,7 @@ body:has(.vn-workspace) {
   background: color-mix(in srgb, var(--ink) 32%, transparent);
 }
 .vn-visitor-dialog.vn-prana-dialog {
+  z-index: 20;
   left: auto;
   right: max(1rem, env(safe-area-inset-right));
 }

@@ -220,6 +220,14 @@ test("gallery requires rights, editorial review, and separate user consents", ()
     true,
   );
   assert.equal(canPublish({ ...base, withdrawn: true }, "GALLERY"), false);
+  // Company media is not a user grant, but rights and a review for the exact
+  // destination remain mandatory, including after a withdrawal.
+  const company = { ...base, origin: "COMPANY_DEMO" as const, activeConsentChannels: [] as const };
+  assert.equal(canPublish(company, "GALLERY"), true);
+  assert.equal(canPublish(company, "PINTEREST"), true);
+  assert.equal(canPublish({ ...company, approvedReviewChannels: ["GALLERY"] }, "PINTEREST"), false);
+  assert.equal(canPublish({ ...company, rightsVerified: false }, "GALLERY"), false);
+  assert.equal(canPublish({ ...company, withdrawn: true }, "PINTEREST"), false);
   assert.equal(
     canPublish({ ...base, rightsVerified: false }, "GALLERY"),
     false,

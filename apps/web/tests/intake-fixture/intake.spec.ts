@@ -86,7 +86,7 @@ test("delayed creation prevents duplicates; locale switch retains draft and clie
   const create = page.getByRole("button", { name: "Create project and continue" });
   await create.click();
   await expect(page.getByRole("button", { name: "Creating…" })).toBeDisabled();
-  expect(posts).toBe(1);
+  await expect.poll(() => posts).toBe(1);
   release();
   await expect(page.getByText("Project created. Choose an image.")).toBeVisible();
   await page.getByLabel("Choose or drop an image").setInputFiles({ name: "synthetic.png", mimeType: "image/png", buffer: Buffer.from("fixture") });
@@ -175,4 +175,44 @@ test("actual Editor warns after reload and navigation when unsaved text and choi
   await page.goBack();
   await expect(page.getByRole("status").filter({ hasText: "previous unsaved description and settings" })).toBeVisible();
   await expect(page.locator("#prompt")).toHaveValue("");
+});
+
+test("actual Editor retains tool, locale, brief, style and source through create failure and retry", async ({ page }) => {
+  const projects = [{ id: "first", name: "Existing" }];
+  let creations = 0;
+  await page.route("**/api/workspaces/personal", route => route.fulfill({ status: 201, json: { id: "workspace" } }));
+  await page.route("**/api/projects**", async route => {
+    if (route.request().url().includes("/assets")) return route.fulfill({ json: [] });
+    if (route.request().method() === "GET") return route.fulfill({ json: projects });
+    creations++;
+    if (creations === 1) return route.fulfill({ status: 503 });
+    projects.push({ id: "second", name: "New room" });
+    return route.fulfill({ status: 201, json: projects[1] });
+  });
+  await page.goto("/editor");
+  await expect(page.locator(".studio-tool-switcher summary")).toContainText("Room Reimagination");
+  await page.locator("#prompt").fill("Keep the oak shelving");
+  await page.getByRole("radio", { name: "Japandi" }).check();
+  await page.getByLabel("Choose or drop an image").setInputFiles({ name: "source.png", mimeType: "image/png", buffer: Buffer.from("synthetic") });
+  await page.getByText("Create project", { exact: true }).click();
+  await page.getByLabel("Project name").fill("New room");
+  await page.getByRole("button", { name: "Create project and continue" }).click();
+  await expect(page.getByText("Could not create the project. Try again.")).toBeVisible();
+  await page.getByRole("button", { name: "Create project and continue" }).click();
+  await expect(page.getByText("Project created. Choose an image.")).toBeVisible();
+  await expect(page.getByRole("radio", { name: "New room" })).toBeChecked();
+  await expect(page.locator("#prompt")).toHaveValue("Keep the oak shelving");
+  await expect(page.getByRole("radio", { name: "Japandi" })).toBeChecked();
+  await expect(page.getByText("source.png")).toBeVisible();
+  await page.getByRole("radio", { name: "Existing" }).check();
+  await expect(page.locator("#prompt")).toHaveValue("Keep the oak shelving");
+  await expect(page.getByRole("radio", { name: "Japandi" })).toBeChecked();
+  await expect(page.getByText("source.png")).toBeVisible();
+  await page.getByRole("radio", { name: "New room" }).check();
+  await page.getByRole("button", { name: "Switch fixture locale" }).click();
+  await expect(page.locator(".studio-tool-switcher summary")).toContainText("Room Reimagination");
+  await expect(page.locator("#prompt")).toHaveValue("Keep the oak shelving");
+  await expect(page.getByRole("radio", { name: "Japandi" })).toBeChecked();
+  await expect(page.getByText("source.png")).toBeVisible();
+  await expect(page.getByRole("radio", { name: "New room" })).toBeChecked();
 });

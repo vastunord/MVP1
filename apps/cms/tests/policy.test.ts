@@ -5,6 +5,7 @@ import {
   staffRole,
   canPublish,
   approvedCover,
+  publishable,
 } from "../src/editorial-policy.ts";
 
 test("CMS configuration requires its dedicated secret, host, role, named database and TLS", () => {
@@ -73,4 +74,17 @@ test("only editorial staff can publish and only approved public photo paths qual
   assert.equal(approvedCover("/reference/editorial/home-close.webp"), true);
   assert.equal(approvedCover("/api/assets/private/download"), false);
   assert.equal(approvedCover("https://images.invalid/photo.webp"), false);
+});
+
+test("editorial publication requires rights evidence, approved image and complete copy in each locale", () => {
+  const copy = { title:"Synthetic title", summary:"Synthetic summary", body:"Synthetic article text", alt:"Synthetic image description" };
+  const base = { slug:"synthetic-article", sourceNote:"Synthetic rights record", rightsConfirmed:true, cover:"/reference/editorial/home-close.webp", nb:copy, en:copy };
+  assert.equal(publishable(base), true);
+  assert.equal(publishable({...base, rightsConfirmed:false}), false);
+  assert.equal(publishable({...base, sourceNote:"  "}), false);
+  assert.equal(publishable({...base, cover:"/api/assets/private/download"}), false);
+  assert.equal(publishable({...base, slug:" "}), false);
+  for (const locale of ["nb", "en"] as const) for (const field of ["title", "summary", "body", "alt"] as const) {
+    assert.equal(publishable({...base, [locale]:{...copy, [field]:" "}}), false, `${locale}.${field}`);
+  }
 });

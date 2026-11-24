@@ -46,6 +46,7 @@ for (const missing of ["source", "output"] as const) {
       return absent ? route.fulfill({ status: 404, body: "" }) : route.fulfill({ status: 200, contentType: "image/png", body: png });
     });
     await page.goto("/");
+    if (missing === "output") await expect(page.getByText("Preview unavailable")).toBeVisible();
     await page.getByRole("button", { name: /View result/ }).click();
     if (missing === "source") {
       await expect(page.locator(".vn-private-renders").getByRole("alert")).toContainText("original image is unavailable");

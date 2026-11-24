@@ -13,6 +13,7 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [project, setProject] = useState("");
   const [renders, setRenders] = useState<RenderStatus[]>([]);
+  const [failedThumbnails, setFailedThumbnails] = useState<string[]>([]);
   const [selected, setSelected] = useState<RenderStatus | null>(null);
   const [divider, setDivider] = useState(50);
   const [sourceError, setSourceError] = useState(false);
@@ -131,6 +132,7 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
           <button
             onClick={() => {
               setStatus("loading");
+              setFailedThumbnails([]);
               setAttempt((n) => n + 1);
             }}
           >
@@ -155,6 +157,7 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
                 if (item.id === project) return;
                 setProject(item.id);
                 setRenders([]);
+                setFailedThumbnails([]);
                 setSelected(null);
                 setStatus("loading");
               }}
@@ -182,14 +185,17 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
               setOutputError(false);
             }}
           >
-            {row.media === "image" && row.outputAssetId ? (
+            {row.media === "image" && row.outputAssetId && !failedThumbnails.includes(row.id) ? (
               <Image
                 unoptimized
                 width={768}
                 height={512}
                 src={url(row.outputAssetId)}
                 alt={en ? "Saved private render" : "Lagret privat bilde"}
+                onError={() => setFailedThumbnails((ids) => ids.includes(row.id) ? ids : [...ids, row.id])}
               />
+            ) : row.media === "image" ? (
+              <span>{en ? "Preview unavailable" : "Forhåndsvisning utilgjengelig"}</span>
             ) : (
               <span>{en ? "Saved video" : "Lagret video"}</span>
             )}
