@@ -5,6 +5,7 @@ import {
   renderEngines,
   renderMode,
   sceneWorkflows,
+  supportedWorkflows,
   type BriefValues,
 } from "../lib/studio-render.ts";
 
@@ -74,6 +75,8 @@ export function parseRender(input: Record<string, unknown>) {
     (level) => level.id === input.engine || level.providerId === input.engine,
   );
   if (!tool || !engine) throw new RenderError(400, "Invalid tool or engine");
+  if (!supportedWorkflows(tool.id, Boolean(tool.reference)).includes(workflow as import("../lib/studio-render.ts").StudioWorkflow))
+    throw new RenderError(400, "Workflow unavailable for this tool");
   const prompt = text(input.prompt, 4000),
     avoid = text(input.avoid ?? "", 1000);
   if (
@@ -93,6 +96,11 @@ export function parseRender(input: Record<string, unknown>) {
   const details = [];
   for (const field of options) {
     const v = values[field.id] ?? field.defaultValue;
+    if (field.kind === "range" && (field.min === undefined || field.max === undefined)) {
+      if (v !== undefined && v !== field.defaultValue)
+        throw new RenderError(400, "This adjustment is unavailable");
+      continue;
+    }
     if (
       v === undefined ||
       v === "" ||

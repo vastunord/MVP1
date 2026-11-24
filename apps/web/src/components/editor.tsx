@@ -24,6 +24,7 @@ import {
   renderEngines,
   renderMode,
   sceneWorkflows,
+  supportedWorkflows,
   type StudioWorkflow,
   type StudioResult,
   type RenderEngine,
@@ -69,6 +70,7 @@ function Field({
         </label>
         <input
           id={id}
+          disabled={control.min === undefined || control.max === undefined}
           type={control.min === undefined ? "number" : "range"}
           min={control.min}
           max={control.max}
@@ -78,8 +80,8 @@ function Field({
           }}
         />
         {control.min === undefined && (
-          <span className="small" lang="en">
-            Reference range limits not recorded; numeric input is provisional.
+          <span className="small">
+            {locale === "en" ? "This adjustment is not available yet." : "Denne justeringen er ikke tilgjengelig ennå."}
           </span>
         )}
       </div>
@@ -191,6 +193,7 @@ export function Editor({
             tabIndex={0}
             aria-label={t.controls}
           >
+            {!submissionEnabled && <p role="status" className="inspector-help">{english ? "Explore this workflow with a sample. Image generation is not enabled in this demo." : "Utforsk arbeidsflyten med et eksempel. Bildegenerering er ikke aktivert i denne demonstrasjonen."}</p>}
             <details className="inspector-group studio-engine room-drawer" open>
               <summary>
                 {english ? "Workflow and engine" : "Arbeidsflyt og motor"}
@@ -218,7 +221,7 @@ export function Editor({
                             },
                           ]
                         : sceneWorkflows
-                            .filter((w) => w.id !== "style" || tool.reference)
+                            .filter((w) => supportedWorkflows(tool.id, Boolean(tool.reference)).includes(w.id))
                             .map((w) => ({
                               value: w.id,
                               label: english ? w.en : w.nb,

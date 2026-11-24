@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const index = publicIndexingEnabled(process.env) &&
     (segments.length <= 1 ? indexableSections.some(section => section === (page || "")) : Boolean(article || journalArticle || (journal && segments.length===2)));
   return {
-    title:
+    title: !page ? { absolute: "Vastu Nord" } :
       journalArticle?.title ?? article?.name ?? (journal ? (locale==="en"?"Journal":"Tidsskrift") : undefined) ??
       (page === "gallery" ? (locale === "en" ? "Gallery" : "Galleri") : page === "privacy" ? privacyTitle(locale) : page && page in t ? t[page as MessageKey] : "Vastu Nord"),
     description: journalArticle?.summary ?? article?.intro ?? (page === "gallery"

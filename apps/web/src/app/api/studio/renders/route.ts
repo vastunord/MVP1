@@ -15,7 +15,9 @@ const privateHeaders = { "Cache-Control": "private, no-store" };
 
 async function handle(request: Request, write: boolean) {
   const provider = mnmlConfig();
-  if (!provider || !readServerConfig().uploadsEnabled)
+  // Saved history must remain available when new provider requests are off or
+  // the provider credential is unavailable. Writes still require a provider.
+  if (!readServerConfig().uploadsEnabled || (write && !provider))
     return Response.json(
       { error: "Rendering unavailable" },
       { status: 503, headers: privateHeaders },
@@ -44,14 +46,14 @@ async function handle(request: Request, write: boolean) {
       if (typeof input.id !== "string" || !jobIdPattern.test(input.id))
         throw new RenderError(400, "Invalid render ID");
       return Response.json(
-        await syncJob(ctx.db, provider.key, actor, id, input.id),
+        await syncJob(ctx.db, provider!.key, actor, id, input.id),
         { headers: privateHeaders },
       );
     }
     if (process.env.MNML_SUBMISSION_ENABLED !== "true")
       throw new RenderError(503, "New rendering is unavailable");
     const brief = parseRender(input);
-    return Response.json(await startJob(ctx.db, provider, actor, brief), {
+    return Response.json(await startJob(ctx.db, provider!, actor, brief), {
       status: 202,
       headers: privateHeaders,
     });

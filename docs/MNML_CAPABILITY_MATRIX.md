@@ -23,3 +23,5 @@ MNML documents render, edit, enhancement and video endpoints; its render modes i
 | Object Placement | Prompt edit | Precise placement and masks unverified |
 
 Configured controls are validated locally and supplied as prompt descriptions where supported; this does not establish that MNML honors each setting. Generated results remain private; server-side ownership checks and the Preview submission gate remain in force. No extra provider call was made during this assessment.
+
+24 November remediation: the client and server now allow the photo workflow and, where supported by the existing configuration, style references; resolution enhancement additionally permits upscale. Generic sketch, plan, masterplan, concept and video choices are held unavailable pending tool-specific validation. Range controls without established bounds are disabled and rejected when changed; their default values are not passed as prompt instructions. These restrictions are local changes, not a claim of live provider verification.

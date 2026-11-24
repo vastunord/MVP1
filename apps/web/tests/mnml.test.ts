@@ -96,38 +96,16 @@ test("All 17 editors select an appropriate provider operation", () => {
     "enhance",
   );
 });
-test("Scene, plan, style, concept and walkthrough modes use documented endpoints and fields", () => {
-  for (const [workflow, mode] of [
-    ["design", "interior"],
-    ["sketch", "interior"],
-    ["masterplan", "masterplan"],
-    ["plan", "plan"],
-  ]) {
-    assert.equal(parseRender({ ...input, workflow }).fields.mode, mode);
-  }
+test("Only tool-compatible workflows are accepted", () => {
+  assert.equal(parseRender({ ...input, workflow: "design" }).fields.mode, "interior");
   assert.equal(
     parseRender({ ...input, workflow: "style", referenceIds: ["photo-b"] })
       .fields.mode,
     "interior",
   );
   assert.throws(() => parseRender({ ...input, workflow: "style" }));
-  const textOnly = parseRender({ ...input, workflow: "concept" });
-  assert.equal(textOnly.fields.mode, "text-to-render");
-  assert.equal(textOnly.sourceAssetId, null);
-  assert.throws(() =>
-    parseRender({ ...input, workflow: "concept", prompt: "" }),
-  );
-  const video = parseRender({ ...input, workflow: "video" });
-  assert.equal(video.endpoint, "videos");
-  assert.deepEqual(video.fields, {
-    model: "v2.0-flash",
-    duration_seconds: 10,
-    camera_movement: "dolly-in",
-    motion: "subtle",
-  });
-  assert.throws(() =>
-    parseRender({ ...input, workflow: "video", referenceIds: ["photo-b"] }),
-  );
+  for (const workflow of ["sketch", "plan", "masterplan", "concept", "video"])
+    assert.throws(() => parseRender({ ...input, workflow }), /unavailable/);
   assert.equal(
     parseRender({
       ...input,
@@ -158,6 +136,10 @@ test("MNML validates asset selection, options, consent and single-image mode bef
   assert.notEqual(
     parseRender(input).hash,
     parseRender({ ...input, prompt: "Different brief" }).hash,
+  );
+  assert.throws(
+    () => parseRender({ ...input, toolId: "perspective-correction", values: { mode: "Fix distortion", vertical: 12 } }),
+    /unavailable/,
   );
 });
 test("One provider submission sends explicit private input and reuses the stable local key", async () => {

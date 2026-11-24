@@ -747,6 +747,7 @@ function Contact({ locale, t }: PageContext) {
                 "The contact form is closed in this demonstration. You can browse the guides or explore Studio.",
               )}
             </p>
+            <p><a href="mailto:contact@vastu.no">contact@vastu.no</a></p>
             <Action href={publicHref("/resources", locale)} secondary>
               {t("Se ressursene", "Browse resources")}
             </Action>

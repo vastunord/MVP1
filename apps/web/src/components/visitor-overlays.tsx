@@ -260,9 +260,18 @@ function VisitorDialog({
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const dialog = ref.current!;
-    dialog.showModal();
+    if (layer === "prana") dialog.show();
+    else dialog.showModal();
     return () => dialog.close();
-  }, []);
+  }, [layer]);
+  useEffect(() => {
+    if (layer !== "prana") return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { event.preventDefault(); dismiss(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [layer, dismiss]);
   return (
     <dialog
       ref={ref}
@@ -273,6 +282,7 @@ function VisitorDialog({
         dismiss();
       }}
       onKeyDown={(event) => {
+        if (layer === "prana") return;
         if (event.key !== "Tab") return;
         const stops = Array.from(
           event.currentTarget.querySelectorAll<HTMLElement>(
@@ -424,6 +434,7 @@ export function VisitorExperience({
   }
   useNewsletterDelay(
     rawOffer !== undefined &&
+      newsletterEnabled &&
       Boolean(choices) &&
       !display &&
       !layer &&
@@ -458,7 +469,7 @@ export function VisitorExperience({
             <DockIcon kind="cookie" />
           </button>
         )}
-        {dockRoute && display === "minimized" && choices && (
+        {newsletterEnabled && dockRoute && display === "minimized" && choices && (
           <button
             ref={newsletterDock}
             type="button"

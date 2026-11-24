@@ -87,7 +87,7 @@ export default async function Page({
             },
           },
         }),
-        tool && mnmlConfig() && readServerConfig().uploadsEnabled
+        tool && readServerConfig().uploadsEnabled
           ? studioPersistenceReady(db)
           : false,
       ]).finally(() => db.$disconnect());
@@ -109,7 +109,7 @@ export default async function Page({
         sample={sample}
         uploadsEnabled={hasWorkspace && readServerConfig().uploadsEnabled}
         renderEnabled={hasWorkspace && renderReady}
-        submissionEnabled={process.env.MNML_SUBMISSION_ENABLED === "true"}
+        submissionEnabled={process.env.MNML_SUBMISSION_ENABLED === "true" && Boolean(mnmlConfig())}
         improveEnabled={Boolean(pranaSettings(process.env))}
       />
     );

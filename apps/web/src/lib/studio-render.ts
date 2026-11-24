@@ -17,6 +17,12 @@ export const sceneWorkflows = [
   { id: "video", en: "Video walkthrough", nb: "Videovandring" },
 ] as const;
 export type StudioWorkflow = (typeof sceneWorkflows)[number]["id"] | "upscale";
+// Keep speculative cross-tool modes unavailable until their individual UI and
+// provider behavior have been verified. The server enforces the same policy.
+export function supportedWorkflows(toolId: string, hasReference: boolean): StudioWorkflow[] {
+  if (toolId === "resolution-enhancement") return ["design", "upscale"];
+  return hasReference && renderMode(toolId) ? ["design", "style"] : ["design"];
+}
 export type StudioResult = {
   source: string | null;
   output: string;

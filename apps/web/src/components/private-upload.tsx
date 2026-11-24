@@ -1,8 +1,7 @@
 "use client";
 import { StudioChoices } from "./studio-choices";
 import { AssetSharingConsent } from "./asset-sharing-consent";
-import { useEffect, useState, type ChangeEvent, type DragEvent } from "react";
-import Link from "next/link";
+import { useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import type { Locale } from "@/lib/i18n";
 import {
   IMAGE_TYPES,
@@ -120,6 +119,35 @@ export function PrivateUpload({
   const [localUrl, setLocalUrl] = useState("");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [creating, setCreating] = useState(false);
+  const createKey = useRef("");
+  const createInFlight = useRef(false);
+  const uploadInput = useRef<HTMLInputElement>(null);
+  async function createProject() {
+    const name = projectName.trim();
+    if (!name || createInFlight.current) return;
+    createInFlight.current = true;
+    setCreating(true);
+    createKey.current ||= crypto.randomUUID();
+    try {
+      const response = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "idempotency-key": createKey.current },
+        body: JSON.stringify({ name }),
+      });
+      if (!response.ok) throw new Error("Project creation failed");
+      const created = await response.json() as Project;
+      setProjects((items) => items.some((item) => item.id === created.id) ? items : [...items, created]);
+      setProject(created.id);
+      setProjectName("");
+      createKey.current = "";
+      setStatus(en ? "Project created. Choose an image." : "Prosjektet er opprettet. Velg et bilde.");
+      requestAnimationFrame(() => uploadInput.current?.focus());
+    } catch {
+      setStatus(en ? "Could not create the project. Try again." : "Kunne ikke opprette prosjektet. Prøv igjen.");
+    } finally { createInFlight.current = false; setCreating(false); }
+  }
   useEffect(() => {
     if (!enabled) return;
     let active = true;
@@ -130,8 +158,8 @@ export function PrivateUpload({
       })
       .then((rows) => {
         if (active) {
-          setProjects(rows);
-          setProject(rows[0]?.id || "");
+          setProjects((current) => [...rows, ...current.filter((item) => !rows.some((row) => row.id === item.id))]);
+          setProject((current) => current || rows[0]?.id || "");
         }
       })
       .catch(() => {
@@ -288,19 +316,19 @@ export function PrivateUpload({
           onPreview("");
         }}
       />
-      {!projects.length && (
-        <p className="small">
-          {en
-            ? "Create a project before uploading."
-            : "Opprett et prosjekt før du laster opp."}{" "}
-          <Link href="/app/projects">
-            {en ? "Open projects" : "Åpne prosjekter"}
-          </Link>
-        </p>
-      )}
+      <details>
+        <summary>{en ? "Create project" : "Opprett prosjekt"}</summary>
+        <label>{en ? "Project name" : "Prosjektnavn"}
+          <input disabled={creating} value={projectName} maxLength={100} onChange={(event) => { setProjectName(event.target.value); createKey.current = ""; }} />
+        </label>
+        <button type="button" disabled={!projectName.trim() || creating} onClick={createProject}>
+          {creating ? (en ? "Creating…" : "Oppretter…") : (en ? "Create project and continue" : "Opprett prosjekt og fortsett")}
+        </button>
+      </details>
       <label>
         {en ? "Choose or drop an image" : "Velg eller slipp et bilde"}
         <input
+          ref={uploadInput}
           type="file"
           accept={IMAGE_TYPES.join(",")}
           disabled={busy || !project}

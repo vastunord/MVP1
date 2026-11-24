@@ -1,5 +1,13 @@
 # Development change log (compact)
 
+## 24 November 2026 · Audit remediation in progress
+
+- Added inline project creation in the private upload panel and kept the editor open. Restricted generic workflows using one client/server allowlist; unbounded numeric settings no longer claim an effect or accept changed values. Added an early explanation when generation is disabled.
+- Made Prana non-modal, added the existing public contact email as fallback, suppressed unavailable newsletter invitations and corrected the duplicate homepage title. Live saved-result and exact Figma/hero evidence remain pending; see the tracker and consolidated owner actions.
+- Local checks: 53 unit tests, TypeScript, ESLint and Webpack build passed; isolated PostgreSQL persistence/authorization passed after updating two fixtures for disabled generic modes. Eleven of twelve focused browser tests passed in the first run; the remaining Studio test passed on its single retry. A separate non-modal Prana/Escape/focus test passed. The first sandboxed PostgreSQL attempt could not connect to its fixture; the local-socket run passed.
+- Saved render history now remains readable when the MNML credential is unavailable; new submissions and provider polling remain gated. Provider availability is still checked before writes.
+- The final Prana keyboard test initially targeted a nonexistent link and timed out; after selecting the actual page search field, it passed with focus outside the panel before Escape.
+
 ## 23 November 2026 · MNML compatibility
 
 - Documented the existing 17-tool provider mapping and its unverified controls. Reject oversized render/video images before job creation or provider submission; added an isolated PostgreSQL regression check. The live saved-render attachment remains pending.

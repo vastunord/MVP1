@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Audit remediation in progress
+
+Reconciled local branch `feat/v7-brand-photo-entry` at `b288b2e94615d1b8dfcdcea451b7eafd8cdbc025` with the audit's protected Preview: that Preview used `a048c9d` plus a diagnostic helper, so the local provider-size guard is newer. No reset, push, paid generation or deployment. The audit's 25 findings are tracked in `AUDIT_REMEDIATION_TRACKER.md`; external actions are consolidated in `BLOCKERS_AND_OWNER_ACTIONS.md`.
+
+Local remediation adds inline project creation, an early unavailable-generation explanation, shared client/server workflow restrictions, disabled unbounded numeric controls, a non-modal Prana panel, a direct contact fallback, suppression of unavailable newsletter offers and a nonduplicated homepage title. The complete authenticated saved-result journey, exact hero assets and commercial/provider verification remain open. Validation details and any failures are recorded in the changelog; a local test is not live evidence.
+
 ## 23 November 2026 · MNML compatibility continuation
 
 The owner authorized development to proceed independently of the pending contact-account login and saved-render attachment. The existing adapter maps all 17 tools to render, edit or enhancement requests, but individual tool outcomes and advanced controls remain unverified. Added a provider capability matrix and reject render/video input or reference images over MNML's documented 15 MB limit before creating a job or contacting the provider. No paid provider request was made. The live saved-render journey remains pending.

@@ -196,7 +196,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         db,
         config,
         other,
-        parseRender({ ...input, workflow: "concept" }),
+        parseRender(input),
         io,
       ),
       /unavailable/,
@@ -302,11 +302,9 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal(isStudioMp4(clip("soun")), false);
     const mp4 = clip("vide");
     assert.equal(isStudioMp4(mp4.subarray(0, -1)), false);
-    const video = parseRender({
-      ...input,
-      id: randomUUID(),
-      workflow: "video",
-    });
+    // Exercise the lower-level video ingestion contract without enabling the
+    // currently unavailable public video workflow.
+    const video = { ...parseRender(input), id: randomUUID(), endpoint: "videos" };
 
     let mime = "text/html",
       storedKey;

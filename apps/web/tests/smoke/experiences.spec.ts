@@ -39,6 +39,8 @@ test("knowledge and Prana offer local reading and accessible empty states", asyn
   await expect(main.getByRole("link", { name: /Prana/ })).toHaveCount(0);
   await page.getByRole("button", { name: "Åpne Prana-assistenten" }).click();
   const panel = page.getByRole("dialog", { name: "VastuNord Prana" });
+  await expect(panel).toBeVisible();
+  expect(await panel.evaluate((node) => node.matches(":modal"))).toBe(false);
   await panel.getByRole("button", { name: "Utforsk tips" }).click();
   await panel
     .getByRole("group", { name: "Velg tema", exact: true })
@@ -48,6 +50,10 @@ test("knowledge and Prana offer local reading and accessible empty states", asyn
   ).toBeVisible();
   await panel.getByRole("tab", { name: "Film", exact: true }).click();
   await expect(panel.getByRole("link", { name: /@VastuNord/ })).toHaveAttribute("href", "https://www.youtube.com/@VastuNord");
+  await main.getByLabel("Søk i guidene").focus();
+  await page.keyboard.press("Escape");
+  await expect(panel).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Åpne Prana-assistenten" })).toBeFocused();
 });
 
 test("sample budget and wallet work without payments", async ({ page }) => {
