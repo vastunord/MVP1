@@ -104,3 +104,56 @@ test("delayed creation prevents duplicates; locale switch retains draft and clie
   await expect(page.getByLabel("Room setting")).toHaveValue("Warm");
   await expect(page.getByRole("radio", { name: "Living room" })).toBeChecked();
 });
+
+test("project creation and switching cannot race an in-flight upload", async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  await page.route("**/api/projects**", async route => {
+    const request = route.request();
+    if (request.url().includes("/assets") && request.method() === "POST") {
+      await gate;
+      return route.fulfill({ json: { assetId: "asset-a" }, status: 201 });
+    }
+    if (request.url().includes("/assets")) return route.fulfill({ json: [] });
+    return route.fulfill({ json: [{ id: "project-a", name: "First" }, { id: "project-b", name: "Second" }] });
+  });
+  await page.goto("/");
+  await page.getByText("Create project", { exact: true }).click();
+  await page.getByLabel("Project name").fill("Third");
+  await page.getByLabel("Choose or drop an image").setInputFiles({ name: "draft.png", mimeType: "image/png", buffer: Buffer.from("fixture") });
+  await page.getByRole("button", { name: "Upload image" }).click();
+  await expect(page.getByRole("button", { name: "Uploading…" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Create project and continue" })).toBeDisabled();
+  await expect(page.getByRole("radio", { name: "Second" })).toBeDisabled();
+  release();
+  await expect(page.getByText("Saved privately.")).toBeVisible();
+  await expect(page.getByTestId("selection")).toContainText('"projectId":"project-a"');
+  await expect(page.getByTestId("selection")).toContainText('"sourceAssetId":"asset-a"');
+});
+
+test("a delayed previous-project image list cannot replace the selected project's images", async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  await page.route("**/api/projects**", async route => {
+    const url = route.request().url();
+    if (url.includes("/project-a/assets")) {
+      await gate;
+      return route.fulfill({ json: [{ id: "asset-a", mimeType: "image/png", createdAt: "2026-01-01" }] });
+    }
+    if (url.includes("/project-b/assets")) return route.fulfill({ json: [{ id: "asset-b", mimeType: "image/png", createdAt: "2026-01-01" }] });
+    return route.fulfill({ json: [{ id: "project-a", name: "First" }, { id: "project-b", name: "Second" }] });
+  });
+  await page.route("**/api/assets/**", route => route.fulfill({ status: 404 }));
+  const firstRequest = page.waitForRequest("**/api/projects/project-a/assets");
+  await page.goto("/");
+  await firstRequest;
+  await page.getByRole("radio", { name: "Second" }).check();
+  await page.getByRole("radio", { name: "Image 1" }).check();
+  await expect(page.getByTestId("selection")).toContainText('"sourceAssetId":"asset-b"');
+  const staleResponse = page.waitForResponse("**/api/projects/project-a/assets");
+  release();
+  await staleResponse;
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+  await expect(page.getByTestId("selection")).toContainText('"projectId":"project-b"');
+  await expect(page.getByTestId("selection")).toContainText('"sourceAssetId":"asset-b"');
+});

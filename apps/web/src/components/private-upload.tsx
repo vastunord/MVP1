@@ -148,7 +148,7 @@ export function PrivateUpload({
   }, [project, creating]);
   async function createProject() {
     const name = projectName.trim();
-    if (name.length < 2 || createInFlight.current) return;
+    if (name.length < 2 || createInFlight.current || busy) return;
     createInFlight.current = true;
     setCreating(true);
     createKey.current ||= crypto.randomUUID();
@@ -259,10 +259,10 @@ export function PrivateUpload({
   }
   function drop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
-    if (!busy) choose(event.dataTransfer.files[0]);
+    if (!busy && !creating) choose(event.dataTransfer.files[0]);
   }
   async function upload() {
-    if (!file || !project || busy) return;
+    if (!file || !project || busy || creating) return;
     setBusy(true);
     setStatus(en ? "Uploading…" : "Laster opp…");
     try {
@@ -295,7 +295,7 @@ export function PrivateUpload({
   async function remove() {
     if (
       !selectedAsset ||
-      busy ||
+      busy || creating ||
       !window.confirm(
         en ? "Delete this private image?" : "Slette dette private bildet?",
       )
@@ -340,7 +340,7 @@ export function PrivateUpload({
       <StudioChoices
         label={en ? "Project" : "Prosjekt"}
         value={project}
-        disabled={busy || !projects.length}
+        disabled={busy || creating || !projects.length}
         choices={projects.map((item) => ({ value: item.id, label: item.name }))}
         onChange={(id) => {
           setAssets([]);
@@ -358,7 +358,7 @@ export function PrivateUpload({
           <input disabled={creating} value={projectName} maxLength={100} onChange={(event) => { setProjectName(event.target.value); createKey.current = ""; }} />
         </label>
         <p className="small">{en ? "Use at least two characters." : "Bruk minst to tegn."}</p>
-        <button type="button" disabled={projectName.trim().length < 2 || creating} onClick={createProject}>
+        <button type="button" disabled={projectName.trim().length < 2 || creating || busy} onClick={createProject}>
           {creating ? (en ? "Creating…" : "Oppretter…") : (en ? "Create project and continue" : "Opprett prosjekt og fortsett")}
         </button>
       </details>
@@ -368,7 +368,7 @@ export function PrivateUpload({
           ref={uploadInput}
           type="file"
           accept={IMAGE_TYPES.join(",")}
-          disabled={busy || !project}
+          disabled={busy || creating || !project}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             choose(event.target.files?.[0])
           }
@@ -379,7 +379,7 @@ export function PrivateUpload({
       <button
         type="button"
         className="button"
-        disabled={!file || !project || busy}
+        disabled={!file || !project || busy || creating}
         onClick={upload}
       >
         {busy
@@ -394,6 +394,7 @@ export function PrivateUpload({
       {assets.length > 0 && (
         <StudioChoices
           label={en ? "Saved images" : "Lagrede bilder"}
+          disabled={busy || creating}
           kind="reference"
           value={selectedAsset}
           choices={assets.map((asset, n) => ({
@@ -414,7 +415,7 @@ export function PrivateUpload({
         <button
           type="button"
           className="button"
-          disabled={busy}
+          disabled={busy || creating}
           onClick={remove}
         >
           {en ? "Delete selected image" : "Slett valgt bilde"}
@@ -432,7 +433,7 @@ export function PrivateUpload({
           key={project}
           assets={assets.filter((asset) => asset.id !== selectedAsset)}
           locale={locale}
-          enabled
+          enabled={!busy && !creating}
           onChange={setReferenceIds}
         />
       )}

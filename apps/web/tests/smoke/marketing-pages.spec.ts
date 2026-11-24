@@ -1,5 +1,19 @@
 import { expect, test } from "@playwright/test";
 
+test("homepage guidance describes available workflows and qualified results in both languages", async ({page}) => {
+  for (const [path, workflow, lighting, caveat] of [
+    ["/", "velg en arbeidsflyt", "Hvordan utforsker jeg lyset i rommet?", "bildet kan endre andre detaljer"],
+    ["/en", "choose a workflow", "How do I explore light in a room?", "the image may change other details"],
+  ]) {
+    await page.goto(path);
+    const faq = page.locator("#questions");
+    await expect(faq.locator("details").first()).toContainText(workflow);
+    const question = faq.locator("details").filter({hasText: lighting});
+    await question.locator("summary").click();
+    await expect(question).toContainText(caveat);
+  }
+});
+
 test("footer terms and privacy stay in the selected language", async ({ page }) => {
   for (const [prefix, terms, privacy] of [["", "Bruksvilkår", "Personvern og informasjonskapsler"], ["/en", "Terms of use", "Privacy and cookies"]]) {
     await page.goto(prefix + "/");

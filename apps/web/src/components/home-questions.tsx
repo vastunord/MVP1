@@ -7,12 +7,12 @@ const questions = [
     illustration: "home-direction-room",
     no: [
       "Trenger jeg designerfaring?",
-      "Begynn med én ting du vil endre, for eksempel hvor sofaen står. Åpne et eksempel i Studio, velg et romkonsept og juster én innstilling om gangen.",
+      "Begynn med én ting du vil endre, for eksempel hvor sofaen står. Åpne et eksempel i Studio, velg en arbeidsflyt og juster én innstilling om gangen.",
       "Lys stue med sofa, rundt bord og god plass rundt sittegruppen.",
     ],
     en: [
       "Do I need design experience?",
-      "Start with one thing you would change, such as the position of the sofa. Open a sample in Studio, choose a room brief, and adjust one setting at a time.",
+      "Start with one thing you would change, such as the position of the sofa. Open a sample in Studio, choose a workflow, and adjust one setting at a time.",
       "Light living room with a sofa, a round table and open space around the seating.",
     ],
   },
@@ -111,12 +111,12 @@ const questions = [
     illustration: "home-steps-explore",
     no: [
       "Hvordan utforsker jeg lyset i rommet?",
-      "Legg merke til hvor sollyset treffer om morgenen og ettermiddagen. Beskriv hvilken tid du planlegger for, og behold de samme møblene når du sammenligner lysretninger.",
+      "Legg merke til hvor sollyset treffer om morgenen og ettermiddagen. Beskriv hvilken tid du planlegger for, og be om å beholde møblene når du sammenligner lysretninger. Kontroller resultatet; bildet kan endre andre detaljer.",
       "Sollys faller gjennom høye vinduer mot en sitteplass.",
     ],
     en: [
       "How do I explore light in a room?",
-      "Observe where sunlight lands in the morning and afternoon. Choose the time of day you are designing for, then keep the furniture fixed while you compare light directions.",
+      "Observe where sunlight lands in the morning and afternoon. Describe the time of day and ask to retain the furniture when comparing light directions. Check the result; the image may change other details.",
       "Sunlight passing through tall windows towards a seating area.",
     ],
   },
