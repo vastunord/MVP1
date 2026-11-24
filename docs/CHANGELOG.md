@@ -1,5 +1,10 @@
 # Development change log (compact)
 
+## 24 November 2026 · Mobile pointer activation and evidence
+
+- Fixed a shared focus-correction timing defect that moved a Studio link during mouse and simulated touch activation. Focus, cancellation, immediate keyboard input and dialog regressions passed locally; the partially covered left edge and real-device verification remain open.
+- Captured 24 signed-out responsive screenshots of earlier source `31a7c36`; they document the initial link overlap and do not claim exact Figma parity or authenticated behavior.
+
 ## 24 November 2026 · Shared mobile focus correction
 
 - Candidate `31a7c36` passed 102 browser smoke tests and an offline locked-dependency Webpack build from its exact archive. The earlier 62-unit-test and isolated recovery results predate this change.

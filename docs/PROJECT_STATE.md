@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Mobile pointer activation and refreshed evidence
+
+The shared focus correction caused a mobile Studio link to move during pointer activation. A mouse click and a touch-enabled browser tap reproduced the issue separately; touch focus arrived after pointerup. The correction now retains pointer mode through activation and clears it on cancellation, keyboard input, window blur and cleanup. Local mouse, simulated touch, cancellation and immediate-keyboard checks passed 4/4, Studio focus/availability 7/7 and shared focus/dialog checks 30/30; a fresh Webpack build, TypeScript and targeted ESLint passed. Real-device behavior remains unverified.
+
+A refreshed 24-image signed-out responsive matrix for earlier source `31a7c36` is in `docs/evidence/responsive-local/31a7c36/`; all routes returned HTTP 200 without horizontal document overflow or unresolved images. At 390 × 900 the cookie launcher partly covers the left edge of the Design link. The later pointer fix makes its visible center work with mouse and simulated touch, and scrolling exposes it; it does not establish full pointer-target visibility. No cloud action or paid rendering occurred.
+
 ## 24 November 2026 · Shared mobile focus correction
 
 Current local source candidate `31a7c361d00bb07399763de7e9155953a68ed683` passed 102 browser smoke tests and built from its exact Git archive using offline locked dependencies. This is local evidence, not a remote checkout or deployment.

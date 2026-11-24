@@ -388,8 +388,15 @@ export function VisitorExperience({
   const newsletterDock = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
   useEffect(() => {
+    let pointerDown = false;
+    let pointerReset: ReturnType<typeof setTimeout> | undefined;
+    const endPointer = () => { clearTimeout(pointerReset); pointerDown = false; };
+    const beginPointer = () => { clearTimeout(pointerReset); pointerDown = true; };
+    // Touch focus may arrive after pointerup but before its synthesized click.
+    const releasePointer = () => { clearTimeout(pointerReset); pointerReset = setTimeout(endPointer, 0); };
+    const keyboardInput = endPointer;
     function keepFocusedControlVisible(event: FocusEvent) {
-      if (window.matchMedia("(min-width: 768px)").matches) return;
+      if (pointerDown || window.matchMedia("(min-width: 768px)").matches) return;
       const focused = event.target;
       if (!(focused instanceof HTMLElement) || !focused.matches("a[href], button, input, select, textarea, summary")) return;
       // Dialogs manage their own focus and should not trigger page scrolling.
@@ -404,8 +411,21 @@ export function VisitorExperience({
       });
       if (overlap) target.scrollIntoView({ block: "center", inline: "nearest" });
     }
+    document.addEventListener("pointerdown", beginPointer, true);
+    document.addEventListener("pointerup", releasePointer, true);
+    document.addEventListener("pointercancel", endPointer, true);
+    document.addEventListener("keydown", keyboardInput, true);
+    window.addEventListener("blur", endPointer);
     document.addEventListener("focusin", keepFocusedControlVisible);
-    return () => document.removeEventListener("focusin", keepFocusedControlVisible);
+    return () => {
+      document.removeEventListener("pointerdown", beginPointer, true);
+      document.removeEventListener("pointerup", releasePointer, true);
+      document.removeEventListener("pointercancel", endPointer, true);
+      document.removeEventListener("keydown", keyboardInput, true);
+      window.removeEventListener("blur", endPointer);
+      clearTimeout(pointerReset);
+      document.removeEventListener("focusin", keepFocusedControlVisible);
+    };
   }, []);
   const launch = (kind: Layer) => {
     previousFocus.current =
