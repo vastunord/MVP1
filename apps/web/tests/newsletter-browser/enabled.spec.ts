@@ -142,3 +142,40 @@ test("enabled newsletter does not interrupt sign-in or Studio", async ({ page })
     await expect(page.getByRole("button", { name: /Newsletter|Nyhetsbrev/, exact: true })).toHaveCount(0);
   }
 });
+
+test("cookie choices take precedence over an enabled newsletter invitation", async ({ page }) => {
+  await page.clock.install();
+  await page.goto("/en");
+  await page.bringToFront();
+  const offer = page.getByRole("dialog", { name: "Vastu Nord newsletter" });
+  const notice = page.getByRole("complementary", { name: "Your cookie choices" });
+  await expect(notice).toBeVisible();
+  await page.clock.fastForward(60_000);
+  await expect(offer).toHaveCount(0);
+  await notice.getByRole("button", { name: "Customize" }).click();
+  const settings = page.getByRole("dialog", { name: "Cookie settings" });
+  await expect(settings).toBeVisible();
+  await page.clock.fastForward(60_000);
+  await expect(offer).toHaveCount(0);
+  await settings.getByRole("button", { name: "Save choices" }).click();
+  await expect(settings).toHaveCount(0);
+  await page.clock.runFor(100);
+  await page.clock.fastForward(28_000);
+  await expect(offer).toBeVisible();
+});
+
+test("active resource search is not interrupted by an enabled offer", async ({ page }) => {
+  await page.clock.install();
+  await page.addInitScript(() => {
+    localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
+  });
+  await page.goto("/en/resources");
+  await page.bringToFront();
+  const search = page.getByRole("searchbox", { name: "Search resources" });
+  await search.fill("daylight");
+  await expect(search).toBeFocused();
+  await page.clock.fastForward(60_000);
+  await expect(page.getByRole("dialog", { name: "Vastu Nord newsletter" })).toHaveCount(0);
+  await expect(search).toHaveValue("daylight");
+  await expect(search).toBeFocused();
+});

@@ -95,6 +95,17 @@ export function parseRender(input: Record<string, unknown>) {
     )
   )
     throw new RenderError(400, "Unknown design setting");
+  // A hidden field can retain a previous value when a mode changes. Reject
+  // unsupported adjustments even while hidden instead of silently ignoring
+  // a forged precision request.
+  for (const field of tool.controls) {
+    const value = values[field.id];
+    if (value === undefined || value === field.defaultValue) continue;
+    if (field.kind === "range" && (field.min === undefined || field.max === undefined))
+      throw new RenderError(400, "This adjustment is unavailable");
+    if (tool.id === "resolution-enhancement" && field.when?.id === "mode" && field.when.values.includes("Manual controls"))
+      throw new RenderError(400, "Manual enhancement is unavailable");
+  }
   const options = visibleControls(tool, values);
   const details = [];
   for (const field of options) {

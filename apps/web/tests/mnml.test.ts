@@ -141,6 +141,26 @@ test("every visible unconditional supported choice is accepted by the same serve
     }
   }
 });
+test("conditional supported choices follow their parent selection without silently accepting hidden precision", () => {
+  for (const tool of tools) {
+    for (const control of tool.controls) {
+      if (control.kind !== "select" || !control.when) continue;
+      for (const parent of control.when.values) {
+        if (unsupportedStudioOption(tool.id, control.when.id, parent)) continue;
+        for (const choice of control.options ?? []) {
+          assert.doesNotThrow(() => parseRender({
+            ...input, toolId: tool.id, prompt: "Describe the change",
+            values: { [control.when!.id]: parent, [control.id]: choice },
+          }), `${tool.id} / ${control.id} / ${parent} / ${choice}`);
+        }
+      }
+    }
+  }
+  const pool = { ...input, toolId: "pool-redesign", values: { mode: "Pool" } };
+  assert.equal(parseRender(pool).hash, parseRender({ ...pool, values: { mode: "Pool", "spa-option-0": "In-ground spa" } }).hash);
+  assert.throws(() => parseRender({ ...input, toolId: "perspective-correction", values: { mode: "Camera angle", vertical: 12 } }), /unavailable/);
+  assert.throws(() => parseRender({ ...input, toolId: "resolution-enhancement", prompt: "", values: { mode: "Auto enhance", "adjust-0": 10 } }), /unavailable/);
+});
 test("MNML validates asset selection, options, consent and single-image mode before dispatch", () => {
   for (const change of [
     { consent: false },

@@ -8,7 +8,7 @@ import { Editor } from "@/components/editor";
 import { pranaSettings } from "@/server/prana";
 import { studioPersistenceReady } from "@/server/studio-readiness";
 import { mnmlConfig } from "@/server/mnml";
-import { findStudioSample, studies } from "@/lib/workspace-catalog";
+import { destinations, findStudioSample, studies } from "@/lib/workspace-catalog";
 import {
   Dashboard,
   StudyDetail,
@@ -28,7 +28,10 @@ import { authReadiness, verifiedSessionUserId } from "@/server/auth-readiness";
 import { createDatabase } from "@/server/db";
 import { ProjectsScreen, AccountScreen } from "@/components/project-screens";
 import { readServerConfig } from "@/server/config";
-export const metadata = { title: "Studio" };
+import { studioPageTitle } from "@/lib/studio-metadata";
+export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
+  return { title: studioPageTitle((await params).path ?? [], await savedLocale(), destinations, findTool) };
+}
 export default async function Page({
   params,
   searchParams,

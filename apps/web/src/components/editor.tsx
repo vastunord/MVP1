@@ -250,6 +250,9 @@ export function Editor({
                     }}
                   />
                 )}
+                {supportedWorkflows(tool.id, Boolean(tool.reference)).length > 1 && (
+                  <p className="inspector-help">{english ? "Your choices are retained when switching workflows. Only settings shown for the selected workflow are used." : "Valgene beholdes når du bytter arbeidsflyt. Bare innstillinger som vises for valgt arbeidsflyt brukes."}</p>
+                )}
                 {renderMode(tool.id) && !video ? (
                   <label className="studio-model-select">
                     <span><span aria-hidden="true">◈ </span>{english ? "Prana Model" : "Prana-modell"}</span>
