@@ -110,7 +110,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       id: randomUUID(),
       toolId: "room-reimagination",
       consent: true,
-      engine: "v4.6-ultra",
+      engine: "v4.5-fast",
       sourceAssetId: "asseta",
       referenceIds: [],
       projectId: "pa",

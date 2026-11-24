@@ -44,6 +44,16 @@ function Field({
 }) {
   const id = "option-" + control.id;
   const text = (label: string) => roomLabel(label, locale);
+  if (["preview", "guides"].includes(control.id))
+    return (
+      <div className="field">
+        <label htmlFor={id}>
+          <input id={id} type="checkbox" disabled checked={value === true} readOnly />
+          {text(control.label)}
+        </label>
+        <span className="small">{locale === "en" ? "This preview control is not available yet." : "Denne forhåndsvisningen er ikke tilgjengelig ennå."}</span>
+      </div>
+    );
   if (control.kind === "action")
     return <Button disabled>{control.label}</Button>;
   if (control.kind === "toggle" && typeof value === "boolean")
@@ -141,7 +151,7 @@ export function Editor({
   );
   const [prompt, setPrompt] = useState("");
   const [avoid, setAvoid] = useState("");
-  const [engine, setEngine] = useState<RenderEngine>("high");
+  const [engine, setEngine] = useState<RenderEngine>("fast");
   const [selection, setSelection] = useState<RenderSelection>({
     projectId: "",
     sourceAssetId: "",
@@ -235,12 +245,13 @@ export function Editor({
                 )}
                 {renderMode(tool.id) && !video ? (
                   <label className="studio-model-select">
-                    <span>◈ {english ? "Prana Model" : "Prana-modell"}</span>
-                    <select value={engine} onChange={(event) => setEngine(event.target.value as RenderEngine)}>
+                    <span><span aria-hidden="true">◈ </span>{english ? "Prana Model" : "Prana-modell"}</span>
+                    <select value={engine} aria-describedby="studio-model-help" onChange={(event) => setEngine(event.target.value as RenderEngine)}>
                       {renderEngines.map((option) => (
-                        <option key={option.id} value={option.id}>VN-1 {option.label}</option>
+                        <option key={option.id} value={option.id} disabled={!option.verified}>VN-1 {option.label}{!option.verified ? (english ? " — not available" : " — ikke tilgjengelig") : ""}</option>
                       ))}
                     </select>
+                    <span id="studio-model-help" className="inspector-help">{english ? "Fast uses the model tested with one interior image. Results vary; other models are not available until tested." : "Fast bruker modellen som er testet med ett interiørbilde. Resultatene varierer; andre modeller er utilgjengelige til de er testet."}</span>
                   </label>
                 ) : (
                   <p className="studio-kicker">
@@ -398,6 +409,7 @@ export function Editor({
                 </details>
               </section>
             )}
+            {!video && !imageOnly && <p className="inspector-help">{english ? "Design choices are included as instructions to the image provider; exact changes are not guaranteed." : "Designvalgene sendes som instrukser til bildeleverandøren. Eksakte endringer kan ikke garanteres."}</p>}
             {!video &&
               workflow !== "upscale" &&
               (room ? (

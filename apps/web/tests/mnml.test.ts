@@ -19,7 +19,7 @@ const input = {
   id: "19272b7a-989a-4229-a98d-984065cee206",
   consent: true,
   toolId: "room-reimagination",
-  engine: "v4.6-ultra",
+  engine: "v4.5-fast",
   projectId: "project-a",
   sourceAssetId: "asset-a",
   referenceIds: [],
@@ -67,13 +67,14 @@ test("MNML reads the provider key only in Development and the pinned Preview", (
   );
   assert.equal(mnmlConfig({ ...env, MNMLAPI: "" }), null);
 });
-test("Each Prana V1 level sends its documented MNML engine", () => {
+test("Only the model with synthetic live evidence is accepted for rendering", () => {
   assert.equal(new Set(renderEngines.map((e) => e.providerId)).size, 5);
-  for (const level of renderEngines)
-    assert.equal(
-      parseRender({ ...input, engine: level.id }).fields.engine,
-      level.providerId,
-    );
+  for (const level of renderEngines) {
+    if (level.verified)
+      assert.equal(parseRender({ ...input, engine: level.id }).fields.engine, level.providerId);
+    else
+      assert.throws(() => parseRender({ ...input, engine: level.id }), /not available yet/);
+  }
 });
 test("All 17 editors select an appropriate provider operation", () => {
   for (const tool of tools) {
@@ -141,6 +142,12 @@ test("MNML validates asset selection, options, consent and single-image mode bef
     () => parseRender({ ...input, toolId: "perspective-correction", values: { mode: "Fix distortion", vertical: 12 } }),
     /unavailable/,
   );
+  for (const value of [0, 100])
+    assert.match(String(parseRender({ ...input, toolId: "lighting-reimagination", values: { brightness: value } }).fields.prompt), new RegExp(`Brightness: ${value}`));
+  for (const value of [-1, 101, "not-a-number"])
+    assert.throws(() => parseRender({ ...input, toolId: "lighting-reimagination", values: { brightness: value } }), /Invalid numeric/);
+  assert.throws(() => parseRender({ ...input, toolId: "lighting-reimagination", values: { temperature: 3000 } }), /unavailable/);
+  assert.throws(() => parseRender({ ...input, toolId: "lighting-reimagination", values: { preview: false } }), /preview control is unavailable/);
 });
 test("One provider submission sends explicit private input and reuses the stable local key", async () => {
   const spec = parseRender(input);
@@ -153,7 +160,7 @@ test("One provider submission sends explicit private input and reuses the stable
     assert.equal(body.mode, "interior");
     assert.equal(body.image, "data:image/png;base64,test");
     assert.equal(body.webhook_url, undefined);
-    assert.equal(body.engine, "v4.6-ultra");
+    assert.equal(body.engine, "v4.5-fast");
     return Response.json(
       {
         success: true,

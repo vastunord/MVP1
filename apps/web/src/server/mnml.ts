@@ -75,6 +75,8 @@ export function parseRender(input: Record<string, unknown>) {
     (level) => level.id === input.engine || level.providerId === input.engine,
   );
   if (!tool || !engine) throw new RenderError(400, "Invalid tool or engine");
+  if (renderMode(tool.id) && !engine.verified)
+    throw new RenderError(400, "This image model is not available yet");
   if (!supportedWorkflows(tool.id, Boolean(tool.reference)).includes(workflow as import("../lib/studio-render.ts").StudioWorkflow))
     throw new RenderError(400, "Workflow unavailable for this tool");
   const prompt = text(input.prompt, 4000),
@@ -96,6 +98,11 @@ export function parseRender(input: Record<string, unknown>) {
   const details = [];
   for (const field of options) {
     const v = values[field.id] ?? field.defaultValue;
+    if (["preview", "guides"].includes(field.id)) {
+      if (v !== undefined && v !== field.defaultValue)
+        throw new RenderError(400, "This preview control is unavailable");
+      continue;
+    }
     if (field.kind === "range" && (field.min === undefined || field.max === undefined)) {
       if (v !== undefined && v !== field.defaultValue)
         throw new RenderError(400, "This adjustment is unavailable");

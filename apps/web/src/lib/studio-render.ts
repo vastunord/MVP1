@@ -1,9 +1,11 @@
 export const renderEngines = [
-  { id: "low", label: "Low", providerId: "v4.3-fast" },
-  { id: "medium", label: "Medium", providerId: "v4.4-ultra" },
-  { id: "high", label: "High", providerId: "v4.5-ultra" },
-  { id: "ultra", label: "Ultra", providerId: "v4.6-ultra" },
-  { id: "fast", label: "Fast", providerId: "v4.5-fast" },
+  { id: "low", label: "Low", providerId: "v4.3-fast", verified: false },
+  { id: "medium", label: "Medium", providerId: "v4.4-ultra", verified: false },
+  { id: "high", label: "High", providerId: "v4.5-ultra", verified: false },
+  { id: "ultra", label: "Ultra", providerId: "v4.6-ultra", verified: false },
+  // A single synthetic interior image was generated using this provider model.
+  // This is not evidence that every tool or workflow has been verified live.
+  { id: "fast", label: "Fast", providerId: "v4.5-fast", verified: true },
 ] as const;
 export type RenderEngine = (typeof renderEngines)[number]["id"];
 export type BriefValues = Record<string, string | number | boolean>;

@@ -91,7 +91,7 @@ test("optional providers gate independently of working email authentication", ()
   );
 });
 
-test("Better Auth starts each browser flow with its exact callback and consumes an Apple cancellation without creating an account", async () => {
+test("Better Auth starts each browser flow and rejects Google and Apple cancellations without creating accounts", async () => {
   const config = oauthConfiguration(configured);
   const records = { verification: [], user: [], account: [], session: [] };
   const auth = betterAuth({
@@ -131,6 +131,26 @@ test("Better Auth starts each browser flow with its exact callback and consumes 
     assert.equal(destination.searchParams.get("redirect_uri"), callback);
     const state = destination.searchParams.get("state");
     assert.ok(state);
+    if (provider === "google") {
+      const cookie = response.headers.getSetCookie().find((entry) => entry.includes(".state="));
+      assert.ok(cookie);
+      const cancellation = new URL(callback);
+      cancellation.searchParams.set("error", "access_denied");
+      cancellation.searchParams.set("state", state);
+      const denied = await auth.handler(new Request(cancellation, { headers: { Cookie: cookie.split(";")[0] } }));
+      assert.equal(denied.status, 302);
+      const returned = new URL(denied.headers.get("location")!, origin);
+      assert.equal(returned.pathname, "/en/login");
+      assert.equal(returned.searchParams.get("error"), "access_denied");
+      assert.equal(records.user.length + records.account.length + records.session.length, 0);
+      const forged = new URL(callback);
+      forged.searchParams.set("code", "synthetic-code");
+      forged.searchParams.set("state", "invalid-state");
+      const rejected = await auth.handler(new Request(forged, { headers: { Cookie: cookie.split(";")[0] } }));
+      assert.equal(rejected.status, 302);
+      assert.equal(records.user.length + records.account.length + records.session.length, 0);
+      continue;
+    }
     if (provider !== "apple") continue;
     assert.equal(destination.searchParams.get("response_mode"), "form_post");
     const cookie = response.headers
