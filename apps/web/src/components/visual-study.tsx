@@ -2,19 +2,8 @@ import Link from "next/link";
 import { publicHref, type Locale } from "@/lib/i18n";
 import { relatedVisualStudies, type visualStudy } from "@/lib/visual-studies";
 import { Action, Photo, Section } from "./marketing-elements";
+import { KnowledgeReturn } from "./knowledge-return";
 import "./visual-study.css";
-
-const regions = [
-  ["øverst til venstre", "top left"],
-  ["øverst i midten", "top centre"],
-  ["øverst til høyre", "top right"],
-  ["midt til venstre", "middle left"],
-  ["i midten", "centre"],
-  ["midt til høyre", "middle right"],
-  ["nederst til venstre", "bottom left"],
-  ["nederst i midten", "bottom centre"],
-  ["nederst til høyre", "bottom right"],
-] as const;
 
 export function VisualStudy({
   study,
@@ -25,17 +14,13 @@ export function VisualStudy({
 }) {
   const en = locale === "en";
   const translate = (nb: string, eng: string) => (en ? eng : nb);
-  const high = Math.max(...study.light);
-  const low = Math.min(...study.light);
-  const lightest = regions[study.light.indexOf(high)][en ? 1 : 0];
-  const darkest = regions[study.light.indexOf(low)][en ? 1 : 0];
   return (
     <article className="visual-study">
       <div className="study-intro">
         <div>
-          <Link href={publicHref("/resources", locale)}>
+          <KnowledgeReturn locale={locale}>
             {translate("← Alle guider", "← All guides")}
-          </Link>
+          </KnowledgeReturn>
           <p className="mk-label">{study.topic}</p>
           <h1>{study.name}</h1>
           <p>{study.intro}</p>
@@ -63,41 +48,25 @@ export function VisualStudy({
           </div>
           <aside
             aria-label={translate(
-              "Bildets farger og lys",
-              "Colour and light in this image",
+              "Illustrerende farger og lys",
+              "Illustrative colour and light",
             )}
           >
-            <h2>{translate("Paletten i bildet", "The image palette")}</h2>
-            <ul className="study-palette">
+            <h2>{translate("Fargeinspirasjon", "Colour inspiration")}</h2>
+            <ul className="study-palette" aria-hidden="true">
               {study.palette.map((hex, i) => (
                 <li key={i}>
                   <span style={{ backgroundColor: "#" + hex }} />
-                  <code>#{hex.toUpperCase()}</code>
                 </li>
               ))}
             </ul>
             <p>
               {translate(
-                "Tre av de mest utbredte fargegruppene, hentet fra selve illustrasjonen. Sammenlign fysiske prøver i rommet før du velger overflate.",
-                "Three prevalent colour groups sampled from this illustration. Compare physical samples in the room before choosing a finish.",
+                "Fargene er kun til inspirasjon. Sammenlign fysiske prøver i rommet før du velger overflate.",
+                "These colours are for inspiration only. Compare physical samples in the room before choosing a finish.",
               )}
             </p>
-            <h2>
-              {translate("Hvor faller lyset?", "Where does the light fall?")}
-            </h2>
-            <div className="study-tones" aria-hidden="true">
-              {study.light.map((n, i) => (
-                <span
-                  key={i}
-                  style={{ backgroundColor: `rgb(${n} ${n} ${n})` }}
-                />
-              ))}
-            </div>
-            <p>
-              {en
-                ? `Across nine equal areas, the brightest average is at the ${lightest} (${high}/255) and the darkest at the ${darkest} (${low}/255). Look back at the illustration to see which surfaces account for that difference.`
-                : `Av ni like store felt er gjennomsnittet lysest ${lightest} (${high}/255) og mørkest ${darkest} (${low}/255). Se på illustrasjonen igjen og finn flatene som skaper forskjellen.`}
-            </p>
+            <p>{translate("Bildet er en illustrasjon, ikke en måling av lys eller farger i et faktisk rom.", "This image is an illustration, not a measurement of light or colour in a real room.")}</p>
           </aside>
         </div>
       </Section>

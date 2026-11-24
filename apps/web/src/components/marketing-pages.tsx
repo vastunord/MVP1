@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { publicHref, type Locale } from "@/lib/i18n";
 import { marketingResources } from "@/lib/marketing-resources";
+import { knowledgeSearch, readKnowledgeState, type KnowledgeState } from "@/lib/knowledge-state";
 import type { StudyCard } from "@/lib/visual-studies";
 import { StudyPagination, studyPageSize } from "./study-pagination";
 import { TopicChoices } from "./topic-choices";
+import { KnowledgeReturn } from "./knowledge-return";
 import { Action, Closing, FAQ, Photo, Section } from "./marketing-elements";
 import "./marketing-pages.css";
 
@@ -216,6 +218,7 @@ function About({ locale, t }: PageContext) {
                 "An image gives you something specific to compare, refine and discuss before moving forward.",
               )}
             </p>
+            <p>{t("Spørsmål til Vastu Nord? Skriv til", "Questions for Vastu Nord? Contact")} <a href="mailto:contact@vastu.no">contact@vastu.no</a>.</p>
           </div>
         </div>
       </Section>
@@ -561,6 +564,19 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
   const [filter, setFilter] = useState(-1);
   const [page, setPage] = useState(0);
   const { categories, articles } = marketingResources(locale);
+  useEffect(() => {
+    const restore = () => {
+      const state = readKnowledgeState(window.location.search);
+      setQuery(state.query); setFilter(state.topic); setPage(state.page);
+    };
+    restore();
+    window.addEventListener("popstate", restore);
+    return () => window.removeEventListener("popstate", restore);
+  }, []);
+  function update(state: KnowledgeState) {
+    setQuery(state.query); setFilter(state.topic); setPage(state.page);
+    window.history.replaceState(window.history.state, "", window.location.pathname + knowledgeSearch(state) + window.location.hash);
+  }
   const results = [...articles, ...studyCards].filter(
     (a) =>
       (filter < 0 || a.tags.includes(filter)) &&
@@ -569,6 +585,7 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
         .toLocaleLowerCase()
         .includes(query.trim().toLocaleLowerCase()),
   );
+  const visiblePage = Math.min(page, Math.max(0, Math.ceil(results.length / studyPageSize) - 1));
   return (
     <>
       <Hero
@@ -588,7 +605,7 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
           <input
             type="search"
             value={query}
-            onChange={(e) => { setQuery(e.target.value); setPage(0); }}
+            onChange={(e) => update({query: e.target.value, topic: filter, page: 0})}
             placeholder={t(
               "Søk etter guider og temaer",
               "Search guides and topics",
@@ -603,27 +620,27 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
             label={t("Filtrer på tema", "Filter by topic")}
             options={[{ id: -1, name: t("Alle temaer", "All topics") }, ...categories.map((name, id) => ({ id, name }))]}
             value={filter}
-            onChange={(id) => { setFilter(id); setPage(0); }}
+            onChange={(id) => update({query, topic: id, page: 0})}
           />
         </div>
         <div className="mp-reads">
-          {results.slice(page * studyPageSize, (page + 1) * studyPageSize).map((a) => (
+          {results.slice(visiblePage * studyPageSize, (visiblePage + 1) * studyPageSize).map((a) => (
             <article key={a.id} className="mp-read">
-              <Link href={publicHref("/resources/" + a.id, locale)}>
+              <Link href={publicHref("/resources/" + a.id, locale) + knowledgeSearch({query, topic: filter, page: visiblePage})}>
                 <span className="mp-read-image">
                   <Photo name={a.image} />
                 </span>
                 <span className="mp-read-copy">
-                  <small>{categories[a.tags[0]]}</small>
+                  <small>{"body" in a ? t("Guide", "Guide") : t("Bildestudie", "Visual study")} · {categories[a.tags[0]]}</small>
                   <strong>{a.name}</strong>
                   <span>{a.intro}</span>
-                  <u>{t("Les guiden", "Read guide")}</u>
+                  <u>{"body" in a ? t("Les guiden", "Read guide") : t("Se bildestudien", "View visual study")}</u>
                 </span>
               </Link>
             </article>
           ))}
         </div>
-        <StudyPagination page={page} count={results.length} locale={locale} move={setPage}/>
+        <StudyPagination page={visiblePage} count={results.length} locale={locale} move={(next) => update({query, topic: filter, page: next})}/>
         {!results.length && (
           <div role="status">
             <p>
@@ -635,9 +652,7 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
             <button
               className="button"
               onClick={() => {
-                setFilter(-1);
-                setQuery("");
-                setPage(0);
+                update({topic: -1, query: "", page: 0});
               }}
             >
               {t("Vis alle guider", "Show all guides")}
@@ -653,9 +668,7 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
               key={c}
               href="#articles"
               onClick={() => {
-                setFilter(i);
-                setQuery("");
-                setPage(0);
+                update({topic: i, query: "", page: 0});
               }}
             >
               {c} <span aria-hidden="true">↗</span>
@@ -827,13 +840,15 @@ export function MarketingPages({
             body={article.intro}
             photo={article.detailImage}
           >
-            <Action href={publicHref("/resources", locale)} secondary>
+            <KnowledgeReturn locale={locale} className="mk-action secondary">
               {t("Alle guider", "All guides")}
-            </Action>
+            </KnowledgeReturn>
           </Hero>
           <Section>
             <div className="mp-article-body">
               <p>{article.body}</p>
+              <h2>{t("Neste steg", "Next step")}</h2>
+              <p>{article.nextStep}</p>
               <Action href="/app/library">
                 {t("Åpne Studio", "Open Studio")}
               </Action>

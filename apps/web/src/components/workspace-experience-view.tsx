@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { publicHref, type Locale } from "@/lib/i18n";
+import { knowledgeSearch, knowledgeTopics, readKnowledgeState, type KnowledgeState } from "@/lib/knowledge-state";
+import { marketingResources } from "@/lib/marketing-resources";
 import type { StudyCard } from "@/lib/visual-studies";
 import { StudyPagination, studyPageSize } from "./study-pagination";
 import { TopicChoices } from "./topic-choices";
@@ -196,16 +198,30 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
   const [topic, setTopic] = useState("all");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
-  const tags = ["budget", "staging", "interiors", "tools", "design", "material", "light", "floor"];
-  const topicLabels = [...guides.map(g => ({id:g.id, name:t(g.topic[0],g.topic[1])})),
-    {id:"interiors", name:t("Interiør","Interiors")}, {id:"design",name:t("Design","Design")}];
+  const tags = knowledgeTopics;
+  const topicLabels = marketingResources(locale).categories.map((name, index) => ({id: tags[index], name}));
+  useEffect(() => {
+    const restore = () => {
+      const state = readKnowledgeState(window.location.search);
+      setTopic(state.topic < 0 ? "all" : tags[state.topic]);
+      setSearch(state.query); setPage(state.page);
+    };
+    restore();
+    window.addEventListener("popstate", restore);
+    return () => window.removeEventListener("popstate", restore);
+  }, [tags]);
+  function update(state: KnowledgeState) {
+    setTopic(state.topic < 0 ? "all" : tags[state.topic]);
+    setSearch(state.query); setPage(state.page);
+    window.history.replaceState(window.history.state, "", window.location.pathname + knowledgeSearch(state) + window.location.hash);
+  }
   const studyMatches = studyCards.filter(card =>
     (topic === "all" || card.tags.some(tag => tags[tag] === topic)) &&
     [card.name,card.intro,...card.tags.map(tag => topicLabels.find(item => item.id === tags[tag])?.name ?? "")].join(" ").toLocaleLowerCase().includes(search.trim().toLocaleLowerCase())
   );
   const matches = guides.filter(
     (g) =>
-      (topic === "all" || topic === g.id) &&
+      (topic === "all" || topic === (g.id === "nordic" || g.id === "vastu" ? "design" : g.id)) &&
       [
         t(g.topic[0], g.topic[1]),
         t(g.title[0], g.title[1]),
@@ -216,7 +232,8 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
         .includes(search.trim().toLocaleLowerCase()),
   );
   const total = matches.length + studyMatches.length;
-  const start = page * studyPageSize;
+  const visiblePage = Math.min(page, Math.max(0, Math.ceil(total / studyPageSize) - 1));
+  const start = visiblePage * studyPageSize;
   const guidePage = matches.slice(start, start + studyPageSize);
   const studyPage = studyMatches.slice(Math.max(0, start - matches.length), Math.max(0, start + studyPageSize - matches.length));
   return (
@@ -235,14 +252,14 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
           <input
             type="search"
             value={search}
-            onChange={(e) => {setSearch(e.target.value); setPage(0);}}
+            onChange={(e) => update({ query: e.target.value, topic: tags.indexOf(topic as typeof tags[number]), page: 0 })}
           />
         </label>
         <TopicChoices
           label={t("Tema", "Topic")}
           options={[{ id: "all", name: t("Alle temaer", "All topics") }, ...topicLabels]}
           value={topic}
-          onChange={(id) => { setTopic(id); setPage(0); }}
+          onChange={(id) => update({ query: search, topic: tags.indexOf(id as typeof tags[number]), page: 0 })}
         />
       </div>
       <div className="xp-grid">
@@ -253,7 +270,7 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
                 <ReferencePhoto image={g.image} />
               </span>
               <span className="xp-guide-label">
-                {t(g.topic[0], g.topic[1])}
+                {t("Hurtigtips", "Quick tip")} · {t(g.topic[0], g.topic[1])}
               </span>
               <span className="xp-guide-title">
                 {t(g.title[0], g.title[1])}
@@ -265,14 +282,14 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
             <p>{t(g.body[0], g.body[1])}</p>
           </details>
         ))}
-        {studyPage.map(card => <Link className="xp-guide xp-study-card" href={publicHref("/resources/"+card.id, locale)} key={card.id}>
+        {studyPage.map(card => <Link className="xp-guide xp-study-card" href={publicHref("/resources/"+card.id, locale) + (knowledgeSearch({ query: search, topic: tags.indexOf(topic as typeof tags[number]), page: visiblePage }) || "?") + (search || topic !== "all" || visiblePage ? "&" : "") + "from=studio"} key={card.id}>
           <span className="xp-thumb"><ReferencePhoto image={card.image}/></span>
-          <span className="xp-guide-label">{topicLabels.find(item => item.id === tags[card.tags[0]])?.name}</span>
+          <span className="xp-guide-label">{t("Bildestudie", "Visual study")} · {topicLabels.find(item => item.id === tags[card.tags[0]])?.name}</span>
           <span className="xp-guide-title">{card.name}</span>
           <p>{card.intro}</p>
         </Link>)}
       </div>
-      <StudyPagination page={page} count={total} locale={locale} move={setPage}/>
+      <StudyPagination page={visiblePage} count={total} locale={locale} move={(next) => update({ query: search, topic: tags.indexOf(topic as typeof tags[number]), page: next })}/>
       {!total && (
         <div className="xp-panel" role="status">
           <h2>{t("Ingen treff", "No matching guides")}</h2>
@@ -280,9 +297,7 @@ function Knowledge({ t, locale, studyCards }: ViewProps & { locale: Locale; stud
             type="button"
             className="button"
             onClick={() => {
-              setTopic("all");
-              setSearch("");
-              setPage(0);
+              update({topic: -1, query: "", page: 0});
             }}
           >
             {t("Vis alle guider", "Show all guides")}

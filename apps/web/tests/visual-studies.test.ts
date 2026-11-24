@@ -19,7 +19,7 @@ const index = JSON.parse(
   light: number[];
 }[];
 
-test("every illustrated study has unique localized editorial content and measured image data", () => {
+test("every illustrated study has unique localized editorial content and stored image-analysis fields", () => {
   assert.equal(index.length, 500);
   assert.equal(new Set(index.map((s) => s.slug)).size, 500);
   for (const locale of [0, 1]) {
