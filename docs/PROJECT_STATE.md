@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Responsive evidence and mobile notice
 
+Current local source candidate `3f5aa4d32d990d994a174e8b745023dac977a639` passed 98 browser smoke tests and built from its exact Git archive using offline locked dependencies. This does not establish a remote checkout or deployment.
+
 Saved 24 signed-out local full-page screenshots of source `d3cd656` across home, login, Studio editor and gallery at 390, 768, 1280, 1440, 1920 and 2560 CSS px in `docs/evidence/responsive-local/d3cd656/`. All returned HTTP 200 with no horizontal document overflow; lazy images were decoded before capture. These are not authenticated, actual-device, zoom, screen-reader or Figma-parity evidence.
 
 The 390 × 900 editor capture exposed a real initial overlap between the availability notice and fixed corner launchers. The local editor now places the existing notice above the workbench; targeted tests passed at 390 × 600, 750 and 900 and across all 17 routes. The earlier screenshots preserve the observed before-state. Fixed controls may still cover other content while scrolling; broader behavior remains unverified. No cloud action or paid render occurred.

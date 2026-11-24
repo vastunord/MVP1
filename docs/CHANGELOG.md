@@ -2,6 +2,7 @@
 
 ## 24 November 2026 · Responsive evidence and mobile notice
 
+- Candidate `3f5aa4d` passed 98 browser smoke tests and an offline locked-dependency Webpack build from its exact archive. The older 62-unit-test result predates the notice change.
 - Captured 24 local signed-out screens at six widths from `d3cd656`, including a documented initial 390 × 900 editor-status obstruction. Moved the existing availability notice above the workbench; local build, targeted lint and six browser checks passed, including three mobile heights and all 17 editor routes. Other scrolling content and actual devices remain unverified.
 
 ## 24 November 2026 · Consent documentation reconciliation
