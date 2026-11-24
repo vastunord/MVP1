@@ -2,6 +2,7 @@
 
 ## 24 November 2026 · Navigation, privacy and performance follow-up
 
+- Candidate source `ee596ae` passed 90 browser smoke tests, 62 unit tests and an offline locked-dependency Webpack build from its exact Git archive. The archive does not establish a remote checkout or deployed revision.
 - Corrected nested Studio navigation semantics while preserving active styling; focused local browser tests passed on all 17 editor routes. Extended isolated private-media tests for a second member in the same workspace and post-deletion denial.
 - Extended the local performance lab to cover the Studio editor and browser-reported transferred bytes. Eighteen signed-out, unthrottled localhost measurements are recorded for `b02680f`; they are not field or authenticated saved-result metrics.
 

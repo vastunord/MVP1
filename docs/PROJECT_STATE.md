@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Navigation, privacy and performance follow-up
 
+Current local source candidate `ee596ae567f5eb4015fedf73637b799c929f340e` passed all 90 browser smoke tests and 62 unit tests. An isolated archive of this exact source installed locked dependencies offline and passed the Webpack build; it is not evidence of a remote checkout or deployment.
+
 Nested Studio editor routes now mark the library as the current location rather than the current page; exact dashboard and library routes retain `aria-current="page"`. A fresh Webpack build, TypeScript, targeted ESLint and three local navigation browser checks passed, including all 17 editor routes. The isolated media fixture additionally denies a different user in the same workspace access to the owner's asset and denies the owner access after deletion; six targeted tests passed. Live Blob and artifact-specific two-user tests remain pending.
 
 The local performance script now includes the Studio editor and browser-reported transfer-size estimates. Eighteen unthrottled localhost runs on earlier built source `b02680f` are recorded in `docs/evidence/local-performance/2026-11-24-b02680f.json`. The gallery route was signed out; these observations are neither authenticated saved-result performance nor field Core Web Vitals. No cloud resources, production data or paid rendering were used.
