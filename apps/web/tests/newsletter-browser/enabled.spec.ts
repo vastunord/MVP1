@@ -52,7 +52,6 @@ test("enabled invitation delays, validates and retries without losing the reques
   await page.keyboard.press("Escape");
   await expect(dock).toBeFocused();
 });
-
 for (const width of [390, 768, 1363]) {
   test(`newsletter, cookies and Prana remain separate at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
@@ -143,4 +142,3 @@ test("enabled newsletter does not interrupt sign-in or Studio", async ({ page })
     await expect(page.getByRole("button", { name: /Newsletter|Nyhetsbrev/, exact: true })).toHaveCount(0);
   }
 });
-
