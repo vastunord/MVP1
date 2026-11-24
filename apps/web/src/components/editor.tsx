@@ -200,7 +200,18 @@ export function Editor({
     />
   );
   return (
-    <div className="studio-editor" onInputCapture={(event) => {
+    <div className="studio-editor" onFocusCapture={(event) => {
+      if (window.matchMedia("(min-width: 768px)").matches) return;
+      const focused = event.target;
+      if (!(focused instanceof HTMLElement) || !focused.matches("a[href], button, input, select, textarea, summary")) return;
+      const target = focused instanceof HTMLInputElement && focused.type === "radio" ? focused.closest("label") ?? focused : focused;
+      const rect = target.getBoundingClientRect();
+      const overlap = [...document.querySelectorAll(".vn-cookie-dock, .vn-prana-dock")].some((dock) => {
+        const obstacle = dock.getBoundingClientRect();
+        return rect.left < obstacle.right && rect.right > obstacle.left && rect.top < obstacle.bottom && rect.bottom > obstacle.top;
+      });
+      if (overlap) target.scrollIntoView({ block: "center", inline: "nearest" });
+    }} onInputCapture={(event) => {
       if (event.target instanceof Element && event.target.closest(".studio-prompt, .room-settings, .avoid-detail, .inspector-group .studio-choices")) {
         try { sessionStorage.setItem("vn-unsaved-editor-settings", "yes"); } catch { /* Optional notice only. */ }
       }

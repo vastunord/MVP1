@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 24 November 2026 · Mobile Studio focus and fixed controls
+
+- Corrected sampled mobile keyboard focus that could partially overlap fixed cookie/Prana launchers. Local focused checks passed at 390px width across three heights; unobscured controls are not moved. Two CSS-only approaches failed and were removed. Static scrolling content and actual devices remain unverified.
+
 ## 24 November 2026 · Responsive evidence and mobile notice
 
 - Candidate `3f5aa4d` passed 98 browser smoke tests and an offline locked-dependency Webpack build from its exact archive. The older 62-unit-test result predates the notice change.

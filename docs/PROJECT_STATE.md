@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Mobile Studio focus and fixed controls
+
+A stricter local keyboard check found partial overlaps between focused Studio controls and fixed cookie/Prana launchers at 390px width. CSS scroll padding alone and padding plus scroll margin each left a failure, because an element can be inside the viewport while underneath a launcher. The mobile editor now centers an actionable focused control only if its rectangle intersects a launcher; already-clear controls and the scroll region are left alone. A fresh Webpack build, TypeScript, targeted ESLint and seven focused browser checks passed at heights 600, 750 and 900px. This does not prove arbitrary static content or real-device behavior.
+
 ## 24 November 2026 · Responsive evidence and mobile notice
 
 Current local source candidate `3f5aa4d32d990d994a174e8b745023dac977a639` passed 98 browser smoke tests and built from its exact Git archive using offline locked dependencies. This does not establish a remote checkout or deployment.
