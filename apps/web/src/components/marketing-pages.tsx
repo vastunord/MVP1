@@ -847,9 +847,13 @@ export function MarketingPages({
           <Section>
             <div className="mp-article-body">
               <p>{article.body}</p>
+              <h2>{t("Sammenlign alternativene", "Compare the options")}</h2>
+              <p>{article.compare}</p>
+              <h2>{t("Dette kan ikke bildet bekrefte", "What the image cannot confirm")}</h2>
+              <p>{article.limitation}</p>
               <h2>{t("Neste steg", "Next step")}</h2>
               <p>{article.nextStep}</p>
-              <Action href="/app/library">
+              <Action href={"/app/tools/" + article.tool}>
                 {t("Åpne Studio", "Open Studio")}
               </Action>
             </div>
