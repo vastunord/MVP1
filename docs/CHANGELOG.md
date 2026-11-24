@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Tightened publication eligibility for missing/unsupported MIME and unknown origins; local consent and editorial fixtures pass. Added expired-output, deleted-source and same-job retry coverage without new provider submissions. Added sampled unobscured-focus checks; live publication, actual zoom and assistive technology remain unverified.
+
 - Gallery result errors now distinguish a missing original from a missing output and hide an unusable comparison; 3 controlled UI-only tests passed. A proposed font preload was removed after an unbuffered rebuild failed to reproduce the earlier buffered test's improvement; the cold-load shift remains open.
 
 - Fixed Prana heading reflow at a very narrow CSS viewport and clarified Studio breadcrumbs. Fresh-build browser tests passed for the overlay and all 17 routes. The initial breadcrumb assertion included the search shortcut; a scoped selector passed on rerun. Investigated, but have not yet changed, the measured font-swap layout shift.

@@ -1,5 +1,13 @@
 # Commercial launch checklist
 
+## Local remediation candidate — not approved for release
+
+Local integration checkpoint: `831f807c8a8237b6eb13d392bc31c7e13e7837d8` on `feat/v7-brand-photo-entry` (record the final full SHA after remaining changes and validation). The protected Preview remains the older `a048c9d` diagnostic deployment; none of the later local fixes is represented as deployed. A fresh checkout of the eventual source SHA and a target-specific deployment decision remain required. No migration or paid generation was introduced by the current local UI/test increments; verify configuration and migration history again for the selected target before release.
+
+Local evidence includes TypeScript, ESLint, unit and isolated database tests, controlled browser fixtures, and signed-out route/reflow checks. These do not establish live saved-render attachment or Google account linking. Commercial hosting eligibility, production database/authentication/private-media verification, matching approved hero and Figma evidence, asset rights, legal review and the exact artifact access checks remain open. Billing stays deferred. See the criterion-level [remediation tracker](../AUDIT_REMEDIATION_TRACKER.md) and [owner actions](../BLOCKERS_AND_OWNER_ACTIONS.md).
+
+When a specific target and release are authorized, record the tested full SHA and environment, verify its closed feature gates, deploy that exact artifact, and smoke-test it. If verification fails, restore the previously verified deployment using the platform's deployment rollback for that same Vastu Nord project; do not reset databases or switch to Development credentials. Do not promote this draft to a commercial release while the listed gates are open.
+
 The existing Vercel site is a noncommercial demonstration. Development has passed signup, email verification, sign-in with the original password, project persistence, two-user isolation and private Blob tests. All 17 Studio editors are available for demonstration. The steps below cover the work between that baseline and a commercial release. Record the release commit and dated evidence for each enabled feature in the [release state](GO_LIVE_STATE.md).
 
 The [five-item owner checklist](../OWNER_ACTIONS_ONE_LIST.md) records the current external dependencies.

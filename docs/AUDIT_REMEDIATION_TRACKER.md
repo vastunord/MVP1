@@ -14,7 +14,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | VN-02/05/16/17: model and control gating | VERIFIED_LOCAL: parser and 17-tool configuration tests; one previously tested model enabled | Browser-check all routes and retain live provider capability checks separately. |
 | VN-03: source/deployment identity | READY: local branch preserved; Preview older | Prepare candidate SHA, fresh-checkout procedure and target-specific release decision. |
 | VN-04: inline create/retry/draft and cross-project saved image selection | VERIFIED_LOCAL: component browser fixture with controlled HTTP; actual project service/Prisma ownership test separately | Test fully authenticated browser/API journey; assess navigation, locales and themes. |
-| VN-06: local persistence and retry | VERIFIED_LOCAL: file-backed PGlite reopen and simulated history/storage failures | Genuine Prisma/network reconnection and live recovery remain unverified. |
+| VN-06: local persistence and retry | VERIFIED_LOCAL: file-backed PGlite reopen, simulated history/storage failures, expired output and same-job retry without duplicate attachment | Genuine Prisma/network reconnection and live recovery remain unverified. |
 | VN-07/20: Prana and overlay separation | VERIFIED_LOCAL: non-modal browser checks and newsletter tests at three widths | Assess active uploads, zoom, keyboard and real assistive devices. |
 | VN-08/18: matching before/after visual authority | BLOCKED_EXTERNAL for final pair and exact Figma comparison; keyboard, reduced-motion and slider-extreme behavior VERIFIED_LOCAL in 9 hero tests | Obtain owner-approved same-room pair and frames; separately assess real touch and crops. |
 | VN-09: usable contact fallback | VERIFIED_LOCAL: all four topic-specific mail links in both locales; no message sent | The disabled website form has no implemented live success/error path. |
@@ -24,7 +24,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | VN-14/15: navigation labels and personal/example distinction | PARTIAL: all 17 direct routes, breadcrumb and signed-out example labeling VERIFIED_LOCAL | Verify authenticated private-gallery empty/error states and ownership. |
 | VN-19: newsletter delay/consent/retry/dismissal | VERIFIED_LOCAL with intercepted synthetic responses | Verify real delivery only when separately authorized and configured. |
 | VN-21: shared Knowledge filtering and return state | VERIFIED_LOCAL: state unit tests and public/Studio browser return journeys | Review remaining taxonomy/locales and editorial depth. |
-| VN-22/23: provenance and operator information | PARTIAL: removed unsourced numeric claims; contact is present | Confirm image rights, Payload publication rules, legal entity and qualified policy review. |
+| VN-22/23: provenance and operator information | PARTIAL: unknown media/origin fails closed; synthetic consent and Payload editorial tests pass; unsourced numeric claims removed | Confirm actual image rights, live Payload publication rules, legal entity and qualified policy review. |
 | VN-24: local performance | PARTIAL: repeatable localhost lab script and preliminary measurements; first cold mobile homepage shift warrants investigation | Rerun on a freshly identified build, diagnose the shift, and do not report lab numbers as field Core Web Vitals. |
 | VN-25: icons and metadata | IMPLEMENTED_UNVERIFIED across all routes | Check accessible names and page titles in both locales. |
 
