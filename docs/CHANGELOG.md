@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Added explicit unsaved Editor draft and uncertain-submission guidance, safe journal response projection, serialized synthetic newsletter deduplication, sampled accessibility tests and a synthetic gallery timing fixture. Full authenticated browser/API/database and real assistive-device tests remain unverified.
+
 - Added explicit same-job history recovery and unconfirmed-submission guidance; seven synthetic gallery/poll cases passed. Public metadata and sampled consent-network checks passed locally. The actual Editor fixture warns after unsaved settings are lost; live provider/session behavior remains unverified.
 
 - Verified source `a1d7c16` with 83 local smoke tests, 61 unit tests, type/lint, Webpack build and isolated database checks. A clean Git archive installed from cache offline and built; this is not a remote checkout or deployment.
