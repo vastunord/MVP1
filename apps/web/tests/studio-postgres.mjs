@@ -249,6 +249,11 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       (await projectJobs(db, actor, "pa", "room-reimagination"))[0].state,
       "RUNNING",
     );
+    // Inject at the application database boundary; this is not a network outage.
+    const unavailableDb = { renderJob: { async findMany() { throw new Error("synthetic database connection failure"); } } };
+    await assert.rejects(projectJobs(unavailableDb, actor, "pa", "room-reimagination"), /synthetic database connection failure/);
+    assert.equal((await projectJobs(db, actor, "pa", "room-reimagination"))[0].id, input.id);
+    assert.equal(submissions, 2, "history retry must not submit a provider job");
     await assert.rejects(
       syncJob(db, "fixture", wrongUser, "pa", input.id, io),
       /unavailable/,

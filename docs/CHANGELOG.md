@@ -2,6 +2,9 @@
 
 ## 24 November 2026 · Remediation continuation
 
+- Added a file-backed PGlite close/reopen test for synthetic owner, project, private asset and job records. It passes locally and is not a network-reconnection or outage test.
+- A simulated history-query database failure followed by retry preserves the job ID and issues no new provider submission. The restricted-sandbox run failed readiness; the existing isolated-socket test passed outside that restriction.
+
 - Newsletter forms now provide a retry after a temporary service-unavailable response instead of leaving the form permanently disabled. TypeScript and targeted ESLint pass; an enabled-service browser fixture is still required.
 
 - Preserved unsaved image drafts while switching projects; enabled first-time authenticated editor users to create a workspace and project through existing APIs without leaving the editor.
