@@ -3,6 +3,7 @@
 ## 24 November 2026 · Wide layouts, contrast and failure cases
 
 - Strengthened the existing closing-image gradient; conservative rendered-background contrast checks pass at 390, 768 and 1440px. Added 2560px reflow and bounded inspector checks, plus homepage slider keyboard operation with Prana open. These are local checks and do not establish physical-device or screen-reader conformance.
+- Added a thin contrasting edge to homepage and Studio comparison dividers; controlled white/black background checks pass. An isolated Google callback without its original state cookie creates no account or session; live OAuth remains unverified.
 - Added isolated provider-failure and ambiguous-timeout cases. An initial synthetic fixture interfered with later reconciliation; it passed after closing that fixture. No live provider failure or network outage was tested.
 
 ## 24 November 2026 · Current remediation candidate

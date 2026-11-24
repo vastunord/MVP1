@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Additional accessibility and recovery evidence
 
+Source checkpoint `364dd2519851e013d75c8a7172222c4156158046` passed a fresh Webpack build and 90/90 integrated browser smoke tests. The offline archive recorded below was performed on earlier source `2787993`. Subsequent local changes add a contrasting edge to homepage and Studio comparison dividers, tested against synthetic white and black image backgrounds, and an isolated Google state-cookie rejection test. Their full integrated regression and exact-candidate archive verification remain outstanding.
+
 The local closing-image overlay was strengthened after a conservative rendered-pixel sample found the white heading's worst-background contrast bound below 4.5:1 at 390 and 768px. After the change, the bound passed at 390, 768 and 1440px; this is not a glyph-by-glyph or full accessibility audit. Four signed-out journeys passed the added 2560px reflow check; the Studio inspector stayed at or below 400px. The homepage slider remained keyboard-operable while Prana was open. These are local browser checks, not physical-device, zoom or screen-reader evidence.
 
 An isolated PGlite/Prisma fixture now tests provider-reported failure as terminal and an ambiguous synthetic submission timeout without automatic resend; an explicit replay preserves the job ID and payload. The first fixture run exposed interference with a later reconciler and passed after closing the synthetic job. This does not prove actual provider behavior or network recovery. No paid generation or cloud action occurred.

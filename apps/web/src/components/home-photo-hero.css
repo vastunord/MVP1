@@ -102,6 +102,7 @@
   left: var(--comparison-split);
   z-index: 1;
   border-left: 2px solid white;
+  box-shadow: 0 0 0 1px var(--navy);
   pointer-events: none;
 }
 .photo-hero-line > span {
