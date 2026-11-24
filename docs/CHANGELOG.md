@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Candidate `fa6f48b` passed 85 smoke, 65 newsletter/accessibility, six intake and seven gallery/recovery browser checks, 61 unit tests, TypeScript, ESLint, Prisma validation and a Webpack build. An isolated archive of the exact commit also installed offline from cache and built. These checks are local/synthetic; no deployment occurred.
+
 - Added explicit unsaved Editor draft and uncertain-submission guidance, safe journal response projection, serialized synthetic newsletter deduplication, sampled accessibility tests and a synthetic gallery timing fixture. Full authenticated browser/API/database and real assistive-device tests remain unverified.
 
 - Added explicit same-job history recovery and unconfirmed-submission guidance; seven synthetic gallery/poll cases passed. Public metadata and sampled consent-network checks passed locally. The actual Editor fixture warns after unsaved settings are lost; live provider/session behavior remains unverified.
