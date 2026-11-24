@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Verified source `a1d7c16` with 83 local smoke tests, 61 unit tests, type/lint, Webpack build and isolated database checks. A clean Git archive installed from cache offline and built; this is not a remote checkout or deployment.
+
 - Fixed a reproduced project-switch race without cancelling the accepted server job; synthetic browser/database recovery tests passed. Qualified privacy copy and passed sampled contrast/reflow checks. Remaining live and assistive-device gates are unchanged.
 
 - Verified both-language Knowledge taxonomy, provider-reported cancellation and manual same-job recovery using local synthetic tests. Pricing now describes deferred subscriptions without promising a launch. Fresh build and focused browser checks passed; final combined regression remains pending.

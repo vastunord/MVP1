@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation checkpoint
 
+At `a1d7c16dd73d8ce86899fb580181f4cbbaa187ed`, fresh Webpack build, 83 smoke tests, 61 unit tests, TypeScript, ESLint and isolated Prisma/project/render tests passed. An isolated Git archive installed the lockfile from cache offline and built successfully; this does not verify the remote repository or any deployed target. The temporary archive was removed. `go-live/RELEASE_CHECKLIST.md` records this source SHA and rollback/gate guidance as a draft, not a commercial release.
+
 At local source `b8c274a`, a delayed response from an old project can no longer update a newly selected project's canvas; controlled browser and isolated partial-storage retry tests passed without a new provider submission. Privacy copy now says results are saved only after storage completes. Fresh build, four localized marketing checks and 18 sampled contrast/reflow checks passed. The initial narrow reflow and stale-selector failures are retained below; these results are not live rendering, actual browser zoom or WCAG conformance.
 
 Local checkpoint `7f0cc02` adds repeat-safe provider-reported cancellation and manual recovery of a running job after reload in synthetic tests; it does not claim automatic recovery or user cancellation. All eight Knowledge topic filters were checked in both languages in public and Studio views on the current build. Pricing copy no longer promises a subscription launch; two localized browser checks passed. Webpack build passed; the full smoke suite needs a final rerun after these later source changes.
