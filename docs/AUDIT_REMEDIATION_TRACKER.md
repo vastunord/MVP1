@@ -25,7 +25,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | VN-19: newsletter delay/consent/retry/dismissal | VERIFIED_LOCAL with intercepted synthetic responses | Verify real delivery only when separately authorized and configured. |
 | VN-21: shared Knowledge filtering, return state and five guide decisions | VERIFIED_LOCAL: state/guide tests and public/Studio browser return journeys | Complete editorial review and verify all locale/taxonomy combinations. |
 | VN-22/23: provenance and operator information | PARTIAL: unknown media/origin fails closed; synthetic consent and Payload editorial tests pass; unsourced numeric claims removed | Confirm actual image rights, live Payload publication rules, legal entity and qualified policy review. |
-| VN-24: local performance | PARTIAL: repeatable localhost lab script and preliminary measurements; first cold mobile homepage shift warrants investigation | Rerun on a freshly identified build, diagnose the shift, and do not report lab numbers as field Core Web Vitals. |
+| VN-24: local performance | PARTIAL: local font-swap cause identified and Arial-only fallback reduced observed cold mobile shift in unbuffered lab | Repeat on real devices and deployed field data; verify non-Arial platforms and remaining notice shift. No field Core Web Vitals claim. |
 | VN-25: icons and metadata | IMPLEMENTED_UNVERIFIED across all routes | Check accessible names and page titles in both locales. |
 
 | ID | Priority | Finding / routes | Triage | Acceptance and dependency |

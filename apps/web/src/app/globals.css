@@ -6,6 +6,13 @@
   font-style: normal;
   font-display: swap;
 }
+/* Match the installed Arial fallback more closely while the brand font loads.
+   If Arial is unavailable, the existing system fallback chain remains intact. */
+@font-face {
+  font-family: "Vastu Nord Arial fallback";
+  src: local("Arial");
+  size-adjust: 124%;
+}
 @font-face {
   font-family: "Zalando Sans Expanded";
   src: url("https://fonts.gstatic.com/s/zalandosansexpanded/v3/JTUHjJci8Cy470GaeFwsix1hi3aTmrgRwU-zqXw5aXo.woff2") format("woff2");
@@ -33,7 +40,7 @@
   --border: var(--sage);
   --focus: var(--navy);
   --soft: var(--sand);
-  --font-brand: "Zalando Sans Expanded", Arial, Helvetica, sans-serif;
+  --font-brand: "Zalando Sans Expanded", "Vastu Nord Arial fallback", Arial, Helvetica, sans-serif;
   color-scheme: light;
 }
 [data-theme="dark"] {

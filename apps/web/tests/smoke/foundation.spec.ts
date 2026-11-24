@@ -156,7 +156,7 @@ for (const width of [390, 768, 1280, 1440])
       ).toBeVisible();
       await page
         .getByRole("navigation", { name: "Meny" })
-        .getByRole("link", { name: "Åpne Studio", exact: true })
+        .getByRole("link", { name: "Studio-bibliotek", exact: true })
         .click();
       await expect(page).toHaveURL(/app\/library$/);
     }

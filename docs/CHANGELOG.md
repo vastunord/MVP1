@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- A complete local browser smoke rerun passed 78/78 after updating stale mobile-navigation and Knowledge URL/illustration assertions. Added an Arial-only adjusted fallback; unbuffered local measurements improved at 390px in both languages, without claiming field metrics or changing the approved loaded font.
+
 - Aligned two unsupported Studio choices with server validation; corrected untrusted verification-status copy; tested synthetic OAuth cancellation/return paths; expanded five bilingual guides. The integrated build, 57 unit tests and 7 Studio/Knowledge browser checks passed. Further synthetic intake and keyboard checks pass; actual zoom and live onboarding remain open.
 
 - Tightened publication eligibility for missing/unsupported MIME and unknown origins; local consent and editorial fixtures pass. Added expired-output, deleted-source and same-job retry coverage without new provider submissions. Added sampled unobscured-focus checks; live publication, actual zoom and assistive technology remain unverified.

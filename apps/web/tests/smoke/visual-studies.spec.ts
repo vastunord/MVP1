@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const slug = "window-glow-over-still-water";
 
-test("mobile reader scans the bilingual study and its measured palette", async ({
+test("mobile reader scans the bilingual study and illustrative palette", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -14,7 +14,7 @@ test("mobile reader scans the bilingual study and its measured palette", async (
     .fill("Window glow over still water");
   await expect(main.locator(".mp-read")).toHaveCount(1);
   await main.locator(".mp-read > a").click();
-  await expect(page).toHaveURL(new RegExp("/en/resources/" + slug + "$"));
+  await expect(page).toHaveURL(new RegExp("/en/resources/" + slug + "\\?q="));
   await expect(main.getByRole("heading", { level: 1 })).toHaveText(
     "Window glow over still water",
   );
@@ -24,7 +24,7 @@ test("mobile reader scans the bilingual study and its measured palette", async (
     }),
   ).toBeVisible();
   await expect(main.locator(".study-palette li")).toHaveCount(3);
-  await expect(main.locator(".study-tones span")).toHaveCount(9);
+  await expect(main.getByText("This image is an illustration, not a measurement of light or colour in a real room.")).toBeVisible();
   await expect(main.locator(".study-related a")).toHaveCount(2);
   expect(
     await page.evaluate(
@@ -50,5 +50,5 @@ test("Studio Knowledge links directly to the same article", async ({
   const result = main.locator(".xp-study-card");
   await expect(result).toHaveCount(1);
   await result.click();
-  await expect(page).toHaveURL(new RegExp("/resources/" + slug + "$"));
+  await expect(page).toHaveURL(new RegExp("/resources/" + slug + "\\?.*from=studio"));
 });
