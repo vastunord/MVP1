@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Remediation continuation
 
+- Newsletter forms now provide a retry after a temporary service-unavailable response instead of leaving the form permanently disabled. TypeScript and targeted ESLint pass; an enabled-service browser fixture is still required.
+
 - Preserved unsaved image drafts while switching projects; enabled first-time authenticated editor users to create a workspace and project through existing APIs without leaving the editor.
 - Prevented late provider status responses from changing terminal render jobs. Isolated database fixtures verify storage retry without another provider request and terminal-state protection.
 - A proposed reconnection fixture failed twice because the disposable PostgreSQL socket closed a second client; removed that fixture and recorded reconnection testing in the technical queue. No live saved-result or provider test was claimed.

@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Continuation after 35e37d5
 
+Local checkpoint `7780cb8785355e7bc2489559da560af1dac677b3` contains the intake and render-race increment below. A transient newsletter-service failure now offers an explicit retry; TypeScript and targeted ESLint pass, while its enabled-service browser fixture remains pending. The prior navigation/Studio browser group passed 16/16 on a clean server after earlier selector/readiness failures were investigated. No updated Preview has been deployed.
+
 Confirmed `feat/v7-brand-photo-entry` at `35e37d5`; the protected Preview is still the earlier `a048c9d` diagnostic build. The existing in-app browser had no matching Preview tab, so the live synthetic attachment and account checks remain pending without another login request. No paid render, deployment or production change was made.
 
 Local work preserves an unsaved selected image when switching projects. A first-time signed-in editor user can explicitly create a personal workspace and project from the upload panel without leaving the editor. Render-state updates now guard terminal outcomes against late polls. Isolated PostgreSQL fixtures cover retrying private output storage without another provider submission and a late-success/cancel race. A proposed reconnect fixture failed twice because the disposable socket closed a second connection, including after disconnect; it was removed. Reconnection remains a technical test-queue item, not an owner-action blocker.

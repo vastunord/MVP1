@@ -162,6 +162,10 @@ export function NewsletterInvitation({
                 {en
                   ? "The newsletter service could not complete your request. Please try again later."
                   : "Nyhetsbrevtjenesten kunne ikke fullføre forespørselen. Prøv igjen senere."}
+                {" "}
+                <button type="button" onClick={() => setStatus("idle")}>
+                  {en ? "Try again" : "Prøv igjen"}
+                </button>
               </p>
             )}
             {status === "limited" && (
