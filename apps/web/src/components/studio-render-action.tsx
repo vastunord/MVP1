@@ -111,7 +111,9 @@ export function StudioRenderAction({
       } catch {
         if (!abort.signal.aborted)
           setError(
-            en ? "Could not check this render." : "Kunne ikke hente status.",
+            en
+              ? "Could not check or save this result. Check again to retry the same job; this does not start another render."
+              : "Kunne ikke sjekke eller lagre dette resultatet. Sjekk på nytt for å prøve samme jobb igjen; det starter ikke en ny rendring.",
           );
       }
     }

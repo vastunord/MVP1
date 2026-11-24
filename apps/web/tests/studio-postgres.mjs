@@ -15,7 +15,7 @@ import {
   reconcileStudioOutput,
 } from "../src/server/studio-jobs.ts";
 import { isStudioMp4 } from "../src/server/studio-video.ts";
-import { createPrivateMedia } from "../src/server/media.ts";
+import { authorizeAsset, createPrivateMedia } from "../src/server/media.ts";
 import { createPrismaMediaRepository } from "../src/server/prisma-media-repository.ts";
 import { projectService } from "../src/server/projects.ts";
 import { prismaProjectStore } from "../src/server/prisma-project-store.ts";
@@ -279,6 +279,11 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       syncJob(db, "fixture", other, "pb", input.id, io),
       /unavailable/,
     );
+    const expiredOutput = { ...io, async fetchFile() { return new Response(null, { status: 403 }); } };
+    await assert.rejects(syncJob(db, "fixture", actor, "pa", input.id, expiredOutput), /temporarily unavailable/);
+    assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
+    assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).outputAssetId } }), 0);
+    assert.equal(submissions, 2, "an expired provider URL must not trigger a new submission");
     const failingStorage = { ...io, async writeOutput() { throw new Error("synthetic storage interruption"); } };
     await assert.rejects(syncJob(db, "fixture", actor, "pa", input.id, failingStorage), /storage interruption/);
     assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
@@ -303,6 +308,13 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal(stored.projectId, "pa");
     assert.equal(stored.width, 32);
     assert.equal(stored.state, "VALIDATED");
+    assert.equal(await db.asset.count({ where: { id: done.outputAssetId } }), 1, "completion retries produce one asset");
+    await db.asset.update({ where: { id: "asseta" }, data: { state: "DELETED" } });
+    const deletedSource = await createPrismaMediaRepository(db).findAsset("asseta");
+    assert.ok(deletedSource);
+    assert.equal(authorizeAsset(actor, deletedSource), false, "deleted source cannot be downloaded");
+    assert.equal((await projectJobs(db, actor, "pa"))[0].sourceAssetId, "asseta", "history retains the original source identity");
+    await db.asset.update({ where: { id: "asseta" }, data: { state: "VALIDATED" } });
     const raceBrief = parseRender({ ...input, id: randomUUID(), prompt: "Separate race fixture" });
     const raceIo = { ...io, async submit() { return { id: "race-provider", status: "queued" }; } };
     await startJob(db, config, actor, raceBrief, raceIo);

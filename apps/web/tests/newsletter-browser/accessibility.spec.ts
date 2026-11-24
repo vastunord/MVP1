@@ -54,3 +54,34 @@ test("cookie and Prana controls reflow in a 195 by 225 CSS-pixel viewport", asyn
   await page.keyboard.press("Enter");
   await expect(panel).toHaveCount(0);
 });
+
+for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
+  test(`keyboard focus stays visible on ${route} at a 640px reflow viewport`, async ({ page }) => {
+    // 640 CSS pixels is equivalent to a 1280px layout viewport at 200% zoom,
+    // but does not exercise the browser's zoom control or assistive technology.
+    await page.setViewportSize({ width: 640, height: 512 });
+    await page.addInitScript(() => {
+      localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
+      localStorage.setItem("vn-newsletter-display", JSON.stringify({ version: 1, state: "confirmed" }));
+    });
+    await page.goto(route);
+    for (let index = 0; index < 14; index++) {
+      await page.keyboard.press("Tab");
+      const focus = page.locator(":focus");
+      if (await focus.count() === 0) continue;
+      const state = await focus.evaluate((node) => {
+        const rect = node.getBoundingClientRect();
+        const x = Math.max(0, Math.min(innerWidth - 1, rect.left + rect.width / 2));
+        const y = Math.max(0, Math.min(innerHeight - 1, rect.top + rect.height / 2));
+        const hit = document.elementFromPoint(x, y);
+        return {
+          visible: rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.right > 0 && rect.top < innerHeight && rect.left < innerWidth,
+          unobscured: Boolean(hit && (node === hit || node.contains(hit))),
+          description: `${node.tagName} ${node.getAttribute("aria-label") || node.textContent?.trim().slice(0, 60) || ""}`,
+        };
+      });
+      expect(state.visible, `Focused element outside viewport: ${state.description}`).toBe(true);
+      expect(state.unobscured, `Focused element obscured: ${state.description}`).toBe(true);
+    }
+  });
+}

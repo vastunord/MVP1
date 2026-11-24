@@ -191,6 +191,7 @@ test("gallery requires rights, editorial review, and separate user consents", ()
     origin: "USER" as const,
     assetState: "VALIDATED" as const,
     rightsVerified: true,
+    mimeType: "image/jpeg",
     activeConsentChannels: ["GALLERY"] as const,
     approvedReviewChannels: ["GALLERY", "PINTEREST"] as const,
     withdrawn: false,
@@ -207,6 +208,9 @@ test("gallery requires rights, editorial review, and separate user consents", ()
     false,
   );
   assert.equal(canPublish(base, "GALLERY"), true);
+  assert.equal(canPublish({ ...base, mimeType: undefined }, "GALLERY"), false);
+  assert.equal(canPublish({ ...base, mimeType: "application/pdf" }, "PINTEREST"), false);
+  assert.equal(canPublish({ ...base, origin: "UNKNOWN" as never }, "GALLERY"), false);
   assert.equal(canPublish(base, "PINTEREST"), false);
   assert.equal(
     canPublish(

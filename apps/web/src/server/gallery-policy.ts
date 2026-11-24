@@ -1,3 +1,5 @@
+import { permittedChannels } from "../lib/publication-consent.ts";
+
 export type Channel = "GALLERY" | "PINTEREST" | "YOUTUBE";
 export type Eligibility = {
   origin: "USER" | "COMPANY_DEMO";
@@ -9,7 +11,9 @@ export type Eligibility = {
   withdrawn: boolean;
 };
 export function canPublish(input: Eligibility, channel: Channel) {
-  if (channel === "YOUTUBE" && input.mimeType !== "video/mp4") return false;
+  // Fail closed for missing, unknown or destination-incompatible media types.
+  if (!input.mimeType || !permittedChannels(input.mimeType).includes(channel)) return false;
+  if (input.origin !== "USER" && input.origin !== "COMPANY_DEMO") return false;
   if (
     input.assetState !== "VALIDATED" ||
     input.withdrawn ||
