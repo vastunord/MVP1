@@ -12,6 +12,7 @@ test("footer terms and privacy stay in the selected language", async ({ page }) 
     await page.getByRole("main").getByRole("link", { name: privacy }).click();
     await expect(page).toHaveURL(new RegExp(prefix + "/privacy$"));
     await expect(page.getByRole("main").getByRole("link", { name: /Groq/ })).toHaveAttribute("href", "https://console.groq.com/docs/your-data");
+    await expect(page.getByRole("main")).toContainText(prefix ? "only after storage completes" : "først når lagringen er fullført");
   }
 });
 
