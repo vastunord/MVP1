@@ -11,7 +11,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | Finding / criterion | State and evidence | Next action or exact dependency |
 |---|---|---|
 | VN-01: existing synthetic result and artifact-specific comparison/download/reopen | BLOCKED_EXTERNAL for live artifact: no shared authenticated Preview session; missing-source/output UI VERIFIED_LOCAL with controlled responses | Resume with authorized owner session and existing synthetic source/result; no paid render. |
-| VN-02/05/16/17: model and control gating | VERIFIED_LOCAL: parser, unconditional-select sweep and all 17 disabled-generation browser states; one previously tested model enabled | Verify conditional control effects and live provider capabilities separately. |
+| VN-02/05/16/17: model and control gating | VERIFIED_LOCAL: parser, unconditional/conditional select sweeps and all 17 disabled-generation browser states; one previously tested model enabled | Actual live provider effects remain unverified. |
 | VN-03: source/deployment identity | READY: local branch preserved; Preview older | Prepare candidate SHA, fresh-checkout procedure and target-specific release decision. |
 | VN-04: inline create/retry/draft and cross-project saved image selection | VERIFIED_LOCAL: controlled component browser fixture includes delayed creation, locale and navigation/reselection; actual project service/Prisma ownership test separately | Test fully authenticated browser/API journey and full Editor prompt/settings navigation behavior. |
 | VN-06: local persistence and retry | VERIFIED_LOCAL: file-backed PGlite reopen, simulated history/storage failures, expired output and same-job retry without duplicate attachment | Genuine Prisma/network reconnection and live recovery remain unverified. |
@@ -26,7 +26,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | VN-21: shared Knowledge filtering, return state and five guide decisions | VERIFIED_LOCAL: state/guide tests and public/Studio browser return journeys | Complete editorial review and verify all locale/taxonomy combinations. |
 | VN-22/23: provenance and operator information | PARTIAL: unknown media/origin fails closed; synthetic consent and Payload editorial tests pass; unsourced numeric claims removed | Confirm actual image rights, live Payload publication rules, legal entity and qualified policy review. |
 | VN-24: local performance | PARTIAL: local font-swap cause identified and Arial-only fallback reduced observed cold mobile shift in unbuffered lab | Repeat on real devices and deployed field data; verify non-Arial platforms and remaining notice shift. No field Core Web Vitals claim. |
-| VN-25: icons and metadata | PARTIAL: representative bilingual page titles/icons and account-recovery titles VERIFIED_LOCAL | Check remaining routes and actual platform font rendering. |
+| VN-25: icons and metadata | PARTIAL: bilingual representative pages, account-recovery titles and all 17 privacy-safe Studio tool titles VERIFIED_LOCAL | Check remaining routes and actual platform font rendering. |
 
 | ID | Priority | Finding / routes | Triage | Acceptance and dependency |
 |---|---|---|---|---|

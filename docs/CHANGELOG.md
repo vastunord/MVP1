@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Added server/client conditional-control checks and privacy-safe route-specific Studio titles; current build and nine focused browser checks passed. The controlled newsletter and overlay suite passed 30/30 without delivery. A final combined regression remains necessary after later work.
+
 - Verified unavailable generation across all 17 Studio routes with zero intercepted provider submissions; added select-value contract coverage. Corrected duplicate brand titles on localized account recovery/verification pages and passed fresh-build browser checks.
 
 - A complete local browser smoke rerun passed 78/78 after updating stale mobile-navigation and Knowledge URL/illustration assertions. Added an Arial-only adjusted fallback; unbuffered local measurements improved at 390px in both languages, without claiming field metrics or changing the approved loaded font.
