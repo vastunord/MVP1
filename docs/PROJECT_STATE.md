@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Current local candidate
+
+Source candidate `2787993e6ce43a34ddf12c665f0848dfa68ee11b` on `feat/v7-brand-photo-entry` includes first-project intake and draft/race recovery, guarded Studio choices, private-gallery empty and missing-image states, consent/newsletter/Prana overlay fixes, localized Knowledge and metadata improvements, and qualified public claims. All 17 Studio routes remain. The full browser smoke suite passed 85/85, newsletter/accessibility fixtures 80/80, gallery/recovery fixtures 9/9, and 61 unit tests, TypeScript, ESLint and Prisma schema validation passed. An isolated archive of that source installed offline from the lockfile and passed the Webpack build. Local mocked browser checks, isolated database/service checks and live Preview evidence are separate; none proves an authenticated saved-render journey.
+
+The protected Preview is still the older `a048c9d` diagnostic build. The existing synthetic result's live attachment, same-asset access checks and real OAuth remain pending. Manual screen-reader, actual browser zoom, physical-device and image-backed contrast checks are unverified. An isolated PGlite file reopen is persistence-lifecycle coverage, not a real network reconnection test; a multi-connection local PostgreSQL server was unavailable. See the tracker and consolidated owner-action register. No paid generation, production change, push or deployment occurred.
+
 ## 24 November 2026 · Single-run remediation checkpoint
 
 The local source candidate `fa6f48b71d8e70a52ea6ba3602e83effde28499b` passed 85 smoke tests, 65 newsletter/accessibility fixture checks, six intake cases, seven gallery/recovery cases, 61 unit tests, TypeScript, ESLint, Prisma schema validation and Webpack build. Its exact Git archive also installed the locked dependencies from cache offline and built successfully; the temporary archive was removed. These are local/synthetic results, not evidence of a live Preview release or commercial readiness. The protected Preview remains the older `a048c9d` diagnostic build. Remaining integration and owner gates are listed in `AUDIT_REMEDIATION_TRACKER.md`, `BLOCKERS_AND_OWNER_ACTIONS.md` and `go-live/RELEASE_CHECKLIST.md`.

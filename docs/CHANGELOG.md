@@ -1,5 +1,10 @@
 # Development change log (compact)
 
+## 24 November 2026 · Current remediation candidate
+
+- Source `2787993` includes Studio intake and recovery, private-gallery empty/error handling, overlay and accessibility fixes, qualified content and localized metadata. Smoke passed 85/85, newsletter/accessibility fixtures 80/80, intake 7/7, gallery/recovery 9/9, and 61 unit tests, TypeScript, ESLint and Prisma schema validation passed. An isolated archive of that exact source built with offline locked dependencies. These local fixtures are distinct from live cloud evidence.
+- Protected Preview remains the earlier diagnostic deployment; the existing saved render and live OAuth remain unverified. No paid render, cloud change, push or deployment occurred.
+
 ## 24 November 2026 · Single-run remediation
 
 - Candidate `fa6f48b` passed 85 smoke, 65 newsletter/accessibility, six intake and seven gallery/recovery browser checks, 61 unit tests, TypeScript, ESLint, Prisma validation and a Webpack build. An isolated archive of the exact commit also installed offline from cache and built. These checks are local/synthetic; no deployment occurred.
