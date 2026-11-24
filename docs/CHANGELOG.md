@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 24 November 2026 · Login dock investigation
+
+- Tested relocating the privacy copy on five auth routes in both languages at three mobile heights. It cleared the copy but shifted launcher overlap to other controls, so the experiment was reverted. Clean rebuild and existing English login keyboard-focus checks passed 3/3. General dock/content layout remains a local technical issue.
+
 ## 24 November 2026 · Current responsive capture matrix
 
 - Saved 24 signed-out local screenshots of `0b8c924` at six widths. The initial 390px Studio navigation is clear; the login capture still shows launchers covering part of static copy near the viewport bottom. Actual devices, zoom, screen readers, authenticated states and exact design parity remain unverified.

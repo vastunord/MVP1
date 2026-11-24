@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Login dock investigation
+
+The current 390px login screenshot shows fixed launchers covering part of static privacy copy at the initial 900px viewport. A local experiment moved the same copy above the form and cleared it across five auth routes in both languages at heights 600, 750 and 900, but shifted overlap to email, password or account links at those heights. The experiment was reverted; the clean source rebuilt and existing English login keyboard-focus checks passed 3/3. This is a remaining local design issue, not a live or owner-access blocker: investigate reserving a dock-safe viewport area while preserving persistent corner controls and approved layouts. Scrolling can expose the copy; keyboard focus has separate coverage. Do not claim arbitrary-content clearance or actual-device verification.
+
 ## 24 November 2026 · Current responsive capture matrix
 
 Saved 24 signed-out local full-page screenshots of current source `0b8c924` at six widths across home, login, Studio editor and gallery in `docs/evidence/responsive-local/0b8c924/`. All returned HTTP 200 without horizontal document overflow or unresolved images. The 390px editor's section links are clear in the initial capture; the login capture still shows fixed launchers covering part of static privacy copy near the viewport bottom, which can be exposed by scrolling. This does not establish arbitrary-scroll, real-device, actual-zoom, screen-reader, authenticated or Figma-parity behavior.
