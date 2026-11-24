@@ -130,7 +130,7 @@ function RoomTour({ t }: ViewProps) {
               {roomIndex === rooms.length - 1
                 ? t("Til første rom", "Back to first room")
                 : t("Neste rom", "Next room")}{" "}
-              →
+              <span aria-hidden="true">→</span>
             </button>
           </figcaption>
         </figure>
@@ -383,7 +383,7 @@ function Budget({ t, locale }: ViewProps & { locale: Locale }) {
             "Les budsjettguiden i biblioteket",
             "Find the budget guide in the library",
           )}{" "}
-          →
+          <span aria-hidden="true">→</span>
         </Link>
       </section>
     </>
@@ -433,7 +433,7 @@ function AccountPreview({ t, wallet }: ViewProps & { wallet: boolean }) {
             {wallet
               ? t("Se fakturering", "Billing overview")
               : t("Se kredittoversikt", "View wallet")}{" "}
-            →
+            <span aria-hidden="true">→</span>
           </Link>
         </section>
         <section className="xp-panel">

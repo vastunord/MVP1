@@ -55,7 +55,7 @@ export function Marketing({
         <>
           <MarketingPages locale={locale} page={page} authReady={authReady}
             studyCards={page === "resources" ? visualStudyCards(locale) : undefined} />
-          {page === "resources" && journalOrigin(process.env) && <div className="mk-wrap"><Link className="mk-action" href={publicHref("/resources/journal",locale)}>{locale==="en"?"Read the editorial journal":"Les tidsskriftet"} ↗</Link></div>}
+          {page === "resources" && journalOrigin(process.env) && <div className="mk-wrap"><Link className="mk-action" href={publicHref("/resources/journal",locale)}>{locale==="en"?"Read the editorial journal":"Les tidsskriftet"} <span aria-hidden="true">↗</span></Link></div>}
         </>
       ) : (
         <MarketingHome

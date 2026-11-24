@@ -29,7 +29,7 @@ export async function Journal({
     return (
       <Section>
         <article className="visual-study">
-          <Link href={base}>{en ? "← Journal" : "← Tidsskrift"}</Link>
+          <Link href={base}><span aria-hidden="true">← </span>{en ? "Journal" : "Tidsskrift"}</Link>
           <h1>{entry.title}</h1>
           <p>{entry.summary}</p>
           <Image
@@ -52,7 +52,7 @@ export async function Journal({
   return (
     <Section>
       <Link href={publicHref("/resources", locale)}>
-        {en ? "← Knowledge Hub" : "← Kunnskapsbase"}
+        <span aria-hidden="true">← </span>{en ? "Knowledge Hub" : "Kunnskapsbase"}
       </Link>
       <h1>{en ? "Journal" : "Tidsskrift"}</h1>
       {result.articles.map((item) => (
@@ -73,12 +73,12 @@ export async function Journal({
       <nav aria-label={en ? "Journal pages" : "Sider i tidsskriftet"}>
         {page > 1 && (
           <Link href={base + "?page=" + (page - 1)}>
-            {en ? "← Previous page" : "← Forrige side"}
+            <span aria-hidden="true">← </span>{en ? "Previous page" : "Forrige side"}
           </Link>
         )}{" "}
         {page < result.pages && (
           <Link href={base + "?page=" + (page + 1)}>
-            {en ? "Next page →" : "Neste side →"}
+            {en ? "Next page" : "Neste side"} <span aria-hidden="true">→</span>
           </Link>
         )}
       </nav>

@@ -94,7 +94,7 @@ export function Directory({
         {entries.map((d) => (
           <Link key={d.href} href={d.href} onClick={onChoose}>
             <span>{d.label}</span>
-            <small>{d.caption} ↗</small>
+            <small>{d.caption} <span aria-hidden="true">↗</span></small>
           </Link>
         ))}
       </div>

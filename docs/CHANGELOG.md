@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 24 November 2026 · Accessible action names
+
+- Hid decorative arrow glyphs from accessible link and button names across affected marketing, Studio, journal and Prana components while retaining their visible appearance. Local build, targeted lint and seven browser checks passed; conditional live states and actual screen-reader output remain unverified.
+
 ## 24 November 2026 · Navigation, privacy and performance follow-up
 
 - Candidate source `ee596ae` passed 90 browser smoke tests, 62 unit tests and an offline locked-dependency Webpack build from its exact Git archive. The archive does not establish a remote checkout or deployed revision.

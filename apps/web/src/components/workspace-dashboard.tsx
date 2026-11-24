@@ -82,7 +82,7 @@ export function Dashboard({
           <div className="vn-section-title">
             <h2>{en ? "Your recent projects" : "Dine siste prosjekter"}</h2>
             <Link href="/app/projects">
-              {en ? "All projects" : "Alle prosjekter"} ↗
+              {en ? "All projects" : "Alle prosjekter"} <span aria-hidden="true">↗</span>
             </Link>
           </div>
           {recentProjects.length ? (
@@ -102,14 +102,14 @@ export function Dashboard({
               {en
                 ? "Create your first project"
                 : "Opprett ditt første prosjekt"}{" "}
-              ↗
+              <span aria-hidden="true">↗</span>
             </Link>
           )}
         </section>
       )}
       <div className="vn-section-title">
         <h2>{en ? "Project studies" : "Eksempelprosjekter"}</h2>
-        <Link href="/app/albums">{en ? "View albums" : "Vis album"} ↗</Link>
+        <Link href="/app/albums">{en ? "View albums" : "Vis album"} <span aria-hidden="true">↗</span></Link>
       </div>
       <StudyCards locale={locale} overview />
       <div className="vn-section-title">
@@ -124,7 +124,7 @@ export function Dashboard({
               ? "Discover how a room changes with light and material."
               : "Se hvordan lys og materialer endrer rommet."}
           </p>
-          <span>↗</span>
+          <span aria-hidden="true">↗</span>
         </Link>
         <Link href="/app/knowledge">
           <WorkspaceIcon name="book" />
@@ -134,7 +134,7 @@ export function Dashboard({
               ? "Read about room flow, materials and Nordic living."
               : "Les om romflyt, materialer og nordisk hverdagsliv."}
           </p>
-          <span>↗</span>
+          <span aria-hidden="true">↗</span>
         </Link>
       </div>
     </section>
@@ -169,7 +169,7 @@ export function StudyDetail({
       <div className="vn-section-title">
         <h2>{en ? "Project album" : "Prosjektalbum"}</h2>
         <Link href={"/app/renders?album=" + study.id}>
-          {en ? "Open album" : "Åpne album"} ↗
+          {en ? "Open album" : "Åpne album"} <span aria-hidden="true">↗</span>
         </Link>
       </div>
       <p>
@@ -180,7 +180,7 @@ export function StudyDetail({
       </p>
       <p>
         <Link href={"/app/renders?album=" + study.id}>
-          {images.length} {en ? "curated references in the album" : "utvalgte referanser i albumet"} ↗
+          {images.length} {en ? "curated references in the album" : "utvalgte referanser i albumet"} <span aria-hidden="true">↗</span>
         </Link>
       </p>
       <div className="vn-related">

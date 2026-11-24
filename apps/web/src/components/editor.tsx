@@ -364,7 +364,7 @@ export function Editor({
                         .filter(([id]) => id !== tool.id)
                         .map(([id, nb, en]) => (
                           <Link key={id} href={studioSampleHref(sample, id)}>
-                            {english ? en : nb} ↗
+                            {english ? en : nb} <span aria-hidden="true">↗</span>
                           </Link>
                         ))}
                     </details>

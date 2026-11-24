@@ -62,7 +62,7 @@ function Cards({
     <div className="mp-cards">
       {items.map(({ title, body, href }) => (
         <article key={title}>
-          <h3>{href ? <Link href={href}>{title} ↗</Link> : title}</h3>
+          <h3>{href ? <Link href={href}>{title} <span aria-hidden="true">↗</span></Link> : title}</h3>
           <p>{body}</p>
         </article>
       ))}

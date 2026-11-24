@@ -150,7 +150,7 @@ export function ProjectsScreen({
       ) : projectId ? (
         <section className="empty-section">
           <Link href="/app/projects">
-            ← {en ? "All projects" : "Alle prosjekter"}
+            <span aria-hidden="true">← </span>{en ? "All projects" : "Alle prosjekter"}
           </Link>
           {selected && (
             <>

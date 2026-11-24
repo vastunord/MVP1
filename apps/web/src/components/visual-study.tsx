@@ -19,7 +19,7 @@ export function VisualStudy({
       <div className="study-intro">
         <div>
           <KnowledgeReturn locale={locale}>
-            {translate("← Alle guider", "← All guides")}
+            <span aria-hidden="true">← </span>{translate("Alle guider", "All guides")}
           </KnowledgeReturn>
           <p className="mk-label">{study.topic}</p>
           <h1>{study.name}</h1>
@@ -78,7 +78,7 @@ export function VisualStudy({
               key={item.id}
               href={publicHref("/resources/" + item.id, locale)}
             >
-              {item.name} ↗
+              {item.name} <span aria-hidden="true">↗</span>
             </Link>
           ))}
         </div>

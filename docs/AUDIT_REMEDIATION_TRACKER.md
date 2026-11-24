@@ -26,7 +26,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 | VN-21: shared Knowledge filtering, return state and five guide decisions | VERIFIED_LOCAL: state/guide tests, public/Studio browser return journeys and all eight topics in both languages | Complete qualified editorial review. |
 | VN-22/23: provenance and operator information | PARTIAL: unknown media/origin fails closed; synthetic consent and Payload editorial tests pass; unsourced numeric claims removed | Confirm actual image rights, live Payload publication rules, legal entity and qualified policy review. |
 | VN-24: local performance | PARTIAL: local font-swap cause identified; 18 signed-out localhost runs now include Studio editor and transfer-size estimates, with evidence in `docs/evidence/local-performance/2026-11-24-b02680f.json` | Measure authenticated saved-result route, real devices and deployed field data; verify non-Arial platforms and remaining notice shift. No field Core Web Vitals claim. |
-| VN-25: icons and metadata | VERIFIED_LOCAL for bilingual public routes, guides/newsletter actions, account-recovery titles and all 17 privacy-safe Studio tool titles | Actual platform/font rendering remains unverified. |
+| VN-25: icons and metadata | VERIFIED_LOCAL for bilingual public routes, guides/newsletter actions, account-recovery titles, all 17 privacy-safe Studio tool titles and decorative-arrow accessible names on sampled routes | Conditional live journal/project/film states and actual platform/font rendering remain unverified. |
 
 | ID | Priority | Finding / routes | Triage | Acceptance and dependency |
 |---|---|---|---|---|

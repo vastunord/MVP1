@@ -311,7 +311,7 @@ export function Gallery({
                   </span>
                   <span className="vn-study-text">
                     <small>{translated(scene.style, locale)}</small>
-                    <strong>{title} ↗</strong>
+                    <strong>{title} <span aria-hidden="true">↗</span></strong>
                   </span>
                 </button>
                 <button
@@ -353,7 +353,7 @@ export function Gallery({
       {!publicCollection && (
         <div className="vn-related">
           <Link href="/app/albums">
-            {en ? "Browse albums" : "Utforsk album"} ↗
+            {en ? "Browse albums" : "Utforsk album"} <span aria-hidden="true">↗</span>
           </Link>
           <Link href="/app/tools/room-reimagination">
             {en ? "Open Studio" : "Åpne Studio"} <span aria-hidden="true">↗</span>
@@ -387,7 +387,7 @@ export function Gallery({
           <span>{translated(selected.style, locale)}</span>
           {!publicCollection && (
             <Link href={"/app/studies/" + selected.study}>
-              {en ? "View example project" : "Åpne eksempelprosjekt"} ↗
+              {en ? "View example project" : "Åpne eksempelprosjekt"} <span aria-hidden="true">↗</span>
             </Link>
           )}
         </div>

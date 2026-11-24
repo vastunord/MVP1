@@ -8,10 +8,12 @@ test("dashboard opens a project study and its album; gallery searches and previe
   await expect(
     page.getByRole("heading", { name: "Gode rom begynner her." }),
   ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Vis album", exact: true })).toBeVisible();
   await page.getByRole("link", { name: /Fjordboligen/ }).click();
   await expect(
     page.getByRole("heading", { name: "Fjordboligen" }),
   ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Åpne album", exact: true })).toBeVisible();
   await page.getByRole("link", { name: /Åpne album/ }).click();
   await expect(page.locator(".vn-tile")).toHaveCount(renderGallery.filter((scene) => scene.study === "fjord").length);
   await page

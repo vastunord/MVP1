@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Accessible action names
+
+Decorative forward and back arrows in affected marketing, Studio, journal and Prana actions remain visible but are excluded from accessible names. A local Webpack build, targeted ESLint and seven focused browser checks passed, including Knowledge return journeys. Conditional live journal and authenticated project screens and actual screen-reader behavior remain unverified. No cloud action or paid render occurred.
+
 ## 24 November 2026 · Navigation, privacy and performance follow-up
 
 Current local source candidate `ee596ae567f5eb4015fedf73637b799c929f340e` passed all 90 browser smoke tests and 62 unit tests. An isolated archive of this exact source installed locked dependencies offline and passed the Webpack build; it is not evidence of a remote checkout or deployment.

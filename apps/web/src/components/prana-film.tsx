@@ -40,12 +40,12 @@ export function PranaFilm({ locale, featured }: { locale: Locale; featured?: str
           </button>
         </>}
         <a className="prana-text-link" href={`https://www.youtube.com/watch?v=${video}`} target="_blank" rel="noreferrer">
-          {en ? "Watch on YouTube" : "Se på YouTube"} ↗
+          {en ? "Watch on YouTube" : "Se på YouTube"} <span aria-hidden="true">↗</span>
         </a>
       </> : <p aria-live="polite">{video === undefined
         ? (en ? "Checking for a film…" : "Henter filmoversikten …")
         : (en ? "There’s no film available to play here right now." : "Det er ingen film tilgjengelig for avspilling her akkurat nå.")}</p>}
-      <a className="prana-text-link" href={channel} target="_blank" rel="noreferrer">@VastuNord {en ? "on YouTube" : "på YouTube"} ↗</a>
+      <a className="prana-text-link" href={channel} target="_blank" rel="noreferrer">@VastuNord {en ? "on YouTube" : "på YouTube"} <span aria-hidden="true">↗</span></a>
     </>
   );
 }
