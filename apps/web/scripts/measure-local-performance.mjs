@@ -64,7 +64,9 @@ try {
               context.font = `400 16px "${font}"`;
               fontWidths[font] = Math.round(context.measureText("Noncommercial demonstration · in development").width);
             }
-            return { ttfbMs: Math.round(navigation.responseStart), lcpWithinWindowMs: Math.round(window.__vnLab.lcp), layoutShiftSumWithinWindow: Number(window.__vnLab.cls.toFixed(4)), shifts: window.__vnLab.shifts, fontEvents: window.__vnLab.fontEvents, geometry: window.__vnLab.geometry, fontWidths };
+            const preload = [...document.querySelectorAll('link[rel="preload"][as="font"]')].length;
+            const fontRequests = performance.getEntriesByType("resource").filter(entry => entry.name.includes("fonts.gstatic.com")).map(entry => ({initiator: entry.initiatorType, start: Math.round(entry.startTime), end: Math.round(entry.responseEnd)}));
+            return { ttfbMs: Math.round(navigation.responseStart), lcpWithinWindowMs: Math.round(window.__vnLab.lcp), layoutShiftSumWithinWindow: Number(window.__vnLab.cls.toFixed(4)), shifts: window.__vnLab.shifts, fontEvents: window.__vnLab.fontEvents, geometry: window.__vnLab.geometry, fontWidths, preload, fontRequests };
           });
           console.log(JSON.stringify({ viewport, route, run, status: response?.status(), ...data }));
         }

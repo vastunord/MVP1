@@ -10,7 +10,7 @@ Source: accompanying forensic audit and backlog. Status is local triage, not pro
 
 | Finding / criterion | State and evidence | Next action or exact dependency |
 |---|---|---|
-| VN-01: existing synthetic result and artifact-specific comparison/download/reopen | BLOCKED_EXTERNAL: no shared authenticated Preview session | Resume with authorized owner session and existing synthetic source/result; no paid render. |
+| VN-01: existing synthetic result and artifact-specific comparison/download/reopen | BLOCKED_EXTERNAL for live artifact: no shared authenticated Preview session; missing-source/output UI VERIFIED_LOCAL with controlled responses | Resume with authorized owner session and existing synthetic source/result; no paid render. |
 | VN-02/05/16/17: model and control gating | VERIFIED_LOCAL: parser and 17-tool configuration tests; one previously tested model enabled | Browser-check all routes and retain live provider capability checks separately. |
 | VN-03: source/deployment identity | READY: local branch preserved; Preview older | Prepare candidate SHA, fresh-checkout procedure and target-specific release decision. |
 | VN-04: inline create/retry/draft and cross-project saved image selection | VERIFIED_LOCAL: component browser fixture with controlled HTTP; actual project service/Prisma ownership test separately | Test fully authenticated browser/API journey; assess navigation, locales and themes. |

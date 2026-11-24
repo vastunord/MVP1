@@ -15,7 +15,8 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
   const [renders, setRenders] = useState<RenderStatus[]>([]);
   const [selected, setSelected] = useState<RenderStatus | null>(null);
   const [divider, setDivider] = useState(50);
-  const [imageError, setImageError] = useState(false);
+  const [sourceError, setSourceError] = useState(false);
+  const [outputError, setOutputError] = useState(false);
   const [status, setStatus] = useState<
     "loading" | "ready" | "signin" | "error"
   >("loading");
@@ -167,7 +168,8 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
             onClick={() => {
               setSelected(row);
               setDivider(50);
-              setImageError(false);
+              setSourceError(false);
+              setOutputError(false);
             }}
           >
             {row.media === "image" && row.outputAssetId ? (
@@ -188,11 +190,25 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
       {selected?.outputAssetId && (
         <div className="vn-private-result">
           <h3>{en ? "Saved result" : "Lagret resultat"}</h3>
-          {imageError && (
+          {outputError && (
             <p role="alert">
               {en
-                ? "The saved image could not be loaded. Try opening it again."
-                : "Det lagrede bildet kunne ikke lastes. Prøv å åpne det igjen."}
+                ? "The saved result could not be loaded. Try opening it again."
+                : "Det lagrede resultatet kunne ikke lastes. Prøv å åpne det igjen."}
+            </p>
+          )}
+          {sourceError && (
+            <p role="alert">
+              {en
+                ? "The original image is unavailable, so comparison is temporarily unavailable. You can still view the saved result."
+                : "Originalbildet er ikke tilgjengelig, så sammenligning er midlertidig utilgjengelig. Du kan fortsatt se det lagrede resultatet."}
+            </p>
+          )}
+          {selected.media === "image" && !selected.sourceAssetId && (
+            <p role="status">
+              {en
+                ? "No original image is recorded for this result, so comparison is unavailable."
+                : "Det finnes ikke noe registrert originalbilde for dette resultatet, så sammenligning er utilgjengelig."}
             </p>
           )}
           {selected.media === "image" ? (
@@ -203,9 +219,9 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
                 height={512}
                 src={url(selected.outputAssetId)}
                 alt={en ? "Generated image" : "Generert bilde"}
-                onError={() => setImageError(true)}
+                onError={() => setOutputError(true)}
               />
-              {selected.sourceAssetId && (
+              {selected.sourceAssetId && !sourceError && !outputError && (
                 <div
                   className="vn-private-comparison-before"
                   style={{ clipPath: `inset(0 ${100 - divider}% 0 0)` }}
@@ -216,7 +232,7 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
                     height={512}
                     src={url(selected.sourceAssetId)}
                     alt={en ? "Original image" : "Originalbilde"}
-                    onError={() => setImageError(true)}
+                    onError={() => setSourceError(true)}
                   />
                 </div>
               )}
@@ -224,7 +240,7 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
           ) : (
             <video controls src={url(selected.outputAssetId)} />
           )}
-          {selected.media === "image" && selected.sourceAssetId && (
+          {selected.media === "image" && selected.sourceAssetId && !sourceError && !outputError && (
             <label>
               {en
                 ? "Compare original and result"
@@ -239,10 +255,9 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
             </label>
           )}
           <p>
-            <a href={url(selected.outputAssetId)} download>
+            {!outputError && <><a href={url(selected.outputAssetId)} download>
               {en ? "Download result" : "Last ned resultat"}
-            </a>{" "}
-            ·{" "}
+            </a>{" "}·{" "}</>}
             <Link href={`/app/tools/${encodeURIComponent(selected.toolId)}`}>
               {en ? "Open Studio" : "Åpne Studio"}
             </Link>

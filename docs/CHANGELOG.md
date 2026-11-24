@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Single-run remediation
 
+- Gallery result errors now distinguish a missing original from a missing output and hide an unusable comparison; 3 controlled UI-only tests passed. A proposed font preload was removed after an unbuffered rebuild failed to reproduce the earlier buffered test's improvement; the cold-load shift remains open.
+
 - Fixed Prana heading reflow at a very narrow CSS viewport and clarified Studio breadcrumbs. Fresh-build browser tests passed for the overlay and all 17 routes. The initial breadcrumb assertion included the search shortcut; a scoped selector passed on rerun. Investigated, but have not yet changed, the measured font-swap layout shift.
 
 - Localized contact fallback now includes the chosen topic; 2 browser tests passed without sending messages. Reflow/keyboard checks passed 24 scenarios; real zoom, touch and assistive technology remain unverified. Cold mobile layout shift was reproduced in a local lab and remains under investigation, without a field-metric claim.
