@@ -210,6 +210,7 @@ export function Editor({
         <Link href="/app/library"><span aria-hidden="true">← </span>{t.open}</Link>
         <StudioToolSwitcher tool={tool} locale={locale} sample={sample} />
       </div>
+      {!submissionEnabled && <p role="status" className="inspector-help editor-availability">{english ? "Explore this workflow with a sample. Image generation is not enabled in this demo." : "Utforsk arbeidsflyten med et eksempel. Bildegenerering er ikke aktivert i denne demonstrasjonen."}</p>}
       <div className="studio-workbench">
         <div className="inspector">
           {room && (
@@ -229,7 +230,6 @@ export function Editor({
             tabIndex={0}
             aria-label={t.controls}
           >
-            {!submissionEnabled && <p role="status" className="inspector-help">{english ? "Explore this workflow with a sample. Image generation is not enabled in this demo." : "Utforsk arbeidsflyten med et eksempel. Bildegenerering er ikke aktivert i denne demonstrasjonen."}</p>}
             <details className="inspector-group studio-engine room-drawer" open>
               <summary>
                 {english ? "Workflow and engine" : "Arbeidsflyt og motor"}

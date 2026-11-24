@@ -1,0 +1,271 @@
+{
+  "source": "d3cd656e191a5f6f61a140ef61033a148bfc2161",
+  "environment": "Local Next.js production build; signed out; Edge headless; 1x CSS pixels; reduced motion; HTTPS requests blocked",
+  "limitations": "No actual device, browser zoom, authenticated assets, screen reader or approved Figma comparison. Consent and newsletter overlays suppressed for stable capture; separate fixture tests cover their sampled behavior.",
+  "captures": [
+    {
+      "route": "/en",
+      "width": 390,
+      "height": 900,
+      "filename": "home-390.jpg",
+      "status": 200,
+      "viewportWidth": 390,
+      "documentWidth": 390,
+      "title": "Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en/login",
+      "width": 390,
+      "height": 900,
+      "filename": "login-390.jpg",
+      "status": 200,
+      "viewportWidth": 390,
+      "documentWidth": 390,
+      "title": "Sign in · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/tools/room-reimagination",
+      "width": 390,
+      "height": 900,
+      "filename": "editor-390.jpg",
+      "status": 200,
+      "viewportWidth": 390,
+      "documentWidth": 390,
+      "title": "Room Reimagination · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/renders",
+      "width": 390,
+      "height": 900,
+      "filename": "gallery-390.jpg",
+      "status": 200,
+      "viewportWidth": 390,
+      "documentWidth": 390,
+      "title": "Render gallery · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en",
+      "width": 768,
+      "height": 900,
+      "filename": "home-768.jpg",
+      "status": 200,
+      "viewportWidth": 768,
+      "documentWidth": 768,
+      "title": "Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en/login",
+      "width": 768,
+      "height": 900,
+      "filename": "login-768.jpg",
+      "status": 200,
+      "viewportWidth": 768,
+      "documentWidth": 768,
+      "title": "Sign in · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/tools/room-reimagination",
+      "width": 768,
+      "height": 900,
+      "filename": "editor-768.jpg",
+      "status": 200,
+      "viewportWidth": 768,
+      "documentWidth": 768,
+      "title": "Room Reimagination · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/renders",
+      "width": 768,
+      "height": 900,
+      "filename": "gallery-768.jpg",
+      "status": 200,
+      "viewportWidth": 768,
+      "documentWidth": 768,
+      "title": "Render gallery · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en",
+      "width": 1280,
+      "height": 900,
+      "filename": "home-1280.jpg",
+      "status": 200,
+      "viewportWidth": 1280,
+      "documentWidth": 1280,
+      "title": "Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en/login",
+      "width": 1280,
+      "height": 900,
+      "filename": "login-1280.jpg",
+      "status": 200,
+      "viewportWidth": 1280,
+      "documentWidth": 1280,
+      "title": "Sign in · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/tools/room-reimagination",
+      "width": 1280,
+      "height": 900,
+      "filename": "editor-1280.jpg",
+      "status": 200,
+      "viewportWidth": 1280,
+      "documentWidth": 1280,
+      "title": "Room Reimagination · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/renders",
+      "width": 1280,
+      "height": 900,
+      "filename": "gallery-1280.jpg",
+      "status": 200,
+      "viewportWidth": 1280,
+      "documentWidth": 1280,
+      "title": "Render gallery · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en",
+      "width": 1440,
+      "height": 900,
+      "filename": "home-1440.jpg",
+      "status": 200,
+      "viewportWidth": 1440,
+      "documentWidth": 1440,
+      "title": "Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en/login",
+      "width": 1440,
+      "height": 900,
+      "filename": "login-1440.jpg",
+      "status": 200,
+      "viewportWidth": 1440,
+      "documentWidth": 1440,
+      "title": "Sign in · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/tools/room-reimagination",
+      "width": 1440,
+      "height": 900,
+      "filename": "editor-1440.jpg",
+      "status": 200,
+      "viewportWidth": 1440,
+      "documentWidth": 1440,
+      "title": "Room Reimagination · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/renders",
+      "width": 1440,
+      "height": 900,
+      "filename": "gallery-1440.jpg",
+      "status": 200,
+      "viewportWidth": 1440,
+      "documentWidth": 1440,
+      "title": "Render gallery · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en",
+      "width": 1920,
+      "height": 900,
+      "filename": "home-1920.jpg",
+      "status": 200,
+      "viewportWidth": 1920,
+      "documentWidth": 1920,
+      "title": "Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en/login",
+      "width": 1920,
+      "height": 900,
+      "filename": "login-1920.jpg",
+      "status": 200,
+      "viewportWidth": 1920,
+      "documentWidth": 1920,
+      "title": "Sign in · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/tools/room-reimagination",
+      "width": 1920,
+      "height": 900,
+      "filename": "editor-1920.jpg",
+      "status": 200,
+      "viewportWidth": 1920,
+      "documentWidth": 1920,
+      "title": "Room Reimagination · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/renders",
+      "width": 1920,
+      "height": 900,
+      "filename": "gallery-1920.jpg",
+      "status": 200,
+      "viewportWidth": 1920,
+      "documentWidth": 1920,
+      "title": "Render gallery · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en",
+      "width": 2560,
+      "height": 900,
+      "filename": "home-2560.jpg",
+      "status": 200,
+      "viewportWidth": 2560,
+      "documentWidth": 2560,
+      "title": "Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/en/login",
+      "width": 2560,
+      "height": 900,
+      "filename": "login-2560.jpg",
+      "status": 200,
+      "viewportWidth": 2560,
+      "documentWidth": 2560,
+      "title": "Sign in · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/tools/room-reimagination",
+      "width": 2560,
+      "height": 900,
+      "filename": "editor-2560.jpg",
+      "status": 200,
+      "viewportWidth": 2560,
+      "documentWidth": 2560,
+      "title": "Room Reimagination · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    },
+    {
+      "route": "/app/renders",
+      "width": 2560,
+      "height": 900,
+      "filename": "gallery-2560.jpg",
+      "status": 200,
+      "viewportWidth": 2560,
+      "documentWidth": 2560,
+      "title": "Render gallery · Studio · Vastu Nord",
+      "unresolvedImages": 0
+    }
+  ]
+}

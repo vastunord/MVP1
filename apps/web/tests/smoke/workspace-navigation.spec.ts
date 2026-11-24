@@ -14,7 +14,7 @@ test("all 17 Studio workflows open directly and identify their active library", 
     await expect(page.locator("aside nav a[aria-current='location']")).toHaveAttribute("href", "/app/library");
     await expect(page.locator("aside nav a[aria-current='page']")).toHaveCount(0);
     await expect(page).toHaveTitle(/Studio.*Vastu Nord/);
-    await expect(page.locator(".inspector [role='status']").first()).toContainText("Bildegenerering er ikke aktivert");
+    await expect(page.locator(".editor-availability[role='status']")).toContainText("Bildegenerering er ikke aktivert");
     await expect(page.locator(".primary-action > button").first()).toBeDisabled();
   }
   expect(providerPosts).toBe(0);

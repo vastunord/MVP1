@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Responsive evidence and mobile notice
+
+Saved 24 signed-out local full-page screenshots of source `d3cd656` across home, login, Studio editor and gallery at 390, 768, 1280, 1440, 1920 and 2560 CSS px in `docs/evidence/responsive-local/d3cd656/`. All returned HTTP 200 with no horizontal document overflow; lazy images were decoded before capture. These are not authenticated, actual-device, zoom, screen-reader or Figma-parity evidence.
+
+The 390 × 900 editor capture exposed a real initial overlap between the availability notice and fixed corner launchers. The local editor now places the existing notice above the workbench; targeted tests passed at 390 × 600, 750 and 900 and across all 17 routes. The earlier screenshots preserve the observed before-state. Fixed controls may still cover other content while scrolling; broader behavior remains unverified. No cloud action or paid render occurred.
+
 ## 24 November 2026 · Consent documentation reconciliation
 
 Clarified the historical Phase 02C paragraph in `CONTENT_AND_CONSENT.md`: the existing illustrative demo gallery and conditional consent controls do not establish a verified customer-publication workflow. Noncommercial demo approval and commercial rights review remain distinct. No application or cloud change was made.

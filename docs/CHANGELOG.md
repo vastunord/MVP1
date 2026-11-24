@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 24 November 2026 · Responsive evidence and mobile notice
+
+- Captured 24 local signed-out screens at six widths from `d3cd656`, including a documented initial 390 × 900 editor-status obstruction. Moved the existing availability notice above the workbench; local build, targeted lint and six browser checks passed, including three mobile heights and all 17 editor routes. Other scrolling content and actual devices remain unverified.
+
 ## 24 November 2026 · Consent documentation reconciliation
 
 - Corrected an outdated Phase 02C statement to distinguish the illustrative demo gallery and conditional consent controls from unverified customer publication and commercial rights.
