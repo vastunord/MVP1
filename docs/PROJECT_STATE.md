@@ -2,6 +2,8 @@
 
 ## 24 November 2026 · Accessible action names
 
+Current local source candidate `d3cd656e191a5f6f61a140ef61033a148bfc2161` passed 95 browser smoke tests and built from its exact isolated Git archive with offline locked dependencies. This is local evidence, not a remote checkout or deployed Preview.
+
 Decorative forward and back arrows in affected marketing, Studio, journal and Prana actions remain visible but are excluded from accessible names. A local Webpack build, targeted ESLint and seven focused browser checks passed, including Knowledge return journeys. Conditional live journal and authenticated project screens and actual screen-reader behavior remain unverified. No cloud action or paid render occurred.
 
 ## 24 November 2026 · Navigation, privacy and performance follow-up

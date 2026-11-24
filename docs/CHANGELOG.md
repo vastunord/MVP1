@@ -2,6 +2,7 @@
 
 ## 24 November 2026 · Accessible action names
 
+- Candidate `d3cd656` passed 95 browser smoke tests and an offline locked-dependency Webpack build from its exact Git archive. The earlier 62-unit-test result predates these presentation-only changes.
 - Hid decorative arrow glyphs from accessible link and button names across affected marketing, Studio, journal and Prana components while retaining their visible appearance. Local build, targeted lint and seven browser checks passed; conditional live states and actual screen-reader output remain unverified.
 
 ## 24 November 2026 · Navigation, privacy and performance follow-up
