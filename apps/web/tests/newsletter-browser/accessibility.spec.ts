@@ -127,6 +127,21 @@ test("newsletter controls remain reachable in a short viewport", async ({ page }
   await expect(dialog).toHaveCount(0);
 });
 
+test("Prana exposes useful unavailable-answer and empty-film states", async ({ page }) => {
+  await page.route("**/api/prana/film", (route) => route.fulfill({ status: 503, json: { error: "synthetic outage" } }));
+  let chatPosts = 0;
+  page.on("request", (request) => { if (request.method() === "POST" && new URL(request.url()).pathname === "/api/prana") chatPosts++; });
+  await page.goto("/en?assistant=prana");
+  const panel = page.getByRole("dialog", { name: "VastuNord Prana" });
+  await expect(panel.getByText("Live answers are currently unavailable. Quick Tips is open below.")).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Ask Prana", exact: true })).toHaveCount(0);
+  await panel.getByRole("tab", { name: "Film", exact: true }).click();
+  await expect(panel.getByText("There’s no film available to play here right now.")).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Play here" })).toHaveCount(0);
+  await expect(panel.getByRole("link", { name: /@VastuNord/ })).toHaveAttribute("href", "https://www.youtube.com/@VastuNord");
+  expect(chatPosts).toBe(0);
+});
+
 for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
   test(`a main-content action can receive visible keyboard focus on ${route}`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });

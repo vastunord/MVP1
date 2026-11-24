@@ -107,6 +107,8 @@ export async function journalList(
   locale: string,
   send: typeof fetch = fetch,
 ): Promise<JournalList> {
+  if (!Number.isSafeInteger(page) || page < 1 || page > 10000)
+    throw new Error("Invalid journal page");
   const data = await journalFetch(
     origin,
     "?locale=" + (locale === "en" ? "en" : "nb") + "&page=" + page,
@@ -122,5 +124,11 @@ export async function journalList(
     data.pages < 0
   )
     throw new Error("Invalid journal listing");
-  return data;
+  // Do not let unexpected provider fields (such as editorial notes) escape
+  // through future consumers of the public listing contract.
+  return {
+    articles: data.articles.map(({slug, title, summary}: JournalList["articles"][number]) => ({slug, title, summary})),
+    page: data.page,
+    pages: data.pages,
+  };
 }

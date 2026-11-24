@@ -49,10 +49,14 @@ test("the journal uses the dedicated origin and renders only projected fields", 
   const result = await journalList(origin, 1, "nb-NO", async (url) => {
     assert.equal(url, origin + "/published?locale=nb&page=1");
     return Response.json({
-      articles: [{ slug: "lys", summary: "Kort", title: "Lys" }],
+      articles: [{ slug: "lys", summary: "Kort", title: "Lys", sourceNote:"private editorial fixture" }],
       page: 1,
       pages: 1,
+      staffEmail: "private@example.invalid",
     });
   });
   assert.equal(result.articles[0].slug, "lys");
+  assert.ok(!Object.hasOwn(result.articles[0], "sourceNote"));
+  assert.ok(!Object.hasOwn(result, "staffEmail"));
+  await assert.rejects(journalList(origin, 0, "en", async () => { throw new Error("must not fetch"); }), /Invalid journal page/);
 });
