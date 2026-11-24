@@ -6,6 +6,8 @@ Reconciled local branch `feat/v7-brand-photo-entry` at `b288b2e94615d1b8dfcdcea4
 
 Local remediation adds inline project creation, an early unavailable-generation explanation, shared client/server workflow restrictions, disabled unbounded numeric controls, a non-modal Prana panel, a direct contact fallback, suppression of unavailable newsletter offers and a nonduplicated homepage title. The complete authenticated saved-result journey, exact hero assets and commercial/provider verification remain open. Validation details and any failures are recorded in the changelog; a local test is not live evidence.
 
+The curated gallery now has an explicit examples heading, the Studio library has a distinct navigation label, shared marketing actions use an SVG arrow, and resource cards link directly to articles. VN-14, VN-15, VN-21 and VN-25 remain partial until their full acceptance criteria have been tested. Next: validate inline project creation and saved-result persistence with a real authorized Preview session, then continue unresolved independent findings in the tracker.
+
 ## 23 November 2026 · MNML compatibility continuation
 
 The owner authorized development to proceed independently of the pending contact-account login and saved-render attachment. The existing adapter maps all 17 tools to render, edit or enhancement requests, but individual tool outcomes and advanced controls remain unverified. Added a provider capability matrix and reject render/video input or reference images over MNML's documented 15 MB limit before creating a job or contacting the provider. No paid provider request was made. The live saved-render journey remains pending.

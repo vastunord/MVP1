@@ -79,7 +79,7 @@ export const destinations = [
   {
     group: 0,
     href: "/app/library", description: ["Velg blant 17 arbeidsflyter.", "Choose from 17 design workflows."],
-    title: ["Åpne Studio", "Open Studio"],
+    title: ["Studio-bibliotek", "Studio library"],
     icon: "tools",
   },
   {

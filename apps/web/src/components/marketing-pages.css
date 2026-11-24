@@ -278,7 +278,7 @@
 .mp-read:first-child {
   grid-row: span 4;
 }
-.mp-read summary {
+.mp-read > a {
   display: grid;
   grid-template-columns: minmax(5rem, 0.42fr) 1fr;
   align-items: center;
@@ -286,10 +286,7 @@
   cursor: pointer;
   list-style: none;
 }
-.mp-read summary::-webkit-details-marker {
-  display: none;
-}
-.mp-read:first-child summary {
+.mp-read:first-child > a {
   display: block;
 }
 .mp-read-image {

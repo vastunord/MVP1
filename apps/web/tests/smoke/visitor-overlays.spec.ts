@@ -89,7 +89,7 @@ test("consent defaults, changes, revocation and version renewal are independent 
   );
 });
 
-test("only eligible time opens the newsletter and dismissal survives scrolling, navigation and reload", async ({
+test("unavailable newsletter stays closed while Prana remains non-modal", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -112,13 +112,7 @@ test("only eligible time opens the newsletter and dismissal survives scrolling, 
   await expect(panel.getByRole("tabpanel")).toContainText("layered lighting");
   await page.keyboard.press("End");
   await expect(panel.getByRole("link", { name: /@VastuNord/ })).toHaveAttribute("href", "https://www.youtube.com/@VastuNord");
-  await panel.getByRole("button", { name: "Close" }).focus();
-  await page.keyboard.press("Shift+Tab");
-  await expect(
-    panel.getByRole("link", { name: /Open Home Experience/ }),
-  ).toBeFocused();
-  await page.keyboard.press("Tab");
-  await expect(panel.getByRole("button", { name: "Close" })).toBeFocused();
+  expect(await panel.evaluate((node) => node.matches(":modal"))).toBe(false);
   await page.keyboard.press("Escape");
   await expect(prana).toBeFocused();
   await page.getByRole("button", { name: "Reject optional" }).click();
@@ -129,42 +123,13 @@ test("only eligible time opens the newsletter and dismissal survives scrolling, 
   await page.keyboard.press("Escape");
   await page.clock.fastForward(15_000);
   await expect(invite).toHaveCount(0);
-  await page.clock.fastForward(4_000);
-  await expect(invite).toBeVisible();
-  await expect(
-    invite.getByRole("heading", { name: "Room for new ideas." }),
-  ).toBeVisible();
-  await expect(invite.locator(".vn-ticket-stub")).toBeVisible();
-  await expect(invite.getByRole("checkbox")).not.toBeChecked();
-  await expect(invite.getByRole("textbox")).toBeDisabled();
-  await invite.getByRole("button", { name: "Not now" }).click();
-  const dock = page.getByRole("button", { name: "Newsletter", exact: true });
-  await expect(dock).toBeFocused();
-  const before = await dock.boundingBox();
-  await page.evaluate(() =>
-    window.scrollTo({ top: 1500, behavior: "instant" }),
-  );
-  expect(await dock.boundingBox()).toEqual(before);
-  expect(before!.x + before!.width).toBeLessThan(
-    (await prana.boundingBox())!.x,
-  );
-  const cookie = await page
-    .getByRole("button", { name: "Change cookie preferences" })
-    .boundingBox();
-  expect(cookie!.x + cookie!.width).toBeLessThan(before!.x);
+  await page.clock.fastForward(60_000);
+  await expect(invite).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Newsletter", exact: true })).toHaveCount(0);
   await page.goto("/en/about");
-  await expect(dock).toBeVisible();
   await page.reload();
   await page.clock.fastForward(60_000);
   await expect(invite).toHaveCount(0);
-  await dock.click();
-  await expect(invite).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(dock).toBeFocused();
-  await page.getByRole("button", { name: "NO – Norsk bokmål" }).click();
-  await expect(
-    page.getByRole("button", { name: "Nyhetsbrev", exact: true }),
-  ).toBeVisible();
 });
 
 test("header and legacy assistant links open the single floating Prana panel", async ({

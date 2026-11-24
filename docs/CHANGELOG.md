@@ -7,6 +7,11 @@
 - Local checks: 53 unit tests, TypeScript, ESLint and Webpack build passed; isolated PostgreSQL persistence/authorization passed after updating two fixtures for disabled generic modes. Eleven of twelve focused browser tests passed in the first run; the remaining Studio test passed on its single retry. A separate non-modal Prana/Escape/focus test passed. The first sandboxed PostgreSQL attempt could not connect to its fixture; the local-socket run passed.
 - Saved render history now remains readable when the MNML credential is unavailable; new submissions and provider polling remain gated. Provider availability is still checked before writes.
 - The final Prana keyboard test initially targeted a nonexistent link and timed out; after selecting the actual page search field, it passed with focus outside the panel before Escape.
+- Labeled the curated gallery studies as examples beside the private render section and replaced the shared marketing action arrow glyph with an SVG. These are local changes; full content and visual-parity findings remain open.
+- Renamed the Studio workspace destination to “Studio library” / “Studio-bibliotek” so it describes a location separately from the “Open Studio” action.
+- Updated the overlay browser regression to test the disabled-newsletter state and non-modal Prana. The enabled-newsletter timing and dismissal flow still needs a separately configured test environment.
+- Resource cards now open their article directly in one action. Shared taxonomy, back-navigation state and editorial depth remain open.
+- The latest Webpack build, TypeScript and ESLint passed. Seven of eight marketing/workspace browser tests passed initially; the resource test passed after its now-ambiguous Materials selector was made exact. The disabled-newsletter/non-modal Prana regression passed.
 
 ## 23 November 2026 · MNML compatibility
 

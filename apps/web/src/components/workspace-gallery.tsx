@@ -223,6 +223,11 @@ export function Gallery({
       {!publicCollection && !assets && privateFilesEnabled && (
         <PrivateRenderGallery locale={locale} />
       )}
+      {!publicCollection && !assets && (
+        <h2 className="vn-section-heading">
+          {en ? "Explore examples" : "Utforsk eksempler"}
+        </h2>
+      )}
       {!publicCollection && assets && (
         <h2 className="vn-section-heading">
           {en ? "Reference collection" : "Referansesamling"}

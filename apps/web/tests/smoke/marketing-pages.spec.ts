@@ -15,19 +15,20 @@ test("footer terms and privacy stay in the selected language", async ({ page }) 
   }
 });
 
-test("resource search, topic filters and expandable articles work together", async ({
+test("resource search, topic filters and direct articles work together", async ({
   page,
 }) => {
   await page.goto("/en/resources");
   const main = page.locator("main");
   await main.getByLabel("Search resources").fill("virtual staging");
   await expect(main.locator(".mp-read")).toHaveCount(1);
-  await main.locator(".mp-read summary").click();
+  await main.locator(".mp-read > a").click();
   await expect(main.getByText(/Virtual staging illustrates/)).toBeVisible();
+  await page.goBack();
   await main.getByLabel("Search resources").fill("zzzzz");
   await expect(main.getByText("No guides match your search.")).toBeVisible();
   await main.getByRole("button", { name: "Show all guides" }).click();
-  await main.getByRole("link", { name: "Materials" }).click();
+  await main.getByRole("link", { name: "Materials", exact: true }).click();
   await expect(
     main.getByRole("group", { name: "Filter by topic", exact: true })
       .getByRole("button", { name: "Materials", exact: true }),

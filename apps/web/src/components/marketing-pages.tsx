@@ -608,8 +608,8 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
         </div>
         <div className="mp-reads">
           {results.slice(page * studyPageSize, (page + 1) * studyPageSize).map((a) => (
-            <details key={a.id} className="mp-read">
-              <summary>
+            <article key={a.id} className="mp-read">
+              <Link href={publicHref("/resources/" + a.id, locale)}>
                 <span className="mp-read-image">
                   <Photo name={a.image} />
                 </span>
@@ -619,15 +619,8 @@ function Resources({ locale, t, studyCards }: PageContext & { studyCards: StudyC
                   <span>{a.intro}</span>
                   <u>{t("Les guiden", "Read guide")}</u>
                 </span>
-              </summary>
-              {a.body && <p>{a.body}</p>}
-              <Link
-                className="mp-permalink"
-                href={publicHref("/resources/" + a.id, locale)}
-              >
-                {t("Åpne artikkelen", "Open article")} ↗
               </Link>
-            </details>
+            </article>
           ))}
         </div>
         <StudyPagination page={page} count={results.length} locale={locale} move={setPage}/>

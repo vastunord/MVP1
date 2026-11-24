@@ -13,8 +13,7 @@ test("mobile reader scans the bilingual study and its measured palette", async (
     .getByLabel("Search resources")
     .fill("Window glow over still water");
   await expect(main.locator(".mp-read")).toHaveCount(1);
-  await main.locator(".mp-read summary").click();
-  await main.getByRole("link", { name: /Open article/ }).click();
+  await main.locator(".mp-read > a").click();
   await expect(page).toHaveURL(new RegExp("/en/resources/" + slug + "$"));
   await expect(main.getByRole("heading", { level: 1 })).toHaveText(
     "Window glow over still water",
