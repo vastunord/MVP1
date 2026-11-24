@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Consent documentation reconciliation
+
+Clarified the historical Phase 02C paragraph in `CONTENT_AND_CONSENT.md`: the existing illustrative demo gallery and conditional consent controls do not establish a verified customer-publication workflow. Noncommercial demo approval and commercial rights review remain distinct. No application or cloud change was made.
+
 ## 24 November 2026 · Accessible action names
 
 Current local source candidate `d3cd656e191a5f6f61a140ef61033a148bfc2161` passed 95 browser smoke tests and built from its exact isolated Git archive with offline locked dependencies. This is local evidence, not a remote checkout or deployed Preview.

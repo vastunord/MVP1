@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 24 November 2026 · Consent documentation reconciliation
+
+- Corrected an outdated Phase 02C statement to distinguish the illustrative demo gallery and conditional consent controls from unverified customer publication and commercial rights.
+
 ## 24 November 2026 · Accessible action names
 
 - Candidate `d3cd656` passed 95 browser smoke tests and an offline locked-dependency Webpack build from its exact Git archive. The earlier 62-unit-test result predates these presentation-only changes.
