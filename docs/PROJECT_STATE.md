@@ -1,5 +1,9 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Shared mobile focus correction
+
+A broader local keyboard review reproduced partial focus obstruction by fixed launchers on the homepage, sign-in and gallery, beyond the earlier Studio-only cases. The correction now runs once in the shared visitor shell, checks cookie, Prana and newsletter launchers, and leaves dialogs and already-clear controls alone. Nine sampled route/height cases, seven Studio cases and 31 newsletter/accessibility cases passed locally, along with a fresh Webpack build, TypeScript and targeted ESLint. This does not establish real-device or screen-reader behavior, nor visibility of arbitrary static content.
+
 ## 24 November 2026 · Mobile Studio focus and fixed controls
 
 Current local source candidate `c9499cfdd4b18d846a7e330dfda9fd102448a980` passed 102 browser smoke tests and an offline locked-dependency Webpack build from its exact Git archive. The archive is local evidence, not a remote checkout or deployment.

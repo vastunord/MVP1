@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 24 November 2026 · Shared mobile focus correction
+
+- Extended the Studio-only focus correction to the shared visitor shell after reproducing covered controls on home, sign-in and gallery. Local route/height, Studio and modal regressions passed; actual devices, screen readers and static scrolling content remain unverified.
+
 ## 24 November 2026 · Mobile Studio focus and fixed controls
 
 - Candidate `c9499cf` passed 102 browser smoke tests and an offline Webpack build from its exact Git archive. The 62-unit-test and isolated recovery results predate this focus-only change.

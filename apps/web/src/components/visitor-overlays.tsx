@@ -387,6 +387,26 @@ export function VisitorExperience({
       : level;
   const newsletterDock = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    function keepFocusedControlVisible(event: FocusEvent) {
+      if (window.matchMedia("(min-width: 768px)").matches) return;
+      const focused = event.target;
+      if (!(focused instanceof HTMLElement) || !focused.matches("a[href], button, input, select, textarea, summary")) return;
+      // Dialogs manage their own focus and should not trigger page scrolling.
+      if (focused.closest('[role="dialog"]')) return;
+      const target = focused instanceof HTMLInputElement && (focused.type === "radio" || focused.type === "checkbox")
+        ? focused.closest("label") ?? focused : focused;
+      const rect = target.getBoundingClientRect();
+      const overlap = [...document.querySelectorAll(".vn-cookie-dock, .vn-prana-dock, .vn-newsletter-dock")].some((dock) => {
+        if (dock === target || dock.contains(target)) return false;
+        const obstacle = dock.getBoundingClientRect();
+        return rect.left < obstacle.right && rect.right > obstacle.left && rect.top < obstacle.bottom && rect.bottom > obstacle.top;
+      });
+      if (overlap) target.scrollIntoView({ block: "center", inline: "nearest" });
+    }
+    document.addEventListener("focusin", keepFocusedControlVisible);
+    return () => document.removeEventListener("focusin", keepFocusedControlVisible);
+  }, []);
   const launch = (kind: Layer) => {
     previousFocus.current =
       document.activeElement instanceof HTMLElement
