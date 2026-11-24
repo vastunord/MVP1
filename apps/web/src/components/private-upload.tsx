@@ -126,11 +126,18 @@ export function PrivateUpload({
   const uploadInput = useRef<HTMLInputElement>(null);
   async function createProject() {
     const name = projectName.trim();
-    if (!name || createInFlight.current) return;
+    if (name.length < 2 || createInFlight.current) return;
     createInFlight.current = true;
     setCreating(true);
     createKey.current ||= crypto.randomUUID();
     try {
+      // A first-time user may not have a personal workspace yet. Create it
+      // only after their explicit project action, using the idempotent API.
+      const workspace = await fetch("/api/workspaces/personal", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: en ? "My workspace" : "Mitt arbeidsområde" }),
+      });
+      if (!workspace.ok) throw new Error("Workspace unavailable");
       const response = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json", "idempotency-key": createKey.current },
@@ -139,6 +146,10 @@ export function PrivateUpload({
       if (!response.ok) throw new Error("Project creation failed");
       const created = await response.json() as Project;
       setProjects((items) => items.some((item) => item.id === created.id) ? items : [...items, created]);
+      setAssets([]);
+      setSelectedAsset("");
+      setReferenceIds([]);
+      if (!file) onPreview("");
       setProject(created.id);
       setProjectName("");
       createKey.current = "";
@@ -153,6 +164,7 @@ export function PrivateUpload({
     let active = true;
     fetch("/api/projects")
       .then(async (response) => {
+        if (response.status === 403) return [] as Project[];
         if (!response.ok) throw Error();
         return response.json() as Promise<Project[]>;
       })
@@ -311,9 +323,9 @@ export function PrivateUpload({
           setProject(id);
           setSelectedAsset("");
           setReferenceIds([]);
-          setFile(null);
-          setLocalUrl("");
-          onPreview("");
+          // An unsaved local image belongs to the draft, not the old project.
+          // Saved assets, however, must be selected again in their own project.
+          if (!file) onPreview("");
         }}
       />
       <details>
@@ -321,7 +333,8 @@ export function PrivateUpload({
         <label>{en ? "Project name" : "Prosjektnavn"}
           <input disabled={creating} value={projectName} maxLength={100} onChange={(event) => { setProjectName(event.target.value); createKey.current = ""; }} />
         </label>
-        <button type="button" disabled={!projectName.trim() || creating} onClick={createProject}>
+        <p className="small">{en ? "Use at least two characters." : "Bruk minst to tegn."}</p>
+        <button type="button" disabled={projectName.trim().length < 2 || creating} onClick={createProject}>
           {creating ? (en ? "Creating…" : "Oppretter…") : (en ? "Create project and continue" : "Opprett prosjekt og fortsett")}
         </button>
       </details>

@@ -1,5 +1,12 @@
 # Development change log (compact)
 
+## 24 November 2026 · Remediation continuation
+
+- Preserved unsaved image drafts while switching projects; enabled first-time authenticated editor users to create a workspace and project through existing APIs without leaving the editor.
+- Prevented late provider status responses from changing terminal render jobs. Isolated database fixtures verify storage retry without another provider request and terminal-state protection.
+- A proposed reconnection fixture failed twice because the disposable PostgreSQL socket closed a second client; removed that fixture and recorded reconnection testing in the technical queue. No live saved-result or provider test was claimed.
+- A clean isolated-server browser run passed 16 Studio, resource, Prana and header checks, including the two tests that previously needed retries and navigation at 390, 768, 1280 and 1440 px. This does not establish full responsive or accessibility conformance.
+
 ## 24 November 2026 · Audit remediation in progress
 
 - Added inline project creation in the private upload panel and kept the editor open. Restricted generic workflows using one client/server allowlist; unbounded numeric settings no longer claim an effect or accept changed values. Added an early explanation when generation is disabled.

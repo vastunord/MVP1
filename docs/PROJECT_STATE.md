@@ -1,5 +1,13 @@
 # Vastu Nord — current project handoff (living document)
 
+## 24 November 2026 · Continuation after 35e37d5
+
+Confirmed `feat/v7-brand-photo-entry` at `35e37d5`; the protected Preview is still the earlier `a048c9d` diagnostic build. The existing in-app browser had no matching Preview tab, so the live synthetic attachment and account checks remain pending without another login request. No paid render, deployment or production change was made.
+
+Local work preserves an unsaved selected image when switching projects. A first-time signed-in editor user can explicitly create a personal workspace and project from the upload panel without leaving the editor. Render-state updates now guard terminal outcomes against late polls. Isolated PostgreSQL fixtures cover retrying private output storage without another provider submission and a late-success/cancel race. A proposed reconnect fixture failed twice because the disposable socket closed a second connection, including after disconnect; it was removed. Reconnection remains a technical test-queue item, not an owner-action blocker.
+
+Exact next actions: (1) add a reliable isolated reconnection test using a compatible PostgreSQL fixture; (2) browser-test inline project creation, failure recovery, draft retention and all four viewport widths in both languages/themes; (3) finish enabled-newsletter fixtures and overlay interactions; (4) complete VN-01/02/04–07/11/12/13/15/16 acceptance tests; (5) continue VN-09/10/14/17–25 independently, then prepare the release candidate. Live source/result attachment, real OAuth and approved hero/Figma evidence remain separately pending. See `AUDIT_REMEDIATION_TRACKER.md` and `BLOCKERS_AND_OWNER_ACTIONS.md`.
+
 ## 24 November 2026 · Audit remediation in progress
 
 Reconciled local branch `feat/v7-brand-photo-entry` at `b288b2e94615d1b8dfcdcea451b7eafd8cdbc025` with the audit's protected Preview: that Preview used `a048c9d` plus a diagnostic helper, so the local provider-size guard is newer. No reset, push, paid generation or deployment. The audit's 25 findings are tracked in `AUDIT_REMEDIATION_TRACKER.md`; external actions are consolidated in `BLOCKERS_AND_OWNER_ACTIONS.md`.

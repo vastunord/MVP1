@@ -304,16 +304,15 @@ export async function syncJob(
     return status(row);
   const job = await io.check(key, row.providerJobId);
   if (job.status === "failed" || job.status === "canceled") {
-    return status(
-      await db.renderJob.update({
-        where: { id },
+    await db.renderJob.updateMany({
+        where: { id, state: "RUNNING", providerJobId: row.providerJobId },
         data: {
           state: job.status === "failed" ? "FAILED" : "CANCELLED",
           refundedUsd: job.refunded_usd,
           chargedUsd: job.charged_usd,
         },
-      }),
-    );
+      });
+    return status(await db.renderJob.findUniqueOrThrow({ where: { id } }));
   }
   if (job.status !== "succeeded") return status(row);
   const video = row.outputMedia === "video";
@@ -341,7 +340,7 @@ export async function syncJob(
     async (tx) => {
       await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(hashtext(${id})::bigint)`;
       const current = await tx.renderJob.findUniqueOrThrow({ where: { id } });
-      if (current.state === "SUCCEEDED") return status(current);
+      if (current.state !== "RUNNING") return status(current);
       const project = await tx.project.findFirst({
         select: { id: true },
         where: {

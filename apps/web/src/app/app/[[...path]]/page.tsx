@@ -59,7 +59,6 @@ export default async function Page({
     tool?.id === "room-reimagination" && !sample ? "?intent=room-upload" : "";
   let signedIn = false;
   let renderReady = false;
-  let hasWorkspace = false;
   if (authEnabled) {
     const requestHeaders = await headers();
     let userId: string | null = null;
@@ -92,8 +91,7 @@ export default async function Page({
           : false,
       ]).finally(() => db.$disconnect());
       renderReady = canRender;
-      hasWorkspace = Boolean(personal);
-      if (!personal && !sample)
+      if (!personal && !sample && !tool)
         redirect(publicHref("/onboarding" + loginIntent, locale));
       if (isDashboard && personal) recentProjects = personal.projects;
     }
@@ -107,8 +105,8 @@ export default async function Page({
         tool={tool}
         locale={locale}
         sample={sample}
-        uploadsEnabled={hasWorkspace && readServerConfig().uploadsEnabled}
-        renderEnabled={hasWorkspace && renderReady}
+        uploadsEnabled={signedIn && readServerConfig().uploadsEnabled}
+        renderEnabled={signedIn && renderReady}
         submissionEnabled={process.env.MNML_SUBMISSION_ENABLED === "true" && Boolean(mnmlConfig())}
         improveEnabled={Boolean(pranaSettings(process.env))}
       />

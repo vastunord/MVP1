@@ -257,7 +257,12 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       syncJob(db, "fixture", other, "pb", input.id, io),
       /unavailable/,
     );
+    const failingStorage = { ...io, async writeOutput() { throw new Error("synthetic storage interruption"); } };
+    await assert.rejects(syncJob(db, "fixture", actor, "pa", input.id, failingStorage), /storage interruption/);
+    assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
+    assert.equal(submissions, 2, "saving failure must not submit another provider job");
     const done = await syncJob(db, "fixture", actor, "pa", input.id, io);
+    assert.equal(submissions, 2, "saving retry must reuse the provider job");
     assert.equal(done.state, "SUCCEEDED");
     assert.ok(
       (await projectJobs(db, actor, "pa")).some(
@@ -276,6 +281,27 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal(stored.projectId, "pa");
     assert.equal(stored.width, 32);
     assert.equal(stored.state, "VALIDATED");
+    const raceBrief = parseRender({ ...input, id: randomUUID(), prompt: "Separate race fixture" });
+    const raceIo = { ...io, async submit() { return { id: "race-provider", status: "queued" }; } };
+    await startJob(db, config, actor, raceBrief, raceIo);
+    const lateSuccess = {
+      ...raceIo,
+      async check() {
+        await db.renderJob.update({ where: { id: raceBrief.id }, data: { state: "CANCELLED" } });
+        return { id: "race-provider", status: "succeeded", outputs: [{ url: "https://api.mnml.ai/v2/files/race-provider?exp=1&sig=fixture", media: "image" }] };
+      },
+    };
+    const beforeRaceWrites = writes.length;
+    assert.equal((await syncJob(db, "fixture", actor, "pa", raceBrief.id, lateSuccess)).state, "CANCELLED");
+    assert.equal(writes.length, beforeRaceWrites, "a late success cannot overwrite a terminal job");
+    const failedBrief = parseRender({ ...input, id: randomUUID(), prompt: "Late failure fixture" });
+    const failedIo = { ...io, async submit() { return { id: "race-provider-2", status: "queued" }; } };
+    await startJob(db, config, actor, failedBrief, failedIo);
+    const lateFailure = { ...failedIo, async check() {
+      await db.renderJob.update({ where: { id: failedBrief.id }, data: { state: "CANCELLED" } });
+      return { id: "race-provider-2", status: "failed" };
+    } };
+    assert.equal((await syncJob(db, "fixture", actor, "pa", failedBrief.id, lateFailure)).state, "CANCELLED");
     // Structural fixture for trusted provider file intake. Actual codec playback requires a live job.
     function box(type, bytes) {
       const header = Buffer.alloc(8);
