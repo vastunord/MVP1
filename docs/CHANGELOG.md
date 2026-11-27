@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 28 November 2026 · Atomic job/reservation checkpoint
+
+Connected the existing controlled-test reservation to render-job creation in the same database transaction. Isolated tests cover rollback and the shared submission identity; new paid rendering remains disabled pending dispatch, quote, settlement and genuine concurrent-connection verification. No paid request, cloud migration or deployment.
+
 ## 28 November 2026 · Controlled render campaign foundation
 
 Recorded the owner's six-attempt `v4.5-fast` authorization and added an inactive local campaign/attempt schema plus transactional reservation function. Isolated sequential limit, duplicate, rollback, refund and kill-switch tests passed. Integration, concurrency, quote and settlement work remain; generation stays disabled. No live render, cloud migration or deployment.
@@ -468,3 +472,7 @@ Continued from 771871067668ce99c42a782fed4c9e3e4c7f7e1b on new branch phase-02a-
 Created phase-02b-application-foundation from a854080a936592dc8b88dc45896267dce89abae9. Added one Next.js/React/TypeScript/Tailwind app, shared contracts, 17 tool configurations/editors, tool search/category filters, public/service placeholders, reusable UI, Norwegian/English URL/navigation/dictionaries/Intl helpers, persisted light/dark/system preferences and typed unavailable integration boundaries. Founder confirmed unprefixed Norwegian and /en. PDF source colors implemented; licensed font/logo absent, system font/plain text identity documented. Added pnpm lockfile, ESLint/Playwright/unit tests and formatter; no Payload/Prisma/auth/payment/AI SDK.
 
 Validation: install and peer check passed; TypeScript, ESLint, production build, six unit and eight browser smoke tests passed. Fixed document-language persistence after a failing smoke test. Local build required process permission after restricted CSS-worker failure. Browser checks cover all 17 tools, public routes/locales, disabled generation, conditional controls, navigation/dialog/keyboard and 390/768/1280/1440 page overflow. Text-token contrast combinations tested. Local screenshots retained in ignored test-results. Exact reference parity, full accessibility certification, backend functionality and specialist translations remain unverified/deferred. ESLint 9 maintenance tag retained for Next plugin compatibility; registry deprecation recorded. No push, deployment, cloud mutation, user upload, paid action or NRide change.
+# 2026-11-28 — isolated readiness diagnosis
+
+- Identified sandbox `EACCES` on the local PGlite socket as the prior readiness failure; verified the migrated isolated schema with permitted loopback access and added explicit connection/identity checks.
+- Added controlled coverage for a dispatch claim, bounded reported charge, zero-charge rejection and retained uncertainty. One-connection fixture only; independent concurrency and full settlement remain open. Paid generation remains disabled; no cloud migration, provider call or deployment.

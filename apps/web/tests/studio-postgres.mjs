@@ -7,7 +7,7 @@ import { readFile } from "node:fs/promises";
 import sharp from "sharp";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client.ts";
-import { parseRender } from "../src/server/mnml.ts";
+import { parseRender, RenderError } from "../src/server/mnml.ts";
 import { reserveTestRender } from "../src/server/test-render-budget.ts";
 import {
   startJob,
@@ -58,6 +58,14 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         port: Number(socket.getServerConn().split(":").at(-1)),
       }),
     });
+    // Connect before probing schema: readiness intentionally fails closed on
+    // errors, so a denied socket must not masquerade as a missing migration.
+    try {
+      const [identity] = await db.$queryRaw`SELECT current_database()::text AS database, current_schema()::text AS schema`;
+      assert.deepEqual(identity, { database: "postgres", schema: "public" });
+    } catch (error) {
+      throw new Error(`Isolated fixture connection failed (${error?.code ?? "unknown"})`, { cause: error });
+    }
     assert.equal(
       await studioPersistenceReady(db),
       false,
@@ -128,6 +136,14 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, id: "seventh" })), /exhausted/);
     await db.testRenderCampaign.update({ where: { id: "campaign" }, data: { active: false } });
     await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, id: "killed" })), /unavailable/);
+    await db.testRenderCampaign.create({ data: { id: "job-campaign", model: "v4.5-fast", active: true, startsAt: new Date(Date.now() - 10000), expiresAt: new Date(Date.now() + 60000), maxAttempts: 6, maxMicrousd: 594000, perAttemptMicrousd: 99000 } });
+    await db.testRenderTester.create({ data: { campaignId: "job-campaign", userId: "a", maxAttempts: 6, maxMicrousd: 594000 } });
+    const rollbackId = randomUUID();
+    await assert.rejects(db.$transaction(async (tx) => {
+      await reserveTestRender(tx, { ...reservation, campaignId: "job-campaign", id: rollbackId });
+      await tx.renderJob.create({ data: { id: rollbackId, workspaceId: "missing", projectId: "missing", toolId: "room-reimagination" } });
+    }));
+    assert.equal(await db.testRenderAttempt.findUnique({ where: { id: rollbackId } }), null, "a failed job insert rolls back its reservation");
     // Exercise the actual project service and Prisma store with synthetic users.
     for (const id of ["project-owner", "project-other"]) {
       await db.user.create({ data: { id, email: `${id}@example.invalid`, emailVerified: true } });
@@ -156,15 +172,14 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     };
     const actor = { workspaceId: "wa", userId: "a" },
       other = { workspaceId: "wb", userId: "b" },
-      config = { key: "fixture" };
+      config = { key: "fixture", campaignId: "job-campaign", quoteMicrousd: 99000 };
     const photo = await sharp({
       create: { width: 32, height: 24, channels: 3, background: "#013c55" },
     })
       .png()
       .toBuffer();
     const writes = [];
-    let submissions = 0,
-      interruption = true;
+    let submissions = 0;
     const io = {
       async readSource(key) {
         assert.equal(key, "fixture-a");
@@ -173,11 +188,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       async submit(_key, brief) {
         assert.equal(brief.id, input.id);
         submissions++;
-        if (interruption) {
-          interruption = false;
-          throw Error("simulated connection loss");
-        }
-        return { id: "12", status: "queued", charged_usd: 0.2475 };
+        return { id: "12", status: "queued", charged_usd: 0.099 };
       },
       async check() {
         return {
@@ -238,11 +249,10 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       ),
       /unavailable/,
     );
-    await assert.rejects(
-      startJob(db, config, actor, parseRender(input), io),
-      /connection loss/,
-    );
+    assert.equal((await startJob(db, config, actor, parseRender(input), io)).state, "RUNNING");
     assert.equal(await db.renderJob.count(), 1);
+    assert.equal((await db.testRenderAttempt.findUniqueOrThrow({ where: { id: input.id } })).requestHash, parseRender(input).hash, "job and reservation share the durable submission key and payload hash");
+    assert.equal((await db.testRenderAttempt.findUniqueOrThrow({ where: { id: input.id } })).settledMicrousd, 99000, "reported charge is recorded in integer microdollars");
     const savedSnapshot = (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).submissionSettings;
     assert.deepEqual(savedSnapshot, parseRender(input).snapshot, "job saves the exact validated snapshot before provider acceptance");
     assert.equal(
@@ -251,7 +261,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
           db,
           config,
           actor,
-          parseRender({ ...input, id: randomUUID() }),
+          parseRender(input),
           io,
         )
       ).id,
@@ -261,7 +271,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       (await startJob(db, config, actor, parseRender(input), io)).state,
       "RUNNING",
     );
-    assert.equal(submissions, 2);
+    assert.equal(submissions, 1);
     assert.deepEqual((await projectJobs(db, actor, "pa", "room-reimagination"))[0].submissionSettings, savedSnapshot, "owned history reopens the immutable snapshot");
     await assert.rejects(
       startJob(
@@ -302,13 +312,13 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.deepEqual(await projectJobs(db, wrongUser, "pa", "room-reimagination", input.id), []);
     assert.deepEqual(await projectJobs(db, actor, "pa", "garden-design", input.id), []);
     assert.deepEqual(await projectJobs(db, other, "pb", "room-reimagination", input.id), []);
-    assert.equal(submissions, 2, "targeted recovery read must not submit a provider job");
+    assert.equal(submissions, 1, "targeted recovery read must not submit a provider job");
     await db.renderJob.deleteMany({ where: { id: { in: newerIds } } });
     // Inject at the application database boundary; this is not a network outage.
     const unavailableDb = { renderJob: { async findMany() { throw new Error("synthetic database connection failure"); } } };
     await assert.rejects(projectJobs(unavailableDb, actor, "pa", "room-reimagination"), /synthetic database connection failure/);
     assert.equal((await projectJobs(db, actor, "pa", "room-reimagination"))[0].id, input.id);
-    assert.equal(submissions, 2, "history retry must not submit a provider job");
+    assert.equal(submissions, 1, "history retry must not submit a provider job");
     await assert.rejects(
       syncJob(db, "fixture", wrongUser, "pa", input.id, io),
       /unavailable/,
@@ -337,11 +347,11 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal(writtenBeforeDbFailure, "private/wa/" + (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).outputAssetId + ".webp");
     assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
     assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).outputAssetId } }), 0);
-    assert.equal(submissions, 2, "an expired provider URL must not trigger a new submission");
+    assert.equal(submissions, 1, "an expired provider URL must not trigger a new submission");
     const failingStorage = { ...io, async writeOutput() { throw new Error("synthetic storage interruption"); } };
     await assert.rejects(syncJob(db, "fixture", actor, "pa", input.id, failingStorage), /storage interruption/);
     assert.equal((await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).state, "RUNNING");
-    assert.equal(submissions, 2, "saving failure must not submit another provider job");
+    assert.equal(submissions, 1, "saving failure must not submit another provider job");
     let partiallyWrittenKey;
     const partialStorage = { ...io, async writeOutput(key) {
       partiallyWrittenKey = key;
@@ -355,7 +365,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       return io.writeOutput(key, bytes, mime);
     } };
     const done = await syncJob(db, "fixture", actor, "pa", input.id, resumedStorage);
-    assert.equal(submissions, 2, "saving retry must reuse the provider job");
+    assert.equal(submissions, 1, "saving retry must reuse the provider job");
     assert.equal(done.state, "SUCCEEDED");
     assert.ok(
       (await projectJobs(db, actor, "pa")).some(
@@ -430,8 +440,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal(failedSubmissions, 1, "terminal failure is not resubmitted");
     assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: providerFailure.id } })).outputAssetId } }), 0);
 
-    // An ambiguous provider timeout is not a confirmed rejection. Only an explicit
-    // replay uses the same persisted job ID and byte-identical request payload.
+    // An ambiguous timeout retains the reservation and cannot be dispatched again.
     const timeoutBrief = parseRender({ ...input, id: randomUUID(), prompt: "Submission timeout fixture" });
     const timeoutPayloads = [];
     const timeoutIo = { ...io, async submit(_key, brief, source, references) {
@@ -444,14 +453,20 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal(timedOut.state, "QUEUED");
     assert.equal(timedOut.providerJobId, null);
     assert.equal(timeoutPayloads.length, 1, "timeout is not automatically resubmitted");
-    const resumed = await startJob(db, config, actor, timeoutBrief, timeoutIo);
-    assert.equal(resumed.id, timeoutBrief.id);
-    assert.equal(resumed.state, "RUNNING");
-    assert.equal(timeoutPayloads.length, 2);
-    assert.equal(timeoutPayloads[0], timeoutPayloads[1], "explicit replay keeps provider idempotency payload stable");
-    await syncJob(db, "fixture", actor, "pa", timeoutBrief.id, {
-      ...timeoutIo, async check() { return { id: "timeout-provider", status: "canceled" }; },
-    });
+    await assert.rejects(startJob(db, config, actor, timeoutBrief, timeoutIo), /reconciliation/);
+    assert.equal(timeoutPayloads.length, 1, "uncertain submission is never automatically retried");
+    assert.equal((await db.testRenderAttempt.findUniqueOrThrow({where:{id:timeoutBrief.id}})).state, "UNCERTAIN");
+    assert.equal((await db.testRenderAttempt.findUniqueOrThrow({where:{id:timeoutBrief.id}})).reservedMicrousd, 99000, "uncertain charge retains full allowance");
+    await db.testRenderCampaign.create({ data: { id: "rejection-campaign", model: "v4.5-fast", active: true, startsAt: new Date(Date.now() - 10000), expiresAt: new Date(Date.now() + 60000), maxAttempts: 1, maxMicrousd: 99000, perAttemptMicrousd: 99000 } });
+    await db.testRenderTester.create({ data: { campaignId: "rejection-campaign", userId: "a", maxAttempts: 1, maxMicrousd: 99000 } });
+    const rejection = parseRender({ ...input, id: randomUUID(), prompt: "Confirmed rejection fixture" });
+    const rejectIo = { ...io, async submit() { throw new RenderError(400, "Rejected", true); } };
+    await assert.rejects(startJob(db, { ...config, campaignId: "rejection-campaign" }, actor, rejection, rejectIo), /Rejected/);
+    const rejectedAttempt = await db.testRenderAttempt.findUniqueOrThrow({where:{id:rejection.id}});
+    assert.equal(rejectedAttempt.state, "SETTLED");
+    assert.equal(rejectedAttempt.settledMicrousd, 0);
+    assert.equal(rejectedAttempt.reservedMicrousd, 99000, "rejection does not replenish attempts");
+    await assert.rejects(startJob(db, { ...config, campaignId: "rejection-campaign" }, actor, parseRender({ ...input, id: randomUUID(), prompt: "Another rejection" }), rejectIo), /exhausted/);
     // Structural fixture for trusted provider file intake. Actual codec playback requires a live job.
     function box(type, bytes) {
       const header = Buffer.alloc(8);
@@ -510,10 +525,10 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         assert.deepEqual(bytes, mp4);
       },
     };
-    assert.equal(
-      (await startJob(db, config, actor, video, videoIo)).media,
-      "video",
-    );
+    await assert.rejects(startJob(db, config, actor, video, videoIo), /approved/);
+    // A legacy accepted job can still be read and reconciled without making
+    // another provider submission, even though new video is not authorized.
+    await db.renderJob.create({ data: { id: video.id, workspaceId: "wa", projectId: "pa", toolId: input.toolId, sourceAssetId: "asseta", outputAssetId: randomUUID(), outputMedia: "video", requestHash: video.hash, providerJobId: "13", state: "RUNNING" } });
 
     await assert.rejects(
       syncJob(db, "fixture", actor, "pa", video.id, videoIo),

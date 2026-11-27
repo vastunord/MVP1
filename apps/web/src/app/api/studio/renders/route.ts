@@ -59,7 +59,9 @@ async function handle(request: Request, write: boolean) {
     if (process.env.MNML_SUBMISSION_ENABLED !== "true" || !controlledRenderingAllowanceReady())
       throw new RenderError(503, "New rendering is unavailable");
     const brief = parseRender(input);
-    return Response.json(await startJob(ctx.db, provider!, actor, brief), {
+    // Zero is deliberately rejected by the reservation layer. A verified
+    // server-side provider quote must replace it before enabling submission.
+    return Response.json(await startJob(ctx.db, { ...provider!, campaignId: process.env.MNML_TEST_CAMPAIGN_ID ?? "", quoteMicrousd: 0 }, actor, brief), {
       status: 202,
       headers: privateHeaders,
     });

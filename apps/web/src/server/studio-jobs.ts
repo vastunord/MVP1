@@ -13,8 +13,9 @@ import {
   type RenderBrief,
 } from "./mnml.ts";
 import { isStudioMp4 } from "./studio-video.ts";
+import { reserveTestRender } from "./test-render-budget.ts";
 
-type Config = { key: string };
+type Config = { key: string; campaignId: string; quoteMicrousd: number };
 type Actor = { userId: string; workspaceId: string };
 function status(row: RenderJob): RenderStatus {
   return {
@@ -146,8 +147,12 @@ export async function startJob(
           409,
           "Render request conflicts with an existing request",
         );
+      const reservation = await tx.testRenderAttempt.findUnique({ where: { id: prior.id } });
+      if (!reservation) throw new RenderError(409, "Existing job has no verified test reservation");
+      await reserveTestRender(tx, { campaignId: config.campaignId, userId: actor.userId, id: prior.id, requestHash: brief.hash, endpoint: brief.endpoint, model: brief.fields.engine, count: brief.fields.count, quoteMicrousd: config.quoteMicrousd });
       return prior;
     }
+    await reserveTestRender(tx, { campaignId: config.campaignId, userId: actor.userId, id: brief.id, requestHash: brief.hash, endpoint: brief.endpoint, model: brief.fields.engine, count: brief.fields.count, quoteMicrousd: config.quoteMicrousd });
     return tx.renderJob.create({
       data: {
         id: brief.id,
@@ -173,7 +178,14 @@ export async function startJob(
       return io.readSource(asset.privateObjectKey, asset.mimeType);
     }),
   );
-  // Byte-identical payload and persisted UUID preserve provider idempotency on ambiguous timeouts.
+  // Claim before the network call. A crash or ambiguous response leaves the
+  // reservation uncertain and prevents an automatic second paid submission.
+  const claim = await db.testRenderAttempt.updateMany({
+    where: { id: job.id, state: "RESERVED" },
+    data: { state: "UNCERTAIN" },
+  });
+  if (claim.count !== 1)
+    throw new RenderError(409, "Submission requires reconciliation before retrying");
   let accepted;
   try {
     accepted = await io.submit(
@@ -184,20 +196,33 @@ export async function startJob(
     );
   } catch (error) {
     if (error instanceof RenderError && error.confirmedRejection) {
-      await db.renderJob.updateMany({
-        where: { id: job.id, state: "QUEUED", providerJobId: null },
-        data: { state: "FAILED" },
+      await db.$transaction(async (tx) => {
+        await tx.renderJob.updateMany({
+          where: { id: job.id, state: "QUEUED", providerJobId: null },
+          data: { state: "FAILED" },
+        });
+        await tx.testRenderAttempt.updateMany({
+          where: { id: job.id, state: "UNCERTAIN" },
+          data: { state: "SETTLED", settledMicrousd: 0 },
+        });
       });
     }
     throw error;
   }
-  await db.renderJob.updateMany({
-    where: { id: job.id, providerJobId: null, state: "QUEUED" },
-    data: {
-      providerJobId: accepted.id,
-      state: "RUNNING",
-      chargedUsd: accepted.charged_usd,
-    },
+  await db.$transaction(async (tx) => {
+    await tx.renderJob.updateMany({
+      where: { id: job.id, providerJobId: null, state: "QUEUED" },
+      data: { providerJobId: accepted.id, state: "RUNNING", chargedUsd: accepted.charged_usd },
+    });
+    // Only settle a reported, bounded charge. Missing or inconsistent prices
+    // remain uncertain and consume the full reservation pending reconciliation.
+    const micros = Math.round(Number(accepted.charged_usd) * 1_000_000);
+    if (accepted.charged_usd != null && Number.isFinite(micros) && micros >= 0 && micros <= 99000) {
+      await tx.testRenderAttempt.updateMany({
+        where: { id: job.id, state: "UNCERTAIN" },
+        data: { state: "SETTLED", settledMicrousd: micros },
+      });
+    }
   });
   return status(
     await db.renderJob.findUniqueOrThrow({ where: { id: job.id } }),
