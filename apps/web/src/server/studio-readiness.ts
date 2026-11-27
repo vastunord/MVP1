@@ -7,8 +7,8 @@ export async function studioPersistenceReady(
   try {
     const [row] = await db.$queryRaw<Array<{ ready: boolean }>>`
       WITH permissions(rel,op,cols) AS (VALUES
-        ('RenderJob','SELECT',ARRAY['id','workspaceId','projectId','toolId','sourceAssetId','outputAssetId','outputMedia','requestHash','providerJobId','chargedUsd','refundedUsd','state','createdAt','updatedAt']),
-        ('RenderJob','INSERT',ARRAY['id','workspaceId','projectId','toolId','sourceAssetId','outputAssetId','outputMedia','requestHash','state','createdAt','updatedAt']),
+        ('RenderJob','SELECT',ARRAY['id','workspaceId','projectId','toolId','sourceAssetId','outputAssetId','outputMedia','requestHash','submissionSettings','providerJobId','chargedUsd','refundedUsd','state','createdAt','updatedAt']),
+        ('RenderJob','INSERT',ARRAY['id','workspaceId','projectId','toolId','sourceAssetId','outputAssetId','outputMedia','requestHash','submissionSettings','state','createdAt','updatedAt']),
         ('RenderJob','UPDATE',ARRAY['providerJobId','state','chargedUsd','refundedUsd','updatedAt']),
         ('Asset','SELECT',ARRAY['id','workspaceId','projectId','ownerId','origin','state','privateObjectKey','mimeType','byteSize','sha256','width','height','retentionUntil','createdAt']),
         ('Asset','INSERT',ARRAY['id','workspaceId','projectId','ownerId','origin','state','privateObjectKey','mimeType','byteSize','width','height','createdAt']),

@@ -4,6 +4,8 @@ import { findTool, visibleControls } from "@vastunord/contracts/tools";
 import {
   renderEngines,
   renderMode,
+  mayaExperience,
+  studioCapability,
   sceneWorkflows,
   supportedWorkflows,
   unsupportedStudioOption,
@@ -54,6 +56,9 @@ function assetId(value: unknown) {
   return value;
 }
 export function parseRender(input: Record<string, unknown>) {
+  const acceptedKeys = new Set(["id", "consent", "workflow", "projectId", "sourceAssetId", "referenceIds", "toolId", "engine", "prompt", "avoid", "values"]);
+  if (Object.keys(input).some((key) => !acceptedKeys.has(key)))
+    throw new RenderError(400, "Unknown render request field");
   const id = text(input.id, 36);
   if (!jobIdPattern.test(id) || input.consent !== true)
     throw new RenderError(400, "Confirm external image processing");
@@ -100,14 +105,26 @@ export function parseRender(input: Record<string, unknown>) {
   // a forged precision request.
   for (const field of tool.controls) {
     const value = values[field.id];
-    if (value === undefined || value === field.defaultValue) continue;
+    if (value === undefined) continue;
+    if (field.kind === "unknown" || field.kind === "action")
+      throw new RenderError(400, `${field.label}: unavailable setting`);
+    if (field.kind === "select" && (typeof value !== "string" || !field.options?.includes(value)))
+      throw new RenderError(400, `${field.label}: Invalid selection`);
+    if (field.kind === "toggle" && typeof value !== "boolean")
+      throw new RenderError(400, `${field.label}: invalid switch`);
+    if ((field.kind === "integer" || field.kind === "range") && (typeof value !== "number" || !Number.isFinite(value) || (field.kind === "integer" && !Number.isInteger(value)) || (field.min !== undefined && value < field.min) || (field.max !== undefined && value > field.max)))
+      throw new RenderError(400, `${field.label}: Invalid numeric setting`);
+    if (value === field.defaultValue) continue;
     if (field.kind === "range" && (field.min === undefined || field.max === undefined))
       throw new RenderError(400, "This adjustment is unavailable");
     if (tool.id === "resolution-enhancement" && field.when?.id === "mode" && field.when.values.includes("Manual controls"))
       throw new RenderError(400, "Manual enhancement is unavailable");
   }
   const options = visibleControls(tool, values);
+  if (values.furnishing === "Empty" && /(?:\b(?:add|place|introduce)\b.{0,45}\b(?:furniture|sofa|bed|chairs?)\b|(?:legg til|plasser).{0,45}(?:møbler|sofa|seng|stol))/i.test(prompt))
+    throw new RenderError(400, "Furnishing: Empty conflicts with adding furniture in the description");
   const details = [];
+  const resolved: BriefValues = {};
   for (const field of options) {
     const v = values[field.id] ?? field.defaultValue;
     if (["preview", "guides"].includes(field.id)) {
@@ -115,7 +132,7 @@ export function parseRender(input: Record<string, unknown>) {
         throw new RenderError(400, "This preview control is unavailable");
       continue;
     }
-    if (field.kind === "range" && (field.min === undefined || field.max === undefined)) {
+    if (field.kind === "range" && studioCapability(tool.id, field).mapping === "unavailable") {
       if (v !== undefined && v !== field.defaultValue)
         throw new RenderError(400, "This adjustment is unavailable");
       continue;
@@ -141,7 +158,8 @@ export function parseRender(input: Record<string, unknown>) {
       )
         throw new RenderError(400, "Invalid numeric setting");
     }
-    if (!["seed", "ratio", "guides", "preview"].includes(field.id))
+    resolved[field.id] = v;
+    if (!["seed", "ratio", "guides", "preview"].includes(field.id) && !["Auto", "Auto-detect", "As photographed", "Keep existing"].includes(String(v)))
       details.push(field.label + ": " + String(v));
   }
   const description = [
@@ -220,6 +238,20 @@ export function parseRender(input: Record<string, unknown>) {
     ...spec,
     id,
     hash: createHash("sha256").update(JSON.stringify(spec)).digest("hex"),
+    snapshot: {
+      version: 1,
+      experienceId: mayaExperience(tool.id),
+      toolId: tool.id,
+      workflow,
+      operation: endpoint,
+      provider: "mnml",
+      providerModelId: typeof fields.engine === "string" ? fields.engine : null,
+      sourceAssetId,
+      referenceIds,
+      requested: { values, prompt, avoid, engine: engine.id },
+      resolved: { values: resolved, fields },
+      providerReported: null,
+    },
   };
 }
 export type RenderBrief = ReturnType<typeof parseRender>;

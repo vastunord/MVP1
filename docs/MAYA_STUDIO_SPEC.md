@@ -1,5 +1,7 @@
 # Maya 7 Studio — implementation checkpoint
 
+27 November continuation: added a nullable versioned RenderJob submission snapshot, scoped same-tab editor-setting drafts and a room advanced-settings summary. The migration has only been applied to local disposable fixtures. See `MAYA_VERIFICATION.md` for acceptance scope and remaining work; the full registry and safe restoration of uploaded asset selections remain incomplete.
+
 The pack was supplied at the repository root; the requested `docs/implementation-packs/maya-7/` directory was absent. This checkpoint builds on `ad13383` and does not replace the 17 tool IDs, provider engine IDs, authenticated uploads or render recovery.
 
 The experience labels describe the operation already used by the selected tool: existing render mappings show Create, existing prompt edits show Refine, and resolution enhancement shows Enhance. Other experiences are disabled for the current tool; Motion remains unavailable. This is not a provider model selector or evidence of a verified output for that operation.

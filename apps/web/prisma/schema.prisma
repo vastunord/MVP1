@@ -241,6 +241,7 @@ model RenderJob {
   outputAssetId String?
   outputMedia String @default("image")
   requestHash String?
+  submissionSettings Json?
   providerJobId String? @unique
   chargedUsd Decimal? @db.Decimal(10, 6)
   refundedUsd Decimal? @db.Decimal(10, 6)

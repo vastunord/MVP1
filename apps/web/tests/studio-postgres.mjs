@@ -71,6 +71,8 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         "utf8",
       ),
     );
+    assert.equal(await studioPersistenceReady(db), false, "snapshot migration is required");
+    await memory.exec(await readFile(new URL("../prisma/migrations/20261127_maya_submission_settings/migration.sql", import.meta.url), "utf8"));
     assert.equal(
       await studioPersistenceReady(db),
       true,
@@ -223,6 +225,8 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       /connection loss/,
     );
     assert.equal(await db.renderJob.count(), 1);
+    const savedSnapshot = (await db.renderJob.findUniqueOrThrow({ where: { id: input.id } })).submissionSettings;
+    assert.deepEqual(savedSnapshot, parseRender(input).snapshot, "job saves the exact validated snapshot before provider acceptance");
     assert.equal(
       (
         await startJob(
@@ -240,6 +244,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       "RUNNING",
     );
     assert.equal(submissions, 2);
+    assert.deepEqual((await projectJobs(db, actor, "pa", "room-reimagination"))[0].submissionSettings, savedSnapshot, "owned history reopens the immutable snapshot");
     await assert.rejects(
       startJob(
         db,

@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { get, put } from "@vercel/blob";
 import sharp from "sharp";
-import type { PrismaClient, RenderJob } from "@/generated/prisma/client";
+import type { Prisma, PrismaClient, RenderJob } from "@/generated/prisma/client";
 import type { RenderStatus } from "@/lib/studio-render";
 import { MAX_IMAGE_BYTES } from "../lib/image-upload-policy.ts";
 import {
@@ -25,6 +25,7 @@ function status(row: RenderJob): RenderStatus {
     outputAssetId: row.state === "SUCCEEDED" ? row.outputAssetId : null,
     media: row.outputMedia === "video" ? "video" : "image",
     waitingForSubmission: row.state === "QUEUED" && !row.providerJobId,
+    submissionSettings: row.submissionSettings,
   };
 }
 async function readBytes(
@@ -156,6 +157,7 @@ export async function startJob(
         outputAssetId: randomUUID(),
         outputMedia: video ? "video" : "image",
         requestHash: brief.hash,
+        submissionSettings: brief.snapshot as Prisma.InputJsonValue,
       },
     });
   });

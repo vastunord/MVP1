@@ -88,6 +88,15 @@ test("Maya labels describe the existing operation and style choices reach the pr
   }
   assert.throws(() => parseRender({ ...input, values: { medium: "unknown" } }), /Invalid selection/);
 });
+test("Maya snapshot preserves the resolved request and rejects conflicts and malformed hidden choices", () => {
+  const brief = parseRender({ ...input, values: { medium: "Watercolor", room: "Auto-detect" } });
+  assert.equal(brief.snapshot.version, 1);
+  assert.deepEqual(brief.snapshot.resolved.fields, brief.fields);
+  assert.equal(brief.snapshot.requested.values.medium, "Watercolor");
+  assert.doesNotMatch(String(brief.fields.prompt), /Auto-detect/);
+  assert.throws(() => parseRender({ ...input, prompt: "Add furniture to the room", values: { furnishing: "Empty" } }), /conflicts/);
+  assert.throws(() => parseRender({ ...input, values: { room: 42 } }), /Invalid selection/);
+});
 test("All 17 editors select an appropriate provider operation", () => {
   for (const tool of tools) {
     const spec = parseRender({

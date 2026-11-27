@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   visibleControls,
@@ -20,6 +20,7 @@ import { StudioChoices } from "./studio-choices";
 import { StudioPrompt } from "./studio-prompt";
 import { StudioToolSwitcher } from "./studio-tool-switcher";
 import { StudioRenderAction } from "./studio-render-action";
+import { mayaDraftKey, readMayaDraft, type MayaDraft } from "@/lib/maya-drafts";
 import {
   renderEngines,
   mayaExperience,
@@ -139,6 +140,7 @@ export function Editor({
   submissionEnabled,
   improveEnabled,
   sample,
+  userId,
 }: {
   tool: ToolDefinition;
   locale: Locale;
@@ -147,6 +149,7 @@ export function Editor({
   submissionEnabled: boolean;
   improveEnabled: boolean;
   sample?: StudioSample;
+  userId?: string;
 }) {
   const t = messages(locale);
   const [values, setValues] = useState<
@@ -170,20 +173,70 @@ export function Editor({
   const [workflow, setWorkflow] = useState<StudioWorkflow>("design");
   const [preview, setPreview] = useState("");
   const [draftNotice, setDraftNotice] = useState(false);
+  const [draftRecovered, setDraftRecovered] = useState(false);
   const english = locale === "en";
+  const draftKey = userId ? mayaDraftKey(userId, selection.projectId, tool.id) : "";
+  const activeDraft = useRef("");
+  const latestDraft = useRef<MayaDraft | null>(null);
+  const previousDraft = useRef<{ key: string; value: MayaDraft } | null>(null);
+  useEffect(() => {
+    latestDraft.current = { version: 1, values, prompt, avoid, engine, workflow };
+  }, [values, prompt, avoid, engine, workflow]);
+  useEffect(() => {
+    if (!draftKey) return;
+    let active = true;
+    activeDraft.current = "";
+    queueMicrotask(() => {
+      if (!active) return;
+      let draft: MayaDraft | null = null;
+      try {
+        const raw = sessionStorage.getItem(draftKey);
+        if (raw) {
+          draft = readMayaDraft(raw, tool);
+          if (!draft) { sessionStorage.removeItem(draftKey); setDraftNotice(true); }
+        }
+      } catch { /* Draft storage is optional. */ }
+      if (!draft && userId && selection.projectId && previousDraft.current?.key === mayaDraftKey(userId, "", tool.id)) draft = previousDraft.current.value;
+      if (draft) {
+        setValues(draft.values); setPrompt(draft.prompt); setAvoid(draft.avoid);
+        setEngine(draft.engine); setWorkflow(draft.workflow); setDraftRecovered(true);
+      } else {
+        setValues(Object.fromEntries(tool.controls.filter((c) => c.defaultValue !== undefined).map((c) => [c.id, c.defaultValue!])));
+        setPrompt(""); setAvoid(""); setEngine("fast"); setWorkflow("design"); setDraftRecovered(false);
+      }
+      activeDraft.current = draftKey;
+    });
+    return () => {
+      active = false;
+      if (activeDraft.current === draftKey && latestDraft.current) {
+        previousDraft.current = { key: draftKey, value: latestDraft.current };
+        try { sessionStorage.setItem(draftKey, JSON.stringify(latestDraft.current)); } catch { /* Optional storage. */ }
+      }
+      activeDraft.current = "";
+    };
+  }, [draftKey, tool, userId, selection.projectId]);
+  useEffect(() => {
+    if (!draftKey || activeDraft.current !== draftKey) return;
+    const timer = setTimeout(() => {
+      if (activeDraft.current === draftKey && latestDraft.current) {
+        try { sessionStorage.setItem(draftKey, JSON.stringify(latestDraft.current)); } catch { /* Optional storage. */ }
+      }
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [draftKey, values, prompt, avoid, engine, workflow]);
   useEffect(() => {
     let active = true;
     queueMicrotask(() => {
       if (!active) return;
       try {
-        if (sessionStorage.getItem("vn-unsaved-editor-settings") === "yes") {
+        if (!userId && sessionStorage.getItem("vn-unsaved-editor-settings") === "yes") {
           sessionStorage.removeItem("vn-unsaved-editor-settings");
           setDraftNotice(true);
         }
       } catch { /* Optional notice only. */ }
     });
     return () => { active = false; };
-  }, []);
+  }, [userId]);
   const room = tool.id === "room-reimagination";
   const enhance = tool.id === "resolution-enhancement";
   const video = workflow === "video";
@@ -203,11 +256,12 @@ export function Editor({
   );
   return (
     <div className="studio-editor" onInputCapture={(event) => {
-      if (event.target instanceof Element && event.target.closest(".studio-prompt, .room-settings, .avoid-detail, .inspector-group .studio-choices")) {
+      if (!userId && event.target instanceof Element && event.target.closest(".studio-prompt, .room-settings, .avoid-detail, .inspector-group .studio-choices")) {
         try { sessionStorage.setItem("vn-unsaved-editor-settings", "yes"); } catch { /* Optional notice only. */ }
       }
     }}>
       {draftNotice && <p role="status" className="inspector-help">{english ? "Your previous unsaved description and settings were not retained. Please review and enter them again." : "Den forrige ulagrede beskrivelsen og innstillingene ble ikke beholdt. Kontroller og legg dem inn på nytt."}</p>}
+      {draftRecovered && <p role="status" className="inspector-help">{english ? "Your settings were restored for this account, project and tool. Select your image again if needed." : "Valgene er gjenopprettet for denne kontoen, prosjektet og verktøyet. Velg bildet på nytt ved behov."}</p>}
       <div className="editor-topbar">
         <Link href="/app/library"><span aria-hidden="true">← </span>{t.open}</Link>
         <StudioToolSwitcher tool={tool} locale={locale} sample={sample} />
@@ -502,7 +556,8 @@ export function Editor({
                   </div>
                 </details>
               ))}
-            <button type="button" className="room-reset" onClick={() => setValues(Object.fromEntries(tool.controls.filter((c) => c.defaultValue !== undefined).map((c) => [c.id, c.defaultValue!])))}>{english ? "Reset tool defaults" : "Tilbakestill verktøyvalg"}</button>
+            <button type="button" className="room-reset editor-reset" aria-describedby="editor-reset-help" onClick={() => setValues(Object.fromEntries(tool.controls.filter((c) => c.defaultValue !== undefined).map((c) => [c.id, c.defaultValue!])))}>{english ? "Reset tool defaults" : "Tilbakestill verktøyvalg"}</button>
+            <p className="inspector-help" id="editor-reset-help">{english ? "Your description and image are kept." : "Beskrivelsen og bildet beholdes."}</p>
           </div>
           <StudioRenderAction
             key={selection.projectId}

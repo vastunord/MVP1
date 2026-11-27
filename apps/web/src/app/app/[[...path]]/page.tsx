@@ -61,6 +61,7 @@ export default async function Page({
   const loginIntent =
     tool?.id === "room-reimagination" && !sample ? "?intent=room-upload" : "";
   let signedIn = false;
+  let editorUserId: string | undefined;
   let renderReady = false;
   if (authEnabled) {
     const requestHeaders = await headers();
@@ -72,6 +73,7 @@ export default async function Page({
       );
     }
     signedIn = Boolean(userId);
+    editorUserId = userId ?? undefined;
     if (!userId && !sample)
       redirect(publicHref("/login" + loginIntent, locale));
     if (userId) {
@@ -106,6 +108,7 @@ export default async function Page({
       <Editor
         key={tool.id + (sample?.id ?? "")}
         tool={tool}
+        userId={editorUserId}
         locale={locale}
         sample={sample}
         uploadsEnabled={signedIn && readServerConfig().uploadsEnabled}

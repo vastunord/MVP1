@@ -1,5 +1,35 @@
 import { expect, test } from "@playwright/test";
 
+test("Maya draft restores per account, project and tool without uploading or submitting", async ({ page }) => {
+  let writes = 0;
+  await page.route("**/api/**", async (route) => {
+    if (route.request().method() !== "GET") writes++;
+    if (route.request().url().includes("/assets")) return route.fulfill({ json: [] });
+    return route.fulfill({ json: [{ id: "project-a", name: "First" }, { id: "project-b", name: "Second" }] });
+  });
+  await page.goto("/maya");
+  const prompt = page.locator("#prompt");
+  await expect(page.getByRole("radio", { name: "First" })).toBeChecked();
+  await prompt.fill("Project A draft");
+  await page.getByRole("radio", { name: "Second" }).check();
+  await expect(prompt).toHaveValue("");
+  await prompt.fill("Project B draft");
+  await page.getByRole("radio", { name: "First" }).check();
+  await expect(prompt).toHaveValue("Project A draft");
+  await page.getByRole("radio", { name: "Second" }).check();
+  await expect(prompt).toHaveValue("Project B draft");
+  await page.getByRole("button", { name: "Switch tool" }).click();
+  await page.getByRole("button", { name: "Switch tool" }).click();
+  await page.getByRole("radio", { name: "Second" }).check();
+  await expect(page.locator("#prompt")).toHaveValue("Project B draft");
+  await page.reload();
+  await page.getByRole("radio", { name: "Second" }).check();
+  await expect(page.locator("#prompt")).toHaveValue("Project B draft");
+  await page.getByRole("button", { name: "Switch account" }).click();
+  await expect(page.locator("#prompt")).toHaveValue("");
+  expect(writes).toBe(0);
+});
+
 // Component-level browser test: controlled HTTP responses, not an auth/API integration test.
 test("first project retry, duplicate prevention, switching and reload explain unsaved file", async ({ page }) => {
   const projects: { id: string; name: string }[] = [];

@@ -60,6 +60,7 @@ test("room choice images, output media, keyboard input and collapsed groups work
       return element.naturalWidth;
     }),
   ).toBe(320);
+  await design.getByText("Flere valg", { exact: true }).click();
   await design.getByText("Kamera og lys", { exact: true }).click();
   await design.getByRole("radio", { name: "Nytt utsnitt" }).check();
   await expect(design.getByRole("group", { name: "Synsvinkel" })).toBeVisible();

@@ -1,5 +1,13 @@
 # Vastu Nord — current project handoff (living document)
 
+## 27 November 2026 · Maya continuation, partial
+
+An additive nullable `RenderJob.submissionSettings` migration and versioned requested/resolved snapshot were added. The snapshot is saved before the provider call and returned in owned history; older jobs are labeled as lacking a snapshot. Migration and owned job/retry behavior passed isolated local PostgreSQL fixtures only. **The migration is not applied in Preview or Development; rendering readiness for this candidate requires it.** No cloud resource or deployment was changed.
+
+Server parsing now rejects unknown request keys and invalid hidden selections, normalizes Auto guidance and rejects a checked empty-room/add-furniture conflict. Same-tab draft settings are scoped by authenticated user, project and tool and cleared on sign-out; a controlled browser fixture passed switching/reload/account isolation. Source/reference selection does not yet restore automatically. Room advanced sections show a changed-setting summary. A four-width bilingual/theme browser sample passed; a reset-control overlap observed at 390px was corrected and tested in that sampled view. See `docs/MAYA_VERIFICATION.md` for the MAYA-C01–C08 matrix. The live saved-render and second-user gates remain open.
+
+Local validation: 66 unit tests, 12 gallery/recovery fixtures, a draft-switching fixture, the Prisma/PostgreSQL job fixture, a file-backed database reopen fixture and 164 shared browser tests passed. The shared browser run used the build immediately before the final read-only settings presentation and mobile reset-alignment refinements; a later Webpack build and targeted layout checks cover the refinements. A simultaneous standalone TypeScript run initially saw generated `.next/types` files being replaced by the build; TypeScript passed when run separately afterward.
+
 ## 27 November 2026 · Maya 7 partial implementation
 
 On `feat/v7-brand-photo-entry` after `ad13383`, the shared editor gained operation-bound Maya labels, a searchable 17-tool chooser, nine optimized room-style examples, reset controls and prompt-suggestion undo. Existing provider engine IDs and render-recovery code are unchanged. The original image hashes match the supplied pack; examples are synthetic, not MNML outputs. Local TypeScript, ESLint and Webpack build passed; the existing 62-unit suite and 12 targeted MNML fixtures passed, plus nine local editor/browser checks at 390, 768, 1280 and 1440 CSS pixels. No live provider test, deployment, authenticated saved-result test or Figma parity was performed.

@@ -151,6 +151,7 @@ export function RoomSettings({
     });
   }
   const en = locale === "en";
+  const changed = controls.filter((control) => control.defaultValue !== undefined && values[control.id] !== undefined && values[control.id] !== control.defaultValue && !["room", "style", "medium"].includes(control.id));
   return (
     <section
       className="inspector-group room-settings"
@@ -167,6 +168,10 @@ export function RoomSettings({
         </summary>
         <div>{fields("room", "style")}{resetButton(["room", "style"])}</div>
       </details>
+      <details className="room-drawer">
+        <summary>{en ? "More options" : "Flere valg"} {changed.length ? `(${changed.length})` : ""}</summary>
+        <div>
+      <p className="inspector-help">{changed.length ? changed.map((control) => `${roomLabel(control.label, locale)}: ${roomLabel(String(values[control.id]), locale)}`).join(" · ") : (en ? "Using tool defaults" : "Bruker standardvalg")}</p>
       <details className="room-drawer">
         <summary>{roomLabel("Camera and light", locale)}</summary>
         <div>{fields("camera", "viewpoint", "time", "lighting")}{resetButton(["camera", "viewpoint", "time", "lighting"])}</div>
@@ -189,6 +194,8 @@ export function RoomSettings({
       <details className="room-drawer">
         <summary>{roomLabel("Output settings", locale)}</summary>
         <div>{fields("palette", "ratio")}{resetButton(["palette", "ratio"])}</div>
+      </details>
+        </div>
       </details>
     </section>
   );

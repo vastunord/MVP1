@@ -1,5 +1,9 @@
 # Blockers and owner actions
 
+## Maya snapshot migration and live verification
+
+The new nullable `20261127_maya_submission_settings` migration was tested only with disposable local PostgreSQL. Before any Preview or Development deployment of this candidate, review the exact migration and authorize its application to the intended nonproduction target; the render readiness check intentionally remains closed until the column and permissions exist. Production remains outside this task. The existing authenticated saved-render, approved design evidence and commercial release actions below still apply. Local draft, control and accessibility acceptance work remains engineering work rather than an owner blocker.
+
 ## Maya 7 local implementation queue
 
 The missing requested nested pack path was resolved using the owner-supplied root files. The remaining capability registry, draft persistence, expanded controls and theme/accessibility acceptance are local engineering work, not owner-action blockers. Existing Preview sign-in, approved Figma evidence and any separately authorized live paid-provider tests remain external gates listed below.

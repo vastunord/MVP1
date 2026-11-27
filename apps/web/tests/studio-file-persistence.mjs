@@ -17,6 +17,7 @@ test("synthetic project and private render survive a local database close and re
   try {
     database = await PGlite.create(directory);
     await database.exec(await readFile(new URL("../prisma/migrations/20261121_phase02c_initial/migration.sql", import.meta.url), "utf8"));
+    await database.exec(await readFile(new URL("../prisma/migrations/20261127_maya_submission_settings/migration.sql", import.meta.url), "utf8"));
     await database.exec(`
       INSERT INTO "User" (id,email) VALUES ('owner','owner@example.invalid');
       INSERT INTO "Workspace" (id,name) VALUES ('workspace','Synthetic');
@@ -25,6 +26,8 @@ test("synthetic project and private render survive a local database close and re
       INSERT INTO "Asset" (id,"workspaceId","projectId","ownerId","privateObjectKey","mimeType","byteSize") VALUES ('result','workspace','project','owner','synthetic-result','image/webp',42);
       INSERT INTO "RenderJob" (id,"workspaceId","projectId","toolId","updatedAt") VALUES ('job','workspace','project','room-reimagination',CURRENT_TIMESTAMP);
     `);
+    const snapshot = { version: 1, operation: "renders", resolved: { values: { medium: "Watercolor" } } };
+    await database.query('UPDATE "RenderJob" SET "submissionSettings"=$1::jsonb WHERE id=$2', [JSON.stringify(snapshot), "job"]);
     await database.close();
     database = undefined;
     database = await PGlite.create(directory);
@@ -34,6 +37,8 @@ test("synthetic project and private render survive a local database close and re
       JOIN "Membership" m ON m."workspaceId"=p."workspaceId"
       WHERE m."userId"=$1 AND a."ownerId"=$1`, ["owner"]);
     assert.deepEqual(result.rows, [{ project: "project", asset: "result", owner: "owner", job: "job" }]);
+    const saved = await database.query('SELECT "submissionSettings" FROM "RenderJob" WHERE id=$1', ["job"]);
+    assert.deepEqual(saved.rows[0].submissionSettings, snapshot);
     const foreign = await database.query('SELECT id FROM "Asset" WHERE "ownerId"=$1', ["other"]);
     assert.equal(foreign.rows.length, 0);
   } finally {

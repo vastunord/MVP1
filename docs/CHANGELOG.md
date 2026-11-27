@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 27 November 2026 · Maya continuation
+
+Added local migration and versioned private render-setting snapshots, stricter render input validation, account/project/tool-scoped same-tab drafts, room advanced-setting summaries and controlled tests. Added local responsive screenshots and corrected a sampled mobile reset/launcher overlap; other acceptance gaps remain recorded in `MAYA_VERIFICATION.md`. No cloud migration, paid render or deployment.
+
 ## 27 November 2026 · Maya 7 partial checkpoint
 
 Added operation-bound experience labels, searchable Studio workflows, nine synthetic style thumbnails with preserved historical style values, room-section and tool reset, and prompt-suggestion undo. Added optimized assets, provenance manifest and fixture/browser checks. No provider, production or cloud changes. Full Maya acceptance and the live saved-result journey remain pending; see `MAYA_STUDIO_SPEC.md` and `PROJECT_STATE.md`.

@@ -3,6 +3,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { clearMayaDrafts } from "@/lib/maya-drafts";
 import type { Locale } from "@/lib/i18n";
 
 type Project = {
@@ -429,6 +430,7 @@ export function AccountScreen({
             <button
               className="button"
               onClick={async () => {
+                try { clearMayaDrafts(sessionStorage); } catch { /* Storage may be unavailable. */ }
                 await authClient.signOut();
                 router.push("/");
                 router.refresh();

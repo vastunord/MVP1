@@ -74,6 +74,10 @@
 .room-reset { min-height: 44px; padding: .45rem .65rem; color: white; background: transparent; border: 1px solid currentColor; border-radius: .4rem; cursor: pointer; }
 .maya-search { display: grid; gap: .4rem; padding: .6rem; }
 .maya-search input { min-height: 44px; width: 100%; }
+.saved-settings { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .72rem; }
+@media (max-width: 850px) {
+  .inspector-scroll > .editor-reset { max-width: calc(100% - 10rem); margin-inline: 3.5rem 6.5rem; }
+}
 .choices-compact .studio-choice { min-height: 44px; }
 .studio-editor :is(#source-image, #room-settings) {
   scroll-margin-block-start: 8rem;

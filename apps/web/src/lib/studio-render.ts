@@ -9,6 +9,25 @@ export const renderEngines = [
 ] as const;
 export type RenderEngine = (typeof renderEngines)[number]["id"];
 export type BriefValues = Record<string, string | number | boolean>;
+// Derived from the existing tool definitions; provider IDs remain separate from
+// the public Maya labels. These are mapping states, not live-outcome claims.
+export function studioCapability(toolId: string, control: { id: string; label?: string; kind: string; min?: number; max?: number; options?: readonly string[]; defaultValue?: string | number | boolean; when?: { id: string; values: readonly string[] } }) {
+  const operation = renderMode(toolId) ? "renders" : toolId === "resolution-enhancement" ? "enhancements" : "edits";
+  const unavailable = control.kind === "unknown" || control.kind === "action" || ["guides", "preview"].includes(control.id) || (control.kind === "range" && (control.min === undefined || control.max === undefined));
+  return {
+    operation,
+    experienceId: mayaExperience(toolId),
+    controlId: control.id,
+    allowedValues: control.options,
+    defaultValue: control.defaultValue,
+    bounds: { min: control.min, max: control.max },
+    dependency: control.when,
+    mapping: unavailable ? "unavailable" : (control.id === "ratio" && operation === "renders") || (control.id === "mode" && operation === "enhancements") ? "native" : "prompt-guidance",
+    explanation: unavailable ? "Not implemented for this operation" : "Configuration or qualitative design guidance; not a guaranteed edit",
+    evidence: "docs/MNML_CAPABILITY_MATRIX.md",
+    verification: "fixture-tested; live outcome unverified",
+  } as const;
+}
 // Presentation aliases do not replace stored tool IDs or provider models.
 export function mayaExperience(toolId: string) {
   if (toolId === "resolution-enhancement") return "enhance";
@@ -86,4 +105,5 @@ export interface RenderStatus {
   outputAssetId: string | null;
   waitingForSubmission: boolean;
   media: "image" | "video";
+  submissionSettings?: unknown;
 }

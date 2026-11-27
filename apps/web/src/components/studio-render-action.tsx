@@ -1,5 +1,6 @@
 "use client";
 import { AssetSharingConsent } from "./asset-sharing-consent";
+import { roomLabel } from "./room-settings";
 import { useEffect, useRef, useState } from "react";
 import { primaryAction, type ToolDefinition } from "@vastunord/contracts/tools";
 import type {
@@ -208,6 +209,11 @@ export function StudioRenderAction({
       // remains in its original project; do not move its result to the new UI.
       if (!mounted.current) return;
       if (!response.ok) {
+        const body = response.status === 400 ? await response.json().catch(() => null) : null;
+        if (typeof body?.error === "string" && body.error.startsWith("Furnishing: Empty conflicts")) {
+          setError(en ? "Choose another furnishing level or remove the request to add furniture." : "Velg en annen møbleringsgrad eller fjern ønsket om å legge til møbler.");
+          return;
+        }
         setError(
           response.status === 402
             ? en
@@ -279,6 +285,10 @@ export function StudioRenderAction({
     FAILED: en ? "Render failed" : "Rendring mislyktes",
     CANCELLED: en ? "Cancelled" : "Avbrutt",
   };
+  const snapshot = job?.submissionSettings && typeof job.submissionSettings === "object" && "version" in job.submissionSettings && job.submissionSettings.version === 1 && "requested" in job.submissionSettings
+    ? job.submissionSettings.requested as { prompt?: unknown; avoid?: unknown; values?: unknown }
+    : null;
+  const savedValues = snapshot?.values && typeof snapshot.values === "object" && !Array.isArray(snapshot.values) ? Object.entries(snapshot.values) : [];
   return (
     <div className="primary-action">
       {enabled && (
@@ -341,6 +351,17 @@ export function StudioRenderAction({
       </p>
       <p className="inspector-help">{en ? "Cost is not available until confirmed by the provider." : "Kostnaden er ikke tilgjengelig før den er bekreftet av leverandøren."}</p>
       {job && <p role="status">{statuses[job.state]}</p>}
+      {job && <details className="render-history">
+        <summary>{en ? "Saved submission settings" : "Lagrede innstillinger"}</summary>
+        {snapshot
+          ? <div className="saved-settings">
+              {typeof snapshot.prompt === "string" && snapshot.prompt && <p>{snapshot.prompt}</p>}
+              {typeof snapshot.avoid === "string" && snapshot.avoid && <p>{en ? "Avoid: " : "Unngå: "}{snapshot.avoid}</p>}
+              {savedValues.map(([id, value]) => <p key={id}>{roomLabel(tool.controls.find((control) => control.id === id)?.label ?? id, locale)}: {roomLabel(String(value), locale)}</p>)}
+              <p>{en ? "These are the submitted choices; they do not guarantee the result." : "Dette er valgene som ble sendt inn; de garanterer ikke resultatet."}</p>
+            </div>
+          : <p>{en ? "This older result has no saved settings snapshot." : "Dette eldre resultatet har ingen lagret kopi av innstillingene."}</p>}
+      </details>}
       {job?.waitingForSubmission && <p role="status">{en
         ? "Submission is not confirmed. This job will not be submitted automatically; check your project history before starting another."
         : "Innsendingen er ikke bekreftet. Denne jobben sendes ikke automatisk; sjekk prosjekthistorikken før du starter en ny."}</p>}
