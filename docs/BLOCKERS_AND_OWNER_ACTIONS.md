@@ -1,5 +1,7 @@
 # Blockers and owner actions
 
+**28 November authorization update:** The owner approved the reviewed release migration sequence and up to six `v4.5-fast` image attempts at US$0.099 each, maximum US$0.594 total. Earlier requests for the same approval below are superseded. Do not request that approval again. The test campaign implementation and release-target checks remain incomplete; no new paid render has been made.
+
 ## Hobby testing release — current decision
 
 The owner approved the existing Hobby project for noncommercial testing, disabled customer payments, and target-verified execution of the reviewed named migration. Do not ask again for the hosting choice. Current blockers and the not-yet-approved bounded MNML test plan are in `GO_LIVE_EXECUTION.md`; the previous source-publication and migration-authorization notes below are historical where superseded by that release instruction. Preview identity and its direct protected credential were verified, recovery branch `br-bold-king-bhncjfk8` is ready, and the Maya migration alone was applied and checksum-verified. The reviewed separate newsletter migration remains pending. The release database identity, credential and recovery readiness remain unverified.

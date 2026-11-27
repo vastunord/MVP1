@@ -8,6 +8,7 @@ import sharp from "sharp";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client.ts";
 import { parseRender } from "../src/server/mnml.ts";
+import { reserveTestRender } from "../src/server/test-render-budget.ts";
 import {
   startJob,
   syncJob,
@@ -73,6 +74,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     );
     assert.equal(await studioPersistenceReady(db), false, "snapshot migration is required");
     await memory.exec(await readFile(new URL("../prisma/migrations/20261127_maya_submission_settings/migration.sql", import.meta.url), "utf8"));
+    await memory.exec(await readFile(new URL("../prisma/migrations/20261128_controlled_render_campaign/migration.sql", import.meta.url), "utf8"));
     assert.equal(
       await studioPersistenceReady(db),
       true,
@@ -110,6 +112,22 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         },
       });
     }
+    await db.testRenderCampaign.create({ data: { id: "campaign", model: "v4.5-fast", active: true, startsAt: new Date(Date.now() - 10000), expiresAt: new Date(Date.now() + 60000), maxAttempts: 6, maxMicrousd: 594000, perAttemptMicrousd: 99000 } });
+    await db.testRenderTester.create({ data: { campaignId: "campaign", userId: "a", maxAttempts: 6, maxMicrousd: 594000 } });
+    const reservation = { campaignId: "campaign", userId: "a", id: "test-attempt-0", requestHash: "brief-a", endpoint: "renders", model: "v4.5-fast", count: 1, quoteMicrousd: 99000 };
+    await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, quoteMicrousd: 99001 })), /approved/);
+    await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, model: "v4.6-ultra" })), /approved/);
+    await assert.rejects(db.$transaction(async (tx) => { await reserveTestRender(tx, { ...reservation, id: "rollback" }); throw Error("synthetic failure"); }), /synthetic failure/);
+    assert.equal(await db.testRenderAttempt.count(), 0, "failed transaction rolls back its reservation");
+    await db.$transaction((tx) => reserveTestRender(tx, reservation));
+    await db.$transaction((tx) => reserveTestRender(tx, reservation));
+    await db.testRenderAttempt.update({ where: { id: reservation.id }, data: { state: "REFUNDED", settledMicrousd: 0 } });
+    await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, requestHash: "different" })), /conflicts/);
+    await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, id: "other-user", userId: "b" })), /unavailable/);
+    for (let i = 1; i < 6; i++) await db.$transaction((tx) => reserveTestRender(tx, { ...reservation, id: `test-attempt-${i}` }));
+    await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, id: "seventh" })), /exhausted/);
+    await db.testRenderCampaign.update({ where: { id: "campaign" }, data: { active: false } });
+    await assert.rejects(db.$transaction((tx) => reserveTestRender(tx, { ...reservation, id: "killed" })), /unavailable/);
     // Exercise the actual project service and Prisma store with synthetic users.
     for (const id of ["project-owner", "project-other"]) {
       await db.user.create({ data: { id, email: `${id}@example.invalid`, emailVerified: true } });

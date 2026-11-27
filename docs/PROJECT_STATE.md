@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 28 November 2026 · Controlled render campaign foundation
+
+The owner authorized the reviewed release migration sequence and at most six new `v4.5-fast` single-image test attempts at US$0.099 each, US$0.594 aggregate; no fallback, video, top-up or expanded allowance. Earlier requests for approval of this same bounded scope are superseded. No new render, charge, cloud migration or deployment occurred in this increment.
+
+Added an additive, inactive-by-default local migration for test campaigns, testers and attempts, with integer micro-USD bounds. `reserveTestRender` locks the campaign row and enforces the tester, model, single-image, lifetime, kill-switch, duplicate-key and conservative attempt/spend limits inside a caller's database transaction. The isolated PostgreSQL fixture passed sequential boundary, duplicate, rejection, rollback, refund and kill-switch cases; no real provider call was made. **It is not yet wired into job creation**, lacks verified multi-connection concurrency, provider quote verification, settlement/reconciliation and a provisioned campaign. The existing client/server paid-render gate therefore remains closed. The migration has not been applied to Preview or Production. The Vastu Nord CLI reconfirmed that the public alias still points to `dpl_HMXJBbuSXgDzs8a9YeQ2kucJqojW`, recorded source `0a99e002adc972ff06eba0a223242dded549d034`; no deployment occurred. Next executable step: integrate reservation and job creation atomically, implement verified quote and safe uncertain-attempt handling, and test concurrency using a suitable isolated database before changing the gate.
+
 ## 27 November 2026 · Hobby test release work in progress
 
 The owner authorized a noncommercial Hobby testing release, a reviewed additive migration at verified targets and disabled customer payments. The isolated Vastu Nord CLI verified `vastu-nord/vastunord-web`; the existing `vastunord-web.vercel.app` alias serves the older 22 November deployment `dpl_HMXJBbuSXgDzs8a9YeQ2kucJqojW`, not this candidate. Its public root returned HTTP 200. The Maya migration has been applied to Preview only; no deployment or paid provider request has been made in this execution.

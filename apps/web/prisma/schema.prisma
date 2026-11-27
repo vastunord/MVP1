@@ -253,6 +253,42 @@ model RenderJob {
   @@index([workspaceId, state, createdAt])
 }
 
+// Controlled test rendering only. Monetary values are integer micro-USD.
+model TestRenderCampaign {
+  id String @id
+  model String
+  active Boolean @default(false)
+  startsAt DateTime
+  expiresAt DateTime
+  maxAttempts Int
+  maxMicrousd Int
+  perAttemptMicrousd Int
+  attempts TestRenderAttempt[]
+  testers TestRenderTester[]
+}
+
+model TestRenderTester {
+  campaignId String
+  userId String
+  maxAttempts Int
+  maxMicrousd Int
+  campaign TestRenderCampaign @relation(fields: [campaignId], references: [id])
+  @@id([campaignId, userId])
+}
+
+model TestRenderAttempt {
+  id String @id
+  campaignId String
+  userId String
+  requestHash String
+  reservedMicrousd Int
+  settledMicrousd Int?
+  state String @default("RESERVED")
+  createdAt DateTime @default(now())
+  campaign TestRenderCampaign @relation(fields: [campaignId], references: [id])
+  @@index([campaignId, userId])
+}
+
 model ConsentGrant {
   id String @id @default(cuid())
   assetVersionId String
