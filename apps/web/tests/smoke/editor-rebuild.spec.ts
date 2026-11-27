@@ -20,7 +20,7 @@ test("studio opens on a single image with optional comparison and tool selection
   await page.locator(".studio-tool-switcher summary").click();
   await expect(page.locator(".studio-tool-switcher nav a")).toHaveCount(17);
   await page.locator(".studio-tool-switcher summary").click();
-  const model = page.getByLabel("Prana-modell");
+  const model = page.getByLabel("Leverandørmodell");
   await model.selectOption("fast");
   await expect(model).toHaveValue("fast");
   await page

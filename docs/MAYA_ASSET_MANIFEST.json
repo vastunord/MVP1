@@ -1,0 +1,134 @@
+{
+  "created": "2026-11-27",
+  "brand_font": "Zalando Sans Expanded",
+  "assets": [
+    {
+      "path": "assets/brand/wordmark-light.svg",
+      "bytes": 90037,
+      "sha256": "d47ec84eb1e935c8c0d96f30f422123bf22510181c737f05329d0976202f507c",
+      "source": "Vastu Nord brand PDF page 14 vector extraction",
+      "purpose": "preview wordmark; use existing app asset when integrating"
+    },
+    {
+      "path": "assets/brand/wordmark.svg",
+      "bytes": 89214,
+      "sha256": "00efad13ea1e086ae98de177f9e1e697bb74c5476ee367aa7e2b013b631c7c21",
+      "source": "Vastu Nord brand PDF page 14 vector extraction",
+      "purpose": "preview wordmark; use existing app asset when integrating"
+    },
+    {
+      "path": "assets/fonts/OFL.txt",
+      "bytes": 4425,
+      "sha256": "411a22de2734b25584e4764f7212b004f241181ac04944a3bcee0e0371afe547",
+      "source": "Google Fonts / Zalando Sans Expanded",
+      "license": "OFL-1.1; see assets/fonts/OFL.txt"
+    },
+    {
+      "path": "assets/fonts/ZalandoSansExpanded.ttf",
+      "bytes": 146688,
+      "sha256": "e3f331b7125dfdcd202f2135c8b48a3766ba5c4fafaa6fedad1bf37b01d6fb3b",
+      "source": "Google Fonts / Zalando Sans Expanded",
+      "license": "OFL-1.1; see assets/fonts/OFL.txt"
+    },
+    {
+      "path": "assets/thumbnails/archviz.png",
+      "bytes": 2948629,
+      "sha256": "6508d0ccf042bde8eff7c7ac162785df8dcfafbeec93b4f48b39e8aff39462e8",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/cgi.png",
+      "bytes": 2857397,
+      "sha256": "a58321dc215cc11c6b4610907b079cbabe4afa093d02b48cea6c5cf2e5d1ab1e",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/diagram.png",
+      "bytes": 1694297,
+      "sha256": "599c39550e156ec356ea963efcd8e2340fbb3da9ae493430db06bc288173efa4",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/illustration.png",
+      "bytes": 2989747,
+      "sha256": "d6cc551b7e3f5c2f1c0964c4e11b12b778d12e39416f945c5798158568bc27ee",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/line-drawing.png",
+      "bytes": 1797011,
+      "sha256": "b2457a7bb25d2d4ad1c25ccb16c8bb0b35c2fc0045acc573161bce52ea352b75",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/neutral-clay.png",
+      "bytes": 1972322,
+      "sha256": "aa03635ac65aaabe517715d2fc5a1713d0ff137f67792cbcfcf61419d80ac062",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/photoreal.png",
+      "bytes": 3087559,
+      "sha256": "a40bf2701e91453900d0966ff3dde5d38cc7822bc36c471bafa5727735892d72",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/sketch.png",
+      "bytes": 3662056,
+      "sha256": "d11f80234f25bbea68775e942f8ee5fa66e107de818c6d9d38246b9a72c67ef1",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/source-empty.png",
+      "bytes": 2705756,
+      "sha256": "68a35b256d2a1007a780597c75af59e23310f167d04da1cfdb1a6929ddbae673",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "synthetic source example",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    },
+    {
+      "path": "assets/thumbnails/watercolor.png",
+      "bytes": 3105200,
+      "sha256": "f615ec9b5d254b1c47938dbb8a97f2853664c2b81cfd77e3c9c141f8dd1767a9",
+      "width": 1254,
+      "height": 1254,
+      "purpose": "visual-style thumbnail",
+      "source": "built-in image generation",
+      "provider_evidence": false
+    }
+  ]
+}

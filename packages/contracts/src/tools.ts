@@ -111,7 +111,7 @@ const ratio = select(
 const daylight = select("time", "Daylight", ["As photographed", "Soft daylight", "Direct sun", "Golden hour", "Blue hour", "Night"], "As photographed");
 const familyLayout = toggle("safe", "Child-friendly layout", false);
 const roomDesign: Control[] = [
-  select("medium", "Render style", ["Photography", "Clay model", "Architectural", "Pencil", "Watercolor", "Illustration", "Diagram", "CAD", "Material study"], "Photography"),
+  select("medium", "Render style", ["Photography", "Clean 3D", "Architectural", "Pencil", "Watercolor", "Illustration", "Diagram", "Line drawing", "Neutral clay", "Clay model", "CAD", "Material study"], "Photography"),
   room, roomStyle, palette,
   select("camera", "Camera", ["Keep framing", "Reframe"], "Keep framing"),
   {

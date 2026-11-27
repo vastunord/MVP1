@@ -1,5 +1,7 @@
 # MNML capability mapping
 
+27 November Maya checkpoint: the nine room visual styles are validated prompt guidance, not verified native MNML styles; the single previously successful live interior test did not establish any of these particular outputs. Maya experience labels are UI aliases for existing tool operations, not provider model IDs. Other experience choices, including Motion, are disabled for the current workflow. Full per-control capability and quote registry remains to be implemented.
+
 MNML documents render, edit, enhancement and video endpoints; its render modes include interior, exterior and landscape. The mappings below describe the application's existing integration, not proof that each specific result or control works. One interior synthetic render has succeeded live; the remaining tools need individual provider acceptance and output validation. Source and reference images for render/video requests are limited to 15 MB each. [MNML API reference](https://developers.mnml.ai/docs/api-reference) · [Render parameters](https://developers.mnml.ai/docs/renders)
 
 | Studio tool | Existing operation | Limitations |

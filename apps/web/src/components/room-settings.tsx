@@ -9,7 +9,10 @@ type Values = Record<string, string | number | boolean>;
 
 const bokmal: Record<string, string> = {
   "Render style": "Bildestil",
-  Photography: "Fotografi",
+  Photography: "Fotorealistisk",
+  "Clean 3D": "Ren 3D",
+  "Line drawing": "Strektegning",
+  "Neutral clay": "Nøytral leire",
   "Clay model": "Leirmodell",
   Architectural: "Arkitektur",
   Pencil: "Blyant",
@@ -104,6 +107,10 @@ export function RoomSettings({
   update: (values: Values) => void;
 }) {
   const controls = visibleControls(tool, values);
+  function reset(ids: string[]) {
+    update(Object.fromEntries(tool.controls.filter((c) => ids.includes(c.id) && c.defaultValue !== undefined).map((c) => [c.id, c.defaultValue!])));
+  }
+  const resetButton = (ids: string[]) => <button type="button" className="room-reset" onClick={() => reset(ids)}>{locale === "en" ? "Reset section" : "Tilbakestill seksjonen"}</button>;
   function fields(...ids: string[]) {
     return ids.map((id) => {
       const c = controls.find((item) => item.id === id);
@@ -134,9 +141,9 @@ export function RoomSettings({
           kind={illustrated ? id : "compact"}
           label={roomLabel(c.label, locale)}
           value={String(values[id] ?? "")}
-          choices={(c.options ?? []).map((value) => ({
+          choices={(c.options ?? []).filter((value) => id !== "medium" || !["Clay model", "CAD", "Material study"].includes(value) || values[id] === value).map((value) => ({
             value,
-            label: roomLabel(value, locale),
+            label: value === "Photography" && locale === "en" ? "Photorealistic" : value === "Pencil" && locale === "en" ? "Pencil sketch" : value === "Diagram" && locale === "en" ? "Spatial diagram" : roomLabel(value, locale),
           }))}
           onChange={(v) => update({ [id]: v })}
         />
@@ -151,14 +158,18 @@ export function RoomSettings({
       aria-label={en ? "Room design settings" : "Innstillinger for romdesign"}
     >
       <details className="room-drawer" open>
+        <summary>{roomLabel("Render style", locale)}</summary>
+        <div>{fields("medium")}{resetButton(["medium"])}</div>
+      </details>
+      <details className="room-drawer" open>
         <summary>
           {en ? "Room type and style" : "Romtype og interiørstil"}
         </summary>
-        <div>{fields("room", "style")}</div>
+        <div>{fields("room", "style")}{resetButton(["room", "style"])}</div>
       </details>
       <details className="room-drawer">
         <summary>{roomLabel("Camera and light", locale)}</summary>
-        <div>{fields("camera", "viewpoint", "time", "lighting")}</div>
+        <div>{fields("camera", "viewpoint", "time", "lighting")}{resetButton(["camera", "viewpoint", "time", "lighting"])}</div>
       </details>
       <details className="room-drawer">
         <summary>{roomLabel("Room details", locale)}</summary>
@@ -172,11 +183,12 @@ export function RoomSettings({
             "people",
             "markings",
           )}
+          {resetButton(["furnishing", "plants", "accessories", "floor", "safe", "people", "markings"])}
         </div>
       </details>
       <details className="room-drawer">
         <summary>{roomLabel("Output settings", locale)}</summary>
-        <div>{fields("medium", "ratio")}</div>
+        <div>{fields("palette", "ratio")}{resetButton(["palette", "ratio"])}</div>
       </details>
     </section>
   );

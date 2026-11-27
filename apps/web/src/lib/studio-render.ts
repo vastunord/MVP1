@@ -9,6 +9,17 @@ export const renderEngines = [
 ] as const;
 export type RenderEngine = (typeof renderEngines)[number]["id"];
 export type BriefValues = Record<string, string | number | boolean>;
+// Presentation aliases do not replace stored tool IDs or provider models.
+export function mayaExperience(toolId: string) {
+  if (toolId === "resolution-enhancement") return "enhance";
+  return renderMode(toolId) ? "create" : "refine";
+}
+export const mayaExperiences = [
+  { id: "create", en: "Maya 7.0 · Create", nb: "Maya 7.0 · Skap" },
+  { id: "refine", en: "Maya 7.1 · Refine", nb: "Maya 7.1 · Tilpass" },
+  { id: "enhance", en: "Maya 7.2 · Enhance", nb: "Maya 7.2 · Forbedre" },
+  { id: "motion", en: "Maya 7.3 · Motion", nb: "Maya 7.3 · Bevegelse" },
+] as const;
 // These modes need capabilities that are not implemented in the shared editor.
 export function unsupportedStudioOption(toolId: string, controlId: string, value: string) {
   return controlId === "mode" && (

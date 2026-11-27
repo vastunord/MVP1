@@ -21,6 +21,7 @@ export function StudioPrompt({
   const [busy, setBusy] = useState(false),
     [message, setMessage] = useState("");
   const [proposal, setProposal] = useState("");
+  const [previous, setPrevious] = useState<string | null>(null);
   const controller = useRef<AbortController | null>(null);
   useEffect(() => () => controller.current?.abort(), []);
   async function improve() {
@@ -117,6 +118,7 @@ export function StudioPrompt({
             type="button"
             onClick={() => {
               change(proposal);
+              setPrevious(value);
               setProposal("");
             }}
           >
@@ -127,6 +129,7 @@ export function StudioPrompt({
           </button>
         </div>
       )}
+      {previous !== null && <button type="button" onClick={() => { change(previous); setPrevious(null); }}>{en ? "Undo suggestion" : "Angre forslag"}</button>}
       {message && <p role="status">{message}</p>}
     </div>
   );

@@ -339,6 +339,7 @@ export function StudioRenderAction({
                       : "Beskriv området og ønsket endring."
                     : ""}
       </p>
+      <p className="inspector-help">{en ? "Cost is not available until confirmed by the provider." : "Kostnaden er ikke tilgjengelig før den er bekreftet av leverandøren."}</p>
       {job && <p role="status">{statuses[job.state]}</p>}
       {job?.waitingForSubmission && <p role="status">{en
         ? "Submission is not confirmed. This job will not be submitted automatically; check your project history before starting another."

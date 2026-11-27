@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { renderEngines, unsupportedStudioOption } from "../src/lib/studio-render.ts";
+import { mayaExperience, renderEngines, unsupportedStudioOption } from "../src/lib/studio-render.ts";
 import {
   previewPool,
   previewRole,
@@ -75,6 +75,18 @@ test("Only the model with synthetic live evidence is accepted for rendering", ()
     else
       assert.throws(() => parseRender({ ...input, engine: level.id }), /not available yet/);
   }
+});
+test("Maya labels describe the existing operation and style choices reach the provider brief", () => {
+  assert.equal(mayaExperience("room-reimagination"), "create");
+  assert.equal(mayaExperience("object-placement"), "refine");
+  assert.equal(mayaExperience("resolution-enhancement"), "enhance");
+  for (const medium of ["Photography", "Clean 3D", "Architectural", "Pencil", "Watercolor", "Illustration", "Diagram", "Line drawing", "Neutral clay"]) {
+    const request = parseRender({ ...input, values: { medium } });
+    assert.equal(request.endpoint, "renders");
+    assert.match(String(request.fields.prompt), new RegExp(`Render style: ${medium}`));
+    assert.equal(request.fields.engine, "v4.5-fast");
+  }
+  assert.throws(() => parseRender({ ...input, values: { medium: "unknown" } }), /Invalid selection/);
 });
 test("All 17 editors select an appropriate provider operation", () => {
   for (const tool of tools) {

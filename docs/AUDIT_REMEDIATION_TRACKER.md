@@ -1,5 +1,7 @@
 # Audit remediation tracker
 
+27 November Maya checkpoint: VN-05 and VN-17 remain partial. The room editor has a searchable tool chooser and labels existing operations as Maya experiences; the requested full operation/capability registry and advanced control coverage remain outstanding. The existing saved-render live gate is unchanged.
+
 Baseline: local b288b2e94615d1b8dfcdcea451b7eafd8cdbc025; protected Preview dpl_GzHakS8X5WLC3uZHW12MepzUrNKY contains a048c9d plus diagnostic helper, not the later size guard. Remote audit reported historical main only; no reset or push.
 
 Source: accompanying forensic audit and backlog. Status is local triage, not proof of release acceptance.

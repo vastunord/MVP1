@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useState } from "react";
 import Link from "next/link";
 import {
   categories,
@@ -18,6 +19,7 @@ export function StudioToolSwitcher({
   sample?: StudioSample;
 }) {
   const t = messages(locale);
+  const [query, setQuery] = useState("");
   return (
     <details className="studio-tool-switcher">
       <summary>
@@ -32,12 +34,13 @@ export function StudioToolSwitcher({
           locale === "en" ? "Workflow" : "Arbeidsflyt"
         }
       >
+        <label className="maya-search">{locale === "en" ? "Search workflows" : "Søk i arbeidsflyter"}<input type="search" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
         {categories.map((category) => (
           <section key={category}>
             <h2>{t[category]}</h2>
             <div>
               {tools
-                .filter((item) => item.category === category)
+                .filter((item) => item.category === category && item.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()))
                 .map((item) => (
                   <Link
                     key={item.id}

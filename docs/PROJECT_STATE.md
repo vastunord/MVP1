@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 27 November 2026 · Maya 7 partial implementation
+
+On `feat/v7-brand-photo-entry` after `ad13383`, the shared editor gained operation-bound Maya labels, a searchable 17-tool chooser, nine optimized room-style examples, reset controls and prompt-suggestion undo. Existing provider engine IDs and render-recovery code are unchanged. The original image hashes match the supplied pack; examples are synthetic, not MNML outputs. Local TypeScript, ESLint and Webpack build passed; the existing 62-unit suite and 12 targeted MNML fixtures passed, plus nine local editor/browser checks at 390, 768, 1280 and 1440 CSS pixels. No live provider test, deployment, authenticated saved-result test or Figma parity was performed.
+
+This is a **partial** Maya checkpoint, not full acceptance. Next executable work: implement the complete server-authoritative per-tool experience/capability registry and effective-setting persistence; then contextual controls, section summaries, per-tool drafts, responsive screenshots and theme/keyboard regression. See `docs/MAYA_STUDIO_SPEC.md` for scope and `docs/BLOCKERS_AND_OWNER_ACTIONS.md` for external gates. Keep paid rendering disabled during tests.
+
 ## 27 November 2026 · Mobile auth dock-safe prototype
 
 Current local source candidate `defecee0362877d6a59f277c823bbcd92ca74246` passed 156 browser smoke tests on the final rerun, 62 unit tests and an offline locked-dependency Webpack build from its exact Git archive. The earlier combined run passed 155/156; the remaining launcher-readiness test passed after its visibility assertion was corrected and in the full rerun. The archive does not establish a remote checkout or deployment.

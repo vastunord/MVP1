@@ -3,6 +3,15 @@ import "./room-settings.css";
 import { useId, type CSSProperties } from "react";
 
 const photos: Record<string, string> = {
+  Photography: "../maya/photoreal",
+  "Clean 3D": "../maya/cgi",
+  Architectural: "../maya/archviz",
+  Pencil: "../maya/sketch",
+  Watercolor: "../maya/watercolor",
+  Illustration: "../maya/illustration",
+  Diagram: "../maya/diagram",
+  "Line drawing": "../maya/line-drawing",
+  "Neutral clay": "../maya/neutral-clay",
   design: "from-photo",
   masterplan: "masterplan",
   style: "reference-style",
@@ -93,7 +102,7 @@ export function StudioChoices({
           const slug = photos[choice.value];
           const source =
             choice.image ??
-            (slug ? "/media/options/" + slug + ".webp" : undefined);
+            (slug ? (slug.startsWith("../maya/") ? "/media/maya/" + slug.slice(8) : "/media/options/" + slug) + ".webp" : undefined);
           const artwork = kind !== "compact";
           const swatch =
             kind === "palette" ? swatches[choice.value] : undefined;

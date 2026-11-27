@@ -1,5 +1,9 @@
 # Blockers and owner actions
 
+## Maya 7 local implementation queue
+
+The missing requested nested pack path was resolved using the owner-supplied root files. The remaining capability registry, draft persistence, expanded controls and theme/accessibility acceptance are local engineering work, not owner-action blockers. Existing Preview sign-in, approved Figma evidence and any separately authorized live paid-provider tests remain external gates listed below.
+
 ## Authenticated Preview evidence — VN-01, VN-10, VN-11
 
 The existing synthetic MNML output was previously verified in private Preview Blob. On 24 November the existing Codex Preview tab displayed the application sign-in page; an authenticated user was not established. Owner action when ready: sign in to the Vastu Nord protected Preview in that browser; do not share a password or token. Resume by verifying the account, then use the existing guarded attachment helper and verify the source/result, download and reopen. A second authorized verified user is needed only for the separate live cross-user test. Isolated project-ownership, render-persistence and browser-fixture work continued without this session. Do not send another verification email or make a paid render.

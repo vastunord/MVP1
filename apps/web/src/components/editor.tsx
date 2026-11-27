@@ -22,6 +22,8 @@ import { StudioToolSwitcher } from "./studio-tool-switcher";
 import { StudioRenderAction } from "./studio-render-action";
 import {
   renderEngines,
+  mayaExperience,
+  mayaExperiences,
   renderMode,
   sceneWorkflows,
   supportedWorkflows,
@@ -235,6 +237,17 @@ export function Editor({
                 {english ? "Workflow and engine" : "Arbeidsflyt og motor"}
               </summary>
               <div>
+                <StudioChoices
+                  label={english ? "Maya experience" : "Maya-opplevelse"}
+                  value={mayaExperience(tool.id)}
+                  choices={mayaExperiences.map((item) => ({
+                    value: item.id,
+                    label: (english ? item.en : item.nb) + (item.id !== mayaExperience(tool.id) ? (english ? " — unavailable for this workflow" : " — utilgjengelig for denne arbeidsflyten") : ""),
+                    disabled: item.id !== mayaExperience(tool.id),
+                  }))}
+                  onChange={() => { /* Experience is bound to this tool's existing operation. */ }}
+                />
+                <p className="inspector-help">{english ? "Experiences describe workflows, not provider model versions. Other operations need a compatible workflow." : "Opplevelsene beskriver arbeidsflyter, ikke leverandørens modellversjoner. Andre operasjoner krever en kompatibel arbeidsflyt."}</p>
                 {(renderMode(tool.id) || enhance) && (
                   <StudioChoices
                     kind="workflow"
@@ -274,17 +287,17 @@ export function Editor({
                 )}
                 {renderMode(tool.id) && !video ? (
                   <label className="studio-model-select">
-                    <span><span aria-hidden="true">◈ </span>{english ? "Prana Model" : "Prana-modell"}</span>
+                    <span><span aria-hidden="true">◈ </span>{english ? "Provider model" : "Leverandørmodell"}</span>
                     <select value={engine} aria-describedby="studio-model-help" onChange={(event) => setEngine(event.target.value as RenderEngine)}>
                       {renderEngines.map((option) => (
-                        <option key={option.id} value={option.id} disabled={!option.verified}>VN-1 {option.label}{!option.verified ? (english ? " — not available" : " — ikke tilgjengelig") : ""}</option>
+                        <option key={option.id} value={option.id} disabled={!option.verified}>{option.label}{!option.verified ? (english ? " — not available" : " — ikke tilgjengelig") : ""}</option>
                       ))}
                     </select>
                     <span id="studio-model-help" className="inspector-help">{english ? "Fast uses the model tested with one interior image. Results vary; other models are not available until tested." : "Fast bruker modellen som er testet med ett interiørbilde. Resultatene varierer; andre modeller er utilgjengelige til de er testet."}</span>
                   </label>
                 ) : (
                   <p className="studio-kicker">
-                    Prana V1 ·{" "}
+                    Maya ·{" "}
                     {video
                       ? "Film · 10 s"
                       : enhance
@@ -489,6 +502,7 @@ export function Editor({
                   </div>
                 </details>
               ))}
+            <button type="button" className="room-reset" onClick={() => setValues(Object.fromEntries(tool.controls.filter((c) => c.defaultValue !== undefined).map((c) => [c.id, c.defaultValue!])))}>{english ? "Reset tool defaults" : "Tilbakestill verktøyvalg"}</button>
           </div>
           <StudioRenderAction
             key={selection.projectId}

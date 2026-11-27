@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 27 November 2026 · Maya 7 partial checkpoint
+
+Added operation-bound experience labels, searchable Studio workflows, nine synthetic style thumbnails with preserved historical style values, room-section and tool reset, and prompt-suggestion undo. Added optimized assets, provenance manifest and fixture/browser checks. No provider, production or cloud changes. Full Maya acceptance and the live saved-result journey remain pending; see `MAYA_STUDIO_SPEC.md` and `PROJECT_STATE.md`.
+
 ## 27 November 2026 · Mobile auth dock-safe prototype
 
 - Candidate `defecee` passed 156 browser smoke tests on the final rerun, 62 unit tests and an offline locked-dependency Webpack build from its exact archive. The earlier 155/156 run and its corrected launcher-readiness test remain documented below.

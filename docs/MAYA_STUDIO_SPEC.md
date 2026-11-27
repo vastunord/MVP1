@@ -1,0 +1,9 @@
+# Maya 7 Studio — implementation checkpoint
+
+The pack was supplied at the repository root; the requested `docs/implementation-packs/maya-7/` directory was absent. This checkpoint builds on `ad13383` and does not replace the 17 tool IDs, provider engine IDs, authenticated uploads or render recovery.
+
+The experience labels describe the operation already used by the selected tool: existing render mappings show Create, existing prompt edits show Refine, and resolution enhancement shows Enhance. Other experiences are disabled for the current tool; Motion remains unavailable. This is not a provider model selector or evidence of a verified output for that operation.
+
+Room Reimagination presents nine visual-style examples as prompt guidance. The server validates these against the existing tool contract and includes the selected value in the request description. Existing historical medium values remain valid. No style is a guarantee of precise output, editable 3D, CAD, or accurate geometry. The existing single verified provider model remains unchanged. The original PNG hashes match the supplied root `MAYA_ASSET_MANIFEST.json`; the ten 320px WebP derivatives under `apps/web/public/media/maya/` are generated from those originals with the existing Sharp dependency. They are synthetic examples, not MNML results or customer assets.
+
+Remaining implementation: complete the full per-tool experience/capability registry; contextual advanced-options summary and all requested controls; durable per-tool draft restoration; exact native-provider capability/quote handling; and complete responsive, theme and accessibility acceptance. Precise masks, seed, batch variants, video and unavailable models must remain gated until their contracts and safety checks are implemented. Do not treat this checkpoint as the complete Maya upgrade or commercial release.
