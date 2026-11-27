@@ -1,6 +1,6 @@
 # MNML capability mapping
 
-27 November continuation: tool control metadata now exposes operation, Maya alias, bounds, values, defaults and mapping classification from existing definitions. Server parsing rejects unknown request fields, malformed hidden selections and the checked furnishing conflict. This is not yet a complete reviewed capability registry, and prompt guidance remains unverified as a live outcome. Submission settings are snapshotted in the new additive migration, which has not been applied to cloud databases.
+27 November continuation: tool control metadata now exposes operation, Maya alias, bounds, values, defaults and mapping classification from existing definitions. Server parsing rejects unknown request fields, malformed hidden selections and the checked furnishing conflict. This is not yet a complete reviewed capability registry, and prompt guidance remains unverified as a live outcome. The additive submission-settings migration has been applied and checksum-verified on Preview only; release/Production migration remains unverified.
 
 27 November Maya checkpoint: the nine room visual styles are validated prompt guidance, not verified native MNML styles; the single previously successful live interior test did not establish any of these particular outputs. Maya experience labels are UI aliases for existing tool operations, not provider model IDs. Other experience choices, including Motion, are disabled for the current workflow. Full per-control capability and quote registry remains to be implemented.
 

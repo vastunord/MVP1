@@ -37,6 +37,7 @@ export async function GET(request: Request, context: Context) {
     });
     return Response.json(
       rows.map((row) => ({ ...row, byteSize: Number(row.byteSize) })),
+      { headers: { "Cache-Control": "private, no-store" } },
     );
   } catch (error) {
     return apiError(error);

@@ -1,5 +1,9 @@
 # Blockers and owner actions
 
+## Hobby testing release — current decision
+
+The owner approved the existing Hobby project for noncommercial testing, disabled customer payments, and target-verified execution of the reviewed named migration. Do not ask again for the hosting choice. Current blockers and the not-yet-approved bounded MNML test plan are in `GO_LIVE_EXECUTION.md`; the previous source-publication and migration-authorization notes below are historical where superseded by that release instruction. Preview identity and its direct protected credential were verified, recovery branch `br-bold-king-bhncjfk8` is ready, and the Maya migration alone was applied and checksum-verified. The reviewed separate newsletter migration remains pending. The release database identity, credential and recovery readiness remain unverified.
+
 ## Maya snapshot migration and live verification
 
 The new nullable `20261127_maya_submission_settings` migration was tested only with disposable local PostgreSQL. Before any Preview or Development deployment of this candidate, review the exact migration and authorize its application to the intended nonproduction target; the render readiness check intentionally remains closed until the column and permissions exist. Production remains outside this task. The existing authenticated saved-render, approved design evidence and commercial release actions below still apply. Local draft, control and accessibility acceptance work remains engineering work rather than an owner blocker.

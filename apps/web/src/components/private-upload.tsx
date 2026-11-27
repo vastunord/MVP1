@@ -9,6 +9,7 @@ import {
   MAX_IMAGE_MIB,
 } from "@/lib/image-upload-policy";
 import type { RenderSelection } from "@/lib/studio-render";
+import { mayaDraftKey } from "@/lib/maya-drafts";
 
 type Project = { id: string; name: string };
 type Asset = { id: string; createdAt: string; mimeType: string };
@@ -20,14 +21,17 @@ export function RoomReferences({
   locale,
   enabled,
   onChange,
+  value,
 }: {
   assets: Asset[];
   locale: Locale;
   enabled: boolean;
   onChange?: (ids: string[]) => void;
+  value?: string[];
 }) {
   const en = locale === "en";
-  const [references, setReferences] = useState(["", ""]);
+  const [localReferences, setReferences] = useState(["", ""]);
+  const references = value ? [value[0] ?? "", value[1] ?? ""] : localReferences;
   return (
     <details className="room-drawer room-reference">
       <summary>{en ? "Reference images" : "Referansebilder"}</summary>
@@ -92,12 +96,16 @@ export function PrivateUpload({
   onPreview,
   withRoomReferences = false,
   onSelection,
+  draftUserId,
+  draftToolId,
 }: {
   locale: Locale;
   enabled: boolean;
   onPreview: (url: string) => void;
   withRoomReferences?: boolean;
   onSelection?: (selection: RenderSelection) => void;
+  draftUserId?: string;
+  draftToolId?: string;
 }) {
   const en = locale === "en";
   const [projects, setProjects] = useState<Project[]>([]);
@@ -105,6 +113,18 @@ export function PrivateUpload({
   const [assets, setAssets] = useState<Asset[]>([]);
   const [selectedAsset, setSelectedAsset] = useState("");
   const [referenceIds, setReferenceIds] = useState<string[]>([]);
+  const selectionRevision = useRef(0);
+  const hasLocalImage = useRef(false);
+  const previewCallback = useRef(onPreview);
+  useEffect(() => { previewCallback.current = onPreview; }, [onPreview]);
+  function rememberMedia(projectId: string, source: string, references: string[]) {
+    if (!draftUserId || !draftToolId || !projectId) return;
+    try { sessionStorage.setItem(mayaDraftKey(draftUserId, projectId, draftToolId) + ":media", JSON.stringify({ version: 1, source, references })); } catch { /* Optional storage. */ }
+  }
+  function rememberProject(projectId: string) {
+    if (!draftUserId || !draftToolId) return;
+    try { sessionStorage.setItem(mayaDraftKey(draftUserId, "project-selection", draftToolId), projectId); } catch { /* Optional storage. */ }
+  }
   useEffect(() => {
     onSelection?.({
       projectId: project,
@@ -174,6 +194,7 @@ export function PrivateUpload({
       if (!file) onPreview("");
       focusUploadAfterCreate.current = true;
       setProject(created.id);
+      rememberProject(created.id);
       setProjectName("");
       createKey.current = "";
       setStatus(en ? "Project created. Choose an image." : "Prosjektet er opprettet. Velg et bilde.");
@@ -193,7 +214,9 @@ export function PrivateUpload({
       .then((rows) => {
         if (active) {
           setProjects((current) => [...rows, ...current.filter((item) => !rows.some((row) => row.id === item.id))]);
-          setProject((current) => current || rows[0]?.id || "");
+          let remembered = "";
+          try { if (draftUserId && draftToolId) remembered = sessionStorage.getItem(mayaDraftKey(draftUserId, "project-selection", draftToolId)) ?? ""; } catch { /* Optional storage. */ }
+          setProject((current) => current || rows.find((row) => row.id === remembered)?.id || rows[0]?.id || "");
         }
       })
       .catch(() => {
@@ -205,17 +228,35 @@ export function PrivateUpload({
     return () => {
       active = false;
     };
-  }, [enabled, en]);
+  }, [enabled, en, draftUserId, draftToolId]);
   useEffect(() => {
     if (!enabled || !project) return;
     let active = true;
+    const revision = selectionRevision.current;
     fetch(`/api/projects/${encodeURIComponent(project)}/assets`)
       .then(async (response) => {
         if (!response.ok) throw Error();
         return response.json() as Promise<Asset[]>;
       })
       .then((rows) => {
-        if (active) setAssets(rows.filter(isPhoto));
+        if (active) {
+          const accessible = rows.filter(isPhoto);
+          setAssets(accessible);
+          if (draftUserId && draftToolId && revision === selectionRevision.current && !hasLocalImage.current) {
+            try {
+              const raw = sessionStorage.getItem(mayaDraftKey(draftUserId, project, draftToolId) + ":media");
+              const saved = raw ? JSON.parse(raw) : null;
+              if (saved?.version === 1 && typeof saved.source === "string" && Array.isArray(saved.references)) {
+                const source = accessible.some((asset) => asset.id === saved.source) ? saved.source : "";
+                const references = saved.references.filter((id: unknown): id is string => typeof id === "string" && id !== source && accessible.some((asset) => asset.id === id)).slice(0, 2);
+                setSelectedAsset(source);
+                setReferenceIds(references);
+                if (source) previewCallback.current(`/api/assets/${encodeURIComponent(source)}/download`);
+                if (saved.source && !source) setStatus(en ? "A previously selected image is no longer available. Choose another." : "Et tidligere valgt bilde er ikke lenger tilgjengelig. Velg et annet.");
+              }
+            } catch { /* Ignore malformed or unavailable storage. */ }
+          }
+        }
       })
       .catch(() => {
         if (active)
@@ -228,7 +269,7 @@ export function PrivateUpload({
     return () => {
       active = false;
     };
-  }, [project, enabled, en]);
+  }, [project, enabled, en, draftUserId, draftToolId]);
   useEffect(
     () => () => {
       if (localUrl) URL.revokeObjectURL(localUrl);
@@ -250,6 +291,9 @@ export function PrivateUpload({
       return;
     }
     const url = URL.createObjectURL(next);
+    selectionRevision.current++;
+    hasLocalImage.current = true;
+    rememberMedia(project, "", referenceIds);
     try { sessionStorage.setItem("vn-unsaved-studio-image", "yes"); } catch { /* Optional reload hint only. */ }
     setSelectedAsset("");
     setLocalUrl(url);
@@ -273,6 +317,9 @@ export function PrivateUpload({
       if (!response.ok) throw Error();
       const result = (await response.json()) as { assetId: string };
       setSelectedAsset(result.assetId);
+      selectionRevision.current++;
+      hasLocalImage.current = false;
+      rememberMedia(project, result.assetId, referenceIds);
       const list = await fetch(
         `/api/projects/${encodeURIComponent(project)}/assets`,
       );
@@ -310,6 +357,8 @@ export function PrivateUpload({
       if (!response.ok) throw Error();
       setAssets((items) => items.filter((item) => item.id !== selectedAsset));
       setSelectedAsset("");
+      selectionRevision.current++;
+      rememberMedia(project, "", referenceIds.filter((id) => id !== selectedAsset));
       onPreview("");
       setStatus(en ? "Image deleted." : "Bildet er slettet.");
     } catch {
@@ -343,6 +392,8 @@ export function PrivateUpload({
         disabled={busy || creating || !projects.length}
         choices={projects.map((item) => ({ value: item.id, label: item.name }))}
         onChange={(id) => {
+          selectionRevision.current++;
+          rememberProject(id);
           setAssets([]);
           setProject(id);
           setSelectedAsset("");
@@ -403,6 +454,11 @@ export function PrivateUpload({
             image: "/api/assets/" + encodeURIComponent(asset.id) + "/download",
           }))}
           onChange={(id) => {
+            selectionRevision.current++;
+            hasLocalImage.current = false;
+            const remaining = referenceIds.filter((reference) => reference !== id);
+            setReferenceIds(remaining);
+            rememberMedia(project, id, remaining);
             setSelectedAsset(id);
             onPreview("/api/assets/" + encodeURIComponent(id) + "/download");
             try { sessionStorage.removeItem("vn-unsaved-studio-image"); } catch { /* Optional reload hint only. */ }
@@ -434,7 +490,8 @@ export function PrivateUpload({
           assets={assets.filter((asset) => asset.id !== selectedAsset)}
           locale={locale}
           enabled={!busy && !creating}
-          onChange={setReferenceIds}
+          value={referenceIds}
+          onChange={(ids) => { selectionRevision.current++; setReferenceIds(ids); rememberMedia(project, selectedAsset, ids); }}
         />
       )}
     </div>

@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 27 November 2026 · Hobby test release preparation
+
+Added account/project/tool-scoped source and reference selection recovery after authorized asset listing, with controlled browser checks for reload, inaccessible source and account switching. Project asset lists explicitly disable private-response caching. Verified the Preview migrator identity and existing migration history, created no-compute recovery branch `br-bold-king-bhncjfk8`, reviewed the separate pending newsletter migration, and applied only the checksum-verified Maya migration to Preview. Its new column and runtime SELECT/INSERT privileges were verified. Recorded current Vastu Nord alias and a bounded but unapproved MNML test proposal. No Production migration, deployment or paid render.
+
 ## 27 November 2026 · Maya continuation
 
 Added local migration and versioned private render-setting snapshots, stricter render input validation, account/project/tool-scoped same-tab drafts, room advanced-setting summaries and controlled tests. Added local responsive screenshots and corrected a sampled mobile reset/launcher overlap; other acceptance gaps remain recorded in `MAYA_VERIFICATION.md`. No cloud migration, paid render or deployment.

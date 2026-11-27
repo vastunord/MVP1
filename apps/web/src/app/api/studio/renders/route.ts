@@ -8,6 +8,7 @@ import {
   jobIdPattern,
 } from "@/server/mnml";
 import { startJob, syncJob, projectJobs } from "@/server/studio-jobs";
+import { controlledRenderingAllowanceReady } from "@/lib/studio-test-access";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -55,7 +56,7 @@ async function handle(request: Request, write: boolean) {
         { headers: privateHeaders },
       );
     }
-    if (process.env.MNML_SUBMISSION_ENABLED !== "true")
+    if (process.env.MNML_SUBMISSION_ENABLED !== "true" || !controlledRenderingAllowanceReady())
       throw new RenderError(503, "New rendering is unavailable");
     const brief = parseRender(input);
     return Response.json(await startJob(ctx.db, provider!, actor, brief), {

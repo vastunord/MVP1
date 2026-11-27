@@ -1,5 +1,71 @@
 import { expect, test } from "@playwright/test";
 
+test("restored project images do not replace a newly selected local image", async ({ page }) => {
+  await page.route("**/api/**", async (route) => {
+    const url = route.request().url();
+    if (url.includes("/api/assets/")) return route.fulfill({ status: 404 });
+    if (url.includes("/assets")) return route.fulfill({ json: [{ id: "saved-image", mimeType: "image/png", createdAt: "2026-01-01" }] });
+    return route.fulfill({ json: [{ id: "project-a", name: "First" }, { id: "project-b", name: "Second" }] });
+  });
+  await page.goto("/maya");
+  await page.getByRole("radio", { name: "Second" }).check();
+  await page.getByRole("group", { name: "Saved images" }).getByRole("radio", { name: "Image 1" }).check();
+  await page.getByRole("radio", { name: "First" }).check();
+  await page.getByLabel("Choose or drop an image").setInputFiles({ name: "local.png", mimeType: "image/png", buffer: Buffer.from("synthetic fixture") });
+  await page.getByRole("radio", { name: "Second" }).check();
+  await expect(page.getByText("local.png")).toBeVisible();
+  await expect(page.getByRole("group", { name: "Saved images" }).getByRole("radio", { name: "Image 1" })).not.toBeChecked();
+});
+
+test("late project image results cannot restore an image into another project", async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  let requested!: () => void;
+  const pending = new Promise<void>((resolve) => { requested = resolve; });
+  await page.route("**/api/**", async (route) => {
+    const url = route.request().url();
+    if (url.includes("/api/assets/")) return route.fulfill({ status: 404 });
+    if (url.includes("project-a/assets")) { requested(); await gate; return route.fulfill({ json: [{ id: "old-image", mimeType: "image/png", createdAt: "2026-01-01" }] }); }
+    if (url.includes("project-b/assets")) return route.fulfill({ json: [{ id: "new-image", mimeType: "image/png", createdAt: "2026-01-01" }] });
+    return route.fulfill({ json: [{ id: "project-a", name: "First" }, { id: "project-b", name: "Second" }] });
+  });
+  await page.goto("/maya");
+  await pending;
+  await page.getByRole("radio", { name: "Second" }).check();
+  await expect(page.getByRole("group", { name: "Saved images" }).locator("img")).toHaveAttribute("src", /new-image/);
+  release();
+  await expect(page.getByRole("group", { name: "Saved images" }).locator("img")).toHaveAttribute("src", /new-image/);
+});
+
+test("Maya restores only currently authorized project images and references", async ({ page }) => {
+  let deleted = false;
+  let writes = 0;
+  await page.route("**/api/**", async (route) => {
+    if (route.request().method() !== "GET") writes++;
+    const url = route.request().url();
+    if (url.includes("/api/assets/")) return route.fulfill({ status: 404 });
+    if (url.includes("/assets")) return route.fulfill({ json: deleted ? [{ id: "reference", mimeType: "image/png", createdAt: "2026-01-01" }] : [{ id: "source", mimeType: "image/png", createdAt: "2026-01-01" }, { id: "reference", mimeType: "image/png", createdAt: "2026-01-01" }] });
+    return route.fulfill({ json: [{ id: "project-a", name: "First" }] });
+  });
+  await page.goto("/maya");
+  await page.getByRole("group", { name: "Saved images" }).getByRole("radio", { name: "Image 1" }).check();
+  await page.getByText("Reference images", { exact: true }).click();
+  await page.getByRole("group", { name: "First reference" }).getByRole("radio", { name: "Image 1" }).check();
+  await page.reload();
+  await expect(page.getByRole("group", { name: "Saved images" }).getByRole("radio", { name: "Image 1" })).toBeChecked();
+  await page.getByText("Reference images", { exact: true }).click();
+  await expect(page.getByRole("group", { name: "First reference" }).getByRole("radio", { name: "Image 1" })).toBeChecked();
+  await page.getByRole("button", { name: "Switch account" }).click();
+  await expect(page.getByRole("group", { name: "Saved images" }).getByRole("radio", { name: "Image 1" })).not.toBeChecked();
+  await page.getByRole("button", { name: "Switch account" }).click();
+  await expect(page.getByRole("group", { name: "Saved images" }).getByRole("radio", { name: "Image 1" })).toBeChecked();
+  deleted = true;
+  await page.reload();
+  await expect(page.getByText("A previously selected image is no longer available. Choose another.")).toBeVisible();
+  await expect(page.getByRole("group", { name: "Saved images" }).getByRole("radio", { name: "Image 1" })).not.toBeChecked();
+  expect(writes).toBe(0);
+});
+
 test("Maya draft restores per account, project and tool without uploading or submitting", async ({ page }) => {
   let writes = 0;
   await page.route("**/api/**", async (route) => {

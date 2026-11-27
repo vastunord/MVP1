@@ -454,6 +454,8 @@ export function Editor({
                       setResult(null);
                     }}
                     onSelection={setSelection}
+                    draftUserId={userId}
+                    draftToolId={tool.id}
                     withRoomReferences={
                       Boolean(tool.reference) &&
                       !["video", "concept"].includes(workflow)

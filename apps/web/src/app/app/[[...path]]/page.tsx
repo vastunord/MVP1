@@ -29,6 +29,7 @@ import { createDatabase } from "@/server/db";
 import { ProjectsScreen, AccountScreen } from "@/components/project-screens";
 import { readServerConfig } from "@/server/config";
 import { studioPageTitle } from "@/lib/studio-metadata";
+import { controlledRenderingAllowanceReady } from "@/lib/studio-test-access";
 export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
   return { title: studioPageTitle((await params).path ?? [], await savedLocale(), destinations, findTool) };
 }
@@ -113,7 +114,7 @@ export default async function Page({
         sample={sample}
         uploadsEnabled={signedIn && readServerConfig().uploadsEnabled}
         renderEnabled={signedIn && renderReady}
-        submissionEnabled={process.env.MNML_SUBMISSION_ENABLED === "true" && Boolean(mnmlConfig())}
+        submissionEnabled={process.env.MNML_SUBMISSION_ENABLED === "true" && controlledRenderingAllowanceReady() && Boolean(mnmlConfig())}
         improveEnabled={Boolean(pranaSettings(process.env))}
       />
     );
