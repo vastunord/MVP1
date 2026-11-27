@@ -476,3 +476,8 @@ Validation: install and peer check passed; TypeScript, ESLint, production build,
 
 - Identified sandbox `EACCES` on the local PGlite socket as the prior readiness failure; verified the migrated isolated schema with permitted loopback access and added explicit connection/identity checks.
 - Added controlled coverage for a dispatch claim, bounded reported charge, zero-charge rejection and retained uncertainty. One-connection fixture only; independent concurrency and full settlement remain open. Paid generation remains disabled; no cloud migration, provider call or deployment.
+
+# 2026-11-28 — isolated Neon concurrency
+
+- Verified the authorized test branch and applied its four reviewed pending additive migrations. Two distinct live Neon backend sessions tested the final aggregate reservation, duplicate reservation, single claim and rollback; synthetic campaign records were removed. Full concurrent `startJob`, provider settlement and Production checks remain open.
+- Production Secret values could not be pulled by the local Vercel CLI, so the protected runtime binding was not verified. No Production migration, provider request or deployment occurred.

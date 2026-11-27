@@ -1,5 +1,13 @@
 # Vastu Nord — current project handoff (living document)
 
+## 28 November 2026 · Isolated Neon concurrency checkpoint
+
+HEAD before this increment: `88e2570eacf9c6de174339de8237e743654db20e` on `feat/v7-brand-photo-entry`. The existing protected migrator credential connected directly to Frankfurt test branch `br-lively-wildflower-bhwpjl4q`, endpoint `ep-holy-waterfall-bheg01mu`, `neondb` as `vastunord_dev_migrator`; no secret was displayed. Its initial two migration hashes matched history. Four reviewed additive migrations were applied to this disposable test target only: newsletter, MNML, Maya settings and controlled campaign; all six history records are complete. Newsletter remains disabled. No Production migration occurred.
+
+Using two simultaneously active, distinct Neon PostgreSQL backends, synthetic tests passed for two testers competing for the final campaign reservation, a duplicate reservation key, a single durable claim and rollback; the script removed its own fixture records. These tests exercise the reservation function and claim operation, not the entire `startJob` path under concurrent provider stubs. Complete that path, provider refund/late reconciliation and verified account pricing before opening rendering. No real campaign was created or reset; historical job `674349` remains conservatively held against the allowance, leaving at most five attempts/$0.495.
+
+The Vastu Nord CLI verified the account, but `vercel env run --environment production` reported seven Secret values cannot be pulled. The local runtime-target check therefore received no verifiable Production `DATABASE_URL`; this does not establish a configuration mismatch. The actual Production target, recovery point, migration credentials, runtime permissions and live private journey remain unverified. No paid render or deployment occurred. Next: complete the real concurrent `startJob` and settlement tests; verify protected Production binding and recovery in its actual runtime; apply the authorized reviewed release sequence only after target verification; then complete candidate gates and deploy. The existing public alias remains the older deployment `dpl_HMXJBbuSXgDzs8a9YeQ2kucJqojW`.
+
 ## 28 November 2026 · Reservation/job transaction continuation
 
 The owner confirmed the existing migration and six-attempt allowance, and is handling domain forwarding independently. The continuation prompt was supplied at `prompts/VastuNord_Continue_From_b9489c2.md`; no DNS dependency applies.
