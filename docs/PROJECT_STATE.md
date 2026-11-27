@@ -2,9 +2,11 @@
 
 ## 27 November 2026 · Mobile auth dock-safe prototype
 
+Current local source candidate `defecee0362877d6a59f277c823bbcd92ca74246` passed 156 browser smoke tests on the final rerun, 62 unit tests and an offline locked-dependency Webpack build from its exact Git archive. The earlier combined run passed 155/156; the remaining launcher-readiness test passed after its visibility assertion was corrected and in the full rerun. The archive does not establish a remote checkout or deployment.
+
 The mobile auth layout now uses a bounded, keyboard-focusable scroll region with a localized scroll hint so its form and privacy copy can be moved clear of the persistent launchers. It measures the header, notice and dock and has a CSS first-paint fallback. Local checks passed 30/30 across five signed-out auth routes, both languages and sampled viewports, including no-JavaScript first paint, keyboard/wheel access, footer exit, notice/dock resizing and rotation. Initial local layout-shift sums in four samples were below 0.1; these are not field CLS. An earlier fallback failed two shift checks and was replaced; an earlier run also had an unexplained initial-navigation failure before a clean rerun passed.
 
-The combined smoke run passed 155/156 cases; one existing Studio test tried to measure a cookie launcher before hydration had rendered it. Its test now explicitly waits for that launcher and passed on a focused rerun. This is a material nested-scroll UX change and adds a landmark tab stop. Real touch scrolling, virtual keyboards, screen readers, viewports below 500px high and approved Figma parity remain unverified; do not treat it as production-ready or a guarantee for arbitrary static content. No cloud action or deployment occurred.
+An earlier combined smoke run passed 155/156 cases; one existing Studio test tried to measure a cookie launcher before hydration had rendered it. Its test now explicitly waits for that launcher and passed on a focused rerun and the complete rerun. This is a material nested-scroll UX change and adds a landmark tab stop. Real touch scrolling, virtual keyboards, screen readers, viewports below 500px high and approved Figma parity remain unverified; do not treat it as production-ready or a guarantee for arbitrary static content. No cloud action or deployment occurred.
 
 ## 27 November 2026 · Render recovery integration
 

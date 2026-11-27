@@ -2,6 +2,7 @@
 
 ## 27 November 2026 · Mobile auth dock-safe prototype
 
+- Candidate `defecee` passed 156 browser smoke tests on the final rerun, 62 unit tests and an offline locked-dependency Webpack build from its exact archive. The earlier 155/156 run and its corrected launcher-readiness test remain documented below.
 - Added a bounded mobile auth scroll region with a localized hint and first-paint fallback. Thirty focused local checks passed; an earlier fallback shifted layout and was replaced, and a prior first-navigation failure was not reproduced on the clean rerun. The combined smoke run passed 155/156; the remaining test measured a launcher before hydration, and passed after an explicit visibility wait. Real touch, virtual keyboards, screen readers, short viewports and Figma parity remain open.
 
 ## 27 November 2026 · Render recovery integration
