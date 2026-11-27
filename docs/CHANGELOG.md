@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 27 November 2026 · Mobile auth dock-safe prototype
+
+- Added a bounded mobile auth scroll region with a localized hint and first-paint fallback. Thirty focused local checks passed; an earlier fallback shifted layout and was replaced, and a prior first-navigation failure was not reproduced on the clean rerun. The combined smoke run passed 155/156; the remaining test measured a launcher before hydration, and passed after an explicit visibility wait. Real touch, virtual keyboards, screen readers, short viewports and Figma parity remain open.
+
 ## 27 November 2026 · Render recovery integration
 
 - Added same-tab reload recovery for a confirmed running job using an authenticated exact-job query, without automatic resubmission. Local browser fixtures passed 12/12 and isolated database tests covered ownership and older jobs; live Preview remains unverified.

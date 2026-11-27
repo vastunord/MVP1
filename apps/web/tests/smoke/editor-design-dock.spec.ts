@@ -69,6 +69,7 @@ test("initial mobile Studio Design link remains pointer-accessible", async ({ pa
   });
   await page.goto("/app/tools/room-reimagination");
   const link = page.locator(".room-section-links a[href='#room-settings']");
+  await expect(page.locator(".vn-cookie-dock")).toBeVisible();
   const result = await link.evaluate(node => {
     const a = node.getBoundingClientRect();
     const dock = document.querySelector(".vn-cookie-dock")!.getBoundingClientRect();

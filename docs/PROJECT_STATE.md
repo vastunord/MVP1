@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 27 November 2026 · Mobile auth dock-safe prototype
+
+The mobile auth layout now uses a bounded, keyboard-focusable scroll region with a localized scroll hint so its form and privacy copy can be moved clear of the persistent launchers. It measures the header, notice and dock and has a CSS first-paint fallback. Local checks passed 30/30 across five signed-out auth routes, both languages and sampled viewports, including no-JavaScript first paint, keyboard/wheel access, footer exit, notice/dock resizing and rotation. Initial local layout-shift sums in four samples were below 0.1; these are not field CLS. An earlier fallback failed two shift checks and was replaced; an earlier run also had an unexplained initial-navigation failure before a clean rerun passed.
+
+The combined smoke run passed 155/156 cases; one existing Studio test tried to measure a cookie launcher before hydration had rendered it. Its test now explicitly waits for that launcher and passed on a focused rerun. This is a material nested-scroll UX change and adds a landmark tab stop. Real touch scrolling, virtual keyboards, screen readers, viewports below 500px high and approved Figma parity remain unverified; do not treat it as production-ready or a guarantee for arbitrary static content. No cloud action or deployment occurred.
+
 ## 27 November 2026 · Render recovery integration
 
 An accepted running render is now remembered per project and tool for the current browser tab. After reload, the client retrieves that exact job through an authenticated, ownership-scoped project/tool/job query before resuming status checks. Unconfirmed submissions are not automatically sent or polled. A different user, project or tool cannot retrieve the job through the scoped query. Closing the tab clears this optional session pointer; project history remains the fallback.

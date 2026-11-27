@@ -1,5 +1,5 @@
 "use client";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -27,6 +27,34 @@ export function AuthScreen({
   providers: OAuthProvider[];
 }) {
   const en = locale === "en";
+  const mainRef = useRef<HTMLElement>(null);
+  const [safeScroll, setSafeScroll] = useState(false);
+  useEffect(() => {
+    const main = mainRef.current;
+    if (!main) return;
+    const update = () => {
+      if (!window.matchMedia("(max-width: 767px) and (min-height: 500px)").matches) {
+        main.style.removeProperty("--auth-safe-height");
+        setSafeScroll(false);
+        return;
+      }
+      const top = main.getBoundingClientRect().top + window.scrollY;
+      const docks = [...document.querySelectorAll(".vn-cookie-dock, .vn-prana-dock, .vn-newsletter-dock")];
+      const dockTop = Math.min(window.innerHeight, ...docks.map((dock) => dock.getBoundingClientRect().top));
+      main.style.setProperty("--auth-safe-height", `${Math.max(120, dockTop - top - 12)}px`);
+      setSafeScroll(true);
+    };
+    const header = document.querySelector(".vg-header");
+    const notice = document.querySelector(".notice");
+    const dock = document.querySelector(".vn-visitor-dock");
+    const observer = new ResizeObserver(update);
+    if (header) observer.observe(header, { box: "border-box" });
+    if (notice) observer.observe(notice, { box: "border-box" });
+    if (dock) observer.observe(dock, { box: "border-box" });
+    window.addEventListener("resize", update);
+    const frame = requestAnimationFrame(update);
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener("resize", update); };
+  }, []);
   const router = useRouter();
   const query = useSearchParams();
   const [pending, setPending] = useState(false);
@@ -164,8 +192,9 @@ export function AuthScreen({
         onboarding: "Opprett Studio",
       };
   return (
-    <main id="main" className="container page-pad auth-layout">
+    <main id="main" ref={mainRef} className="container page-pad auth-layout" tabIndex={0} aria-label={titles[mode]} aria-describedby={safeScroll ? "auth-scroll-hint" : undefined}>
       <div>
+        {safeScroll && <p id="auth-scroll-hint" className="small">{en ? "Scroll to view the form." : "Rull for å se skjemaet."}</p>}
         <p className="eyebrow">VASTU NORD / {en ? "YOUR SPACE" : "DITT ROM"}</p>
         <h1>{titles[mode]}</h1>
         <p>
