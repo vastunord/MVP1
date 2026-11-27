@@ -13,6 +13,18 @@ import type {
 import type { Locale } from "@/lib/i18n";
 
 const endpoint = "/api/studio/renders";
+const jobIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+function recoveryKey(projectId: string, toolId: string) {
+  return `vn-render-recovery:${projectId}:${toolId}`;
+}
+function rememberJob(projectId: string, toolId: string, row: RenderStatus) {
+  try {
+    const key = recoveryKey(projectId, toolId);
+    if ((row.state === "RUNNING" || row.state === "QUEUED") && !row.waitingForSubmission && jobIdPattern.test(row.id))
+      sessionStorage.setItem(key, row.id);
+    else if (sessionStorage.getItem(key) === row.id) sessionStorage.removeItem(key);
+  } catch { /* Recovery is optional if browser storage is unavailable. */ }
+}
 type Props = {
   tool: ToolDefinition;
   values: BriefValues;
@@ -52,6 +64,7 @@ export function StudioRenderAction({
     [error, setError] = useState("");
   const requestKey = useRef({ id: "", body: "" });
   const submitting = useRef(false);
+  const recoveryAbort = useRef<AbortController | null>(null);
   const mounted = useRef(false);
   useEffect(() => {
     mounted.current = true;
@@ -80,6 +93,33 @@ export function StudioRenderAction({
     (!needsLocation || prompt.trim()) &&
     !unsupportedMode;
   useEffect(() => {
+    if (!enabled || !projectId) return;
+    let id: string | null = null;
+    try { id = sessionStorage.getItem(recoveryKey(projectId, tool.id)); } catch { return; }
+    if (!id || !jobIdPattern.test(id)) return;
+    const abort = new AbortController();
+    recoveryAbort.current = abort;
+    async function recover() {
+      try {
+        const response = await fetch(endpoint + "?" + new URLSearchParams({ projectId, toolId: tool.id, id: id! }), { signal: abort.signal });
+        if (!response.ok) return;
+        const rows: unknown = await response.json();
+        if (abort.signal.aborted || !Array.isArray(rows)) return;
+        const row = rows.find((item: RenderStatus) => item.id === id && item.toolId === tool.id) as RenderStatus | undefined;
+        if (!row) {
+          try { if (sessionStorage.getItem(recoveryKey(projectId, tool.id)) === id) sessionStorage.removeItem(recoveryKey(projectId, tool.id)); } catch { /* Optional storage. */ }
+          return;
+        }
+        // History is authenticated and scoped to this project; never submit here.
+        rememberJob(projectId, tool.id, row);
+        setJob(row);
+        onResult(renderResult(row));
+      } catch { /* Leave the pointer for a later retry; history remains available. */ }
+    }
+    void recover();
+    return () => { abort.abort(); if (recoveryAbort.current === abort) recoveryAbort.current = null; };
+  }, [enabled, projectId, tool.id, onResult]);
+  useEffect(() => {
     if (
       !job ||
       !projectId ||
@@ -107,6 +147,7 @@ export function StudioRenderAction({
           result.state === "FAILED" ||
           result.state === "CANCELLED"
         ) {
+          rememberJob(projectId, tool.id, result);
           setJob(result);
           onResult(renderResult(result));
         } else {
@@ -127,9 +168,10 @@ export function StudioRenderAction({
       clearTimeout(timer);
       abort.abort();
     };
-  }, [job, projectId, enabled, en, onResult, resync]);
+  }, [job, projectId, enabled, en, onResult, resync, tool.id]);
   async function start() {
     if (!ready || submitting.current) return;
+    recoveryAbort.current?.abort();
     submitting.current = true;
     setBusy(true);
     setError("");
@@ -187,6 +229,7 @@ export function StudioRenderAction({
       }
       const result: RenderStatus = await response.json();
       if (!mounted.current) return;
+      rememberJob(projectId, tool.id, result);
       setJob(result);
       onResult(null);
       if (result.outputAssetId) onResult(renderResult(result));
@@ -335,6 +378,8 @@ export function StudioRenderAction({
               key={row.id}
               type="button"
               onClick={() => {
+                recoveryAbort.current?.abort();
+                rememberJob(projectId, tool.id, row);
                 setJob(row);
                 setError("");
                 onResult(renderResult(row));

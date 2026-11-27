@@ -95,11 +95,17 @@ test("a failed status check retries the same job without another submission", as
   expect(submissions).toBe(1);
 });
 
-test("after reload a running job can be resumed from project history without another submission", async ({ page }) => {
+test("after reload a known running job resumes from authorized history without another submission", async ({ page }) => {
   let submissions = 0, checks = 0;
-  const row = { id: "synthetic-job", toolId: "room-reimagination", state: "RUNNING", media: "image", waitingForSubmission: false, sourceAssetId: "source", outputAssetId: null };
+  const row = { id: "12345678-1234-4123-8123-123456789abc", toolId: "room-reimagination", state: "RUNNING", media: "image", waitingForSubmission: false, sourceAssetId: "source", outputAssetId: null };
   await page.route("**/api/studio/renders**", async route => {
-    if (route.request().method() === "GET") return route.fulfill({ json: [row] });
+    if (route.request().method() === "GET") {
+      const query = new URL(route.request().url()).searchParams;
+      expect(query.get("id")).toBe(row.id);
+      expect(query.get("projectId")).toBe("project");
+      expect(query.get("toolId")).toBe(row.toolId);
+      return route.fulfill({ json: [row] });
+    }
     const input = route.request().postDataJSON();
     if (input.action === "status") {
       checks++;
@@ -113,11 +119,73 @@ test("after reload a running job can be resumed from project history without ano
   await page.locator(".primary-action > button").first().click();
   await expect(page.locator(".primary-action").getByRole("status")).toHaveText("Rendering");
   await page.reload();
-  await page.getByText("Project renders", { exact: true }).click();
-  await page.getByRole("button", { name: /Rendering · syntheti/ }).click();
+  await expect(page.locator(".primary-action").getByRole("status")).toHaveText("Rendering");
   await page.clock.fastForward(3000);
   await expect.poll(() => checks).toBe(1);
   expect(submissions).toBe(1);
+});
+
+test("recovery never resumes a job absent from owned project history", async ({ page }) => {
+  const id = "12345678-1234-4123-8123-123456789abc";
+  let submissions = 0, checks = 0, historyCalls = 0;
+  await page.route("**/api/studio/renders**", async route => {
+    if (route.request().method() === "GET") {
+      historyCalls++;
+      return route.fulfill({ json: [] });
+    }
+    const input = route.request().postDataJSON();
+    if (input.action === "status") checks++; else submissions++;
+    return route.fulfill({ json: {} });
+  });
+  await page.addInitScript((jobId) => sessionStorage.setItem("vn-render-recovery:project:room-reimagination", jobId), id);
+  await page.clock.install();
+  await page.goto("/poll");
+  await expect.poll(() => historyCalls).toBeGreaterThan(0);
+  await page.clock.fastForward(20000);
+  expect(checks).toBe(0);
+  expect(submissions).toBe(0);
+});
+
+test("recovery never polls or resubmits an unconfirmed submission", async ({ page }) => {
+  const id = "12345678-1234-4123-8123-123456789abc";
+  let submissions = 0, checks = 0;
+  await page.route("**/api/studio/renders**", async route => {
+    if (route.request().method() === "GET") return route.fulfill({ json: [{ id, toolId: "room-reimagination", state: "QUEUED", media: "image", waitingForSubmission: true, sourceAssetId: "source", outputAssetId: null }] });
+    const input = route.request().postDataJSON();
+    if (input.action === "status") checks++; else submissions++;
+    return route.fulfill({ json: {} });
+  });
+  await page.addInitScript((jobId) => sessionStorage.setItem("vn-render-recovery:project:room-reimagination", jobId), id);
+  await page.clock.install();
+  await page.goto("/poll");
+  await expect(page.getByText(/Submission is not confirmed/)).toBeVisible();
+  await page.clock.fastForward(20000);
+  expect(checks).toBe(0);
+  expect(submissions).toBe(0);
+});
+
+test("switching projects cannot resume the previous project's stored job", async ({ page }) => {
+  const id = "12345678-1234-4123-8123-123456789abc";
+  let otherHistory = 0, otherChecks = 0;
+  await page.route("**/api/studio/renders**", async route => {
+    const request = route.request();
+    if (request.method() === "GET") {
+      if (new URL(request.url()).searchParams.get("projectId") === "other") otherHistory++;
+      return route.fulfill({ json: [] });
+    }
+    const input = request.postDataJSON();
+    if (input.action === "status" && input.projectId === "other") otherChecks++;
+    return route.fulfill({ json: { id, toolId: "room-reimagination", state: "RUNNING", media: "image", waitingForSubmission: false, sourceAssetId: "source", outputAssetId: null } });
+  });
+  await page.clock.install();
+  await page.goto("/poll");
+  await page.getByRole("checkbox").check();
+  await page.locator(".primary-action > button").first().click();
+  await expect(page.locator(".primary-action").getByRole("status")).toHaveText("Rendering");
+  await page.getByRole("button", { name: "Switch project" }).click();
+  await page.clock.fastForward(20000);
+  expect(otherHistory).toBe(0);
+  expect(otherChecks).toBe(0);
 });
 
 test("a late response from the previous project cannot replace the new project's canvas", async ({ page }) => {

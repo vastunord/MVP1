@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 27 November 2026 · Render recovery integration
+
+- Added same-tab reload recovery for a confirmed running job using an authenticated exact-job query, without automatic resubmission. Local browser fixtures passed 12/12 and isolated database tests covered ownership and older jobs; live Preview remains unverified.
+
 ## 24 November 2026 · Login dock investigation
 
 - Tested relocating the privacy copy on five auth routes in both languages at three mobile heights. It cleared the copy but shifted launcher overlap to other controls, so the experiment was reverted. Clean rebuild and existing English login keyboard-focus checks passed 3/3. General dock/content layout remains a local technical issue.

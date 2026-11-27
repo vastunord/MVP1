@@ -207,11 +207,13 @@ export async function projectJobs(
   actor: Actor,
   projectId: string,
   toolId?: string,
+  jobId?: string,
 ) {
   const rows = await db.renderJob.findMany({
     where: {
       workspaceId: actor.workspaceId,
       projectId,
+      ...(jobId ? { id: jobId } : {}),
       ...(toolId ? { toolId } : { state: "SUCCEEDED" }),
       requestHash: { not: null },
       project: {

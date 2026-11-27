@@ -37,11 +37,16 @@ async function handle(request: Request, write: boolean) {
       throw new RenderError(409, "Restore the project to render");
     const space = await ctx.projects.getWorkspace(ctx.userId);
     const actor = { userId: ctx.userId, workspaceId: space.id };
-    if (!write)
+    if (!write) {
+      const toolId = query.get("toolId") || undefined;
+      const jobId = query.get("id") || undefined;
+      if (jobId && (!jobIdPattern.test(jobId) || !toolId || toolId.length > 100))
+        throw new RenderError(400, "Render and tool required");
       return Response.json(
-        await projectJobs(ctx.db, actor, id, query.get("toolId") || undefined),
+        await projectJobs(ctx.db, actor, id, toolId, jobId),
         { headers: privateHeaders },
       );
+    }
     if (input.action === "status") {
       if (typeof input.id !== "string" || !jobIdPattern.test(input.id))
         throw new RenderError(400, "Invalid render ID");

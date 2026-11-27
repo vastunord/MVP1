@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 27 November 2026 · Render recovery integration
+
+An accepted running render is now remembered per project and tool for the current browser tab. After reload, the client retrieves that exact job through an authenticated, ownership-scoped project/tool/job query before resuming status checks. Unconfirmed submissions are not automatically sent or polled. A different user, project or tool cannot retrieve the job through the scoped query. Closing the tab clears this optional session pointer; project history remains the fallback.
+
+Local verification: the gallery browser fixture passed 12/12, including same-job reload and project switching; isolated Prisma/PostgreSQL tests covered a job older than 13 newer jobs and cross-user/project/tool denial. TypeScript and Webpack build passed. These are local and isolated checks, not evidence of a live Preview render. An unrelated mobile auth safe-region prototype remains uncommitted and its first-view timing is under investigation.
+
 ## 24 November 2026 · Login dock investigation
 
 The current 390px login screenshot shows fixed launchers covering part of static privacy copy at the initial 900px viewport. A local experiment moved the same copy above the form and cleared it across five auth routes in both languages at heights 600, 750 and 900, but shifted overlap to email, password or account links at those heights. The experiment was reverted; the clean source rebuilt and existing English login keyboard-focus checks passed 3/3. This is a remaining local design issue, not a live or owner-access blocker: investigate reserving a dock-safe viewport area while preserving persistent corner controls and approved layouts. Scrolling can expose the copy; keyboard focus has separate coverage. Do not claim arbitrary-content clearance or actual-device verification.

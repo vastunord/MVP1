@@ -266,6 +266,21 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
       (await projectJobs(db, actor, "pa", "room-reimagination"))[0].state,
       "RUNNING",
     );
+    // Recovery reads a specific owned job without depending on the 12-item
+    // recent-history window, and never calls the provider.
+    const newerIds = Array.from({ length: 13 }, () => randomUUID());
+    await db.renderJob.createMany({ data: newerIds.map((id, index) => ({
+      id, workspaceId: "wa", projectId: "pa", toolId: "room-reimagination",
+      requestHash: `newer-recovery-fixture-${index}`, state: "FAILED",
+      createdAt: new Date(Date.now() + 60_000 + index),
+    })) });
+    assert.equal((await projectJobs(db, actor, "pa", "room-reimagination")).some((row) => row.id === input.id), false);
+    assert.equal((await projectJobs(db, actor, "pa", "room-reimagination", input.id))[0].id, input.id);
+    assert.deepEqual(await projectJobs(db, wrongUser, "pa", "room-reimagination", input.id), []);
+    assert.deepEqual(await projectJobs(db, actor, "pa", "garden-design", input.id), []);
+    assert.deepEqual(await projectJobs(db, other, "pb", "room-reimagination", input.id), []);
+    assert.equal(submissions, 2, "targeted recovery read must not submit a provider job");
+    await db.renderJob.deleteMany({ where: { id: { in: newerIds } } });
     // Inject at the application database boundary; this is not a network outage.
     const unavailableDb = { renderJob: { async findMany() { throw new Error("synthetic database connection failure"); } } };
     await assert.rejects(projectJobs(unavailableDb, actor, "pa", "room-reimagination"), /synthetic database connection failure/);
