@@ -116,23 +116,69 @@ test("library search and recovery from an empty result", async ({ page }) => {
   expect(sources.size).toBe(17);
 });
 
-test("unspecified outdoor controls share one disclosure", async ({ page }) => {
+test("outdoor surroundings and designer style stay selectable as qualitative instructions", async ({ page }) => {
   await page.goto("/app/tools/outdoor-visualization");
-  const unavailable = page
-    .locator("details.avoid-detail")
-    .filter({ hasText: "Utilgjengelige innstillinger" });
-  await expect(unavailable).toHaveCount(1);
-  await unavailable.locator("summary").click();
-  await expect(unavailable.getByRole("listitem")).toHaveCount(5);
-  await expect(unavailable).toContainText("Omgivelser");
+  await expect(page.getByRole("radio", { name: /Naturnær/ })).toBeChecked();
+  const context = page.getByRole("group", { name: "Omgivelser", exact: true });
+  await expect(context.getByRole("radio")).toHaveCount(4);
+  await context.getByRole("radio").last().check();
+  await expect(context.getByRole("radio").last()).toBeChecked();
+  await expect(page.getByRole("group", { name: "Kjøretøy", exact: true }).getByRole("radio")).toHaveCount(4);
   await expect(page.locator(".primary-action button")).toBeDisabled();
 });
 
-test("unsupported manual modes are explained and cannot be selected", async ({ page }) => {
+test("hardscape planning supports keyboard marks, selection, removal and clearing on a sample", async ({ page }) => {
+  await page.goto("/app/tools/hardscape-design");
+  await expect(page.getByRole("button", { name: "Marker overflater" })).toBeDisabled();
+  await page.goto("/app/tools/hardscape-design?sample=gallery-01");
+  await page.getByRole("button", { name: "Marker overflater" }).click();
+  const photo = page.getByRole("button", { name: "Legg til overflate på bildet" });
+  await photo.press("Enter");
+  await page.getByRole("radio", { name: "Fiskebein" }).check();
+  await photo.click({ position: { x: 26, y: 35 } });
+  await page.getByRole("radio", { name: "Gangvei" }).check();
+  await page.getByRole("button", { name: "Velg overflate 1" }).click();
+  await expect(page.getByRole("radio", { name: "Fiskebein" })).toBeChecked();
+  await page.getByRole("button", { name: "Fjern overflate" }).click();
+  await expect(page.getByRole("radio", { name: "Gangvei" })).toBeChecked();
+  await page.getByRole("button", { name: "Tøm", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Velg overflate 1" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Ferdig", exact: true }).click();
+  await expect(photo).toHaveCount(0);
+});
+
+test("season cards update the palette and multiple cleanup choices remain independent", async ({ page }) => {
+  await page.goto("/app/tools/seasonal-styling");
+  await page.getByRole("radio", { name: /Vinter/ }).check();
+  await expect(page.getByRole("radio", { name: "Sesongens egen" })).toBeChecked();
+  await page.goto("/app/tools/visual-cleanup");
+  const clutter = page.getByRole("group", { name: "Vanlige forstyrrelser" });
+  await expect(clutter.getByRole("checkbox")).toHaveCount(8);
+  await clutter.getByRole("checkbox", { name: "Søppeldunker" }).check();
+  await clutter.getByRole("checkbox", { name: "Kabler" }).check();
+  await clutter.getByRole("checkbox", { name: "Søppeldunker" }).uncheck();
+  await expect(clutter.getByRole("checkbox", { name: "Kabler" })).toBeChecked();
+  await expect(page.getByRole("button", { name: "Forbedre med Prana" })).toHaveCount(0);
+});
+
+test("mask-based deletion is gated and manual enhancement exports a pixel-adjusted copy", async ({ page }) => {
   await page.goto("/app/tools/visual-cleanup");
   await expect(page.getByRole("radio", { name: "Brush & delete (utilgjengelig)" })).toBeDisabled();
   await expect(page.getByRole("radio", { name: "AI object editing" })).toBeEnabled();
   await page.goto("/app/tools/resolution-enhancement");
-  await expect(page.getByRole("radio", { name: "Manual controls (utilgjengelig)" })).toBeDisabled();
-  await expect(page.getByRole("radio", { name: "Auto enhance" })).toBeEnabled();
+  await page.getByRole("radio", { name: "Manuelle justeringer" }).check();
+  const canvas = page.getByLabel("Justert fotografi");
+  await expect(canvas).toBeVisible();
+  const pixels = () => canvas.evaluate(node => (node as HTMLCanvasElement).toDataURL());
+  await expect.poll(() => canvas.evaluate(node => (node as HTMLCanvasElement).width)).toBeGreaterThan(300);
+  const original = await pixels();
+  await page.locator("#option-adjust-2").focus();
+  await page.keyboard.press("ArrowRight");
+  await expect.poll(pixels).not.toBe(original);
+  await page.getByRole("button", { name: "Tilbakestill justeringer" }).click();
+  await expect.poll(pixels).toBe(original);
+  const downloaded = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Bruk justeringer og last ned" }).click();
+  expect((await downloaded).suggestedFilename()).toBe("vastunord-adjustments.png");
+  await expect(page.locator(".primary-action button")).toHaveCount(0);
 });

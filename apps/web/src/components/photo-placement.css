@@ -1,0 +1,98 @@
+.photo-placement {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  margin-block: 1rem;
+}
+.photo-placement p {
+  margin: 0;
+}
+.placement-actions,
+.placement-library,
+.photo-placement fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+.photo-placement button {
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+  padding: 0.35em 0.55em;
+}
+.photo-placement button:disabled {
+  opacity: 0.55;
+}
+.placement-stage {
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+}
+.placement-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.placement-stage .placement-target {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  cursor: crosshair;
+}
+.placement-stage .placement-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: white;
+}
+.placement-pin img {
+  max-height: 60px;
+  object-fit: contain;
+}
+.placement-pin span {
+  display: inline-grid;
+  place-items: center;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: var(--brand-blue, #1f477a);
+  min-width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.5;
+}
+.placement-pin[aria-pressed="true"] span {
+  outline: 2px solid black;
+}
+.photo-placement fieldset {
+  min-width: 0;
+}
+.photo-placement label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.photo-placement input {
+  max-width: 100%;
+}
+.designer-local-preview canvas {
+  display: block;
+  max-width: 100%;
+  margin: auto;
+}
+.designer-local-preview canvas[hidden] {
+  display: none;
+}
+.designer-local-preview figcaption,
+.designer-pool-plan figcaption {
+  padding: 0.4rem 0;
+}
+.designer-pool-plan {
+  margin: 1rem 0;
+}

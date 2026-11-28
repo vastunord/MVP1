@@ -85,12 +85,13 @@ export function parseRender(input: Record<string, unknown>) {
     (level) => level.id === input.engine || level.providerId === input.engine,
   );
   if (!tool || !engine) throw new RenderError(400, "Invalid tool or engine");
+  if (tool.id === "object-placement") throw new RenderError(400, "Object placement is available locally only");
   if (renderMode(tool.id) && !engine.verified)
     throw new RenderError(400, "This image model is not available yet");
   if (!supportedWorkflows(tool.id, Boolean(tool.reference)).includes(workflow as import("../lib/studio-render.ts").StudioWorkflow))
     throw new RenderError(400, "Workflow unavailable for this tool");
-  const prompt = text(input.prompt, 4000),
-    avoid = text(input.avoid ?? "", 1000);
+  const prompt = text(input.prompt, tool.briefLimit ?? 4000),
+    avoid = text(input.avoid ?? "", tool.avoidLimit ?? 1000);
   if (
     !input.values ||
     typeof input.values !== "object" ||
@@ -98,6 +99,7 @@ export function parseRender(input: Record<string, unknown>) {
   )
     throw new RenderError(400, "Invalid design settings");
   const values = input.values as BriefValues;
+  if (tool.id === "resolution-enhancement" && values.mode === "Manual controls") throw new RenderError(400, "Use the local adjustment editor");
   if (
     Object.keys(values).some(
       (id) => !tool.controls.some((field) => field.id === id),
@@ -121,6 +123,10 @@ export function parseRender(input: Record<string, unknown>) {
     if ((field.kind === "integer" || field.kind === "range") && (typeof value !== "number" || !Number.isFinite(value) || (field.kind === "integer" && !Number.isInteger(value)) || (field.min !== undefined && value < field.min) || (field.max !== undefined && value > field.max)))
       throw new RenderError(400, `${field.label}: Invalid numeric setting`);
     if (value === field.defaultValue) continue;
+    if (field.step !== undefined && typeof value === "number" && !Number.isInteger((value - (field.min ?? 0)) / field.step))
+      throw new RenderError(400, "Invalid numeric increment");
+    if (tool.id === "resolution-enhancement" && field.id === "upscale")
+      throw new RenderError(400, "This output scale is unavailable");
     if (field.kind === "range" && (field.min === undefined || field.max === undefined))
       throw new RenderError(400, "This adjustment is unavailable");
     if (tool.id === "resolution-enhancement" && field.when?.id === "mode" && field.when.values.includes("Manual controls"))
@@ -135,8 +141,7 @@ export function parseRender(input: Record<string, unknown>) {
       continue;
     const v = values[field.id] ?? field.defaultValue;
     if (["preview", "guides"].includes(field.id)) {
-      if (v !== undefined && v !== field.defaultValue)
-        throw new RenderError(400, "This preview control is unavailable");
+      // A screen-only preference never becomes a provider instruction.
       continue;
     }
     if (field.kind === "range" && studioCapability(tool.id, field).mapping === "unavailable") {
@@ -166,6 +171,10 @@ export function parseRender(input: Record<string, unknown>) {
         throw new RenderError(400, "Invalid numeric setting");
     }
     resolved[field.id] = v;
+    if (tool.id === "visual-cleanup" && field.id.startsWith("remove-")) {
+      if (v === true) details.push("Remove: " + field.label);
+      continue;
+    }
     if (!["seed", "ratio", "guides", "preview"].includes(field.id) && !["Auto", "Auto-detect", "As photographed", "Keep existing"].includes(String(v)))
       details.push(field.label + ": " + String(v));
   }

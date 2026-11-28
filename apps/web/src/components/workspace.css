@@ -558,3 +558,9 @@
 .vn-private-comparison-before img { width: 100%; height: 100%; object-fit: fill; }
 .vn-private-result label { display: grid; gap: .5rem; margin-top: .75rem; }
 .vn-private-result video { width: 100%; }
+.vn-editor-navigation { display: none; }
+@media (min-width: 901px) {
+  .workspace.vn-focused-editor { grid-template-columns: minmax(0, 1fr); }
+  .vn-focused-editor > .vn-side { display: none; }
+  .vn-editor-navigation { display: inline-flex; margin-inline-end: 1rem; }
+}

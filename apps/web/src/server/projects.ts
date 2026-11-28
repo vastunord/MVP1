@@ -114,6 +114,7 @@ export function projectService(store: ProjectStore) {
       rawName: unknown,
       rawDescription: unknown,
       key: unknown,
+      independent = false,
     ) {
       const name = title(rawName, "project name");
       const detail = description(rawDescription);
@@ -125,10 +126,13 @@ export function projectService(store: ProjectStore) {
       )
         throw new ProjectError(400, "Invalid request key");
       const space = await workspace(userId);
-      const prior = await store.findByKey(space.id, key);
+      // Independent work uses the same owned asset/job container. A separate
+      // key namespace keeps retries distinct from named project requests.
+      const creationKey = independent ? "independent:" + key : key;
+      const prior = await store.findByKey(space.id, creationKey);
       if (prior) {
         if (
-          prior.name !== name ||
+          (!independent && prior.name !== name) ||
           prior.description !== detail ||
           prior.deletedAt
         )
@@ -136,12 +140,12 @@ export function projectService(store: ProjectStore) {
         return safe(prior);
       }
       try {
-        return safe(await store.create(space.id, name, detail, key));
+        return safe(await store.create(space.id, name, detail, creationKey));
       } catch (error) {
-        const raced = await store.findByKey(space.id, key);
+        const raced = await store.findByKey(space.id, creationKey);
         if (
           raced &&
-          raced.name === name &&
+          (independent || raced.name === name) &&
           raced.description === detail &&
           !raced.deletedAt
         )

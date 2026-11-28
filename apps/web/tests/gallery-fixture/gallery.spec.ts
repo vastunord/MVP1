@@ -15,12 +15,14 @@ test("gallery distinguishes sign-in, first workspace, loading and error recovery
   await expect(page.getByText("Loading projects…")).toBeVisible();
   release();
   await expect(page.getByRole("link", { name: "Sign in to see your renders" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Sign in to see your renders" })).toHaveAttribute("href", "/en/login?returnTo=%2Fapp%2Frenders");
   current = 403;
   gate = new Promise<void>(resolve => { release = resolve; });
   await page.reload();
   await expect(page.getByText("Loading projects…")).toBeVisible();
   release();
-  await expect(page.getByText("Create a project to save renders.")).toBeVisible();
+  await expect(page.getByText("Start a private workspace to save renders.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open Studio" })).toHaveAttribute("href", "/app/library");
   current = 500;
   gate = new Promise<void>(resolve => { release = resolve; });
   await page.reload();
@@ -28,7 +30,7 @@ test("gallery distinguishes sign-in, first workspace, loading and error recovery
   await expect(page.getByText("Could not load saved renders.")).toBeVisible();
   current = 200;
   await page.getByRole("button", { name: "Try again" }).click();
-  await expect(page.getByText("Create a project to save renders.")).toBeVisible();
+  await expect(page.getByText("Start a private workspace to save renders.")).toBeVisible();
 });
 test("an owned project with no completed renders has a distinct empty state", async ({ page }) => {
   await page.route("**/api/projects", route => route.fulfill({ json: [{ id: "project", name: "Synthetic project" }] }));

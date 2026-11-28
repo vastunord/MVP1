@@ -14,10 +14,11 @@ export function readMayaDraft(raw: string, tool: ToolDefinition): MayaDraft | nu
     for (const [id, value] of Object.entries(data.values)) {
       const field = activeFields.find((item) => item.id === id) ?? tool.controls.find((item) => item.id === id);
       if (!field || !["string", "number", "boolean"].includes(typeof value)) return null;
-      if (typeof value === "string" && unsupportedStudioOption(tool.id, id, value)) return null;
+      if (typeof value === "string" && tool.id !== "resolution-enhancement" && unsupportedStudioOption(tool.id, id, value)) return null;
       if (field.kind === "select" && (typeof value !== "string" || !field.options?.includes(value))) return null;
       if (field.kind === "toggle" && typeof value !== "boolean") return null;
       if (field.kind === "range" && (typeof value !== "number" || !Number.isFinite(value) || (field.min !== undefined && value < field.min) || (field.max !== undefined && value > field.max))) return null;
+      if (field.step !== undefined && typeof value === "number" && !Number.isInteger((value - (field.min ?? 0)) / field.step)) return null;
       if (field.kind === "integer" && (typeof value !== "number" || !Number.isInteger(value) || (field.min !== undefined && value < field.min) || (field.max !== undefined && value > field.max))) return null;
       if (!["select", "toggle", "range", "integer"].includes(field.kind)) return null;
       values[id] = value as string | number | boolean;

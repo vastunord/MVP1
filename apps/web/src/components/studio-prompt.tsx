@@ -9,6 +9,8 @@ export function StudioPrompt({
   enabled,
   label,
   help,
+  limit = 4000,
+  showImprove = true,
 }: {
   value: string;
   change: (v: string) => void;
@@ -16,6 +18,8 @@ export function StudioPrompt({
   enabled: boolean;
   label: string;
   help: string;
+  limit?: number;
+  showImprove?: boolean;
 }) {
   const en = locale === "en";
   const [busy, setBusy] = useState(false),
@@ -57,7 +61,7 @@ export function StudioPrompt({
       if (
         typeof result.answer !== "string" ||
         !result.answer.trim() ||
-        result.answer.length > 4000
+        result.answer.length > limit
       )
         throw Error();
       setProposal(result.answer.trim());
@@ -83,7 +87,7 @@ export function StudioPrompt({
       <p className="inspector-help">{help}</p>
       <textarea
         id="prompt"
-        maxLength={4000}
+        maxLength={limit}
         value={value}
         rows={3}
         onChange={(e) => {
@@ -96,7 +100,7 @@ export function StudioPrompt({
         }}
       />
       <div className="prompt-tools">
-        <button
+        {showImprove && <button
           type="button"
           disabled={!enabled || !value.trim() || busy}
           onClick={improve}
@@ -108,8 +112,8 @@ export function StudioPrompt({
             : en
               ? "Improve with Prana"
               : "Forbedre med Prana"}
-        </button>
-        <small>{value.length} / 4000</small>
+        </button>}
+        <small>{value.length} / {limit}</small>
       </div>
       {proposal && (
         <div className="prompt-proposal" role="status">

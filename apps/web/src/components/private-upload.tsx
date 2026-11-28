@@ -2,7 +2,10 @@
 import { StudioChoices } from "./studio-choices";
 import { AssetSharingConsent } from "./asset-sharing-consent";
 import { useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
-import type { Locale } from "@/lib/i18n";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { publicHref, type Locale } from "@/lib/i18n";
+import { studioAuthQuery, studioReturn } from "@/lib/studio-return";
 import {
   IMAGE_TYPES,
   MAX_IMAGE_BYTES,
@@ -139,53 +142,65 @@ export function PrivateUpload({
   const [localUrl, setLocalUrl] = useState("");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
+  const [needsSignIn, setNeedsSignIn] = useState(false);
+  const editorPath = studioReturn(usePathname()) ?? "/app/library";
   const [projectName, setProjectName] = useState("");
   const [creating, setCreating] = useState(false);
   const createKey = useRef("");
+  const independentKey = useRef("");
   const createInFlight = useRef(false);
   const uploadInput = useRef<HTMLInputElement>(null);
   const focusUploadAfterCreate = useRef(false);
   const checkedReloadHint = useRef(false);
+  const unsavedFileKey = draftUserId && draftToolId
+    ? mayaDraftKey(draftUserId, "", draftToolId) + ":unsaved-file"
+    : "vn-unsaved-studio-image";
   useEffect(() => {
     let active = true;
     queueMicrotask(() => {
       if (!active || checkedReloadHint.current) return;
       checkedReloadHint.current = true;
       try {
-        if (sessionStorage.getItem("vn-unsaved-studio-image") === "yes") {
-          sessionStorage.removeItem("vn-unsaved-studio-image");
+        if (sessionStorage.getItem(unsavedFileKey) === "yes") {
+          sessionStorage.removeItem(unsavedFileKey);
           setStatus(en ? "Your unsaved image was not retained. Choose it again." : "Det ulagrede bildet ble ikke beholdt. Velg det på nytt.");
         }
       } catch { /* Storage may be unavailable in private browsing. */ }
     });
     return () => { active = false; };
-  }, [en]);
+  }, [en, unsavedFileKey]);
   useEffect(() => {
     if (focusUploadAfterCreate.current && project && !creating) {
       focusUploadAfterCreate.current = false;
       uploadInput.current?.focus();
     }
   }, [project, creating]);
-  async function createProject() {
+  async function createProject(independent = false) {
     const name = projectName.trim();
-    if (name.length < 2 || createInFlight.current || busy) return;
+    if ((!independent && name.length < 2) || createInFlight.current || busy) return;
     createInFlight.current = true;
     setCreating(true);
-    createKey.current ||= crypto.randomUUID();
+    const key = independent ? independentKey : createKey;
+    key.current ||= crypto.randomUUID();
     try {
       // A first-time user may not have a personal workspace yet. Create it
       // only after their explicit project action, using the idempotent API.
-      const workspace = await fetch("/api/workspaces/personal", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: en ? "My workspace" : "Mitt arbeidsområde" }),
-      });
-      if (!workspace.ok) throw new Error("Workspace unavailable");
-      const response = await fetch("/api/projects", {
+      if (!independent) {
+        const workspace = await fetch("/api/workspaces/personal", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: en ? "My workspace" : "Mitt arbeidsområde" }),
+        });
+        if (workspace.status === 401) setNeedsSignIn(true);
+        if (!workspace.ok) throw new Error("Workspace unavailable");
+      }
+      const response = await fetch(independent ? "/api/workspaces/independent" : "/api/projects", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "idempotency-key": createKey.current },
-        body: JSON.stringify({ name }),
+        headers: { "Content-Type": "application/json", "idempotency-key": key.current },
+        body: JSON.stringify(independent ? { locale } : { name }),
       });
+      if (response.status === 401) setNeedsSignIn(true);
       if (!response.ok) throw new Error("Project creation failed");
+      setNeedsSignIn(false);
       const created = await response.json() as Project;
       setProjects((items) => items.some((item) => item.id === created.id) ? items : [...items, created]);
       setAssets([]);
@@ -195,11 +210,15 @@ export function PrivateUpload({
       focusUploadAfterCreate.current = true;
       setProject(created.id);
       rememberProject(created.id);
-      setProjectName("");
-      createKey.current = "";
-      setStatus(en ? "Project created. Choose an image." : "Prosjektet er opprettet. Velg et bilde.");
+      if (!independent) setProjectName("");
+      key.current = "";
+      setStatus(independent
+        ? (en ? "Workspace ready. Choose an image." : "Arbeidsområdet er klart. Velg et bilde.")
+        : (en ? "Project created. Choose an image." : "Prosjektet er opprettet. Velg et bilde."));
     } catch {
-      setStatus(en ? "Could not create the project. Try again." : "Kunne ikke opprette prosjektet. Prøv igjen.");
+      setStatus(independent
+        ? (en ? "Could not open the workspace. Try again." : "Kunne ikke åpne arbeidsområdet. Prøv igjen.")
+        : (en ? "Could not create the project. Try again." : "Kunne ikke opprette prosjektet. Prøv igjen."));
     } finally { createInFlight.current = false; setCreating(false); }
   }
   useEffect(() => {
@@ -207,6 +226,7 @@ export function PrivateUpload({
     let active = true;
     fetch("/api/projects")
       .then(async (response) => {
+        if (response.status === 401 && active) setNeedsSignIn(true);
         if (response.status === 403) return [] as Project[];
         if (!response.ok) throw Error();
         return response.json() as Promise<Project[]>;
@@ -235,6 +255,7 @@ export function PrivateUpload({
     const revision = selectionRevision.current;
     fetch(`/api/projects/${encodeURIComponent(project)}/assets`)
       .then(async (response) => {
+        if (response.status === 401 && active) setNeedsSignIn(true);
         if (!response.ok) throw Error();
         return response.json() as Promise<Asset[]>;
       })
@@ -294,7 +315,7 @@ export function PrivateUpload({
     selectionRevision.current++;
     hasLocalImage.current = true;
     rememberMedia(project, "", referenceIds);
-    try { sessionStorage.setItem("vn-unsaved-studio-image", "yes"); } catch { /* Optional reload hint only. */ }
+    try { sessionStorage.setItem(unsavedFileKey, "yes"); } catch { /* Optional reload hint only. */ }
     setSelectedAsset("");
     setLocalUrl(url);
     onPreview(url);
@@ -314,6 +335,7 @@ export function PrivateUpload({
         `/api/projects/${encodeURIComponent(project)}/assets`,
         { method: "POST", headers: { "Content-Type": file.type }, body: file },
       );
+      if (response.status === 401) setNeedsSignIn(true);
       if (!response.ok) throw Error();
       const result = (await response.json()) as { assetId: string };
       setSelectedAsset(result.assetId);
@@ -325,7 +347,7 @@ export function PrivateUpload({
       );
       if (list.ok) setAssets(((await list.json()) as Asset[]).filter(isPhoto));
       onPreview(`/api/assets/${encodeURIComponent(result.assetId)}/download`);
-      try { sessionStorage.removeItem("vn-unsaved-studio-image"); } catch { /* Optional reload hint only. */ }
+      try { sessionStorage.removeItem(unsavedFileKey); } catch { /* Optional reload hint only. */ }
       setFile(null);
       setLocalUrl("");
       setStatus(en ? "Saved privately." : "Lagret privat.");
@@ -354,6 +376,7 @@ export function PrivateUpload({
         `/api/assets/${encodeURIComponent(selectedAsset)}`,
         { method: "DELETE" },
       );
+      if (response.status === 401) setNeedsSignIn(true);
       if (!response.ok) throw Error();
       setAssets((items) => items.filter((item) => item.id !== selectedAsset));
       setSelectedAsset("");
@@ -386,6 +409,9 @@ export function PrivateUpload({
       onDrop={drop}
     >
       <h2>{en ? "Private image" : "Privat bilde"}</h2>
+      <button type="button" disabled={busy || creating} onClick={() => createProject(true)}>
+        {en ? "Start without a project" : "Start uten prosjekt"}
+      </button>
       <StudioChoices
         label={en ? "Project" : "Prosjekt"}
         value={project}
@@ -409,7 +435,7 @@ export function PrivateUpload({
           <input disabled={creating} value={projectName} maxLength={100} onChange={(event) => { setProjectName(event.target.value); createKey.current = ""; }} />
         </label>
         <p className="small">{en ? "Use at least two characters." : "Bruk minst to tegn."}</p>
-        <button type="button" disabled={projectName.trim().length < 2 || creating || busy} onClick={createProject}>
+        <button type="button" disabled={projectName.trim().length < 2 || creating || busy} onClick={() => createProject()}>
           {creating ? (en ? "Creating…" : "Oppretter…") : (en ? "Create project and continue" : "Opprett prosjekt og fortsett")}
         </button>
       </details>
@@ -442,6 +468,11 @@ export function PrivateUpload({
             : "Last opp bilde"}
       </button>
       {status && <p role="status">{status}</p>}
+      {needsSignIn && (
+        <p><Link href={publicHref("/login", locale) + "?" + studioAuthQuery(false, editorPath)}>
+          {en ? "Sign in again to return to Studio" : "Logg inn igjen for å gå tilbake til Studio"}
+        </Link></p>
+      )}
       {assets.length > 0 && (
         <StudioChoices
           label={en ? "Saved images" : "Lagrede bilder"}
@@ -461,7 +492,7 @@ export function PrivateUpload({
             rememberMedia(project, id, remaining);
             setSelectedAsset(id);
             onPreview("/api/assets/" + encodeURIComponent(id) + "/download");
-            try { sessionStorage.removeItem("vn-unsaved-studio-image"); } catch { /* Optional reload hint only. */ }
+            try { sessionStorage.removeItem(unsavedFileKey); } catch { /* Optional reload hint only. */ }
             setFile(null);
             setLocalUrl("");
           }}

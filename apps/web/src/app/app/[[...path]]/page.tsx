@@ -29,6 +29,7 @@ import { createDatabase } from "@/server/db";
 import { ProjectsScreen, AccountScreen } from "@/components/project-screens";
 import { readServerConfig } from "@/server/config";
 import { studioPageTitle } from "@/lib/studio-metadata";
+import { studioAuthQuery } from "@/lib/studio-return";
 import { controlledRenderingAllowanceReady } from "@/lib/studio-test-access";
 export async function generateMetadata({ params }: { params: Promise<{ path?: string[] }> }) {
   return { title: studioPageTitle((await params).path ?? [], await savedLocale(), destinations, findTool) };
@@ -59,8 +60,12 @@ export default async function Page({
   const sample = tool
     ? findStudioSample((await searchParams).sample)
     : undefined;
-  const loginIntent =
-    tool?.id === "room-reimagination" && !sample ? "?intent=room-upload" : "";
+  const requestedAlbum = (await searchParams).album;
+  const location = path.length ? "/app/" + path.join("/") : "/app";
+  const returnLocation = typeof requestedAlbum === "string" && /^[A-Za-z0-9_-]{1,100}$/.test(requestedAlbum)
+    ? location + "?album=" + requestedAlbum : location;
+  const intent = studioAuthQuery(tool?.id === "room-reimagination" && !sample, returnLocation);
+  const loginIntent = intent ? "?" + intent : "";
   let signedIn = false;
   let editorUserId: string | undefined;
   let renderReady = false;
@@ -160,7 +165,6 @@ export default async function Page({
     path.length === 1 &&
     ["renders", "gallery", "files", "assets"].includes(path[0])
   ) {
-    const requestedAlbum = (await searchParams).album;
     const album = studies.find((s) => s.id === requestedAlbum)?.id;
     content = (
       <Gallery
@@ -248,7 +252,7 @@ export default async function Page({
         authReady={authEnabled}
         signedIn={signedIn}
       />
-      <StudioShell locale={locale}>{content}</StudioShell>
+      <StudioShell userId={editorUserId} locale={locale}>{content}</StudioShell>
     </>
   );
 }

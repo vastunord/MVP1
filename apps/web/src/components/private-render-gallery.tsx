@@ -3,13 +3,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import type { Locale } from "@/lib/i18n";
+import { publicHref, type Locale } from "@/lib/i18n";
+import { studioAuthQuery, studioReturn } from "@/lib/studio-return";
+import { usePathname } from "next/navigation";
 import type { RenderStatus } from "@/lib/studio-render";
 
 type Project = { id: string; name: string };
 
 export function PrivateRenderGallery({ locale }: { locale: Locale }) {
   const en = locale === "en";
+  const destination = studioReturn(usePathname()) ?? "/app/renders";
   const [projects, setProjects] = useState<Project[]>([]);
   const [project, setProject] = useState("");
   const [renders, setRenders] = useState<RenderStatus[]>([]);
@@ -117,7 +120,7 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
       )}
       {status === "signin" && (
         <p>
-          <Link href="/login">
+          <Link href={publicHref("/login", locale) + "?" + studioAuthQuery(false, destination)}>
             {en
               ? "Sign in to see your renders"
               : "Logg inn for å se bildene dine"}
@@ -143,8 +146,9 @@ export function PrivateRenderGallery({ locale }: { locale: Locale }) {
       {status === "ready" && !projects.length && (
         <p>
           {en
-            ? "Create a project to save renders."
-            : "Opprett et prosjekt for å lagre bilder."}
+            ? "Start a private workspace to save renders."
+            : "Start et privat arbeidsområde for å lagre bilder."}{" "}
+          <Link href="/app/library">{en ? "Open Studio" : "Åpne Studio"}</Link>
         </p>
       )}
       {projects.length > 0 && (

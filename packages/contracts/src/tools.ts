@@ -10,9 +10,11 @@ export type Control = {
   label: string;
   kind: "select" | "range" | "toggle" | "action" | "unknown" | "integer";
   options?: readonly string[];
+  legacyOptions?: readonly string[];
   defaultValue?: string | number | boolean;
   min?: number;
   max?: number;
+  step?: number;
   unit?: string;
   when?: { id: string; values: readonly string[] };
 };
@@ -23,6 +25,8 @@ export interface ToolDefinition {
   route: string;
   prompt: string;
   action: string;
+  briefLimit?: number;
+  avoidLimit?: number;
   reference: boolean;
   improve: boolean;
   framing: string;
@@ -35,7 +39,8 @@ const select = (
   label: string,
   options: readonly string[],
   defaultValue?: string,
-): Control => ({ id, label, kind: "select", options, defaultValue });
+  legacyOptions?: readonly string[],
+): Control => ({ id, label, kind: "select", options, defaultValue, legacyOptions });
 const toggle = (
   id: string,
   label: string,
@@ -80,14 +85,13 @@ const room = select(
   "Auto-detect",
 );
 const roomStyle = select("style", "Room style", [
-  "Auto",
   "Scandinavian",
   "Japandi",
   "Modern luxury",
   "Minimalist",
   "Industrial",
   "Biophilic",
-], "Auto");
+], "Scandinavian", ["Auto"]);
 const palette = select(
   "palette",
   "Palette",
@@ -108,7 +112,7 @@ const ratio = select(
   ["Original", "1:1", "4:3", "3:2", "16:9"],
   "Original",
 );
-const daylight = select("time", "Daylight", ["As photographed", "Soft daylight", "Direct sun", "Golden hour", "Blue hour", "Night"], "As photographed");
+const daylight = select("time", "Time of day", ["As photographed", "Morning", "Midday", "Golden hour", "Blue hour", "Night"], "As photographed", ["Soft daylight", "Direct sun"]);
 const familyLayout = toggle("safe", "Child-friendly layout", false);
 const roomDesign: Control[] = [
   select("medium", "Render style", ["Photography", "Clean 3D", "Architectural", "Pencil", "Watercolor", "Illustration", "Diagram", "Line drawing", "Neutral clay", "Clay model", "CAD", "Material study"], "Photography"),
@@ -119,11 +123,11 @@ const roomDesign: Control[] = [
     when: { id: "camera", values: ["Reframe"] },
   },
   daylight,
-  select("lighting", "Lighting", ["Auto", "Window light", "Task lighting", "Layered"], "Auto"),
-  select("furnishing", "Furnishing", ["Auto", "Empty", "Minimal", "Balanced", "Full"], "Auto"),
-  select("plants", "Indoor plants", ["Auto", "None", "A few", "Lush"], "Auto"),
-  select("accessories", "Accessories", ["Auto", "None", "Curated"], "Auto"),
-  select("floor", "Floor finish", ["Keep existing", "Pale timber", "Natural stone", "Polished"], "Keep existing"),
+  select("lighting", "Lighting", ["Auto", "Natural only", "Warm lamps", "Bright", "Moody"], "Auto", ["Window light", "Task lighting", "Layered"]),
+  select("furnishing", "Furnishing", ["Keep existing", "Light", "Balanced", "Full"], "Keep existing", ["Auto", "Empty", "Minimal"]),
+  select("plants", "Indoor plants", ["Auto", "None", "A few", "Generous"], "Auto", ["Lush"]),
+  select("accessories", "Accessories", ["Auto", "Minimal", "Considered", "Layered"], "Auto", ["None", "Curated"]),
+  select("floor", "Floor finish", ["Keep existing", "Pale oak", "Walnut", "Concrete", "Stone", "Terrazzo"], "Keep existing", ["Pale timber", "Natural stone", "Polished"]),
   familyLayout,
   select("people", "People", ["Auto", "None", "A few", "Many"], "Auto"),
   select("markings", "Annotations", ["Keep existing", "Remove text"], "Keep existing"),
@@ -142,15 +146,15 @@ const outside = select("style", "Outdoor style", [
   "Nordic",
   "Desert",
   "Tropical",
-]);
+], "Naturalistic");
 const outdoors: Control[] = [
-  unknown("time", "Time of day"),
+  daylight,
   outside,
   range("density", "Lighting density", 30, "%"),
-  unknown("people", "People"),
-  unknown("site", "Site context"),
-  unknown("greenery", "Greenery"),
-  unknown("vehicles", "Vehicles"),
+  select("people", "People", ["Keep existing", "None", "A few", "Many"], "Keep existing"),
+  select("site", "Site context", ["Auto", "Urban", "Suburban", "Nature"], "Auto"),
+  select("greenery", "Greenery", ["Keep existing", "Sparse", "Balanced", "Lush"], "Keep existing"),
+  select("vehicles", "Vehicles", ["Keep existing", "None", "A few", "Many"], "Keep existing"),
   select("weather", "Weather", [
     "As photographed",
     "Clear",
@@ -158,15 +162,15 @@ const outdoors: Control[] = [
     "Hazy",
     "Rain",
     "Snow",
-  ]),
+  ], "As photographed"),
   action("suggest", "VastuNord suggestions · Show"),
   action("area", "Analyze an area · Select"),
 ];
 const tidy: Control[] = [
-  "Mow",
+  "Mow & edge",
   "Weed",
   "Fresh mulch",
-  "Prune",
+  "Prune & shape",
   "Clean paving",
   "Fill gaps",
 ].map((label, i) => ({
@@ -185,6 +189,8 @@ type Seed = Omit<
 const seeds: Seed[] = [
   {
     id: "room-reimagination",
+    briefLimit: 1000,
+    avoidLimit: 400,
     name: "Room Reimagination",
     category: "Interior Design",
     prompt: "Describe the room",
@@ -194,6 +200,7 @@ const seeds: Seed[] = [
   },
   {
     id: "virtual-home-staging",
+    briefLimit: 1000,
     name: "Virtual Home Staging",
     category: "Virtual Staging",
     prompt: "Describe the staging · Anything specific?",
@@ -206,12 +213,13 @@ const seeds: Seed[] = [
         "Downsizer",
         "Luxury",
         "Neutral",
-      ]),
+      ], "Family"),
       familyLayout,
     ],
   },
   {
     id: "outdoor-visualization",
+    briefLimit: 1000,
     name: "Outdoor Visualization",
     category: "Exterior & Landscape",
     prompt: "Describe the outside",
@@ -221,15 +229,17 @@ const seeds: Seed[] = [
   },
   {
     id: "hardscape-design",
+    briefLimit: 1000,
     name: "Hardscape Design",
     category: "Exterior & Landscape",
     prompt: "Anything else? · Anything the surfaces do not say",
     action: "Design the hardscape",
     comparison: ["Today", "Hardscaped"],
-    controls: [...outdoors, action("surfaces", "Surfaces · Mark")],
+    controls: [...outdoors.filter(control => control.id !== "area"), action("surfaces", "Surfaces · Mark")],
   },
   {
     id: "furniture-refresh",
+    briefLimit: 1000,
     name: "Furniture Refresh",
     category: "Interior Design",
     prompt: "What should change?",
@@ -241,13 +251,15 @@ const seeds: Seed[] = [
       daylight,
       action("refresh", "Refresh now"),
       action("pick", "Pick"),
-      action("place", "Place asset"),
-      action("cleanup", "Clean up room"),
+      action("place", "Place"),
+      action("asset", "Choose furniture asset"),
+      toggle("cleanup", "Clean up the room", false),
       familyLayout,
     ],
   },
   {
     id: "seasonal-styling",
+    briefLimit: 1000,
     name: "Seasonal Styling",
     category: "Virtual Staging",
     prompt: "Describe the seasonal styling",
@@ -256,12 +268,13 @@ const seeds: Seed[] = [
     controls: [
       room,
       roomStyle,
-      select("palette", "Palette", ["Spring’s own"], "Spring’s own"),
+      select("palette", "Palette", ["Season’s own", ...palette.options!.slice(1)], "Season’s own", ["Spring’s own"]),
       season,
     ],
   },
   {
     id: "visual-cleanup",
+    briefLimit: 1000,
     name: "Visual Cleanup",
     category: "Image Enhancement",
     reference: false,
@@ -269,7 +282,7 @@ const seeds: Seed[] = [
     prompt: "Describe what to clean up",
     action: "Clean up image",
     controls: [
-      select("mode", "Editing mode", ["AI object editing", "Brush & delete"]),
+      select("mode", "Editing mode", ["AI object editing", "Brush & delete"], "AI object editing"),
       ...[
         "Bins",
         "Cables",
@@ -279,7 +292,7 @@ const seeds: Seed[] = [
         "Loose clutter",
         "Power lines",
         "Reflections",
-      ].map((x, i) => toggle("remove-" + i, x)),
+      ].map((x, i) => toggle("remove-" + i, x, false)),
       action("pick", "Pick things on photo · Pick"),
     ],
   },
@@ -305,8 +318,8 @@ const seeds: Seed[] = [
         "Brightness",
         "Contrast",
         "Saturation",
-      ].map((x, i) => manual(range("adjust-" + i, x, 0))),
-      manual(select("upscale", "Upscale", ["Original size", "2×", "4×"])),
+      ].map((x, i) => manual({ ...range("adjust-" + i, x, 0), min: i < 2 ? 0 : -100, max: 100, step: 5 })),
+      { ...select("upscale", "Upscale", ["Original size", "2×", "4×"], "Original size"), when: { id: "mode", values: ["Auto enhance"] } },
       manual(
         select("look", "Look", [
           "None",
@@ -315,12 +328,12 @@ const seeds: Seed[] = [
           "Cool",
           "Matte",
           "Mono",
-        ]),
+        ], "None"),
       ),
-      manual(select("crop", "Crop", ["Original", "1:1", "4:3", "3:2", "16:9"])),
-      manual(range("straighten", "Straighten", 0, "°")),
-      manual(toggle("flip-h", "Flip horizontal")),
-      manual(toggle("flip-v", "Flip vertical")),
+      manual(select("crop", "Crop", ["Original", "1:1", "4:3", "3:2", "16:9"], "Original")),
+      manual({ ...range("straighten", "Straighten", 0, "°"), min: -15, max: 15, step: 0.5 }),
+      manual(toggle("flip-h", "Flip horizontal", false)),
+      manual(toggle("flip-v", "Flip vertical", false)),
     ],
   },
   {
@@ -339,11 +352,11 @@ const seeds: Seed[] = [
         "Fix distortion",
       ),
       {
-        ...range("vertical", "Vertical", 0),
+        ...range("vertical", "Vertical", 0), min: -100, max: 100, step: 5,
         when: { id: "mode", values: ["Fix distortion"] },
       },
       {
-        ...range("horizontal", "Horizontal", 0),
+        ...range("horizontal", "Horizontal", 0), min: -100, max: 100, step: 5,
         when: { id: "mode", values: ["Fix distortion"] },
       },
       action("suggest", "Suggest a correction"),
@@ -382,7 +395,8 @@ const seeds: Seed[] = [
       ),
       ratio,
       action("pick", "Spot · Pick"),
-      action("place", "Decor · Place / asset"),
+      action("place", "Place decor"),
+      action("decor-assets", "Choose from your decor assets"),
       familyLayout,
     ],
   },
@@ -408,8 +422,8 @@ const seeds: Seed[] = [
     comparison: ["Today", "Evening"],
     controls: [
       room,
-      range("temperature", "Temperature", 2700, "K"),
-      range("brightness", "Brightness", 60, "%"),
+      { ...range("temperature", "Colour temperature", 2700, "K"), min: 2200, max: 5000, step: 100 },
+      { ...range("brightness", "Brightness", 60, "%"), min: 10, step: 5 },
       select(
         "layer",
         "Layering",
@@ -431,7 +445,8 @@ const seeds: Seed[] = [
         ],
         "Keep existing",
       ),
-      action("lights", "Add lights · Place / assets"),
+      action("lights", "Place a light"),
+      action("lighting-assets", "Choose from your lighting assets"),
     ],
   },
   {
@@ -515,7 +530,7 @@ const seeds: Seed[] = [
         "Waterfall/water feature",
         "Underwater lighting",
         "Deck/surround",
-      ].map((x, i) => toggle("feature-" + i, x, false)),
+      ].map((x, i) => ({ ...toggle("feature-" + i, x, false), when: { id: "mode", values: ["Spa", "Pool + Spa"] } })),
     ],
   },
   {
@@ -640,11 +655,14 @@ export function visibleControls(
           ),
         ),
     )
+    .map((c) => typeof values[c.id] === "string" && c.legacyOptions?.includes(String(values[c.id]))
+      ? { ...c, options: [...(c.options ?? []), String(values[c.id])] }
+      : c)
     .map((c) =>
       tool.id === "pool-redesign" &&
       c.id === "spa-option-0" &&
       values.mode === "Pool + Spa"
-        ? { ...c, options: [...(c.options ?? []), "Spillover spa"] }
+        ? { ...c, options: [...(c.options ?? []).slice(0, 2), "Spillover spa", ...(c.options ?? []).slice(2)] }
         : c,
     );
 }

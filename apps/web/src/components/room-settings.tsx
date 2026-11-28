@@ -8,6 +8,19 @@ import type { Locale } from "@/lib/i18n";
 type Values = Record<string, string | number | boolean>;
 
 const bokmal: Record<string, string> = {
+  "Season’s own": "Sesongens egen",
+  Morning: "Morgen", Midday: "Midt på dagen",
+  "Natural only": "Bare naturlig lys", "Warm lamps": "Varme lamper", Bright: "Lyst", Moody: "Stemningsfullt",
+  Light: "Lett", Generous: "Frodig", Considered: "Gjennomtenkt", Walnut: "Valnøtt", Concrete: "Betong", Stone: "Stein",
+  "Cleanup method": "Ryddemetode", "Clean up the room": "Rydd rommet",
+  "Enhancement mode": "Forbedringsmåte", "Manual controls": "Manuelle justeringer", "Auto enhance": "Automatisk forbedring",
+  "Noise reduction": "Støyreduksjon", Sharpness: "Skarphet", Brightness: "Lysstyrke", Contrast: "Kontrast", Saturation: "Fargemetning",
+  Upscale: "Oppskalering", "Original size": "Originalstørrelse", Look: "Bildeuttrykk", Crop: "Beskjæring",
+  Straighten: "Rett opp", "Flip horizontal": "Speil vannrett", "Flip vertical": "Speil loddrett",
+  "Correction mode": "Korreksjonsmåte", "Fix distortion": "Korriger forvrengning", "Camera angle": "Kameravinkel",
+  Vertical: "Loddrett", Horizontal: "Vannrett", "Show guides": "Vis hjelpelinjer",
+  "Preview on my photo": "Forhåndsvis på bildet mitt", "Colour temperature": "Fargetemperatur",
+  "Decor style": "Dekorstil", "Garden area": "Hageområde", "Just tidy it up": "Rydd opp i hagen",
   "Render style": "Bildestil",
   Photography: "Fotorealistisk",
   "Clean 3D": "Ren 3D",
@@ -134,6 +147,7 @@ export function RoomSettings({
         "camera",
         "lighting",
         "medium",
+        "palette",
       ].includes(id);
       return (
         <StudioChoices
@@ -166,7 +180,7 @@ export function RoomSettings({
         <summary>
           {en ? "Room type and style" : "Romtype og interiørstil"}
         </summary>
-        <div>{fields("room", "style")}{resetButton(["room", "style"])}</div>
+        <div>{fields("room", "style", "palette")}{resetButton(["room", "style", "palette"])}</div>
       </details>
       <details className="room-drawer">
         <summary>{en ? "More options" : "Flere valg"} {changed.length ? `(${changed.length})` : ""}</summary>
@@ -180,20 +194,21 @@ export function RoomSettings({
         <summary>{roomLabel("Room details", locale)}</summary>
         <div>
           {fields(
+            "floor",
             "furnishing",
             "plants",
             "accessories",
-            "floor",
             "safe",
             "people",
             "markings",
           )}
+          <p className="inspector-help">{en ? "Child-friendly layout guides the design. A safety inspection requires an on-site assessment." : "Barnevennlig innredning gir føringer for designet. En sikkerhetsvurdering krever befaring."}</p>
           {resetButton(["furnishing", "plants", "accessories", "floor", "safe", "people", "markings"])}
         </div>
       </details>
       <details className="room-drawer">
         <summary>{roomLabel("Output settings", locale)}</summary>
-        <div>{fields("palette", "ratio")}{resetButton(["palette", "ratio"])}</div>
+        <div>{fields("ratio")}{resetButton(["ratio"])}</div>
       </details>
         </div>
       </details>

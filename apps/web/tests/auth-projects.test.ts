@@ -1,5 +1,18 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { studioAuthQuery, studioReturn } from "../src/lib/studio-return.ts";
+
+test("only local Studio locations and recognized view parameters survive authentication", () => {
+  for (const path of ["/app/tools/garden-design", "/app/projects/project-id", "/app/settings/security", "/app/library", "/app/renders?album=study-a", "/app/tools/room-reimagination#source-image"]) {
+    assert.equal(studioReturn(path), path);
+    assert.equal(new URLSearchParams(studioAuthQuery(false, path)).get("returnTo"), path);
+  }
+  for (const path of ["/api/assets/private/download", "//external.example", "https://external.example/app", "/app/%2f%2fexternal.example", "/app/../login", "/app/library?token=hidden", "/app/room\n", "/application"]) {
+    assert.equal(studioReturn(path), null);
+    assert.equal(studioAuthQuery(false, path), "");
+  }
+  assert.equal(studioAuthQuery(true, "https://external.example/"), "intent=room-upload");
+});
 import {
   authEmailCopy,
   authEmailLocale,
@@ -243,6 +256,20 @@ test("duplicate creation returns the same project and rejects changed payload", 
     service.create("alice", "x", null, key),
     /Invalid project name/,
   );
+});
+
+test("independent work remains privately owned and retryable across locale changes", async () => {
+  const { service, projects } = fixture();
+  await service.createWorkspace("alice", "My workspace");
+  await service.createWorkspace("bob", "My workspace");
+  const first = await service.create("alice", "Untitled workspace", null, key, true);
+  const retried = await service.create("alice", "Arbeidsområde uten navn", null, key, true);
+  assert.deepEqual(first, retried);
+  const named = await service.create("alice", "My kitchen", null, key);
+  assert.notEqual(first.id, named.id);
+  assert.equal(projects.length, 2);
+  assert.deepEqual(await service.list("bob"), []);
+  await assert.rejects(service.get("bob", first.id), /Project not found/);
 });
 
 test("archive, restore, metadata and deletion require owner and confirmation", async () => {

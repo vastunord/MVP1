@@ -97,8 +97,9 @@ test("Maya snapshot preserves the resolved request and rejects conflicts and mal
   assert.throws(() => parseRender({ ...input, prompt: "Add furniture to the room", values: { furnishing: "Empty" } }), /conflicts/);
   assert.throws(() => parseRender({ ...input, values: { room: 42 } }), /Invalid selection/);
 });
-test("All 17 editors select an appropriate provider operation", () => {
+test("Editors select the supported operation and refuse unmapped object compositing", () => {
   for (const tool of tools) {
+    if (tool.id === "object-placement") continue;
     const spec = parseRender({
       ...input,
       toolId: tool.id,
@@ -108,10 +109,7 @@ test("All 17 editors select an appropriate provider operation", () => {
     assert(["renders", "edits", "enhancements"].includes(spec.endpoint));
   }
   assert.throws(() => parseRender({ ...input, values: { seed: "123" } }));
-  assert.equal(
-    parseRender({ ...input, toolId: "object-placement" }).endpoint,
-    "edits",
-  );
+  assert.throws(() => parseRender({ ...input, toolId: "object-placement" }), /Object placement/);
   assert.equal(
     parseRender({ ...input, toolId: "resolution-enhancement", prompt: "" })
       .fields.kind,
@@ -181,8 +179,12 @@ test("conditional supported choices follow their parent selection without silent
       for (const parent of control.when.values) {
         if (unsupportedStudioOption(tool.id, control.when.id, parent)) continue;
         for (const choice of control.options ?? []) {
+          if (control.id === "upscale" && choice !== "Original size") {
+            assert.throws(() => parseRender({ ...input, toolId: tool.id, prompt: "", values: { mode: parent, upscale: choice } }), /scale is unavailable/);
+            continue;
+          }
           assert.doesNotThrow(() => parseRender({
-            ...input, toolId: tool.id, prompt: "Describe the change",
+            ...input, toolId: tool.id, prompt: tool.id === "resolution-enhancement" ? "" : "Describe the change",
             values: { [control.when!.id]: parent, [control.id]: choice },
           }), `${tool.id} / ${control.id} / ${parent} / ${choice}`);
         }
@@ -191,7 +193,7 @@ test("conditional supported choices follow their parent selection without silent
   }
   const pool = { ...input, toolId: "pool-redesign", values: { mode: "Pool" } };
   assert.equal(parseRender(pool).hash, parseRender({ ...pool, values: { mode: "Pool", "spa-option-0": "In-ground spa" } }).hash);
-  assert.throws(() => parseRender({ ...input, toolId: "perspective-correction", values: { mode: "Camera angle", vertical: 12 } }), /unavailable/);
+  assert.throws(() => parseRender({ ...input, toolId: "perspective-correction", values: { mode: "Camera angle", vertical: 12 } }), /Invalid numeric increment/);
   assert.throws(() => parseRender({ ...input, toolId: "resolution-enhancement", prompt: "", values: { mode: "Auto enhance", "adjust-0": 10 } }), /unavailable/);
 });
 test("MNML validates asset selection, options, consent and single-image mode before dispatch", () => {
@@ -217,14 +219,20 @@ test("MNML validates asset selection, options, consent and single-image mode bef
   );
   assert.throws(
     () => parseRender({ ...input, toolId: "perspective-correction", values: { mode: "Fix distortion", vertical: 12 } }),
-    /unavailable/,
+    /Invalid numeric increment/,
   );
-  for (const value of [0, 100])
+  for (const value of [10, 100])
     assert.match(String(parseRender({ ...input, toolId: "lighting-reimagination", values: { brightness: value } }).fields.prompt), new RegExp(`Brightness: ${value}`));
-  for (const value of [-1, 101, "not-a-number"])
+  for (const value of [0, 101, "not-a-number"])
     assert.throws(() => parseRender({ ...input, toolId: "lighting-reimagination", values: { brightness: value } }), /Invalid numeric/);
-  assert.throws(() => parseRender({ ...input, toolId: "lighting-reimagination", values: { temperature: 3000 } }), /unavailable/);
-  assert.throws(() => parseRender({ ...input, toolId: "lighting-reimagination", values: { preview: false } }), /preview control is unavailable/);
+  const light = { ...input, toolId: "lighting-reimagination" };
+  const settings = parseRender({ ...light, values: { temperature: 3000, preview: false } });
+  assert.match(String(settings.fields.prompt), /Colour temperature: 3000/);
+  assert.doesNotMatch(String(settings.fields.prompt), /preview/i);
+  assert.equal(settings.snapshot.requested.values.preview, false);
+  assert.equal(settings.hash, parseRender({ ...light, values: { temperature: 3000, preview: true } }).hash);
+  for (const temperature of [2100, 2250, 5100])
+    assert.throws(() => parseRender({ ...light, values: { temperature } }), /Invalid numeric/);
 });
 test("One provider submission sends explicit private input and reuses the stable local key", async () => {
   const spec = parseRender(input);

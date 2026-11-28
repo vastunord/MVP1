@@ -15,8 +15,12 @@ import {
 import { Button } from "./ui";
 import { PrivateUpload, RoomReferences } from "./private-upload";
 import { RoomSettings, roomLabel } from "./room-settings";
+import { PhotoPlacement, hasPlacement } from "./photo-placement";
+import "./photo-placement.css";
 import { StudioCanvas } from "./studio-canvas";
 import { StudioChoices } from "./studio-choices";
+import { DesignerCards, ClutterChoices } from "./designer-interior-controls";
+import { HardscapeSurfaces } from "./hardscape-surfaces";
 import { StudioPrompt } from "./studio-prompt";
 import { StudioToolSwitcher } from "./studio-tool-switcher";
 import { StudioRenderAction } from "./studio-render-action";
@@ -41,23 +45,28 @@ function Field({
   onChange,
   locale,
   toolId,
+  season,
 }: {
   control: Control;
   value: string | number | boolean | undefined;
   onChange: (value: string | number | boolean) => void;
   locale: Locale;
   toolId: string;
+  season?: string;
 }) {
   const id = "option-" + control.id;
   const text = (label: string) => roomLabel(label, locale);
+  if (control.id === "decor" || control.id === "angle" || (control.id === "season" && toolId === "seasonal-transformation") || (control.id === "mode" && toolId === "pool-redesign") || control.id === "buyer" || (control.id === "season" && toolId === "seasonal-styling") ||
+      (control.id === "style" && ["outdoor-visualization", "hardscape-design", "garden-design"].includes(toolId)))
+    return <DesignerCards outdoorSeason={toolId === "seasonal-transformation"} control={control} value={String(value ?? "")} locale={locale} onChange={onChange} />;
   if (["preview", "guides"].includes(control.id))
     return (
       <div className="field">
         <label htmlFor={id}>
-          <input id={id} type="checkbox" disabled checked={value === true} readOnly />
+          <input id={id} type="checkbox" role="switch" checked={value === true} onChange={(e) => onChange(e.target.checked)} />
           {text(control.label)}
         </label>
-        <span className="small">{locale === "en" ? "This preview control is not available yet." : "Denne forhåndsvisningen er ikke tilgjengelig ennå."}</span>
+        <span className="small">{locale === "en" ? "On-screen preview only." : "Bare forhåndsvisning på skjermen."}</span>
       </div>
     );
   if (control.kind === "action")
@@ -78,7 +87,7 @@ function Field({
     return (
       <div className="field">
         <label htmlFor={id}>
-          {control.label}{" "}
+          {text(control.label)}{" "}
           <output htmlFor={id}>
             {value}
             {control.unit}
@@ -90,6 +99,7 @@ function Field({
           type={control.min === undefined ? "number" : "range"}
           min={control.min}
           max={control.max}
+          step={control.step}
           value={typeof value === "number" ? value : ""}
           onChange={(e) => {
             if (e.target.value !== "") onChange(Number(e.target.value));
@@ -119,14 +129,15 @@ function Field({
           "medium",
           "camera",
           "viewpoint",
+          "palette",
         ].includes(control.id)
           ? control.id
           : "compact"
       }
       choices={options.map((v) => ({
         value: v,
-        label: text(v) + (unsupportedStudioOption(toolId, control.id, v) ? (locale === "en" ? " (unavailable)" : " (utilgjengelig)") : ""),
-        disabled: unsupportedStudioOption(toolId, control.id, v),
+        label: (v === "Season’s own" ? locale === "en" ? (season || "Spring") + "’s own" : "Sesongens egen" : text(v)) + ((control.id === "upscale" && v !== "Original size" || toolId !== "resolution-enhancement" && unsupportedStudioOption(toolId, control.id, v)) ? (locale === "en" ? " (unavailable)" : " (utilgjengelig)") : ""),
+        disabled: control.id === "upscale" ? v !== "Original size" : toolId !== "resolution-enhancement" && unsupportedStudioOption(toolId, control.id, v),
       }))}
       onChange={(v) => onChange(control.kind === "toggle" ? v === "On" : v)}
     />
@@ -241,9 +252,13 @@ export function Editor({
   const enhance = tool.id === "resolution-enhancement";
   const video = workflow === "video";
   const imageOnly = enhance || video;
+  const manual = enhance && workflow === "design" && values.mode === "Manual controls";
+  const placementSource = preview || (sample ? (sample.image.startsWith("/") ? sample.image : "/reference/" + sample.image) : "");
+  const placementKey = draftKey && selection.sourceAssetId && placementSource === `/api/assets/${encodeURIComponent(selection.sourceAssetId)}/download` ? draftKey + ":positions:" + selection.sourceAssetId : undefined;
   const configured = visibleControls(tool, values);
+  const planningSource = placementSource;
   const unavailable = configured.filter(
-    (control) => control.kind === "unknown",
+    (control) => control.kind === "unknown" && !(tool.id === "object-placement" && control.id === "pins"),
   );
   const changedSettings = configured.filter((control) => {
     const value = values[control.id];
@@ -292,6 +307,127 @@ export function Editor({
             tabIndex={0}
             aria-label={t.controls}
           >
+
+            <details
+              className="inspector-group room-drawer"
+              id="source-image"
+              open
+            >
+              <summary>{english ? "Source image" : "Kildebilde"}</summary>
+              <div>
+                {sample && !preview && (
+                  <div className="selected-study">
+                    <strong>{translated(sample.name, locale)}</strong>
+                    <span>
+                      {english ? "Studio sample" : "Eksempel i Studio"}
+                    </span>
+                    <details>
+                      <summary>
+                        {english
+                          ? "Workflow"
+                          : "Arbeidsflyt"}
+                      </summary>
+                      {(
+                        [
+                          [
+                            "room-reimagination",
+                            "Gi rommet ny form",
+                            "Reimagine the room",
+                          ],
+                          [
+                            "material-refinement",
+                            "Utforsk materialer",
+                            "Explore materials",
+                          ],
+                          [
+                            "lighting-reimagination",
+                            "Endre lyset",
+                            "Change the lighting",
+                          ],
+                        ] as const
+                      )
+                        .filter(([id]) => id !== tool.id)
+                        .map(([id, nb, en]) => (
+                          <Link key={id} href={studioSampleHref(sample, id)}>
+                            {english ? en : nb} <span aria-hidden="true">↗</span>
+                          </Link>
+                        ))}
+                    </details>
+                  </div>
+                )}
+                <div className={uploadsEnabled ? "" : "source-unavailable"}>
+                  {!uploadsEnabled && (
+                    <>
+                      <span className="upload-glyph" aria-hidden="true">
+                        ↑
+                      </span>
+                      <strong>{t.upload}</strong>
+                    </>
+                  )}
+                  <PrivateUpload
+                    locale={locale}
+                    enabled={uploadsEnabled}
+                    onPreview={(url) => {
+                      setPreview(url);
+                      setResult(null);
+                    }}
+                    onSelection={setSelection}
+                    draftUserId={userId}
+                    draftToolId={tool.id}
+                    withRoomReferences={
+                      Boolean(tool.reference) &&
+                      !["video", "concept"].includes(workflow)
+                    }
+                  />
+                </div>
+                {tool.reference &&
+                  !uploadsEnabled &&
+                  !["video", "concept"].includes(workflow) && (
+                    <RoomReferences
+                      assets={[]}
+                      enabled={false}
+                      locale={locale}
+                    />
+                  )}
+              </div>
+            </details>
+            {!imageOnly && (
+              <section className="inspector-group">
+                <StudioPrompt
+                  value={prompt}
+                  change={setPrompt}
+                  label={t.prompt}
+                  help={
+                    room && !english ? "Beskriv rommet du ønsker" : tool.prompt
+                  }
+                  locale={locale}
+                  enabled={improveEnabled && tool.improve}
+                  showImprove={tool.improve}
+                  limit={tool.briefLimit ?? 4000}
+                />
+                {((tool.briefLimit && prompt.length > tool.briefLimit) || (tool.avoidLimit && avoid.length > tool.avoidLimit)) && <p role="status">{english ? "Your earlier text is preserved. Shorten it to the current limit before generating." : "Den tidligere teksten er beholdt. Forkort den til gjeldende grense før generering."}</p>}
+                {tool.improve && (
+                  <details className="avoid-detail">
+                    <summary>{english ? "Writing tips" : "Skrivetips"}</summary>
+                    <p className="inspector-help">
+                      {english
+                        ? "Name the part of the scene to change. Describe the materials and the light. Specify any features that should stay as they are."
+                        : "Angi hvilken del av motivet du vil endre. Beskriv materialene og lyset. Ta med detaljer som skal beholdes."}
+                    </p>
+                  </details>
+                )}
+                <details className="avoid-detail">
+                  <summary>{t.avoid}</summary>
+                  <textarea
+                    aria-label={t.avoid}
+                    rows={2}
+                    maxLength={tool.avoidLimit ?? 1000}
+                    value={avoid}
+                    onChange={(e) => setAvoid(e.target.value)}
+                  />
+                </details>
+              </section>
+            )}
             <details className="inspector-group studio-engine room-drawer" open>
               <summary>
                 {english ? "Workflow and engine" : "Arbeidsflyt og motor"}
@@ -396,123 +532,6 @@ export function Editor({
                 )}
               </div>
             </details>
-            <details
-              className="inspector-group room-drawer"
-              id="source-image"
-              open
-            >
-              <summary>{english ? "Source image" : "Kildebilde"}</summary>
-              <div>
-                {sample && !preview && (
-                  <div className="selected-study">
-                    <strong>{translated(sample.name, locale)}</strong>
-                    <span>
-                      {english ? "Studio sample" : "Eksempel i Studio"}
-                    </span>
-                    <details>
-                      <summary>
-                        {english
-                          ? "Workflow"
-                          : "Arbeidsflyt"}
-                      </summary>
-                      {(
-                        [
-                          [
-                            "room-reimagination",
-                            "Gi rommet ny form",
-                            "Reimagine the room",
-                          ],
-                          [
-                            "material-refinement",
-                            "Utforsk materialer",
-                            "Explore materials",
-                          ],
-                          [
-                            "lighting-reimagination",
-                            "Endre lyset",
-                            "Change the lighting",
-                          ],
-                        ] as const
-                      )
-                        .filter(([id]) => id !== tool.id)
-                        .map(([id, nb, en]) => (
-                          <Link key={id} href={studioSampleHref(sample, id)}>
-                            {english ? en : nb} <span aria-hidden="true">↗</span>
-                          </Link>
-                        ))}
-                    </details>
-                  </div>
-                )}
-                <div className={uploadsEnabled ? "" : "source-unavailable"}>
-                  {!uploadsEnabled && (
-                    <>
-                      <span className="upload-glyph" aria-hidden="true">
-                        ↑
-                      </span>
-                      <strong>{t.upload}</strong>
-                    </>
-                  )}
-                  <PrivateUpload
-                    locale={locale}
-                    enabled={uploadsEnabled}
-                    onPreview={(url) => {
-                      setPreview(url);
-                      setResult(null);
-                    }}
-                    onSelection={setSelection}
-                    draftUserId={userId}
-                    draftToolId={tool.id}
-                    withRoomReferences={
-                      Boolean(tool.reference) &&
-                      !["video", "concept"].includes(workflow)
-                    }
-                  />
-                </div>
-                {tool.reference &&
-                  !uploadsEnabled &&
-                  !["video", "concept"].includes(workflow) && (
-                    <RoomReferences
-                      assets={[]}
-                      enabled={false}
-                      locale={locale}
-                    />
-                  )}
-              </div>
-            </details>
-            {!imageOnly && (
-              <section className="inspector-group">
-                <StudioPrompt
-                  value={prompt}
-                  change={setPrompt}
-                  label={t.prompt}
-                  help={
-                    room && !english ? "Beskriv rommet du ønsker" : tool.prompt
-                  }
-                  locale={locale}
-                  enabled={improveEnabled}
-                />
-                {tool.improve && (
-                  <details className="avoid-detail">
-                    <summary>{english ? "Writing tips" : "Skrivetips"}</summary>
-                    <p className="inspector-help">
-                      {english
-                        ? "Name the part of the scene to change. Describe the materials and the light. Specify any features that should stay as they are."
-                        : "Angi hvilken del av motivet du vil endre. Beskriv materialene og lyset. Ta med detaljer som skal beholdes."}
-                    </p>
-                  </details>
-                )}
-                <details className="avoid-detail">
-                  <summary>{t.avoid}</summary>
-                  <textarea
-                    aria-label={t.avoid}
-                    rows={2}
-                    maxLength={1000}
-                    value={avoid}
-                    onChange={(e) => setAvoid(e.target.value)}
-                  />
-                </details>
-              </section>
-            )}
             {!video && !imageOnly && <p className="inspector-help">{english ? "Design choices are included as instructions to the image provider; exact changes are not guaranteed." : "Designvalgene sendes som instrukser til bildeleverandøren. Eksakte endringer kan ikke garanteres."}</p>}
             {!video &&
               workflow !== "upscale" &&
@@ -532,8 +551,14 @@ export function Editor({
                       </p>
                     )}
                     {configured
-                      .filter((control) => control.kind !== "unknown" && control.id !== "palette")
-                      .map((c) => (
+                      .filter((control) => control.kind !== "unknown" && !(tool.id === "garden-design" && control.id.startsWith("tidy-") && control.id !== "tidy-0") && !(hasPlacement(tool.id) && control.kind === "action") && !(tool.id === "visual-cleanup" && control.id.startsWith("remove-") && control.id !== "remove-0"))
+                      .map((c) => tool.id === "hardscape-design" && c.id === "surfaces" ? (
+                        <HardscapeSurfaces key={[userId, selection.projectId, selection.sourceAssetId, planningSource].join(":")} source={planningSource} english={english} />
+                      ) : tool.id === "garden-design" && c.id === "tidy-0" ? (
+                        <ClutterChoices garden key="garden-tasks" controls={configured.filter(field => field.id.startsWith("tidy-"))} values={values} locale={locale} onChange={(id,checked)=>setValues(old=>({...old,[id]:checked}))}/>
+                      ) : tool.id === "visual-cleanup" && c.id === "remove-0" ? (
+                        <ClutterChoices key="clutter" controls={configured.filter((field) => field.id.startsWith("remove-"))} values={values} locale={locale} onChange={(id, checked) => setValues((old) => ({ ...old, [id]: checked }))} />
+                      ) : (
                         <fieldset
                           key={c.id}
                           disabled={
@@ -545,9 +570,12 @@ export function Editor({
                           <Field
                             control={c}
                             toolId={tool.id}
+                            season={String(values.season || "Spring")}
                             value={values[c.id]}
                             locale={locale}
-                            onChange={(v) => setValues((previous) => {
+                            onChange={(v) => {
+                              if (tool.id === "resolution-enhancement" && c.id === "mode") setResult(null);
+                              setValues((previous) => {
                               const next = { ...previous, [c.id]: v };
                               // A mode switch can remove a previously offered selection.
                               const visible = visibleControls(tool, next);
@@ -559,10 +587,13 @@ export function Editor({
                                 }
                               }
                               return next;
-                            })}
+                              });
+                            }}
                           />
                         </fieldset>
                       ))}
+                    {hasPlacement(tool.id) && <PhotoPlacement key={[tool.id, selection.projectId, placementSource, placementKey].join("|")} toolId={tool.id} source={placementSource} projectId={selection.projectId} sourceId={selection.sourceAssetId} storageKey={placementKey} english={english} />}
+                    {manual && <button type="button" onClick={() => setValues(previous => ({...previous, ...Object.fromEntries(tool.controls.filter(c => c.when?.values.includes("Manual controls") && c.defaultValue !== undefined).map(c => [c.id, c.defaultValue!]))}))}>{english ? "Reset adjustments" : "Tilbakestill justeringer"}</button>}
                     {unavailable.length > 0 && (
                       <details className="avoid-detail">
                         <summary>
@@ -586,20 +617,20 @@ export function Editor({
             <button type="button" className="room-reset editor-reset" aria-describedby="editor-reset-help" onClick={() => setValues(Object.fromEntries(tool.controls.filter((c) => c.defaultValue !== undefined).map((c) => [c.id, c.defaultValue!])))}>{english ? "Reset tool defaults" : "Tilbakestill verktøyvalg"}</button>
             <p className="inspector-help" id="editor-reset-help">{english ? "Your description and image are kept." : "Beskrivelsen og bildet beholdes."}</p>
           </div>
-          <StudioRenderAction
+          {!manual && <StudioRenderAction
             key={selection.projectId}
             tool={tool}
             locale={locale}
             enabled={renderEnabled && uploadsEnabled}
-            submissionEnabled={submissionEnabled}
+            submissionEnabled={submissionEnabled && tool.id !== "object-placement"}
             workflow={workflow}
             selection={selection}
             onResult={setResult}
-            values={values}
+            values={workflow === "upscale" ? {} : enhance ? Object.fromEntries(Object.entries(values).filter(([id]) => configured.some(c => c.id === id))) : values}
             engine={engine}
             prompt={imageOnly ? "" : prompt}
             avoid={imageOnly ? "" : avoid}
-          />
+          />}
         </div>
         <StudioCanvas
           tool={tool}
@@ -620,6 +651,8 @@ export function Editor({
           }
           outputMedia={result?.media}
           sample={preview ? undefined : sample}
+          values={values}
+          manual={manual}
           guides={values.guides === true}
         />
       </div>

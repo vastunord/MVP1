@@ -81,7 +81,7 @@ export function StudioRenderAction({
   const unsupportedMode =
     (tool.id === "visual-cleanup" && values.mode === "Brush & delete") ||
     (tool.id === "resolution-enhancement" &&
-      (values.mode === "Manual controls" || !!prompt || !!avoid));
+      ((workflow !== "upscale" && values.mode === "Manual controls") || !!prompt || !!avoid));
   const ready =
     enabled &&
     submissionEnabled &&

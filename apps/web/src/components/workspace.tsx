@@ -104,13 +104,17 @@ export function Directory({
 
 export function StudioShell({
   locale,
+  userId,
   children,
 }: {
   locale: Locale;
+  userId: string | undefined;
   children: ReactNode;
 }) {
   const en = locale === "en";
   const path = usePathname();
+  const editing = path.startsWith("/app/tools/") || path.startsWith("/app/editor/");
+  const [showNavigation, setShowNavigation] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const groups = en
@@ -135,8 +139,8 @@ export function StudioShell({
     return () => window.removeEventListener("keydown", shortcut);
   }, []);
   return (
-    <div className="workspace vn-workspace">
-      <aside className="sidebar vn-side">
+    <div key={userId ? "account:" + userId : "guest"} className={"workspace vn-workspace" + (editing && !showNavigation ? " vn-focused-editor" : "")}>
+      <aside id="studio-navigation" className="sidebar vn-side">
         <nav aria-label="Studio">
           {groups.map((group, i) => (
             <div key={group} className="vn-nav-group">
@@ -164,6 +168,7 @@ export function StudioShell({
       <main id="main" className="workspace-main vn-main">
         <div className="vn-workspace-bar">
           <span>
+            {editing && <button type="button" className="vn-editor-navigation" aria-controls="studio-navigation" aria-expanded={showNavigation} onClick={() => setShowNavigation(open => !open)}>{en ? "Navigation" : "Navigasjon"}</button>}
             <Link href="/app">Studio</Link>
             {active && active.href !== "/app" && <> / {translated(active.title, locale)}</>}
           </span>

@@ -66,6 +66,25 @@ test("Maya restores only currently authorized project images and references", as
   expect(writes).toBe(0);
 });
 
+test("same-route account switch clears private project names, local sources and the previous brief", async ({ page }) => {
+  let owner = "A";
+  await page.route("**/api/projects", route => route.fulfill({ json: [{ id: "project-" + owner, name: "Private workspace " + owner }] }));
+  await page.route("**/api/projects/*/assets", route => route.fulfill({ json: [] }));
+  await page.goto("/maya");
+  await expect(page.getByRole("radio", { name: "Private workspace A" })).toBeChecked();
+  await page.locator("#prompt").fill("Owner A private brief");
+  await page.getByLabel("Choose or drop an image").setInputFiles({ name: "private-a.png", mimeType: "image/png", buffer: Buffer.from("fixture") });
+  await expect(page.getByText("private-a.png")).toBeVisible();
+  owner = "B";
+  await page.getByRole("button", { name: "Switch account" }).click();
+  await expect(page.getByRole("radio", { name: "Private workspace B" })).toBeChecked();
+  await expect(page.getByRole("radio", { name: "Private workspace A" })).toHaveCount(0);
+  await expect(page.getByText("private-a.png")).toHaveCount(0);
+  await expect(page.getByText(/Your unsaved image was not retained/)).toHaveCount(0);
+  await expect(page.getByLabel("Choose or drop an image")).toHaveValue("");
+  await expect(page.locator("#prompt")).toHaveValue("");
+});
+
 test("Maya draft restores per account, project and tool without uploading or submitting", async ({ page }) => {
   let writes = 0;
   await page.route("**/api/**", async (route) => {
@@ -97,6 +116,80 @@ test("Maya draft restores per account, project and tool without uploading or sub
 });
 
 // Component-level browser test: controlled HTTP responses, not an auth/API integration test.
+test("Studio return survives sign-in errors and recovery links, then opens the intended screen", async ({ page }) => {
+  let attempts = 0;
+  await page.route("**/api/auth/sign-in/email", async route => {
+    attempts++;
+    await route.fulfill(attempts === 1
+      ? { status: 401, json: { code: "INVALID_EMAIL_OR_PASSWORD", message: "Invalid test credentials" } }
+      : { json: { redirect: false } });
+  });
+  await page.goto("/login?returnTo=%2Fapp%2Flibrary");
+  await expect(page.getByRole("link", { name: "Forgot password?" })).toHaveAttribute("href", "/en/forgot-password?returnTo=%2Fapp%2Flibrary");
+  await expect(page.getByRole("link", { name: "Create account" })).toHaveAttribute("href", "/en/signup?returnTo=%2Fapp%2Flibrary");
+  await page.getByLabel("Email", { exact: true }).fill("visitor@example.invalid");
+  await page.getByLabel("Password", { exact: true }).fill("fixture-only");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page.locator(".auth-panel").getByRole("alert")).toHaveText("Invalid test credentials");
+  const successfulLogin = page.waitForResponse(response => response.url().endsWith("/api/auth/sign-in/email") && response.status() === 200);
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await successfulLogin;
+  await page.waitForURL("**/app/library");
+  await expect(page.getByRole("heading", { name: "Room Reimagination" })).toBeVisible();
+});
+
+test("first visit can skip naming and retry into the Studio library", async ({ page }) => {
+  let requests = 0;
+  await page.route("**/api/workspaces/personal", async route => {
+    expect(route.request().postDataJSON()).toEqual({ name: "My workspace" });
+    requests++;
+    await route.fulfill({ status: requests === 1 ? 503 : 201, json: {} });
+  });
+  await page.goto("/onboarding");
+  const skip = page.getByRole("button", { name: "Skip naming and open Studio" });
+  await skip.click();
+  await expect(page.locator(".auth-panel").getByRole("alert")).toHaveText("Studio could not be set up.");
+  await skip.click();
+  await expect(page).toHaveURL(/\/app\/library$/);
+  await expect(page.getByRole("link").filter({ hasText: "Room Reimagination" }).first()).toBeVisible();
+  expect(requests).toBe(2);
+});
+
+test("start without a named project and upload to the returned private workspace", async ({ page }) => {
+  let uploaded = false;
+  const keys: string[] = [];
+  await page.route("**/api/workspaces/independent", async route => {
+    keys.push(route.request().headers()["idempotency-key"]);
+    expect(route.request().postDataJSON()).toEqual({ locale: "en" });
+    if (keys.length === 1) return route.fulfill({ status: 503 });
+    return route.fulfill({ status: 201, json: { id: "independent-a", name: "Untitled workspace" } });
+  });
+  await page.route("**/api/projects", route => {
+    expect(route.request().method()).toBe("GET");
+    return route.fulfill({ json: [] });
+  });
+  await page.route("**/api/projects/independent-a/assets", route => {
+    if (route.request().method() === "POST") {
+      uploaded = true;
+      return route.fulfill({ status: 201, json: { assetId: "input-a" } });
+    }
+    return route.fulfill({ json: uploaded ? [{ id: "input-a", mimeType: "image/png" }] : [] });
+  });
+  await page.goto("/");
+  const start = page.getByRole("button", { name: "Start without a project" });
+  await expect(page.getByTestId("selection")).toContainText('"projectId":""');
+  await start.click();
+  await expect(page.getByText("Could not open the workspace. Try again.")).toBeVisible();
+  await start.click();
+  await expect(page.getByLabel("Choose or drop an image")).toBeFocused();
+  expect(keys).toHaveLength(2);
+  expect(keys[0]).toEqual(keys[1]);
+  await page.getByLabel("Choose or drop an image").setInputFiles({ name: "source.png", mimeType: "image/png", buffer: Buffer.from("fixture") });
+  await page.getByRole("button", { name: "Upload image" }).click();
+  await expect(page.getByTestId("selection")).toContainText('"sourceAssetId":"input-a"');
+  await expect(page.getByTestId("selection")).toContainText('"projectId":"independent-a"');
+});
+
 test("first project retry, duplicate prevention, switching and reload explain unsaved file", async ({ page }) => {
   const projects: { id: string; name: string }[] = [];
   let workspaces = 0, attempts = 0;

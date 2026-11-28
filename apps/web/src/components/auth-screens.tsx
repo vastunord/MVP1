@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { publicHref, type Locale } from "@/lib/i18n";
+import { studioAuthQuery, studioReturn } from "@/lib/studio-return";
 import type { OAuthProvider } from "@/server/auth-readiness";
 
 const providerNames = { google: "Google", github: "GitHub", apple: "Apple" };
@@ -62,13 +63,15 @@ export function AuthScreen({
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const roomUpload = query.get("intent") === "room-upload";
+  const destination = studioReturn(query.get("returnTo"));
+  const intent = studioAuthQuery(roomUpload, destination);
   const workspaceEntry = roomUpload
     ? "/app/tools/room-reimagination#source-image"
-    : "/app";
+    : destination ?? "/app";
   const href = (path: string) => {
     const localized = publicHref(path, locale);
-    return roomUpload
-      ? localized + (path.includes("?") ? "&" : "?") + "intent=room-upload"
+    return intent
+      ? localized + (path.includes("?") ? "&" : "?") + intent
       : localized;
   };
 
@@ -147,10 +150,12 @@ export function AuthScreen({
             : "Forespørselen er mottatt. Sjekk innboksen for en ny lenke; kontakt brukerstøtte hvis den ikke kommer.",
         );
       } else if (mode === "onboarding") {
+        const submitter = (event.nativeEvent as SubmitEvent).submitter;
+        const skipNaming = submitter instanceof HTMLButtonElement && submitter.value === "skip";
         const response = await fetch("/api/workspaces/personal", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name }),
+          body: JSON.stringify({ name: skipNaming ? (en ? "My workspace" : "Mitt arbeidsområde") : name }),
         });
         if (!response.ok)
           throw new Error(
@@ -158,7 +163,7 @@ export function AuthScreen({
               ? "Studio could not be set up."
               : "Studio kunne ikke opprettes.",
           );
-        router.push(workspaceEntry);
+        router.push(skipNaming && !intent ? "/app/library" : workspaceEntry);
         router.refresh();
       }
     } catch (failure) {
@@ -283,6 +288,11 @@ export function AuthScreen({
           >
             {pending ? (en ? "Please wait…" : "Vennligst vent…") : titles[mode]}
           </button>
+          {mode === "onboarding" && (
+            <button type="submit" value="skip" className="button" formNoValidate disabled={!enabled || pending}>
+              {en ? "Skip naming and open Studio" : "Hopp over navn og åpne Studio"}
+            </button>
+          )}
         </form>
         {message && <p role="status">{message}</p>}
         {error && <p role="alert">{error}</p>}

@@ -15,7 +15,8 @@ import { AuthScreen } from "@/components/auth-screens";
 import { privacyTitle } from "@/components/privacy-notice";
 import { authReadiness, verifiedSessionUserId } from "@/server/auth-readiness";
 import { messages, publicHref, type Locale, type MessageKey } from "@/lib/i18n";
-type Props = { params: Promise<{ path?: string[] }>; searchParams: Promise<{page?:string | string[]}> };
+import { studioAuthQuery } from "@/lib/studio-return";
+type Props = { params: Promise<{ path?: string[] }>; searchParams: Promise<{page?:string | string[]; intent?:string | string[]; returnTo?:string | string[]}> };
 function resolve(path: string[] = []) {
   const locale: Locale = path[0] === "en" ? "en" : "nb-NO";
   return { locale, segments: locale === "en" ? path.slice(1) : path };
@@ -90,8 +91,11 @@ export default async function Page({ params, searchParams }: Props) {
       const session = await auth.api.getSession({ headers: requestHeaders });
       signedIn = Boolean(verifiedSessionUserId(session));
     }
-    if (authPage === "onboarding" && !signedIn)
-      redirect(publicHref("/login", locale));
+    if (authPage === "onboarding" && !signedIn) {
+      const requested = await searchParams;
+      const intent = studioAuthQuery(requested.intent === "room-upload", requested.returnTo);
+      redirect(publicHref("/login", locale) + (intent ? "?" + intent : ""));
+    }
   }
   return (
     <>

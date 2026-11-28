@@ -1,5 +1,8 @@
 "use client";
 import Image from "next/image";
+import type { BriefValues } from "@/lib/studio-render";
+import { LocalPhotoAdjustments } from "./local-photo-adjustments";
+import { PoolPlan, photoAppearance, skyWash } from "./designer-preview";
 import { useState, type CSSProperties } from "react";
 import type { ToolDefinition } from "@vastunord/contracts/tools";
 import { messages, type Locale } from "@/lib/i18n";
@@ -15,12 +18,16 @@ export function StudioCanvas({
   guides,
   output,
   outputMedia,
+  values,
+  manual,
 }: {
   tool: ToolDefinition;
   locale: Locale;
   preview: string;
   sample?: StudioSample;
   guides: boolean;
+  values: BriefValues;
+  manual: boolean;
   output?: string;
   outputMedia?: "image" | "video";
 }) {
@@ -64,7 +71,7 @@ export function StudioCanvas({
         <h1 lang="en">{tool.name}</h1>
         <p>{toolDescription(tool.id, locale)}</p>
       </div>
-      <figure className="canvas-figure">
+      {manual ? <LocalPhotoAdjustments source={source} values={values} english={en}/> : <figure className="canvas-figure">
         <div
           className={
             "sample-stage " +
@@ -86,6 +93,7 @@ export function StudioCanvas({
             />
           ) : (
             <Image
+              style={output || comparing ? undefined : photoAppearance(tool.id, values)}
               src={comparing ? after : output || source}
               alt={
                 output
@@ -102,6 +110,7 @@ export function StudioCanvas({
               sizes="(max-width:850px) 95vw, 65vw"
             />
           )}
+          {tool.id === "sky-transformation" && values.preview && !comparing && !output && <div aria-hidden="true" style={{position:"absolute",inset:"0 0 48%",pointerEvents:"none",...skyWash(values)}}/>}
           {comparing && (
             <>
               <div className="sample-before">
@@ -177,7 +186,10 @@ export function StudioCanvas({
             </button>
           )}
         </figcaption>
-      </figure>
+      </figure>}
+      {tool.id === "pool-redesign" && <PoolPlan values={values} english={en}/>}
+      {tool.id === "sky-transformation" && <figure><div aria-hidden="true" style={{height:70,...skyWash(values)}}/><figcaption>{en?"Sky preview":"Forhåndsvisning av himmelen"} · {[values.time, values.weather, String(values.clouds)+"%", String(values.saturation)+"%"].join(" · ")}</figcaption></figure>}
+      {["lighting-reimagination","seasonal-transformation","sky-transformation","perspective-correction"].includes(tool.id) && !output && !comparing && <p className="inspector-help">{en?"Local appearance preview. Your source image is preserved.":"Lokal forhåndsvisning. Originalbildet beholdes."}</p>}
     </section>
   );
 }
