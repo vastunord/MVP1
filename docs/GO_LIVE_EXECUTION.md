@@ -1,5 +1,7 @@
 # Hobby test release execution
 
+28 November diagnostic continuation: staged deployment `dpl_4V1ULuthpCycVG8ww2HSSJGEoYgp` reported that the Production database secret's host and role failed the pinned checks. All other sanitized binding predicates passed. No connection was attempted; this does not establish a password failure. The release alias was not changed. The designer-parity queue is tracked in `release-execution/08_DESIGNER_PARITY.md` and its captured evidence.
+
 ## 28 November · Promoted candidate and verified limits
 
 | Gate | Current evidence |

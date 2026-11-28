@@ -320,6 +320,8 @@ export function StudioRenderAction({
               : "Oppskaler bilde"
             : tool.id === "room-reimagination" && !en
               ? "Generer rom"
+              : tool.id === "garden-design" && values.tidy === true && !en
+                ? "Rydd hagen"
               : primaryAction(tool, values)}
       </button>
       <p id="action-help">

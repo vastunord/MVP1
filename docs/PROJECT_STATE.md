@@ -4,6 +4,8 @@
 
 The owner supplied captured Studio and eight-group FigJam evidence in `docs/release-execution/reference-evidence/`. This supersedes older statements that FigJam is unavailable. The requested tool-by-tool control, visual and journey parity remains incomplete. Garden tidy mode now uses its observed action text. A protected staged runtime diagnostic reports individual Production database binding predicates as booleans without recording credentials. No database configuration or schema was changed. Next execute the staged diagnostic, then continue the remaining per-tool differences in `STUDIO_17_TOOL_PARITY_FINDINGS.md` and the independent-workspace journey.
 
+Staged diagnostic deployment `dpl_4V1ULuthpCycVG8ww2HSSJGEoYgp` from `b9929da` reached READY without alias promotion. Protected runtime logs showed host and role mismatches; presence, parsing, protocol, port, database, password presence, TLS, parameters and fragment checks passed. No database connection was attempted. Next fix the protected Production binding using the existing approved target and continue the tool-by-tool remediation. Live public deployment remains `dpl_jKKoVxyVLSkVCZgDEGdcHeqHazrj`.
+
 ## 28 November 2026 · Updated demo live, private rendering gated
 
 The public [Vastu Nord demo](https://vastunord-web.vercel.app/) serves Production deployment `dpl_jKKoVxyVLSkVCZgDEGdcHeqHazrj` from application commit `4c8a8409f1616686acf30f2a52ee565283f08cab`. Vercel's alias API and deployment metadata independently confirmed the mapping after promotion. The homepage in both languages and Studio returned HTTP 200. Live room-editor controls passed at four widths. Private services returned HTTP 503 as configured.
