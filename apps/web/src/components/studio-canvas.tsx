@@ -71,7 +71,10 @@ export function StudioCanvas({
         <h1 lang="en">{tool.name}</h1>
         <p>{toolDescription(tool.id, locale)}</p>
       </div>
-      {manual ? <LocalPhotoAdjustments source={source} values={values} english={en}/> : <figure className="canvas-figure">
+      {manual ? (preview || sample ? <LocalPhotoAdjustments source={source} values={values} english={en}/> : <figure className="designer-local-preview">
+        <figcaption>{en ? "Choose a source photo to preview manual adjustments." : "Velg et kildebilde for å forhåndsvise justeringene."}</figcaption>
+        <button type="button" className="button" disabled>{en ? "Apply adjustments and download" : "Bruk justeringer og last ned"}</button>
+      </figure>) : <figure className="canvas-figure">
         <div
           className={
             "sample-stage " +

@@ -21,7 +21,11 @@ async function inspect(locale, theme) {
       errors.length = 0;
       await page.setViewportSize({ width: 1363, height: 936 });
       assert.equal((await page.goto(origin + "/app/tools/" + tool.id)).status(), 200, tool.id);
-      await page.locator(".editor-reset").waitFor({state:"attached"});
+      try {
+        await page.locator(".editor-reset").waitFor({state:"attached"});
+      } catch {
+        throw new Error([tool.id, locale, theme, page.url(), await page.title(), ...errors].join(" | "));
+      }
       await page.evaluate(() => document.fonts.ready.then(() => undefined));
       if (locale === "en" && theme === "dark") {
         await page.screenshot({ path: directory + tool.id + ".png", animations: "disabled" });
@@ -43,8 +47,11 @@ async function inspect(locale, theme) {
   } finally { await context.close(); }
 }
 try {
-  const completed = await Promise.allSettled(["en","nb-NO"].flatMap(locale => ["light","dark"].map(theme => inspect(locale,theme))));
-  const failures = completed.filter(r=>r.status === "rejected");
+  const failures = [];
+  for (const locale of ["en", "nb-NO"]) for (const theme of ["dark", "light"]) {
+    try { await inspect(locale, theme); }
+    catch (reason) { failures.push({reason}); }
+  }
   const bad = rows.filter(r=>!r.pass);
   await writeFile(directory + "layout.json", JSON.stringify(rows.sort((a,b)=>a.tool.localeCompare(b.tool)||a.locale.localeCompare(b.locale)||a.theme.localeCompare(b.theme)||a.width-b.width),null,2)+"\n");
   console.log("Layout observations:",rows.length,"failed:",bad.length,"incomplete contexts:",failures.length);

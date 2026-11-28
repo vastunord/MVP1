@@ -167,6 +167,9 @@ test("mask-based deletion is gated and manual enhancement exports a pixel-adjust
   await expect(page.getByRole("radio", { name: "AI object editing" })).toBeEnabled();
   await page.goto("/app/tools/resolution-enhancement");
   await page.getByRole("radio", { name: "Manuelle justeringer" }).check();
+  await expect(page.getByRole("button", { name: "Bruk justeringer og last ned" })).toBeDisabled();
+  await page.goto("/app/tools/resolution-enhancement?sample=gallery-01");
+  await page.getByRole("radio", { name: "Manuelle justeringer" }).check();
   const canvas = page.getByLabel("Justert fotografi");
   await expect(canvas).toBeVisible();
   const pixels = () => canvas.evaluate(node => (node as HTMLCanvasElement).toDataURL());
