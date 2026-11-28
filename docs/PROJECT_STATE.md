@@ -1,5 +1,13 @@
 # Vastu Nord — current project handoff (living document)
 
+## 28 November 2026 · Updated demo live, private rendering gated
+
+The public [Vastu Nord demo](https://vastunord-web.vercel.app/) serves Production deployment `dpl_jKKoVxyVLSkVCZgDEGdcHeqHazrj` from application commit `4c8a8409f1616686acf30f2a52ee565283f08cab`. Vercel's alias API and deployment metadata independently confirmed the mapping after promotion. The homepage in both languages and Studio returned HTTP 200. Live room-editor controls passed at four widths. Private services returned HTTP 503 as configured.
+
+Two independent PostgreSQL sessions exercised concurrent application job creation and single dispatch on disposable Neon. Provider responses were test doubles. Further isolated checks covered rollback, settlement, refunds and storage retries. No real provider submission was made. Historical job `674349` accounts for US$0.099 with campaign attribution unresolved. Keep five further attempts and US$0.495 as the maximum remaining allowance.
+
+Production's staged server had a database secret, but its target check failed before opening a connection. A separate restricted Neon query found no migration history or RenderJob on the intended branch. No Production migrations were applied. Next, correct the Production runtime binding and supply a separate protected migration runner, then resume from the binding and recovery checks in [the release record](GO_LIVE_EXECUTION.md).
+
 ## 28 November 2026 · Isolated Neon concurrency checkpoint
 
 HEAD before this increment: `88e2570eacf9c6de174339de8237e743654db20e` on `feat/v7-brand-photo-entry`. The existing protected migrator credential connected directly to Frankfurt test branch `br-lively-wildflower-bhwpjl4q`, endpoint `ep-holy-waterfall-bheg01mu`, `neondb` as `vastunord_dev_migrator`; no secret was displayed. Its initial two migration hashes matched history. Four reviewed additive migrations were applied to this disposable test target only: newsletter, MNML, Maya settings and controlled campaign; all six history records are complete. Newsletter remains disabled. No Production migration occurred.

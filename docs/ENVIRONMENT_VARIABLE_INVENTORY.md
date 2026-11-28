@@ -1,5 +1,9 @@
 # Environment variable inventory
 
+## 28 November 2026 · Actual Production runtime evidence
+
+Staged Vercel server logs confirmed presence of `DATABASE_URL`, the auth secret, the correct release origin, sender configuration, MNML configuration and Blob store configuration. The database URL failed its pinned configuration check before any connection. Production account login, email delivery and Blob operations remain unverified. A direct migration runner is a separate operator dependency. The promoted demo fixes `AUTH_ENABLED`, `MEDIA_UPLOADS_ENABLED`, `MEDIA_RECONCILIATION_ENABLED`, `MNML_RENDERING_ENABLED`, `MNML_SUBMISSION_ENABLED`, `NEWSLETTER_ENABLED` and `PRANA_ENABLED` to false in both build and runtime. The staged-only diagnostic flag was omitted from the release. See [release evidence](GO_LIVE_EXECUTION.md).
+
 The assigned [Vastu Nord site](https://vastunord-web.vercel.app) serves the noncommercial demonstration. Its Production sign-in origin is configured. Account creation, private uploads, provider spending, newsletter enrollment and search indexing each require separate verification and activation.
 
 Updated 22 November 2026. Vastu Nord owns the configurations below. Preview runs with Vercel Authentication for development testing. The two AI credential names are case-sensitive. The application reads them only on the server.

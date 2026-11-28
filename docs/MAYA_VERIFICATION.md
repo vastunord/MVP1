@@ -2,6 +2,8 @@
 
 28 November release continuation. Seventeen focused Maya draft and provider-contract tests passed across the 17 tool definitions. The Pool + Spa editor, draft reader and server now agree on the conditional Spillover spa selection. Switching to a mode that removes that choice resets the selection. Garden tidy mode now omits inactive style and area settings from the effective provider request while preserving the original user choices in the submission snapshot. Targeted ESLint passed. These results cover local settings and request construction. Release-origin rendering, post-login recovery and private download require independent verification.
 
+The 28 November local webpack production build passed. All 16 targeted browser checks passed, including direct navigation to all 17 workflows, the conditional Pool + Spa reset, keyboard focus near the action dock, and the advanced panel at 390, 768, 1280 and 1440 pixels. The four screenshots in `docs/evidence/maya-local/` were refreshed. Two additional controlled browser checks passed for project-authorized source and reference recovery and account/project/tool-scoped drafts.
+
 These results use synthetic local data and controlled provider responses. They do not establish live Preview behavior or provider image quality.
 
 | ID | Status | Evidence and remaining work |

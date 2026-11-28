@@ -1,5 +1,12 @@
 # Blockers and owner actions
 
+## Current Production handoff · 28 November 2026
+
+1. In Vercel `vastu-nord / vastunord-web / Production`, replace the server-side `DATABASE_URL` with the pooled URL for the existing Frankfurt branch `br-wild-unit-bhin6sli`, database `neondb`, runtime role `vastunord_prod_runtime` and host `ep-shiny-block-bhmlplzm-pooler.c-10.eu-central-1.aws.neon.tech`. Use TLS with `sslmode=require` or `verify-full`. The staged server received a value and rejected it before connection. Use the provider's protected secret fields.
+2. Provide access to a protected **Production-only direct migration runner** for that same branch and database. The available Production roles were the restricted runtime and the database owner. The available local protected migrator handoff was Development-only. Keep migration credentials outside Vercel application environments. Migration approval and bounded test approval are already recorded.
+
+The public demo has been updated. Revalidate the staged binding, recovery and migrations before enabling the controlled private journey. Domain forwarding, another render purchase and a new test budget are unnecessary.
+
 **28 November authorization update:** The owner approved the reviewed release migration sequence and up to six `v4.5-fast` image attempts at US$0.099 each, maximum US$0.594 total. Earlier requests for the same approval below are superseded. Do not request that approval again. The test campaign implementation and release-target checks remain incomplete; no new paid render has been made.
 
 ## Hobby testing release — current decision

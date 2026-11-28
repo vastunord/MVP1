@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 28 November 2026 · Maya test release promoted
+
+Released `4c8a840` to the public demo. Changes include per-tester spend checks, pre-submission pricing verification, cumulative provider settlement and contextual Maya option validation. Verified concurrency with independent Neon sessions and a provider stub. The public room editor passed four responsive browser checks. Account access, private uploads and chargeable rendering stayed closed after the staged Production runtime rejected its database binding. See [release evidence](GO_LIVE_EXECUTION.md).
+
 ## 28 November 2026 · Atomic job/reservation checkpoint
 
 Connected the existing controlled-test reservation to render-job creation in the same database transaction. Isolated tests cover rollback and the shared submission identity; new paid rendering remains disabled pending dispatch, quote, settlement and genuine concurrent-connection verification. No paid request, cloud migration or deployment.
