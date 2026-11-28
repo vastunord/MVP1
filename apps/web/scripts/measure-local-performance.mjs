@@ -14,14 +14,14 @@ try {
     const context = await browser.newContext({ viewport, reducedMotion: "reduce" });
     try {
       const page = await context.newPage();
-      if (process.env.VN_PERF_BLOCK_FONT) await page.route("https://fonts.gstatic.com/**", route => route.abort());
+      if (process.env.VN_PERF_BLOCK_FONT) await page.route("**/fonts/inter/**", route => route.abort());
       if (process.env.VN_PERF_TEST_FALLBACK) await page.route("**/*.css*", async route => {
         const response = await route.fetch();
         const css = await response.text();
         const noArial = process.env.VN_PERF_NO_ARIAL;
         const fallback = noArial ? 'local("VN Font Not Installed")' : 'local("Arial")';
         const finalFallback = noArial ? "Georgia,serif" : "Arial,sans-serif";
-        await route.fulfill({ response, body: css + `\n@font-face{font-family:"VN Lab Fallback";src:${fallback};size-adjust:124%} :root{--font-brand:"Zalando Sans Expanded","VN Lab Fallback",${finalFallback}}` });
+        await route.fulfill({ response, body: css + `\n@font-face{font-family:"VN Lab Fallback";src:${fallback};size-adjust:100%} :root{--font-brand:"Inter Variable","VN Lab Fallback",${finalFallback}}` });
       });
       await page.addInitScript(() => {
         window.__vnLab = { lcp: 0, cls: 0, shifts: [], fontEvents: [], geometry: [] };
@@ -34,7 +34,7 @@ try {
             const rect = element.getBoundingClientRect();
             return { y: Math.round(rect.y), h: Math.round(rect.height), display: getComputedStyle(element).display };
           };
-          const state = { fontReady: document.fonts.check('400 16px "Zalando Sans Expanded"'), header: get(".vg-header"), notice: get(".notice"), noticeText: document.querySelector(".notice > span")?.textContent, main: get("main"), hero: get(".photo-hero"), heroCopy: get(".photo-hero-copy"), heroImage: get(".photo-hero-visual"), quick: get(".mk-quick") };
+          const state = { fontReady: document.fonts.check('400 16px "Inter Variable"'), header: get(".vg-header"), notice: get(".notice"), noticeText: document.querySelector(".notice > span")?.textContent, main: get("main"), hero: get(".photo-hero"), heroCopy: get(".photo-hero-copy"), heroImage: get(".photo-hero-visual"), quick: get(".mk-quick") };
           const serialized = JSON.stringify(state);
           if (serialized !== previous && state.main) window.__vnLab.geometry.push({ at: Math.round(performance.now()), fonts: document.fonts.status, ...state });
           previous = serialized;
@@ -62,7 +62,7 @@ try {
             const navigation = performance.getEntriesByType("navigation")[0];
             const context = document.createElement("canvas").getContext("2d");
             const fontWidths = {};
-            for (const font of ["Arial", "Zalando Sans Expanded"]) {
+            for (const font of ["Arial", "Inter Variable"]) {
               context.font = `400 16px "${font}"`;
               fontWidths[font] = Math.round(context.measureText("Noncommercial demonstration · in development").width);
             }

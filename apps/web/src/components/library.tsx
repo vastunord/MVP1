@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { workflowThumbnail } from "@/lib/workflow-thumbnail";
 import { tools, categories } from "@vastunord/contracts/tools";
 import { messages, formatNumber, type Locale } from "@/lib/i18n";
 import { toolDescription } from "./tool-presentation";
@@ -11,7 +12,7 @@ function ToolArt({ id }: { id: string }) {
   return (
     <div className="tool-picture">
       <Image
-        src={`/media/tools/${id}.webp`}
+        src={workflowThumbnail(id)}
         unoptimized
         alt=""
         fill

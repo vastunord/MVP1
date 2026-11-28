@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -17,7 +18,7 @@ import "./home-photo-hero.css";
 type Scene = (typeof homeComparisons)[number];
 const sweepPerSecond = 8;
 const edgeHoldMs = 350;
-const initialSplit = 50;
+const initialSplit = 0;
 
 async function loadPair(scene: Scene) {
   await Promise.all(
@@ -33,6 +34,7 @@ function ComparisonWindow({
   scene,
   locale,
   moving,
+  pause,
   previousScene,
   nextScene,
   advance,
@@ -41,6 +43,7 @@ function ComparisonWindow({
   scene: Scene;
   locale: Locale;
   moving: boolean;
+  pause: () => void;
   previousScene: Scene;
   nextScene: Scene;
   advance: (step: -1 | 1) => void;
@@ -49,7 +52,7 @@ function ComparisonWindow({
   const frame = useRef<HTMLDivElement>(null);
   const range = useRef<HTMLInputElement>(null);
   const position = useRef(initialSplit);
-  const direction = useRef(1);
+  const [retryStep, setRetryStep] = useState<-1 | 0 | 1>(0);
   const pointing = useRef(false);
   const [hovered, setHovered] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -64,75 +67,56 @@ function ComparisonWindow({
     if (input && input.value !== rounded) input.value = rounded;
   }
 
+  useLayoutEffect(() => {
+    paint(0);
+  }, [scene.id]);
+
+  // Start decoding the next pair while the current photographs are visible.
+  useEffect(() => { void loadPair(nextScene).catch(() => {}); }, [nextScene]);
+
   useEffect(() => {
-    if (!manualStep && (!moving || hovered || dragging || keyboardFocus))
-      return;
+    if (!manualStep && (!moving || hovered || dragging || keyboardFocus || retryStep)) return;
     let active = true;
     let animation = 0;
-    let delay = 0;
-    let previous = performance.now();
+    let timer = 0;
+    let previous = 0;
 
-    function finishSweep(edge: number) {
-      paint(edge);
-      delay = window.setTimeout(
-        async () => {
-          if (
-            !manualStep &&
-            (document.hidden || document.querySelector("dialog[open]"))
-          ) {
-            if (active) finishSweep(edge);
-            return;
-          }
-          try {
-            await loadPair(manualStep === -1 ? previousScene : nextScene);
-            if (!active) return;
-            direction.current = edge === 100 ? -1 : 1;
-            advance(manualStep || 1);
-          } catch {
-            // Keep a readable pair and let the next sweep or manual action retry.
-            if (active && !manualStep) {
-              direction.current = edge === 100 ? -1 : 1;
-              previous = performance.now();
-              animation = requestAnimationFrame(tick);
-            }
-          } finally {
-            if (active && manualStep) setManualStep(0);
-          }
-        },
-        manualStep ? 0 : edgeHoldMs,
-      );
+    async function changePair(step: -1 | 1) {
+      if (!manualStep && (document.hidden || document.querySelector("dialog[open]"))) {
+        timer = window.setTimeout(() => void changePair(step), edgeHoldMs);
+        return;
+      }
+      try {
+        await loadPair(step === -1 ? previousScene : nextScene);
+        if (!active) return;
+        setRetryStep(0);
+        setManualStep(0);
+        advance(step);
+      } catch {
+        if (!active) return;
+        setManualStep(0);
+        setRetryStep(step);
+        pause();
+      }
     }
 
     function tick(time: number) {
-      const elapsed = Math.min(Math.max(0, time - previous), 100);
+      const elapsed = previous ? Math.min(100, time - previous) : 0;
       previous = time;
-      const next =
-        position.current +
-        (direction.current * sweepPerSecond * elapsed) / 1000;
-      if (next >= 100 || next <= 0) {
-        finishSweep(next >= 100 ? 100 : 0);
-        return;
+      if (!document.hidden && !document.querySelector("dialog[open]")) {
+        paint(Math.min(100, position.current + sweepPerSecond * elapsed / 1000));
       }
-      paint(next);
-      animation = requestAnimationFrame(tick);
+      if (position.current < 100) animation = requestAnimationFrame(tick);
+      else timer = window.setTimeout(() => void changePair(1), edgeHoldMs);
     }
-    if (manualStep) finishSweep(direction.current === 1 ? 100 : 0);
-    else animation = requestAnimationFrame(tick);
+    if (manualStep) void changePair(manualStep);
+    else timer = window.setTimeout(() => { animation = requestAnimationFrame(tick); }, position.current === 0 ? edgeHoldMs : 0);
     return () => {
       active = false;
       cancelAnimationFrame(animation);
-      window.clearTimeout(delay);
+      window.clearTimeout(timer);
     };
-  }, [
-    moving,
-    hovered,
-    dragging,
-    keyboardFocus,
-    manualStep,
-    previousScene,
-    nextScene,
-    advance,
-  ]);
+  }, [moving, hovered, dragging, keyboardFocus, manualStep, retryStep, previousScene, nextScene, advance, pause]);
 
   return (
     <>
@@ -198,8 +182,9 @@ function ComparisonWindow({
                 ? "Compare before and after"
                 : "Sammenlign før og etter"
             }
-            onChange={(e) => paint(e.currentTarget.valueAsNumber)}
+            onChange={(e) => { pause(); paint(e.currentTarget.valueAsNumber); }}
             onPointerDown={(e) => {
+              pause();
               pointing.current = true;
               e.currentTarget.setPointerCapture(e.pointerId);
               setKeyboardFocus(false);
@@ -222,7 +207,10 @@ function ComparisonWindow({
                 !pointing.current && e.currentTarget.matches(":focus-visible"),
               )
             }
-            onKeyDown={() => setKeyboardFocus(true)}
+            onKeyDown={(event) => {
+              setKeyboardFocus(true);
+              if (["Home", "End", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "PageUp", "PageDown"].includes(event.key)) pause();
+            }}
             onBlur={() => {
               setKeyboardFocus(false);
               setDragging(false);
@@ -230,6 +218,7 @@ function ComparisonWindow({
           />
         </div>
       </div>
+      {retryStep !== 0 && <p role="status">{locale === "en" ? "The next image pair could not load." : "Det neste bildeparet kunne ikke lastes."} <button type="button" onClick={() => setManualStep(retryStep)}>{locale === "en" ? "Try again" : "Prøv igjen"}</button></p>}
       <div className="hero-sequence">
         <button
           type="button"
@@ -303,6 +292,7 @@ export function HomePhotoHero({
     };
   }, []);
 
+  const pause = useCallback(() => setPaused(true), []);
   const advance = useCallback((step: -1 | 1) => {
     setIndex(current => (current + step + homeComparisons.length) % homeComparisons.length);
   }, []);
@@ -350,6 +340,7 @@ export function HomePhotoHero({
           scene={scene}
           locale={locale}
           moving={playing && !choosingSample}
+          pause={pause}
           previousScene={homeComparisons[(index - 1 + homeComparisons.length) % homeComparisons.length]}
           nextScene={homeComparisons[next]}
           advance={advance}

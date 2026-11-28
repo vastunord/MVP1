@@ -1,23 +1,9 @@
 @import "tailwindcss";
 @font-face {
-  font-family: "Zalando Sans Expanded";
-  src: url("https://fonts.gstatic.com/s/zalandosansexpanded/v3/JTUJjJci8Cy470GaeFwsix1hi3aTmrgRwU-zrEw7.woff2") format("woff2");
-  font-weight: 200 900;
+  font-family: "Inter Variable";
+  src: url("/fonts/inter/InterVariable.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
-  font-display: swap;
-}
-/* Match the installed Arial fallback more closely while the brand font loads.
-   If Arial is unavailable, the existing system fallback chain remains intact. */
-@font-face {
-  font-family: "Vastu Nord Arial fallback";
-  src: local("Arial");
-  size-adjust: 124%;
-}
-@font-face {
-  font-family: "Zalando Sans Expanded";
-  src: url("https://fonts.gstatic.com/s/zalandosansexpanded/v3/JTUHjJci8Cy470GaeFwsix1hi3aTmrgRwU-zqXw5aXo.woff2") format("woff2");
-  font-weight: 200 900;
-  font-style: italic;
   font-display: swap;
 }
 /* Brand colors: PDF page 19 RGB fill operands, not screenshot sampling.
@@ -40,7 +26,12 @@
   --border: var(--sage);
   --focus: var(--navy);
   --soft: var(--sand);
-  --font-brand: "Zalando Sans Expanded", "Vastu Nord Arial fallback", Arial, Helvetica, sans-serif;
+  --font-brand: "Inter Variable", Arial, sans-serif;
+  --weight-body: 400;
+  --weight-ui: 500;
+  --weight-emphasis: 600;
+  --size-label: .875rem;
+  --size-helper: .8125rem;
   color-scheme: light;
 }
 [data-theme="dark"] {
@@ -78,6 +69,8 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-brand);
+  font-optical-sizing: auto;
+  font-weight: var(--weight-body);
   line-height: 1.55;
 }
 button,
@@ -144,6 +137,7 @@ textarea {
   width: 100%;
   resize: vertical;
 }
+h1, h2, h3 { font-weight: var(--weight-ui); }
 h1,
 h2,
 h3,
@@ -151,10 +145,10 @@ p {
   margin-top: 0;
 }
 h1 {
-  font-size: clamp(2rem, 4.6vw, 4.6rem);
+  font-size: clamp(1.875rem, 4.6vw, 3rem);
   line-height: 1.06;
-  letter-spacing: -0.045em;
-  font-weight: 600;
+  letter-spacing: -0.025em;
+  font-weight: var(--weight-ui);
   max-width: 16ch;
   margin-bottom: 1.4rem;
 }
@@ -190,7 +184,7 @@ p {
   color: var(--muted);
 }
 .eyebrow {
-  font-size: 0.68rem;
+  font-size: var(--size-helper);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 600;
@@ -227,7 +221,7 @@ p {
   padding: 0.3rem 0.5rem;
   min-height: 36px;
   font-weight: 400;
-  font-size: 0.75rem;
+  font-size: var(--size-helper);
 }
 .skip {
   position: absolute;
@@ -250,14 +244,14 @@ p {
 }
 .identity {
   font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: -0.05em;
+  font-weight: var(--weight-emphasis);
+  letter-spacing: -0.025em;
   white-space: nowrap;
 }
 .identity-note {
   display: block;
   letter-spacing: 0.17em;
-  font-size: 0.5rem;
+  font-size: var(--size-helper);
   font-weight: 400;
 }
 .desktop-nav {
@@ -273,7 +267,7 @@ p {
   gap: 0.6rem;
 }
 .preferences select {
-  font-size: 0.78rem;
+  font-size: var(--size-helper);
   max-width: 110px;
 }
 .notice {
@@ -283,7 +277,7 @@ p {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border);
-  font-size: 0.7rem;
+  font-size: var(--size-helper);
   gap: 1rem;
 }
 .mobile-nav {
@@ -353,7 +347,7 @@ p {
   position: absolute;
   bottom: 5%;
   left: 12%;
-  font-size: 0.57rem;
+  font-size: var(--size-helper);
   letter-spacing: 0.14em;
 }
 .section {
@@ -380,7 +374,7 @@ p {
   gap: 1.5rem;
 }
 .serial {
-  font-size: 0.7rem;
+  font-size: var(--size-helper);
   color: var(--muted);
 }
 .steps {
@@ -400,7 +394,7 @@ p {
   justify-content: space-between;
   gap: 2rem;
   border-top: 1px solid var(--border);
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
 }
 .footer nav {
   display: flex;
@@ -432,7 +426,7 @@ p {
 }
 .nav-index {
   margin-right: 1rem;
-  font-size: 0.55rem;
+  font-size: var(--size-helper);
   color: var(--muted);
 }
 .workspace-main {
@@ -463,7 +457,7 @@ p {
   border: 1px solid var(--border);
   padding: 0.5rem 0.9rem;
   border-radius: 30px;
-  font-size: 0.78rem;
+  font-size: var(--size-helper);
 }
 .filters button[aria-pressed="true"] {
   background: var(--text);
@@ -505,7 +499,7 @@ p {
   background: var(--orange);
 }
 .tool-art > span {
-  font-size: 0.68rem;
+  font-size: var(--size-helper);
 }
 .geometry {
   border: 1px solid currentColor;
@@ -535,7 +529,7 @@ p {
   margin-bottom: 1rem;
 }
 .tool-card-copy > span:last-child {
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
 }
 .empty-section {
   border: 1px dashed var(--muted);
@@ -557,7 +551,7 @@ p {
   max-width: none;
 }
 .editor-heading a {
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
 }
 .row {
   display: flex;
@@ -591,7 +585,7 @@ p {
   font-size: 1.7rem;
 }
 .upload-box p {
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
   margin-top: 0.5rem;
 }
 .upload-box h2 {
@@ -658,7 +652,7 @@ p {
   justify-content: space-between;
   gap: 1rem;
   list-style-position: inside;
-  font-size: 0.65rem;
+  font-size: var(--size-helper);
   margin: 0;
   padding: 1rem 0 0;
   border-top: 1px solid var(--muted);
@@ -668,7 +662,7 @@ p {
   gap: 2rem;
   justify-content: space-between;
   margin: 2rem 0;
-  font-size: 0.75rem;
+  font-size: var(--size-helper);
 }
 .primary-action {
   border-top: 1px solid var(--border);
@@ -768,14 +762,14 @@ dialog::backdrop {
     font-size: 1.2rem;
   }
   .identity-note {
-    font-size: 0.45rem;
+    font-size: var(--size-helper);
   }
   .preferences {
     gap: 0.4rem;
   }
   .preferences select {
     padding: 0.4rem;
-    font-size: 0.75rem;
+    font-size: var(--size-helper);
   }
   .container {
     width: calc(100% - 40px);
@@ -883,7 +877,7 @@ dialog::backdrop {
     font-size: 1.7rem;
   }
   .row .button {
-    font-size: 0.73rem;
+    font-size: var(--size-helper);
   }
   .search-field {
     align-items: start;

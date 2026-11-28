@@ -10,8 +10,10 @@ import {
 } from "../src/server/production-target.ts";
 if (process.env.VERCEL_ENV === "production") {
   if (process.env.VN_PROBE_RELEASE_PROVIDERS === "1") {
-    const { probeReleaseProviders } = await import("./probe-release-providers.mjs");
+    const { probeReleaseProviders, checkPranaReplies } = await import("./probe-release-providers.mjs");
     console.log("VN read-only provider evidence", await probeReleaseProviders(process.env));
+    if (process.env.VN_CHECK_PRANA_REPLIES === "1")
+      console.log("VN synthetic Prana provider replies", await checkPranaReplies(process.env));
   }
   const url = process.env.DATABASE_URL;
   const serviceChecks = releaseServiceChecks(process.env);

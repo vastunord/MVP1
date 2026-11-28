@@ -4,10 +4,10 @@ import { acceptanceEmailAllowed, controlledAcceptance, verifiedSessionUserId } f
 
 type Environment = Record<string, string | undefined>;
 const emailEntryPaths = new Set(["/sign-up/email", "/sign-in/email", "/send-verification-email", "/request-password-reset"]);
+type UserValidation = NonNullable<NonNullable<BetterAuthOptions["user"]>["validateUserInfo"]>;
 
 export function acceptanceIdentityPolicy(env: Environment) {
-  const validateUserInfo: NonNullable<NonNullable<BetterAuthOptions["user"]>["validateUserInfo"]> =
-    ({ user, source }) => {
+  const validateUserInfo = ({ user, source }: Parameters<UserValidation>[0]) => {
       if (!controlledAcceptance(env)) return;
       if (!acceptanceEmailAllowed(user.email, env)) return { error: "acceptance_invitation_required" };
       if (source.method !== "oauth") return;
@@ -17,7 +17,7 @@ export function acceptanceIdentityPolicy(env: Environment) {
       // prove current mailbox control. Require email signup then explicit linking.
       if (source.action === "create-user" && source.oauth.profile?.hd !== "vastu.no")
         return { error: "verify_email_then_link_google" };
-    };
+  };
   return {
     user: { modelName: "User", validateUserInfo },
     hooks: {

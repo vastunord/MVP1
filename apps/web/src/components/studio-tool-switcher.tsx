@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { workflowThumbnail } from "@/lib/workflow-thumbnail";
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -50,7 +51,7 @@ export function StudioToolSwitcher({
                     aria-current={tool.id === item.id ? "page" : undefined}
                   >
                     <Image
-                      src={"/media/tools/" + item.id + ".webp"}
+                      src={workflowThumbnail(item.id)}
                       alt=""
                       unoptimized
                       width={42}

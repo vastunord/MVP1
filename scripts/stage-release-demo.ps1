@@ -5,6 +5,7 @@
 param(
     [switch] $VerifyRuntime,
     [switch] $VerifyProviders,
+    [switch] $CheckPranaReplies,
     [switch] $EnableAuthentication,
     [switch] $EnablePrivateMedia,
     [switch] $EnableRendering,
@@ -14,6 +15,7 @@ param(
     [ValidatePattern('^[a-zA-Z0-9_-]{1,100}$')] [string] $CampaignId
 )
 $ErrorActionPreference = 'Stop'
+if ($CheckPranaReplies -and !$VerifyProviders) { throw 'Synthetic Prana checks require the explicit provider verification stage.' }
 if (($EnablePrivateMedia -or $EnableGoogle -or $EnablePrana) -and !$EnableAuthentication) { throw 'These controlled services require verified-account authentication.' }
 if ($EnableRendering -and !$EnablePrivateMedia) { throw 'Rendering requires private media.' }
 if ($EnableSubmission -and (!$EnableRendering -or !$CampaignId)) { throw 'Submission requires rendering and the existing campaign ID.' }
@@ -51,4 +53,5 @@ foreach ($entry in $flags.GetEnumerator()) {
 if ($EnableSubmission) { $arguments += @('--env',"MNML_TEST_CAMPAIGN_ID=$CampaignId",'--build-env',"MNML_TEST_CAMPAIGN_ID=$CampaignId") }
 if ($VerifyRuntime) { $arguments += @('--env','VN_VERIFY_RELEASE=1') }
 if ($VerifyProviders) { $arguments += @('--build-env','VN_PROBE_RELEASE_PROVIDERS=1') }
+if ($CheckPranaReplies) { $arguments += @('--build-env','VN_CHECK_PRANA_REPLIES=1') }
 & (Join-Path $PSScriptRoot 'vercel-vastunord.ps1') -CliArguments $arguments

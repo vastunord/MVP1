@@ -43,8 +43,8 @@ export function PrivacyNotice({ locale, newsletterEnabled }: { locale: Locale; n
         <h2>{t("Levering av nettsiden", "Delivering the site")}</h2>
         <p>
           {t(
-            "Vercel leverer sidene og bildene. Nettleseren henter skrifttypen Zalando Sans Expanded fra Google Fonts. Ved slike forespørsler mottar leverandøren tekniske opplysninger, blant annet IP-adressen din.",
-            "Vercel delivers the pages and images. Your browser requests Zalando Sans Expanded from Google Fonts. These requests share technical information, including your IP address, with the provider.",
+            "Vercel leverer sidene, bildene og skrifttypen Inter fra nettstedet vårt. Ved slike forespørsler mottar Vercel tekniske opplysninger, blant annet IP-adressen din.",
+            "Vercel delivers the pages, images and Inter font from our website. Vercel receives technical information, including your IP address, when serving these requests.",
           )}
         </p>
       </section>

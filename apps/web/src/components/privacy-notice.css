@@ -6,7 +6,7 @@
 }
 .mk-site .vn-privacy h1 {
   font-size: clamp(2.2rem, 5vw, 4rem);
-  letter-spacing: -0.055em;
+  letter-spacing: -0.025em;
   line-height: 1.08;
   margin: 0 0 1.1rem;
   overflow-wrap: anywhere;

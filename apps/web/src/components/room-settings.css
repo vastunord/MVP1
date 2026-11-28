@@ -8,7 +8,7 @@
 }
 .room-drawer {
   border-block-start: 1px solid var(--border);
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
 }
 .room-drawer summary {
   display: flex;
@@ -45,7 +45,7 @@
   border-bottom: 1px solid var(--border);
   background: var(--navy);
   color: white;
-  font-size: 0.77rem;
+  font-size: var(--size-helper);
 }
 @media (max-width: 767px) {
   .room-section-links {
@@ -74,11 +74,10 @@
 .room-reset { min-height: 44px; padding: .45rem .65rem; color: white; background: transparent; border: 1px solid currentColor; border-radius: .4rem; cursor: pointer; }
 .maya-search { display: grid; gap: .4rem; padding: .6rem; }
 .maya-search input { min-height: 44px; width: 100%; }
-.saved-settings { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .72rem; }
+.saved-settings { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--size-helper); }
 @media (max-width: 850px) {
   .inspector-scroll > .editor-reset { max-width: calc(100% - 10rem); margin-inline: 3.5rem 6.5rem; }
 }
-.choices-compact .studio-choice { min-height: 44px; }
 .studio-editor :is(#source-image, #room-settings) {
   scroll-margin-block-start: 8rem;
 }
@@ -90,7 +89,7 @@
 .studio-choices legend {
   margin-block-end: 0.45rem;
   color: white;
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
   font-weight: 600;
   line-height: 1.3;
 }
@@ -118,6 +117,8 @@
   z-index: 1;
   width: 100%;
   height: 100%;
+  min-height: 0;
+  min-width: 0;
   margin: 0;
   opacity: 0;
   cursor: inherit;
@@ -140,9 +141,13 @@
   border-radius: 50%;
   background: var(--navy);
   color: white;
-  padding: 0.08rem 0.2rem;
-  font-size: 0.65rem;
-  font-weight: 700;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid white;
+  font-size: var(--size-helper);
+  font-weight: var(--weight-emphasis);
 }
 .studio-choice:has(:disabled) {
   cursor: default;
@@ -151,8 +156,9 @@
 .choice-label {
   padding: 0.35rem 0.4rem;
   line-height: 1.25;
-  font-size: 0.71rem;
-  overflow-wrap: anywhere;
+  font-size: var(--size-helper);
+  hyphens: auto;
+  overflow-wrap: break-word;
   color: white;
 }
 .choices-compact > div {
@@ -161,11 +167,12 @@
 }
 .choices-compact .studio-choice {
   align-content: center;
-  padding-inline: 0.22rem;
-  min-height: 36px;
+  padding-inline: 0.22rem 1.5rem;
+  min-height: 44px;
 }
 .choices-compact .studio-choice:has(:checked)::after {
-  display: none;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .choice-art {
   background: linear-gradient(132deg, #d5c6b0, #f2eadf);

@@ -25,6 +25,7 @@ export default async function RootLayout({
   const theme = value === "dark" || value === "light" ? value : "system";
   return (
     <html lang={lang} data-theme={theme}>
+      <head><link rel="preload" href="/fonts/inter/InterVariable.woff2" as="font" type="font/woff2" crossOrigin="anonymous" /></head>
       <body>
         <VisitorExperience
           initialLocale={lang}

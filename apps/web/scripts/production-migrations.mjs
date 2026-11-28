@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import pg from "pg";
+import { enrollReleaseTester, EnrollmentConflict } from "./enroll-release-tester.mjs";
 
 const manifest = {
   "20261121_phase02c_initial": "d79088cf6d074033a017e28fe888f22cc65dee7136e9fd9d044de227497c8a3a",
@@ -26,7 +27,7 @@ try {
     if (createHash("sha256").update(sql).digest("hex") !== manifest[name]) throw Error();
   }
   const mode = process.argv[2];
-  if (!["--apply", "--status", "--check-manifest"].includes(mode)) throw Error();
+  if (!["--apply", "--status", "--check-manifest", "--runtime-grants", "--enroll-tester"].includes(mode)) throw Error();
   if (mode === "--check-manifest") {
     console.log("Verified all six reviewed migration files.");
   } else {
@@ -64,6 +65,26 @@ try {
     }
     const applied = await history();
     console.log("Verified Production identity and reviewed migration history:", applied);
+    if (mode === "--enroll-tester") {
+      stage = "controlled enrollment";
+      if (applied !== names.length) throw Error();
+      console.log("Controlled acceptance enrollment", await enrollReleaseTester(client));
+    }
+    if (mode === "--runtime-grants") {
+      stage = "runtime grants";
+      if (applied !== names.length) throw Error();
+      const {rows:[runtime]} = await client.query(`SELECT rolcanlogin AND NOT
+        (rolsuper OR rolcreatedb OR rolcreaterole OR rolreplication OR rolbypassrls OR
+        pg_has_role(oid,'neon_superuser','MEMBER') OR
+        has_database_privilege(oid,current_database(),'CREATE') OR
+        has_schema_privilege(oid,'public','CREATE')) AS limited FROM pg_roles WHERE rolname=$1`, ["vastunord_prod_runtime"]);
+      if (!runtime?.limited) throw Error();
+      await client.query("BEGIN");
+      await client.query("SET LOCAL search_path TO public, pg_catalog");
+      await client.query(await readFile(new URL("./production-runtime-grants.sql",import.meta.url),"utf8"));
+      await client.query("COMMIT");
+      console.log("Applied reviewed runtime table and column grants.");
+    }
     if (mode === "--apply" && applied < names.length) {
       stage = "Prisma deploy";
       const url = new URL("postgresql://" + host + "/neondb?sslmode=verify-full");
@@ -75,7 +96,8 @@ try {
       console.log("Verified six completed Production migration checksums.");
     }
   }
-} catch {
+} catch (error) {
   console.error("Production migration check failed at",stage);
+  if (error instanceof EnrollmentConflict) console.error(error.message);
   process.exitCode = 1;
 } finally { if (client) await client.end().catch(()=>{}); }

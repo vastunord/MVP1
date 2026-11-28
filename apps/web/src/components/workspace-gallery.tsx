@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { workflowThumbnail } from "@/lib/workflow-thumbnail";
 import Link from "next/link";
 import { tools } from "@vastunord/contracts/tools";
 import { StudioChoices } from "./studio-choices";
@@ -402,7 +403,7 @@ export function Gallery({
             choices={tools.map((tool) => ({
               value: tool.id,
               label: tool.name,
-              image: `/media/tools/${tool.id}.webp`,
+              image: workflowThumbnail(tool.id),
             }))}
           />
           <Link

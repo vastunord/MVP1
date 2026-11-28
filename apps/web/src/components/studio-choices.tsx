@@ -17,9 +17,9 @@ const photos: Record<string, string> = {
   style: "reference-style",
   concept: "written-concept",
   video: "walkthrough",
-  sketch: "written-concept",
+  sketch: "../maya/sketch",
   plan: "masterplan",
-  Hallway: "living-room",
+  Hallway: "../workflow-studies/hallway",
   "Living room": "living-room",
   Bedroom: "bedroom",
   Dining: "dining",
@@ -102,7 +102,7 @@ export function StudioChoices({
           const slug = photos[choice.value];
           const source =
             choice.image ??
-            (slug ? (slug.startsWith("../maya/") ? "/media/maya/" + slug.slice(8) : "/media/options/" + slug) + ".webp" : undefined);
+            (slug ? (slug.startsWith("../") ? "/media/" + slug.slice(3) : "/media/options/" + slug) + ".webp" : undefined);
           const artwork = kind !== "compact";
           const swatch =
             kind === "palette" ? swatches[choice.value] : undefined;

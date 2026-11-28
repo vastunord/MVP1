@@ -56,7 +56,7 @@
 .mp-copy h1 {
   font-size: clamp(2.8rem, 5.65vw, 5rem);
   line-height: 1.04;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.025em;
   max-width: 16ch;
   color: var(--on-brand);
   margin: 0 0 1rem;
@@ -71,9 +71,9 @@
 .mp-kicker,
 .mp-read-copy small {
   text-transform: uppercase;
-  font-weight: 650;
+  font-weight: var(--weight-emphasis);
   letter-spacing: 0.13em;
-  font-size: 0.73rem;
+  font-size: var(--size-helper);
 }
 .mp-kicker {
   margin: 0 0 1rem;
@@ -140,7 +140,7 @@
 }
 .mp-questions p {
   font-size: clamp(1.08rem, 1.5vw, 1.4rem);
-  font-weight: 550;
+  font-weight: var(--weight-ui);
   margin: 0;
 }
 .mp-workflow {
@@ -173,7 +173,7 @@
   background: var(--navy);
   color: var(--on-brand);
   border-radius: 9rem;
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
   padding: 0.36rem 0.8rem;
 }
 .mp-variant {
@@ -217,7 +217,7 @@
 .mp-plans h3 {
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.025em;
   margin: 0.4rem 0 1.5rem;
 }
 .mp-status {

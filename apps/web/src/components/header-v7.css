@@ -21,9 +21,9 @@
   min-height: var(--vg-height);
   padding: 0.48rem clamp(1.15rem, 2.5vw, 3.25rem);
   margin-inline: auto;
-  font-size: 0.76rem;
-  line-height: 1.25;
-  font-weight: 600;
+  font-size: var(--size-label);
+  line-height: 1.45;
+  font-weight: var(--weight-ui);
 }
 .vg-bar a,
 .vg-bar button {
@@ -146,7 +146,7 @@
 .vg-header + .notice {
   min-height: 30px;
   padding: 0.08rem clamp(1rem, 2.5vw, 3.25rem);
-  font-size: 0.67rem;
+  font-size: var(--size-helper);
 }
 .vg-header + .notice .button {
   min-height: 26px;
@@ -166,7 +166,7 @@
   }
   .vg-bar {
     gap: clamp(0.6rem, 2vw, 1.3rem);
-    font-size: 0.82rem;
+    font-size: var(--size-label);
   }
   .vg-segment button {
     min-height: 44px;
@@ -179,7 +179,7 @@
     border: 0;
     padding: 0 0.2rem;
     color: inherit;
-    font-weight: 650;
+    font-weight: var(--weight-emphasis);
   }
   .vg-panel:not([hidden]) {
     position: absolute;
@@ -242,7 +242,7 @@
   .vg-create {
     grid-area: create;
     justify-self: end;
-    font-size: 0.74rem;
+    font-size: var(--size-label);
   }
   .vg-menu-toggle span {
     position: absolute;

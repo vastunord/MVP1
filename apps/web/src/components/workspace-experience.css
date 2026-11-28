@@ -103,7 +103,7 @@
   color: white;
 }
 .xp-room-caption small {
-  font-weight: 650;
+  font-weight: var(--weight-emphasis);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -163,8 +163,8 @@
   color: var(--ink);
   background: var(--paper);
   border: 1px solid var(--navy);
-  font-size: 0.76rem;
-  font-weight: 650;
+  font-size: var(--size-helper);
+  font-weight: var(--weight-emphasis);
 }
 .xp-plan button:nth-child(1),
 .xp-plan button:nth-child(4) {
@@ -179,7 +179,7 @@
   color: var(--on-brand);
 }
 .xp-small {
-  font-size: 0.77rem;
+  font-size: var(--size-helper);
   margin: 0.5rem 0 1rem;
 }
 .xp-workspace fieldset {
@@ -284,7 +284,7 @@
 .xp-guide-label {
   display: block;
   padding: 1rem 1rem 0.35rem;
-  font-size: 0.72rem;
+  font-size: var(--size-helper);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -293,7 +293,7 @@
   display: block;
   margin: 0 2.75rem 0 1rem;
   font-size: 1.15rem;
-  font-weight: 650;
+  font-weight: var(--weight-emphasis);
   line-height: 1.28;
 }
 .xp-guide-toggle {

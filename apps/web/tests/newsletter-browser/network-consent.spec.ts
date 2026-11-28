@@ -25,7 +25,7 @@ for (const choice of ["Reject optional", "Accept all"]) {
     }
     // The font host is an explicitly disclosed necessary resource. Any other
     // third-party host or script is a failure, even though it was blocked above.
-    expect(external.filter((item) => item.host !== "fonts.gstatic.com")).toEqual([]);
+    expect(external).toEqual([]);
     expect(external.filter((item) => item.type === "script")).toEqual([]);
     // Also catch common same-origin collection routes; this is a named pattern
     // check, not proof that an unknown first-party endpoint cannot collect data.

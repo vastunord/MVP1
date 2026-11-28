@@ -458,8 +458,12 @@ export function AccountScreen({
             <button
               className="button"
               onClick={async () => {
+                const result = await authClient.signOut();
+                if (result.error) {
+                  setMessage(en ? "Sign-out failed. Try again." : "Utloggingen mislyktes. Prøv igjen.");
+                  return;
+                }
                 try { clearMayaDrafts(sessionStorage); } catch { /* Storage may be unavailable. */ }
-                await authClient.signOut();
                 router.push("/");
                 router.refresh();
               }}

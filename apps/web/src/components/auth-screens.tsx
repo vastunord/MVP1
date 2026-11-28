@@ -62,6 +62,23 @@ export function AuthScreen({
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
+  const [needsVerification, setNeedsVerification] = useState(false);
+  function checkAuthError(error: { code?: string; status?: number } | null) {
+    if (!error) return;
+    setNeedsVerification(error.code === "EMAIL_NOT_VERIFIED");
+    const failures: Record<string, [string, string]> = {
+      ACCEPTANCE_INVITATION_REQUIRED: ["This test is available to invited participants.", "Denne testen er tilgjengelig for inviterte deltakere."],
+      INVALID_EMAIL_OR_PASSWORD: ["The email or password is incorrect.", "E-postadressen eller passordet er feil."],
+      EMAIL_NOT_VERIFIED: ["Verify your email before signing in.", "Bekreft e-posten din før du logger inn."],
+      INVALID_TOKEN: ["This link is invalid or expired.", "Lenken er ugyldig eller utløpt."],
+      TOKEN_EXPIRED: ["This link has expired.", "Lenken er utløpt."],
+      USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: ["If you already have an account, sign in.", "Logg inn hvis du allerede har en konto."],
+    };
+    const copy = failures[error.code || ""] ?? (error.status === 429
+      ? ["Too many attempts. Please wait and try again.", "For mange forsøk. Vent litt og prøv igjen."]
+      : ["The request could not be completed. Please try again.", "Forespørselen kunne ikke fullføres. Prøv igjen."]);
+    throw new Error(copy[en ? 0 : 1]);
+  }
   const roomUpload = query.get("intent") === "room-upload";
   const destination = studioReturn(query.get("returnTo"));
   const intent = studioAuthQuery(roomUpload, destination);
@@ -80,6 +97,7 @@ export function AuthScreen({
     if (!enabled || pending) return;
     setPending(true);
     setError("");
+    setNeedsVerification(false);
     setMessage("");
     const data = new FormData(event.currentTarget);
     const name = String(data.get("name") || "");
@@ -94,7 +112,7 @@ export function AuthScreen({
           callbackURL: href("/login?verified=1"),
           fetchOptions: { headers: { "x-vn-locale": locale } },
         });
-        if (result.error) throw new Error(result.error.message);
+        checkAuthError(result.error);
         setMessage(
           en
             ? "Account created. Email verification is required before sign-in; request a new link if it does not arrive."
@@ -105,7 +123,7 @@ export function AuthScreen({
           email: address,
           password,
         });
-        if (result.error) throw new Error(result.error.message);
+        checkAuthError(result.error);
         router.push(workspaceEntry);
         router.refresh();
       } else if (mode === "forgot-password") {
@@ -114,7 +132,7 @@ export function AuthScreen({
           redirectTo: window.location.origin + href("/reset-password"),
           fetchOptions: { headers: { "x-vn-locale": locale } },
         });
-        if (result.error) throw new Error(result.error.message);
+        checkAuthError(result.error);
         setMessage(
           en
             ? "Request received. If the account exists and delivery succeeds, check your inbox for a recovery link."
@@ -132,7 +150,7 @@ export function AuthScreen({
           newPassword: password,
           token,
         });
-        if (result.error) throw new Error(result.error.message);
+        checkAuthError(result.error);
         setMessage(
           en
             ? "Password updated. Sign in again."
@@ -144,7 +162,7 @@ export function AuthScreen({
           callbackURL: href("/login?verified=1"),
           fetchOptions: { headers: { "x-vn-locale": locale } },
         });
-        if (result.error) throw new Error(result.error.message);
+        checkAuthError(result.error);
         setMessage(
           en
             ? "Request received. Check your inbox for a new link; contact support if it does not arrive."
@@ -227,6 +245,9 @@ export function AuthScreen({
         {query.get("verified") === "1" && query.has("error") && mode === "login" && (
           <p role="alert">{en ? "This verification link is invalid or expired." : "Bekreftelseslenken er ugyldig eller utløpt."} <Link href={href("/verify-email")}>{en ? "Request a new link" : "Be om en ny lenke"}</Link></p>
         )}
+        {mode === "reset-password" && (!query.get("token") || query.has("error")) && (
+          <p role="alert">{en ? "This recovery link is invalid or expired." : "Gjenopprettingslenken er ugyldig eller utløpt."} <Link href={href("/forgot-password")}>{en ? "Request a new link" : "Be om en ny lenke"}</Link></p>
+        )}
         {mode === "login" && query.get("oauth") === "incomplete" && (
           <p role="alert">
             {["account_not_linked", "verify_email_then_link_google"].includes(query.get("error") ?? "")
@@ -290,7 +311,7 @@ export function AuthScreen({
           <button
             className="button primary"
             type="submit"
-            disabled={!enabled || pending}
+            disabled={!enabled || pending || (mode === "reset-password" && (!query.get("token") || query.has("error")))}
           >
             {pending ? (en ? "Please wait…" : "Vennligst vent…") : titles[mode]}
           </button>
@@ -304,6 +325,8 @@ export function AuthScreen({
         {error && <p role="alert">{error}</p>}
         {mode === "login" && (
           <>
+            {needsVerification &&
+              <p><Link href={href("/verify-email")}>{en ? "Request a verification link" : "Be om en bekreftelseslenke"}</Link></p>}
             <p>
               <Link href={href("/forgot-password")}>
                 {en ? "Forgot password?" : "Glemt passord?"}

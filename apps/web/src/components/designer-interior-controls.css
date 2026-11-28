@@ -1,14 +1,15 @@
 .design-card-group, .clutter-choices { margin: 0; padding: 0; border: 0; min-width: 0; }
 .design-card-group > div, .clutter-choices > div { display: flex; flex-wrap: wrap; gap: .45rem; }
 .design-card-group label, .clutter-choices label { display: flex; align-items: center; gap: .45rem; padding: .55rem; border: 1px solid currentColor; border-radius: .5rem; cursor: pointer; }
-.design-card-group label { flex: 1 1 9rem; }
+.design-card-group label { flex: 1 1 9rem; min-height: 44px; }
+.design-card-group input[type="radio"], .clutter-choices input[type="checkbox"], .surface-choices input[type="radio"] { position: static; flex: 0 0 18px; width: 18px; height: 18px; min-height: 0; margin: 0; accent-color: var(--orange); }
 .design-card-group label span { display: grid; gap: .25rem; }
-.design-card-group label small { font-size: .77rem; line-height: 1.35; }
-.clutter-choices label { border-radius: 2rem; min-height: 2.5rem; }
+.design-card-group label small { font-size: var(--size-helper); line-height: 1.35; }
+.clutter-choices label { border-radius: 2rem; min-height: 44px; }
 .design-card-group label:has(:checked), .clutter-choices label:has(:checked) { box-shadow: inset 0 0 0 1px currentColor; }
 .design-card-group label:focus-within, .clutter-choices label:focus-within { outline: 2px solid currentColor; outline-offset: 2px; }
 .surface-editor { display: grid; gap: .65rem; }
-.surface-editor button, .surface-choices label { min-height: 2.5rem; }
+.surface-editor button, .surface-choices label { min-height: 44px; }
 .surface-photo { position: relative; overflow: hidden; border-radius: .5rem; }
 .surface-backdrop { display: block; width: 100%; padding: 0; cursor: crosshair; }
 .surface-backdrop img { display: block; width: 100%; height: auto; }

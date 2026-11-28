@@ -15,15 +15,15 @@
   margin-inline: auto;
 }
 .mk-site h2 {
-  font-size: clamp(2rem, 3.7vw, 3.35rem);
-  letter-spacing: -0.055em;
-  line-height: 1.06;
-  font-weight: 600;
+  font-size: clamp(1.75rem, 3.7vw, 3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.18;
+  font-weight: var(--weight-ui);
   max-width: 27ch;
   margin: 0 0 1.4rem;
 }
 .mk-site h3 {
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
 }
 .mk-photo {
   width: 100%;
@@ -50,8 +50,8 @@
 .mk-label {
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: var(--size-helper);
+  font-weight: var(--weight-emphasis);
   margin: 0 0 1.1rem;
   line-height: 1.4;
 }
@@ -75,7 +75,7 @@
   background: var(--brand-action);
   color: var(--brand-action-text);
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: var(--weight-emphasis);
   text-decoration: none;
 }
 .mk-action.secondary {
@@ -96,7 +96,7 @@
 }
 .mk-direction .mk-label {
   display: block;
-  font-size: 0.64rem;
+  font-size: var(--size-helper);
   text-transform: uppercase;
   letter-spacing: 0.13em;
   color: #fff;
@@ -110,7 +110,7 @@
 }
 .mk-start h2 {
   font-size: 1.35rem;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
   margin: 0;
 }
 .mk-quick {
@@ -262,7 +262,7 @@
   background: color-mix(in srgb, var(--navy) 90%, transparent);
   color: white;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: var(--size-helper);
   padding: 0.25rem 0.6rem;
 }
 .mk-image-tag.left {
@@ -302,7 +302,7 @@
   border-radius: 6px;
   padding: 5px 10px 5px 5px;
   min-height: 44px;
-  font-size: 0.8rem;
+  font-size: var(--size-helper);
 }
 .mk-tone-swatch {
   width: 43px;
@@ -332,7 +332,7 @@
 }
 .mk-steps button > span {
   color: var(--on-brand);
-  font-size: 0.78rem;
+  font-size: var(--size-helper);
 }
 .mk-steps p {
   margin: 0.3rem 0 0;
@@ -437,7 +437,7 @@
 }
 .mk-header .preferences select {
   min-height: 35px;
-  font-size: 0.7rem;
+  font-size: var(--size-helper);
   padding: 0.35rem;
 }
 .mk-header .desktop-nav {
@@ -445,8 +445,8 @@
 }
 .mk-head-cta,
 .mk-head-login {
-  font-size: 0.78rem;
-  font-weight: 650;
+  font-size: var(--size-helper);
+  font-weight: var(--weight-emphasis);
   white-space: nowrap;
 }
 .mk-head-cta {
@@ -458,7 +458,7 @@
 .mk-header + .notice {
   min-height: 24px;
   padding-block: 0;
-  font-size: 0.63rem;
+  font-size: var(--size-helper);
 }
 .mk-header + .notice .button {
   min-height: 24px;
@@ -503,7 +503,7 @@
     grid-template-columns: 1fr 1fr;
   }
   .mk-quick a {
-    font-size: 0.74rem;
+    font-size: var(--size-helper);
     padding: 0.5rem;
     gap: 6px;
   }
@@ -524,7 +524,7 @@
   }
   .mk-variants button {
     padding: 4px;
-    font-size: 0.73rem;
+    font-size: var(--size-helper);
   }
   .mk-tone-swatch {
     width: 30px;

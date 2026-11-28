@@ -19,9 +19,9 @@ const styles = await readFile(
 const brandFonts = new Set(
   [
     ...styles.matchAll(
-      /url\("(https:\/\/fonts\.gstatic\.com\/s\/zalandosansexpanded\/[^"]+\.woff2)"\)/g,
+      /url\("(\/fonts\/inter\/[^"]+\.woff2)"\)/g,
     ),
-  ].map((match) => match[1]),
+  ].map((match) => new URL(match[1], origin).href),
 );
 assert(brandFonts.size > 0, "Brand font locations missing from CSS");
 const evidence = new URL(
@@ -125,13 +125,13 @@ async function screenshot(name) {
   const fontAvailable = await page.evaluate(async () => {
     try {
       const faces = await document.fonts.load(
-        '400 16px "Zalando Sans Expanded"',
+        '400 16px "Inter Variable"',
         "Vastu Nord",
       );
       await document.fonts.ready;
       return (
         faces.some((face) => face.status === "loaded") &&
-        document.fonts.check('400 16px "Zalando Sans Expanded"', "Vastu Nord")
+        document.fonts.check('400 16px "Inter Variable"', "Vastu Nord")
       );
     } catch {
       return false;

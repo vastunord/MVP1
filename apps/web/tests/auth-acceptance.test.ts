@@ -22,6 +22,16 @@ test("controlled acceptance permits only the approved, verified session and the 
   assert.deepEqual(Object.keys(oauthConfiguration({ ...env, GITHUB_OAUTH_ENABLED: "true", GITHUB_CLIENT_ID: "fixture", GITHUB_CLIENT_SECRET: "fixture" }).socialProviders), ["google"]);
   assert.deepEqual(oauthConfiguration({ ...env, GOOGLE_CLIENT_ID: "different" }).socialProviders, {});
   assert.deepEqual(oauthConfiguration({ ...env, GoogleOauth: "" }).socialProviders, {});
+  const { user, account } = acceptanceIdentityPolicy(env);
+  const google = (address: string, emailVerified: boolean, action: "create-user" | "link-account", hd?: string) =>
+    user.validateUserInfo({ user: { email: address, emailVerified }, source: { action, method: "oauth", oauth: { providerId: "google", profile: { hd } } } });
+  assert.equal(google(email, true, "create-user", "vastu.no"), undefined);
+  assert.equal(google(email, true, "create-user")?.error, "verify_email_then_link_google");
+  assert.equal(google(email, false, "link-account")?.error, "verified_google_identity_required");
+  assert.equal(google("uninvited@example.invalid", true, "link-account")?.error, "acceptance_invitation_required");
+  assert.equal(google(email, true, "link-account"), undefined);
+  assert.equal(account.accountLinking.disableImplicitLinking, true);
+  assert.equal(account.accountLinking.allowDifferentEmails, false);
 });
 
 test("real Better Auth handlers enforce invitation, email verification, explicit linking, session invalidation and password recovery using isolated fixtures", async () => {
@@ -59,6 +69,9 @@ test("real Better Auth handlers enforce invitation, email verification, explicit
   assert.equal(sent.length, 1);
   assert.equal(sent[0].address, email);
   assert.equal((await post("sign-in/email", { email, password })).status, 403);
+  const invalid = await get("verify-email?token=invalid-fixture&callbackURL=%2Fen%2Flogin%3Fverified%3D1");
+  assert.equal(invalid.status, 302);
+  assert.ok(new URL(invalid.headers.get("location")!, productionAuthOrigin).searchParams.has("error"));
   const confirmation = await auth.handler(new Request(sent[0].url));
   assert.equal(confirmation.status, 302);
   assert.ok(confirmation.headers.get("location")?.endsWith("/login?verified=1"));
@@ -73,6 +86,7 @@ test("real Better Auth handlers enforce invitation, email verification, explicit
   const next = new URL((await link.json()).url);
   assert.equal(next.origin, "https://accounts.google.com");
   assert.equal(next.searchParams.get("redirect_uri"), productionAuthOrigin + "/api/auth/callback/google");
+  assert.deepEqual(new Set(next.searchParams.get("scope")?.split(" ")), new Set(["openid", "profile", "email"]));
   assert.equal((await post("sign-out", {}, cookie)).status, 200);
   assert.equal(await (await get("get-session", cookie)).json(), null);
   const recovery = await post("request-password-reset", { email, redirectTo: productionAuthOrigin + "/en/reset-password" });
