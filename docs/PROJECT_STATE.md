@@ -1,5 +1,11 @@
 # Vastu Nord — current project handoff (living document)
 
+## 28 November · Controlled account and rendering activation
+
+Vercel promoted [the public release](https://vastunord-web.vercel.app/) from `063004adab6cb724a9c991a16f5bf48551f76bdd`, deployment `dpl_73u64PMMRJcCDaVeYCm9JsEUKNdD`. Application rollback is `dpl_J7A2mFG1SnhoJoB4aUnrGVrFp8oh`. The new candidate retains the nine verified Production bindings, fixes the homepage button contrast and includes all 17 editors. Two real GroqCloud text replies passed in the preceding staged build. Production signup, uploads, private rendering and account-based Prana await the database role approval.
+
+The release candidate adds tester-only Production authentication and explicit Google linking, reviewable runtime grants, invitation-scoped Prana and a protected enrollment command for the existing MNML allowance. The staged server authenticated to the provider catalogs. Vercel's Production Google client ID was corrected after the build found a mismatch. Six migrations remain pending on Frankfurt Production and block the first live private project. [Release results](GO_LIVE_EXECUTION.md) · [Required approval](BLOCKERS_AND_OWNER_ACTIONS.md)
+
 ## 28 November · Studio demonstration release
 
 Vercel promoted application revision `672577a7c17298b8d52bf1c17f305b85c71ef1c2`, deployment `dpl_J7A2mFG1SnhoJoB4aUnrGVrFp8oh`, to [the public demo](https://vastunord-web.vercel.app/). The immediate application rollback is `dpl_jKKoVxyVLSkVCZgDEGdcHeqHazrj` from `4c8a8409f1616686acf30f2a52ee565283f08cab`. The build confirmed the restricted Production database connection and missing schema. Customer onboarding, uploads, paid dispatch and billing remain closed.

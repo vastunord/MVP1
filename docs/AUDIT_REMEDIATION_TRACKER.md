@@ -1,5 +1,9 @@
 # Audit remediation tracker
 
+## Controlled Production acceptance
+
+Email and Google onboarding have a server-enforced invitation policy and explicit verified account linking. Protected build checks evaluate each requested service separately. The migration manifest and isolated runtime-grant tests cover the private project and render paths. [Current release evidence](GO_LIVE_EXECUTION.md)
+
 ## 28 November · Designer Studio and independent workspace release
 
 Independent private workspace start/retry, first-visit Skip, return to the intended Studio location, and clearing project/media/brief state on account switch passed controlled component and browser checks. Deployment and real account-to-render verification are recorded separately in [release evidence](GO_LIVE_EXECUTION.md).

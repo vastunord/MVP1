@@ -1,0 +1,138 @@
+{
+  "room-reimagination": {
+    "path": "/media/workflow-studies/room-reimagination.webp",
+    "source": "Owner BeforeAfter pair: open-plan",
+    "meaning": "Open-plan room retains its viewpoint across the redesign.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "823aa095b04397257ef55b0526aa6581d4cd2253575420e7311811068540c26b"
+  },
+  "outdoor-visualization": {
+    "path": "/media/workflow-studies/outdoor-visualization.webp",
+    "source": "Owner BeforeAfter pair: white-villa",
+    "meaning": "Site and massing retained while facades and terrace change.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "7cfa48121f86c65310389606a07b5b412b6d6388d9f12a36f4884222c3eae0a5"
+  },
+  "furniture-refresh": {
+    "path": "/media/workflow-studies/furniture-refresh.webp",
+    "source": "Owner BeforeAfter pair: city-living",
+    "meaning": "Dark sectional replaced by pale upholstered seating.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "c86e62c07cc3bb94ec5130b0a118fab1410057b7fb7015ff3877e2a1296360f6"
+  },
+  "decor-redefinition": {
+    "path": "/media/workflow-studies/decor-redefinition.webp",
+    "source": "Owner BeforeAfter pair: bedroom-alcove",
+    "meaning": "Wall art, plants and bedside accessories change.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "90dd6c38e44ae6c04d1ff2afb9e02d927bfcf7c34599c06ffb91a09687054f6e"
+  },
+  "material-refinement": {
+    "path": "/media/workflow-studies/material-refinement.webp",
+    "source": "Owner BeforeAfter pair: stone-bath",
+    "meaning": "Stone wall finish and basin joinery change.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "43bfe7d1ffd4dd0c743e6724060e821c0cb076fdc50c6b9d418cdb3e4c06eb13"
+  },
+  "virtual-home-staging": {
+    "path": "/media/workflow-studies/virtual-home-staging.webp",
+    "source": "Maya pack: source-empty.png + photoreal.png",
+    "meaning": "Furniture and textiles appear in the same bare room.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "90b35c3e173fea98cd164e9783e6e8f5cbeabe638d023aee9f93e78e4cf959eb"
+  },
+  "lighting-reimagination": {
+    "path": "/media/workflow-studies/lighting-reimagination.webp",
+    "source": "Maya pack: photoreal.png + archviz.png",
+    "meaning": "The same furniture, fixtures and windows in daylight and practical evening light.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "9bf6fc868224c99ccff79cf2e2012229658b116e01bf3a17fce07040347ebf4e"
+  },
+  "seasonal-styling": {
+    "path": "/media/workflow-studies/seasonal-styling.webp",
+    "source": "Built-in image generation, synthetic illustration sheet row 1; master SHA-256 6cfb943b27b6f86126f73a27b4afc9987ab72581f043bb1215978e0e462a92d6",
+    "meaning": "Neutral summer linen and warm winter throws on the same sofa.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "45d21f887f817b2f1ba1bbcec79ba9e159d388423539b8a5d71d2c829dbdd848"
+  },
+  "visual-cleanup": {
+    "path": "/media/workflow-studies/visual-cleanup.webp",
+    "source": "Built-in image generation, synthetic illustration sheet row 2; master SHA-256 6cfb943b27b6f86126f73a27b4afc9987ab72581f043bb1215978e0e462a92d6",
+    "meaning": "Loose belongings removed from console and entry floor.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "225f02836ecc726f77bf7f53dd036b5b79bcfbc4616129fd6b7090174543951e"
+  },
+  "object-placement": {
+    "path": "/media/workflow-studies/object-placement.webp",
+    "source": "Built-in image generation, synthetic illustration sheet row 3; master SHA-256 6cfb943b27b6f86126f73a27b4afc9987ab72581f043bb1215978e0e462a92d6",
+    "meaning": "Empty console gains one spherical table lamp at the right.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "614084d00a1f78863dd1aa3e090e72f6ff25562fec0b7e959f990efd65448f10"
+  },
+  "seasonal-transformation": {
+    "path": "/media/workflow-studies/seasonal-transformation.webp",
+    "source": "Built-in image generation, synthetic illustration sheet row 4; master SHA-256 6cfb943b27b6f86126f73a27b4afc9987ab72581f043bb1215978e0e462a92d6",
+    "meaning": "The same porch and birch in leafy summer and snowy winter.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "2fd70f903e6a7517f979212aee2b1c05500facdabd70883c81c1fde30be25108"
+  },
+  "sky-transformation": {
+    "path": "/media/workflow-studies/sky-transformation.webp",
+    "source": "Built-in image generation, illustrative Norwegian boathouse; master SHA-256 74c98366cf0a2f2b1d4376229af0991005dd489c79533475bd93eb95bccbd645",
+    "meaning": "The same coastal structure beneath overcast and sunset skies.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "4eaf8a35bb6c53d7896bfc5f2713fcca29b3e93095a9f293286a6099add9e5e9"
+  },
+  "resolution-enhancement": {
+    "path": "/media/workflow-studies/resolution-enhancement.webp",
+    "source": "Existing owner Visuals master for resolution-enhancement in VISUALS_PLACEMENTS.csv",
+    "meaning": "Same bookcase detail downsampled at left and sharp at right. This illustrates resolution.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "b43c7f50f8cfb59872d400de093ee5d27e5fc18263994aa9bb24fc450a566dde"
+  },
+  "perspective-correction": {
+    "path": "/media/workflow-studies/perspective-correction.webp",
+    "source": "Existing owner Visuals corridor master for perspective-correction in VISUALS_PLACEMENTS.csv",
+    "meaning": "Illustrated shear at left; aligned vertical guides on right.",
+    "dimensions": "660×400",
+    "crop": "Matched centre-detail panels unless specified",
+    "sha256": "3343dd597cd30c12f0aff814bc7cccdac1f98ad7f53235de0cb6db9dc8d992c8"
+  },
+  "hardscape-design": {
+    "path": "/media/tools/hardscape-design.webp",
+    "source": "Owner Visuals master in docs/VISUALS_PLACEMENTS.csv",
+    "meaning": "Paved approach, low retaining planter and columned walk.",
+    "dimensions": "720×480",
+    "crop": "Centred card crop 1.65:1",
+    "sha256": "ccb9da062fc0891f83a4c50e969ce93856a62fc49d17142cd3dcaee048a8cd50"
+  },
+  "pool-redesign": {
+    "path": "/media/tools/pool-redesign.webp",
+    "source": "Owner Visuals master in docs/VISUALS_PLACEMENTS.csv",
+    "meaning": "Long reflection pool centred between glass walls.",
+    "dimensions": "720×407",
+    "crop": "Centred card crop 1.65:1",
+    "sha256": "6a2a855d75f908057d812db9b81feff4dc2b860e94ed9aee11ddf2aef27fc8a3"
+  },
+  "garden-design": {
+    "path": "/media/tools/garden-design.webp",
+    "source": "Owner Visuals master in docs/VISUALS_PLACEMENTS.csv",
+    "meaning": "Planting, enclosed garden structure and stepping-stone path.",
+    "dimensions": "720×480",
+    "crop": "Centred card crop 1.65:1",
+    "sha256": "7a41cec1c297763e1685e258088a981e79e36d39b0f1f85ceb90aeb4b6c870a8"
+  }
+}

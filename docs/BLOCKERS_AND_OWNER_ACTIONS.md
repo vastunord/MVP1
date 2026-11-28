@@ -1,5 +1,11 @@
 # Blockers and owner actions
 
+## 28 November · Production schema approval
+
+The Frankfurt Production runtime binding passed. The database still has zero application tables and no Prisma history. Automatic approval review declined creation of the missing migration login because it required direct confirmation after its earlier rejection. The operation permits persistent schema objects. The requested confirmation is “I authorize creating vastunord_prod_migrator with LOGIN, CONNECT on neondb, and USAGE and CREATE on schema public on Vastu Nord Production branch br-wild-unit-bhin6sli.” The restricted runner rejects database-wide CREATE and administrative roles.
+
+After approval, apply the six checksum-verified migrations and runtime grants, then enable controlled email acceptance before enrolling the verified tester. The owner participates in mailbox and Google consent checks when those screens become available. Recovery child `br-royal-mode-bh8zoq0h` is available at parent LSN `0/1C57580`. A restore rehearsal remains outstanding.
+
 ## 28 November · Corrected Production runtime binding
 
 The Production runtime connection has passed. The remaining infrastructure action is a protected Production migration runner. Automatic approval review rejected creating a persistent Production login with schema CREATE. Provide a suitable restricted runner, or specifically authorize creating `vastunord_prod_migrator` on Frankfurt Production with LOGIN, CONNECT on `neondb` and USAGE/CREATE on schema `public`. Schema CREATE allows persistent database objects. Keep its password outside the web runtime and chat. The owner already authorized the six migrations and bounded test campaign. The earlier two-item diagnostic handoff below is historical.

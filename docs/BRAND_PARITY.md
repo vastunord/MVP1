@@ -32,3 +32,14 @@ The CSS retains the guide's PDF fill operands. The nearest 8-bit sRGB values bel
 | Sage | `--sage` | `#BCCCC9` |
 | Sand | `--sand` | `#EAD0B6` |
 | Orange | `--orange` | `#FB602B` |
+
+## November 28 ordinary-text update
+
+The owner's release instructions adopt Inter Variable 4.1 for site text. The unmodified upright WOFF2 is served from the application origin, with optical sizing and Arial fallback. The wordmark still uses the approved vector paths. The historical typography row above describes the earlier release.
+
+| File | SHA-256 |
+|---|---|
+| InterVariable.woff2 | `693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3` |
+| LICENSE.txt | `262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a` |
+
+The Open Font License and copyright notice accompany the distributed font. [Official tagged source](https://github.com/rsms/inter/tree/v4.1/docs/font-files) · [Distributed license](../apps/web/public/fonts/inter/LICENSE.txt).

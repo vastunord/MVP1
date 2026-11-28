@@ -1,5 +1,9 @@
 # Studio journey parity
 
+## Controlled account-to-render acceptance
+
+The isolated account and render tests cover a verified owner's project, source asset, output and persistence. The Production verifier checks both private images, the comparison, download digest and a fresh sign-in. Run it against a real saved job after schema setup and owner sign-in. Closed-service HTTP 503 responses leave artifact-specific denial unverified. [Release evidence](GO_LIVE_EXECUTION.md)
+
 The board covers eight areas. The transitions below use the designer's arrow ends and labels. The [full node and connector register](release-execution/reference-evidence/FIGJAM_JOURNEY_NODES_AND_EDGES.json) includes the other paths and branches. The [source findings](release-execution/reference-evidence/FIGJAM_ACCESS_AND_JOURNEY_FINDINGS.md) explain conflicting and future requirements.
 
 | Group and actor | Entry, prerequisites and decisions | Destination, ownership and recovery | Implementation and evidence |

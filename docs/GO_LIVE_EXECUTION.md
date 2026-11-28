@@ -1,5 +1,31 @@
 # Hobby test release execution
 
+## 28 November · Controlled activation and provider preflight
+
+Two Vercel API lookups independently resolved the public alias and source revision. Four public routes and all 17 Studio editors passed on the public hostname. The guide toggle worked, and homepage/Studio passed 32 responsive checks across English and Norwegian, light and dark, and 390/768/1280/1440-pixel widths. [Public response record](evidence/designer-parity/public-origin.json) · [Live screenshots](evidence/maya-live/ui11/)
+
+| Production journey | Latest evidence |
+|---|---|
+| Signup, verification, original-password sign-in, recovery and return | BLOCKED by the missing schema. The protected binding and approved sender configuration passed. Better Auth workflow checks passed with isolated data. |
+| Google new user, returning sign-in, cancel, callback and linking | BLOCKED for live accounts. The correct public client reached Google sign-in. Controlled cancellation and locale handling passed locally. |
+| Owned project and private source/reference upload | BLOCKED. Storage identity is configured. Real user storage and access await account and project tables. |
+| MNML submission, job attachment, before/after, download and fresh-session reopening | BLOCKED. Price/balance discovery passed live. Disposable database tests exercised persistence and private result access. |
+| Anonymous and second-user denial | Closed public services returned 503. Anonymous private-artifact denial is NOT TESTED on Production. Live second-user isolation is PENDING. |
+| Prana | PASS for the two synthetic provider calls. Authenticated public-origin replies await account activation. |
+| Billing | DISABLED. The temporary rendering allowance only covers the authorized tester. |
+
+**Local verification.** Prisma validation and manifest integrity, TypeScript, ESLint and the optimized Next.js build passed. All 80 unit tests passed. Disposable database tests passed for render persistence, ownership, withdrawal, runtime grants, bounded enrollment and reservation retention. Three localized authentication browser tests passed. The initial broad smoke run passed 170 of 173 tests; the three failures were outdated assertions about local file selection, language and reveal direction. The initial newsletter/overlay run passed 88 of 94 tests; six detected the orange hero CTA contrast defect. After repair, all 26 affected Studio/hero tests and all 30 contrast/reflow tests passed on the final build. The staged and public results above are recorded separately.
+
+**Promoted application:** `063004adab6cb724a9c991a16f5bf48551f76bdd` on `feat/v7-brand-photo-entry`, deployment `dpl_73u64PMMRJcCDaVeYCm9JsEUKNdD`. **Application rollback:** `dpl_J7A2mFG1SnhoJoB4aUnrGVrFp8oh`, revision `672577a7c17298b8d52bf1c17f305b85c71ef1c2`. Promotion reused the staged Production artifact. The provider probe again passed all nine checks. Private service flags, GitHub/Apple OAuth, newsletter and billing remain disabled. Rollback reassigns application traffic and does not restore database state.
+
+Vercel staged `1ed73d499b9b3f88419c585bac1973f322f7d690` as `dpl_6FqmCCGhj4gL4vaVmDTLEesWJXh2`. The read-only build connected as the intended restricted Production runtime. All nine protected configuration/provider checks passed after correcting the Google client ID. Two fixed synthetic consultation questions through the real Prana adapter returned relevant short answers in English and Norwegian from GroqCloud. This exercised the provider directly in the staged build. The visitor-facing consultation still requires an authenticated tester. Chat charges were not itemized by this check. A public OAuth initiation reached Google's sign-in screen with the exact approved callback; neither consent nor account linking was exercised on Production.
+
+Production database `neondb` on `br-wild-unit-bhin6sli` remains empty. The connector verified the restricted runtime identity, zero public application tables, absent Prisma history, and absent `vastunord_prod_migrator`. Recovery child `br-royal-mode-bh8zoq0h` is available from parent LSN `0/1C57580`. A whole-branch restore remains untested. Preserve the recovery point, validate a reconstructed child before any recovery, and obtain separate authorization for a destructive restore.
+
+All six migration hashes passed. Automatic approval review rejected the requested Production login and schema CREATE grant. No migration, runtime grant or tester enrollment ran on Production. Once approved, use the protected `scripts/run-production-migration.ps1` status check, `-Apply`, a second status check and `-RuntimeGrants`. Enable controlled authentication first. After verifying the invited account and private storage, use `-EnrollTester`; it verifies compatible existing history, preserves holds and never extends an existing campaign. The first Production enrollment would start a 24-hour acceptance window. Budget administration remains outside the web runtime.
+
+Historical job `674349` counts conservatively as one attempt and US$0.099. This execution submitted zero MNML jobs, incurred US$0 in new render charges, and added no holds. Five further attempts and US$0.495 remain at most. No automatic retries following an uncertain submission. Public commercial operation requires eligible hosting; controlled acceptance uses the existing Hobby plan. [Vercel Hobby terms](https://vercel.com/docs/plans/hobby)
+
 ## 28 November · Studio demonstration release
 
 Vercel promoted application revision `672577a7c17298b8d52bf1c17f305b85c71ef1c2`, deployment `dpl_J7A2mFG1SnhoJoB4aUnrGVrFp8oh`, to [the public demo](https://vastunord-web.vercel.app/). The immediate application rollback is `dpl_jKKoVxyVLSkVCZgDEGdcHeqHazrj` from `4c8a8409f1616686acf30f2a52ee565283f08cab`. The build confirmed the restricted Production database connection and missing schema. Customer onboarding, uploads, paid dispatch and billing remain closed.

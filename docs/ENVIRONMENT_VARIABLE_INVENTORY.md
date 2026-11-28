@@ -1,5 +1,7 @@
 # Environment variable inventory
 
+The Production catalog probe on deployment `dpl_GnK4X3zEHxx6xpWvAcx9dgStRfzL` verified the MNML catalog, authorized price and sufficient balance for one attempt. It also verified the selected GroqCloud model, private Blob store binding/server identity, approved Resend sender settings and Google secret presence. It detected a mismatch in `GOOGLE_CLIENT_ID`. Vercel confirmed replacement of this one Production variable. An unauthenticated request using the approved client and canonical callback reached Google's sign-in screen. [Latest release verification](GO_LIVE_EXECUTION.md)
+
 ## Controlled acceptance release
 
 The staging script archives the selected Git HEAD and deploys to the linked Production project with domain assignment held back. The following flags default to false. They are supplied to both the build and server runtime.
@@ -14,6 +16,8 @@ The staging script archives the selected Git HEAD and deploys to the linked Prod
 | `GOOGLE_OAUTH_ENABLED` | The approved Google client, protected client secret and canonical callback origin. Real consent and returning sign-in require separate evidence. |
 
 The optional staging switch `-VerifyProviders` sets `VN_PROBE_RELEASE_PROVIDERS=1` only in the build. It checks the authenticated MNML catalog and prepaid balance for one v4.5-fast image at US$0.099, and lists Groq models for `openai/gpt-oss-20b`. It also checks Google configuration, Resend sender configuration and the pinned Blob binding. Logs contain booleans. These checks generate no images or text and send no email. Production behavior and actual consumption belong in the [release evidence](GO_LIVE_EXECUTION.md).
+
+Once the invited Production account has verified its email, the protected operator command `scripts/run-production-migration.ps1 -EnrollTester` records its allowance under `mnml-674349-release-acceptance`. First enrollment on the empty release ledger sets a 24-hour window and reserves the historical attempt outside the five remaining. Replaying enrollment preserves the original window, caps and all existing attempt states. An expired, paused or conflicting ledger requires reconciliation before further submissions.
 
 ## 28 November · Corrected Production runtime binding
 

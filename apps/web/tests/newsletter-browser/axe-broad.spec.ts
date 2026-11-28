@@ -6,9 +6,10 @@ const plugin = createRequire(createRequire(require.resolve("eslint-config-next")
 const axeScript = plugin.resolve("axe-core/axe.min.js");
 
 for (const theme of ["light", "dark"]) {
-  for (const route of ["/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
+  for (const route of ["/", "/en", "/en/login", "/app/tools/room-reimagination", "/app/renders"]) {
     test(`axe WCAG-tagged sample on ${route} in ${theme}`, async ({ page, context }) => {
-      await page.setViewportSize({ width: 390, height: 844 });
+      const home = route === "/" || route === "/en";
+      await page.setViewportSize(home ? { width: 375, height: 568 } : { width: 390, height: 844 });
       await context.addCookies([{ name: "vn-theme", value: theme, url: "http://127.0.0.1:3111" }]);
       await page.addInitScript(() => {
         localStorage.setItem("vn-cookie-choices", JSON.stringify({ version: 1, decidedAt: new Date().toISOString(), statistics: false, marketing: false }));
@@ -16,6 +17,16 @@ for (const theme of ["light", "dark"]) {
       });
       await page.route("https://**/*", (route) => route.abort());
       await page.goto(route);
+      if (home) {
+        await expect(page.locator("html")).toHaveAttribute("lang", route === "/" ? "nb-NO" : "en");
+        const cta = page.locator(".photo-hero-actions .mk-action").first();
+        await expect(cta).toHaveCSS("font-size", "24px");
+        const usesLocalFont = await cta.evaluate(async (element) => {
+          const faces = await document.fonts.load('600 24px "Inter Variable"');
+          return faces.length > 0 && getComputedStyle(element).fontFamily.includes("Inter Variable");
+        });
+        expect(usesLocalFont).toBe(true);
+      }
       await page.addScriptTag({ path: axeScript });
       const result = await page.evaluate(async () => {
         const axe = (window as unknown as { axe: { run: (context: Document, options: unknown) => Promise<{ violations: { id: string; nodes: { target: string[]; html: string; failureSummary?: string }[] }[]; incomplete: { id: string; nodes: { target: string[] }[] }[] }> } }).axe;

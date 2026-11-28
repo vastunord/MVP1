@@ -1,5 +1,11 @@
 # Development change log (compact)
 
+## 28 November · Controlled Production acceptance
+
+Promoted application `063004a` to the public alias after correcting the Production Google OAuth client and homepage action contrast. The protected staged build confirmed the MNML single-image price and balance, approved Google client, Resend sender, private Blob binding and Groq model. The migration runner is pending platform approval.
+
+Added a server-enforced tester invitation, explicit Google account linking, independent authentication/media/provider checks, a protected runtime-grant and enrollment procedure, and a fresh-session private-render verifier. The hero now reveals each original from left to right into its result. Studio uses reviewed workflow thumbnails and self-hosted Inter. [Release record](GO_LIVE_EXECUTION.md)
+
 ## 28 November · Studio demonstration release
 
 Vercel promoted application revision `672577a7c17298b8d52bf1c17f305b85c71ef1c2`, deployment `dpl_J7A2mFG1SnhoJoB4aUnrGVrFp8oh`, to [the public demo](https://vastunord-web.vercel.app/). The immediate application rollback is `dpl_jKKoVxyVLSkVCZgDEGdcHeqHazrj` from `4c8a8409f1616686acf30f2a52ee565283f08cab`. The build confirmed the restricted Production database connection and missing schema. Customer onboarding, uploads, paid dispatch and billing remain closed.
