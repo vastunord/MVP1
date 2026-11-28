@@ -27,3 +27,5 @@ Use the official brand PDF for identity, the finalized Figma frames for marketin
 12. **Git bootstrapping.** Absence of `.git` is NORMAL at start. Follow `docs/GITHUB_VERCEL_BOOTSTRAP.md`; the owner creates a new PRIVATE GitHub repo; Codex connects only that exact remote, after confirmation. Do not treat missing *old* repo or Vercel access as blockers.
 
 **Phase 01 design decisions.** Use Studio as the product name in both languages. Prana opens beside sign-in and from the bottom-right launcher. Use white text on blue and orange, and reserve black text for light surfaces. Use the supplied BeforeAfter pairs for the homepage and assign distinct Visuals photographs to independent placements. A thumbnail, its enlarged view and an image explicitly carried into Studio represent the same selected item.
+
+**Designer parity.** Follow `docs/release-execution/08_DESIGNER_PARITY.md` and its captured control and journey evidence for Studio changes. Record per-tool evidence and approved deviations. Shared-shell smoke tests alone do not establish designer parity.

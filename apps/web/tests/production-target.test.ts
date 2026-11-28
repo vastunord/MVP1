@@ -4,6 +4,7 @@ import {
   isProductionDatabase,
   productionPool,
   productionRuntimeRole,
+  productionBindingChecks,
 } from "../src/server/production-target.ts";
 test("Production refuses Development, owners, alternate databases and connection overrides", () => {
   const scoped = new URL(
@@ -28,4 +29,11 @@ test("Production refuses Development, owners, alternate databases and connection
   }
   assert.equal(isProductionDatabase(scoped.href + "&host=localhost"), false);
   assert.equal(isProductionDatabase(scoped.href + "&sslmode=disable"), false);
+});
+test("binding diagnostics report only boolean checks", () => {
+  const url = `postgres://${productionRuntimeRole}:fixture@${productionPool}/neondb?channel_binding=require&sslmode=require`;
+  assert.ok(Object.values(productionBindingChecks(url)).every(Boolean));
+  assert.equal(productionBindingChecks(url.replace(productionPool, "example.com")).host, false);
+  assert.equal(productionBindingChecks("invalid").parseable, false);
+  assert.equal(JSON.stringify(productionBindingChecks(url)).includes("fixture"), false);
 });

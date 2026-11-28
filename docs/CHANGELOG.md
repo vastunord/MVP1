@@ -1,5 +1,9 @@
 # Development change log (compact)
 
+## 28 November 2026 · Designer evidence continuation
+
+Recorded the new Studio/FigJam parity authority, aligned the garden tidy action, and added protected boolean diagnostics for the Production database binding. Full designer parity and Production activation remain open.
+
 ## 28 November 2026 · Maya test release promoted
 
 Released `4c8a840` to the public demo. Changes include per-tester spend checks, pre-submission pricing verification, cumulative provider settlement and contextual Maya option validation. Verified concurrency with independent Neon sessions and a provider stub. The public room editor passed four responsive browser checks. Account access, private uploads and chargeable rendering stayed closed after the staged Production runtime rejected its database binding. See [release evidence](GO_LIVE_EXECUTION.md).

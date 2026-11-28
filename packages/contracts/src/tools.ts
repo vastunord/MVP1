@@ -652,6 +652,8 @@ export function primaryAction(
   tool: ToolDefinition,
   values: Record<string, string | number | boolean>,
 ) {
+  if (tool.id === "garden-design" && values.tidy === true)
+    return "Tidy the garden";
   if (tool.id === "resolution-enhancement" && values.mode === "Manual controls")
     return "Apply adjustments";
   if (tool.id === "pool-redesign")

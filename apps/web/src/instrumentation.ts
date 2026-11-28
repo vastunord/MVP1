@@ -5,6 +5,8 @@ export async function register() {
     process.env.VN_VERIFY_RELEASE === "1" &&
     process.env.VERCEL_PROJECT_ID === "prj_LyZA1xMnM4efg5U8SIAfGD4GIDc0"
   ) {
+    const { productionBindingChecks } = await import("./server/production-target");
+    console.info("VN staged database binding checks", productionBindingChecks(process.env.DATABASE_URL));
     console.info("VN staged runtime configuration", {
       databasePresent: Boolean(process.env.DATABASE_URL),
       authSecretPresent: Boolean(process.env.BETTER_AUTH_SECRET),
