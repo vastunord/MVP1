@@ -90,7 +90,7 @@ test("the homepage cycles through all eleven photo pairs and honors a motion pau
   await expect(stage).not.toHaveAttribute("data-scene", first!);
 });
 
-test("a complete sweep advances the pair at alternating edges and hover holds the current view", async ({
+test("a complete forward sweep reveals the next original and hover holds the current view", async ({
   page,
 }) => {
   // Isolate the continuous sweep from the separately tested timed newsletter dialog.
@@ -108,6 +108,8 @@ test("a complete sweep advances the pair at alternating edges and hover holds th
   const copy = page.locator(".photo-hero-copy");
   await copy.hover();
   const first = await frame.getAttribute("data-scene");
+  // Pass the initial original hold before measuring steady-state travel.
+  await page.clock.runFor(500);
   const initial = Number(await slider.inputValue());
   await page.clock.runFor(2000);
   const travel = Number(await slider.inputValue()) - initial;
@@ -130,15 +132,15 @@ test("a complete sweep advances the pair at alternating edges and hover holds th
     }).observe(element, { attributes: true, attributeFilter: ["data-scene"] });
   });
   await copy.hover();
-  await page.clock.runFor(5200);
+  await page.clock.runFor(11800);
   await expect(frame).not.toHaveAttribute("data-scene", first!);
   const second = await frame.getAttribute("data-scene");
-  await expect(frame).toHaveAttribute("data-observed-edges", "100");
+  await expect(frame).toHaveAttribute("data-observed-edges", "0");
   await page.clock.runFor(3500);
   await expect(frame).toHaveAttribute("data-scene", second!);
-  await page.clock.runFor(9700);
+  await page.clock.runFor(10200);
   await expect(frame).not.toHaveAttribute("data-scene", second!);
-  await expect(frame).toHaveAttribute("data-observed-edges", "100,0");
+  await expect(frame).toHaveAttribute("data-observed-edges", "0,0");
 });
 test("home study controls and transformation directions lead into the Studio", async ({
   page,

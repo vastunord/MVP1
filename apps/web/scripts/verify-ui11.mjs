@@ -4,8 +4,9 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 
 const origin = new URL(process.argv[2] ?? "http://127.0.0.1:3100").origin;
-assert.equal(new URL(origin).hostname, "127.0.0.1");
-const evidence = new URL("../../../docs/evidence/maya-local/ui11/", import.meta.url);
+const live = origin === "https://vastunord-web.vercel.app";
+assert(live || new URL(origin).hostname === "127.0.0.1", "Use the Vastu Nord release origin or the loopback test server.");
+const evidence = new URL(`../../../docs/evidence/maya-${live ? "live" : "local"}/ui11/`, import.meta.url);
 await mkdir(evidence, { recursive: true });
 const browser = await chromium.launch({ channel: "msedge", headless: true });
 try {

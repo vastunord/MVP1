@@ -77,7 +77,15 @@ test("all 17 routes render shared editors with disabled generation", async ({
       page.getByRole("heading", { name: tool.name, exact: true }),
     ).toBeVisible();
     await expect(page.locator(".primary-action button")).toBeDisabled();
-    await expect(page.locator("input[type=file]")).toHaveCount(0);
+    await expect(page.locator("#source-image")).toContainText("Privat opplasting er ikke tilgjengelig.");
+    await expect(page.locator("#source-image input[type=file]")).toHaveCount(0);
+    // Only the local object-position editor may offer an in-memory file picker.
+    const localPicker = ["decor-redefinition", "lighting-reimagination", "object-placement"].includes(tool.id);
+    await expect(page.locator("input[type=file]")).toHaveCount(localPicker ? 1 : 0);
+    if (localPicker) {
+      await expect(page.locator(".photo-placement input[type=file][hidden]")).toHaveCount(1);
+      await expect(page.getByRole("button", { name: "Velg objektbilde fra enheten" })).toBeDisabled();
+    }
   }
 });
 test("filters, routing, locale and theme persist", async ({ page }) => {
@@ -106,7 +114,7 @@ test("filters, routing, locale and theme persist", async ({ page }) => {
 });
 test("conditional editor controls, keyboard and dialog", async ({ page }) => {
   await page.goto("/app/tools/seasonal-transformation");
-  await page.getByRole("group",{name:"Season",exact:true}).getByRole("radio",{name:"Winter",exact:true}).check();
+  await page.getByRole("group",{name:"Season",exact:true}).getByRole("radio",{name:/^Vinter\b/}).check();
   await expect(page.getByRole("group",{name:"Snow",exact:true})).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Show it in winter", exact: true }),

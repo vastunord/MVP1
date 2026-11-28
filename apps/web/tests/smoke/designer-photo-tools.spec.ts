@@ -108,3 +108,28 @@ test("pool mode scopes the schematic and amenities; winter reveals snow settings
   await page.getByRole("radio",{name:/Vår Friskt/}).check();
   await expect(page.getByRole("radio",{name:"Heavy snow",exact:true})).toHaveCount(0);
 });
+
+test("placing a device image on a public sample keeps its bytes inside the browser", async ({ page }) => {
+  const privateRequests: string[] = [];
+  await page.route(/\/api\/(?:assets|uploads|projects|studio\/renders)(?:[/?]|$)/, route => {
+    privateRequests.push(route.request().method() + " " + new URL(route.request().url()).pathname);
+    return route.abort();
+  });
+  await page.goto("/app/tools/object-placement?sample=gallery-01");
+  const placement = page.locator(".photo-placement");
+  const picker = placement.locator("input[type=file]");
+  await expect(placement.getByRole("button", { name: "Velg objektbilde fra enheten" })).toBeEnabled();
+  await expect(page.locator("#source-image input[type=file]")).toHaveCount(0);
+  await picker.setInputFiles({
+    name: "synthetic-marker.png",
+    mimeType: "image/png",
+    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jU1kAAAAASUVORK5CYII=", "base64"),
+  });
+  const preview = placement.locator(".placement-pin img");
+  await expect(preview).toHaveAttribute("src", /^blob:/);
+  await expect(page.locator(".primary-action button")).toBeDisabled();
+  await page.reload();
+  await expect(placement.getByRole("button", { name: "Velg objektbilde fra enheten" })).toBeEnabled();
+  await expect(preview).toHaveCount(0);
+  expect(privateRequests).toEqual([]);
+});

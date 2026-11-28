@@ -23,8 +23,8 @@ for (const choice of ["Reject optional", "Accept all"]) {
       await page.goto(route);
       await page.evaluate(() => document.fonts.ready);
     }
-    // The font host is an explicitly disclosed necessary resource. Any other
-    // third-party host or script is a failure, even though it was blocked above.
+    // The production font and visitor controls are served from the website.
+    // Catch any third-party request even when the test has blocked it.
     expect(external).toEqual([]);
     expect(external.filter((item) => item.type === "script")).toEqual([]);
     // Also catch common same-origin collection routes; this is a named pattern
