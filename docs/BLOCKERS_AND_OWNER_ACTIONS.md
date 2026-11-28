@@ -1,5 +1,10 @@
 # Blockers and owner actions
 
+## 28 November · Corrected Production runtime binding
+
+The Production runtime connection has passed. The remaining infrastructure action is a protected Production migration runner. Automatic approval review rejected creating a persistent Production login with schema CREATE. Provide a suitable restricted runner, or specifically authorize creating `vastunord_prod_migrator` on Frankfurt Production with LOGIN, CONNECT on `neondb` and USAGE/CREATE on schema `public`. Schema CREATE allows persistent database objects. Keep its password outside the web runtime and chat. The owner already authorized the six migrations and bounded test campaign. The earlier two-item diagnostic handoff below is historical.
+
+
 ## Current Production handoff · 28 November 2026
 
 1. In Vercel `vastu-nord / vastunord-web / Production`, replace the server-side `DATABASE_URL` with the pooled URL for the existing Frankfurt branch `br-wild-unit-bhin6sli`, database `neondb`, runtime role `vastunord_prod_runtime` and host `ep-shiny-block-bhmlplzm-pooler.c-10.eu-central-1.aws.neon.tech`. Use TLS with `sslmode=require` or `verify-full`. The staged server received a value and rejected it before connection. Use the provider's protected secret fields.

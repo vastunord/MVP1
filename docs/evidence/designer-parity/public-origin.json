@@ -1,0 +1,36 @@
+{
+  "origin": "https://vastunord-web.vercel.app",
+  "checkedAt": "2026-11-28T08:03:05.727Z",
+  "pages": {
+    "/": 200,
+    "/en": 200,
+    "/app": 200,
+    "/app/library": 200
+  },
+  "editors": [
+    "room-reimagination",
+    "virtual-home-staging",
+    "outdoor-visualization",
+    "hardscape-design",
+    "furniture-refresh",
+    "seasonal-styling",
+    "visual-cleanup",
+    "resolution-enhancement",
+    "perspective-correction",
+    "decor-redefinition",
+    "material-refinement",
+    "lighting-reimagination",
+    "garden-design",
+    "pool-redesign",
+    "sky-transformation",
+    "seasonal-transformation",
+    "object-placement"
+  ],
+  "closed": {
+    "/api/health": 503,
+    "/api/projects": 503,
+    "/api/auth/get-session": 503,
+    "/api/studio/renders": 503
+  },
+  "guides": "checked and cleared"
+}

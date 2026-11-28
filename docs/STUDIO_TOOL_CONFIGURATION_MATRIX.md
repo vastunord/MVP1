@@ -1,6 +1,11 @@
 # Studio tool configuration matrix
 
-**Current Studio implementation.** Room Reimagination opens with three photographic briefs, Forest stillness, Everyday rhythm and By the hearth. Each sets a combination of interior style, furniture, plants, light, palette, time and family layout. The visitor can change any field independently. Output settings preserve nine presentation media, aspect ratio and an optional numeric seed. Room references use private images from the current project when private media is enabled. The other 16 tools retain their individual configurations. Comparison previews show alternate tones of the same Studio sample with a keyboard-operable slider. The public demo keeps uploads and generation closed. The historical comparison labels below describe the inspected reference. [Configuration](../packages/contracts/src/tools.ts) · [Room inspector](../apps/web/src/components/room-settings.tsx)
+## 28 November · Designer Studio and independent workspace release
+
+The implementation at `2f96da2` introduces tool-specific controls, preserves the 17 routes and validates selected settings on the server. Use the [current per-tool comparison](evidence/designer-parity/DESKTOP_COMPARISON.md), [designer register](release-execution/reference-evidence/STUDIO_17_TOOL_PARITY_FINDINGS.md) [photo-tool acceptance](evidence/designer-parity/PHOTO_TOOL_ACCEPTANCE.md) and [override register](DESIGN_OVERRIDE_REGISTER.md) alongside the historical inventory below.
+
+
+**Earlier implementation snapshot (superseded).** Room Reimagination opens with three photographic briefs, Forest stillness, Everyday rhythm and By the hearth. Each sets a combination of interior style, furniture, plants, light, palette, time and family layout. The visitor can change any field independently. Output settings preserve nine presentation media, aspect ratio and an optional numeric seed. Room references use private images from the current project when private media is enabled. The other 16 tools retain their individual configurations. Comparison previews show alternate tones of the same Studio sample with a keyboard-operable slider. The public demo keeps uploads and generation closed. The historical comparison labels below describe the inspected reference. [Configuration](../packages/contracts/src/tools.ts) · [Room inspector](../apps/web/src/components/room-settings.tsx)
 
 ## Observed prototype
 

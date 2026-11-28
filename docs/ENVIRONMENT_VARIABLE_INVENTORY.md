@@ -1,5 +1,10 @@
 # Environment variable inventory
 
+## 28 November · Corrected Production runtime binding
+
+The corrected Production-only `DATABASE_URL` passed all eleven protected predicates and connected to the pinned Frankfurt Production branch as `vastunord_prod_runtime`. Production auth, email and Blob operations await schema activation. No migration secret is required in the web runtime.
+
+
 ## 28 November 2026 · Actual Production runtime evidence
 
 Staged Vercel server logs confirmed presence of `DATABASE_URL`, the auth secret, the correct release origin, sender configuration, MNML configuration and Blob store configuration. The database URL failed its pinned configuration check before any connection. Production account login, email delivery and Blob operations remain unverified. A direct migration runner is a separate operator dependency. The promoted demo fixes `AUTH_ENABLED`, `MEDIA_UPLOADS_ENABLED`, `MEDIA_RECONCILIATION_ENABLED`, `MNML_RENDERING_ENABLED`, `MNML_SUBMISSION_ENABLED`, `NEWSLETTER_ENABLED` and `PRANA_ENABLED` to false in both build and runtime. The staged-only diagnostic flag was omitted from the release. See [release evidence](GO_LIVE_EXECUTION.md).
@@ -10,7 +15,7 @@ Updated 22 November 2026. Vastu Nord owns the configurations below. Preview runs
 
 | Name / configuration | Purpose | Development | Preview (optional) | Production |
 |---|---|---|---|---|
-| DATABASE_URL | Neon pooled application connection | VERIFIED development endpoint; temporary development owner role | VERIFIED by the protected build against the exact Preview branch, pool, restricted role and database | BLOCKED. The actual Production build failed the expected pool/database/role/TLS check and skipped connecting. Current target undisclosed. |
+| DATABASE_URL | Neon pooled application connection | VERIFIED development endpoint; temporary development owner role | VERIFIED by the protected build against the exact Preview branch, pool, restricted role and database | VERIFIED by the staged Production server. Frankfurt restricted runtime identity matched. Schema pending. |
 | DIRECT_DATABASE_URL | Migration connection; protected context only | Protected development helper; current credential rejected (28P01) | Protected Preview migration credential missing | MISSING protected Production migration handoff |
 | BETTER_AUTH_SECRET | Session signing | CONFIGURED; live Development tested | CONFIGURED and available to the protected build | CONFIGURED, distinct strong secret; runtime UNVERIFIED |
 | BETTER_AUTH_URL | Canonical auth origin | CONFIGURED for local testing | Derived from validated VERCEL_URL | CONFIGURED for the assigned HTTPS site. Live sign-in remains closed. |

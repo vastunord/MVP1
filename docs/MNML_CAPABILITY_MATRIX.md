@@ -12,9 +12,9 @@ MNML documents render, edit, enhancement and video endpoints; its render modes i
 | Virtual Home Staging | Interior render | Staging behavior unverified live |
 | Furniture Refresh | Interior render | Precise placement and masks unverified |
 | Seasonal Styling | Interior render | Season fidelity unverified |
-| Decor Re-definition | Interior render | Spot selection unverified |
-| Material Refinement | Interior render | Precise material targeting unverified |
-| Lighting Reimagination | Interior render | Individual lighting control fidelity unverified |
+| Decor Re-definition | Interior render | Restyle/clear/add pins and private decor photos support a local study. Their coordinates and photos are excluded from the provider request. |
+| Material Refinement | Interior render | The palette informs the brief. User-chosen surface positions and finishes are local planning information. |
+| Lighting Reimagination | Interior render | Temperature and brightness produce a local tint. Values inform the brief. Pin placement and exact provider lighting remain unverified. |
 | Outdoor Visualization | Exterior render | Live output unverified |
 | Sky Transformation | Exterior render | Exact sky replacement unverified |
 | Seasonal Transformation | Exterior render | Season fidelity unverified |
@@ -22,9 +22,9 @@ MNML documents render, edit, enhancement and video endpoints; its render modes i
 | Garden Design | Landscape render | Touch-up precision unverified |
 | Spa & Pool Redesign | Landscape render | Pool geometry unverified |
 | Visual Cleanup | Prompt edit | Brush-and-delete mode is rejected; mask support unavailable |
-| Resolution Enhancement | Enhance or upscale | Manual controls are rejected; provider output unverified |
-| Perspective Correction | Prompt edit | Exact geometric correction and sliders not verified |
-| Object Placement | Prompt edit | Precise placement and masks unverified |
+| Resolution Enhancement | Enhance or upscale | Manual adjustments run on the device and export PNG locally. Provider requests reject manual operations and explicit unverified output factors. |
+| Perspective Correction | Prompt edit | Bounded horizontal/vertical controls preview a local transform. Guides are screen-only. Geometric accuracy of the provider result is unverified. |
+| Object Placement | Local composition | Users may plan positions and select object photos. The API rejects new object-placement requests because its generic edit operation would omit the object and pins. Existing project history remains readable. |
 
 Configured controls are validated locally and supplied as prompt descriptions where supported; this does not establish that MNML honors each setting. Generated results remain private; server-side ownership checks and the Preview submission gate remain in force. No extra provider call was made during this assessment.
 

@@ -1,5 +1,10 @@
 # Audit remediation tracker
 
+## 28 November · Designer Studio and independent workspace release
+
+Independent private workspace start/retry, first-visit Skip, return to the intended Studio location, and clearing project/media/brief state on account switch passed controlled component and browser checks. Deployment and real account-to-render verification are recorded separately in [release evidence](GO_LIVE_EXECUTION.md).
+
+
 MAYA-C01–C08 continuation status and local evidence are recorded in `MAYA_VERIFICATION.md`. All rows except local job recovery remain partial; these do not supersede the existing live saved-result and commercial gates.
 
 27 November Maya checkpoint: VN-05 and VN-17 remain partial. The room editor has a searchable tool chooser and labels existing operations as Maya experiences; the requested full operation/capability registry and advanced control coverage remain outstanding. The existing saved-render live gate is unchanged.

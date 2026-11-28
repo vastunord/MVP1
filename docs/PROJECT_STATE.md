@@ -1,5 +1,19 @@
 # Vastu Nord — current project handoff (living document)
 
+## 28 November · Studio demonstration release
+
+Vercel promoted application revision `672577a7c17298b8d52bf1c17f305b85c71ef1c2`, deployment `dpl_J7A2mFG1SnhoJoB4aUnrGVrFp8oh`, to [the public demo](https://vastunord-web.vercel.app/). The immediate application rollback is `dpl_jKKoVxyVLSkVCZgDEGdcHeqHazrj` from `4c8a8409f1616686acf30f2a52ee565283f08cab`. The build confirmed the restricted Production database connection and missing schema. Customer onboarding, uploads, paid dispatch and billing remain closed.
+
+Two Vercel API lookups verified the alias, deployment ID and source. On the public hostname, all 17 editors loaded in Edge, Perspective Correction guides toggled, both homepages, Studio and its library returned HTTP 200, and the four private service probes returned HTTP 503. [Public-origin test record](evidence/designer-parity/public-origin.json).
+
+The [17-tool acceptance record](evidence/designer-parity/ACCEPTANCE.md) separates local interaction coverage from provider limitations. All 272 viewport/language/theme combinations passed. See [visual comparisons](evidence/designer-parity/DESKTOP_COMPARISON.md) and the [eight FigJam journey groups](JOURNEY_PARITY_MATRIX.md). TypeScript, ESLint, Prisma validation, the Production build, 76 unit tests and independent PostgreSQL job-contention/rollback tests passed. Provider responses in the concurrency tests were controlled. No new MNML request was made.
+
+
+## 28 November · Corrected Production runtime binding
+
+The staged Production server connected to Frankfurt `neondb` as `vastunord_prod_runtime` after the Production-only Secret correction. All eleven connection checks passed. No application tables or Prisma history were found. See [release evidence](GO_LIVE_EXECUTION.md) for the recovery point and [the owner-action register](BLOCKERS_AND_OWNER_ACTIONS.md) for the migration runner.
+
+
 ## 28 November 2026 · Designer parity continuation
 
 The owner supplied captured Studio and eight-group FigJam evidence in `docs/release-execution/reference-evidence/`. This supersedes older statements that FigJam is unavailable. The requested tool-by-tool control, visual and journey parity remains incomplete. Garden tidy mode now uses its observed action text. A protected staged runtime diagnostic reports individual Production database binding predicates as booleans without recording credentials. No database configuration or schema was changed. Next execute the staged diagnostic, then continue the remaining per-tool differences in `STUDIO_17_TOOL_PARITY_FINDINGS.md` and the independent-workspace journey.

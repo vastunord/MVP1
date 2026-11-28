@@ -2,7 +2,9 @@ import { expect, test } from "@playwright/test";
 
 test("local guides, lighting and sky switches change only the preview", async ({page}) => {
   for (const [tool, field] of [["perspective-correction", "guides"], ["lighting-reimagination","preview"], ["sky-transformation","preview"]]) {
-    await page.goto("/app/tools/"+tool+"?sample=gallery-01");
+    const navigation = await page.goto("/app/tools/"+tool+"?sample=gallery-01");
+    expect(navigation?.status(), `Navigation to ${tool}`).toBe(200);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(tool === "perspective-correction" ? "Perspective Correction" : tool === "lighting-reimagination" ? "Lighting Reimagination" : "Sky Transformation");
     const toggle = page.locator("#option-"+field);
     await expect(toggle).toBeChecked();
     const image = page.locator(".sample-stage > img").first();

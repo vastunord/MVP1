@@ -1,5 +1,10 @@
 # Visual / functional parity matrix
 
+## 28 November · Designer Studio and independent workspace release
+
+The [Studio comparison record](evidence/designer-parity/DESKTOP_COMPARISON.md) pairs designer and candidate views separately from the marketing Figma matrix. [Approved overrides](DESIGN_OVERRIDE_REGISTER.md) cover the initial single image, themes, upload constraints, and provider gates.
+
+
 ## Current implementation evidence
 
 The [v7 Figma-to-route matrix](FIGMA_TO_ROUTE_MATRIX.md) records the current homepage, shared navigation, founder-directed changes and remaining artwork comparisons. The [brand record](BRAND_PARITY.md) supersedes earlier font and logo availability notes.
