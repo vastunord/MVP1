@@ -2,6 +2,7 @@
 export const productionPool =
   "ep-shiny-block-bhmlplzm-pooler.c-10.eu-central-1.aws.neon.tech";
 export const productionRuntimeRole = "vastunord_prod_runtime";
+export const productionStore = "store_qKLXl0wUzpDw4kP2";
 export function isProductionDatabase(value: string | undefined) {
   return matchesDatabase(value, productionPool, productionRuntimeRole);
 }

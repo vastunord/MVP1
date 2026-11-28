@@ -32,6 +32,12 @@ export function PranaConsultation({
         body: JSON.stringify({ question: question.trim(), language: locale }),
         signal: controller.signal,
       });
+      if (response.status === 401 || response.status === 403) {
+        setError(en
+          ? "Sign in with your invited account to ask Prana during testing."
+          : "Logg inn med den inviterte kontoen din for å spørre Prana i testperioden.");
+        return;
+      }
       if (response.status === 429) {
         setError(
           en

@@ -2,8 +2,22 @@
 # Package only the tracked web application at HEAD. The CLI uses the linked
 # project in the archive and the operator's isolated Vastu Nord CLI session.
 [CmdletBinding()]
-param([switch] $VerifyRuntime)
+param(
+    [switch] $VerifyRuntime,
+    [switch] $VerifyProviders,
+    [switch] $EnableAuthentication,
+    [switch] $EnablePrivateMedia,
+    [switch] $EnableRendering,
+    [switch] $EnableSubmission,
+    [switch] $EnableGoogle,
+    [switch] $EnablePrana,
+    [ValidatePattern('^[a-zA-Z0-9_-]{1,100}$')] [string] $CampaignId
+)
 $ErrorActionPreference = 'Stop'
+if (($EnablePrivateMedia -or $EnableGoogle -or $EnablePrana) -and !$EnableAuthentication) { throw 'These controlled services require verified-account authentication.' }
+if ($EnableRendering -and !$EnablePrivateMedia) { throw 'Rendering requires private media.' }
+if ($EnableSubmission -and (!$EnableRendering -or !$CampaignId)) { throw 'Submission requires rendering and the existing campaign ID.' }
+if ($CampaignId -and !$EnableSubmission) { throw 'Only specify a campaign for controlled submission.' }
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $sha = (git -C $root rev-parse HEAD).Trim()
 $link = Join-Path $root '.vercel/project.json'
@@ -18,8 +32,23 @@ Expand-Archive -LiteralPath $archive -DestinationPath $stage
 $null = New-Item -ItemType Directory -Path (Join-Path $stage '.vercel')
 Copy-Item -LiteralPath $link -Destination (Join-Path $stage '.vercel/project.json')
 $arguments = @('deploy',$stage,'--prod','--skip-domain','--yes','--no-wait','--archive','tgz','--meta',"sourceCommit=$sha")
-foreach ($flag in @('AUTH_ENABLED','MEDIA_UPLOADS_ENABLED','MEDIA_RECONCILIATION_ENABLED','MNML_RENDERING_ENABLED','MNML_SUBMISSION_ENABLED','NEWSLETTER_ENABLED','PRANA_ENABLED')) {
-  $arguments += @('--env',"$flag=false",'--build-env',"$flag=false")
+$flags = [ordered]@{
+  AUTH_ENABLED = $EnableAuthentication.IsPresent
+  MEDIA_UPLOADS_ENABLED = $EnablePrivateMedia.IsPresent
+  MNML_RENDERING_ENABLED = $EnableRendering.IsPresent
+  MNML_SUBMISSION_ENABLED = $EnableSubmission.IsPresent
+  GOOGLE_OAUTH_ENABLED = $EnableGoogle.IsPresent
+  PRANA_ENABLED = $EnablePrana.IsPresent
+  GITHUB_OAUTH_ENABLED = $false
+  APPLE_OAUTH_ENABLED = $false
+  MEDIA_RECONCILIATION_ENABLED = $false
+  NEWSLETTER_ENABLED = $false
 }
+foreach ($entry in $flags.GetEnumerator()) {
+  $setting = $entry.Key + '=' + $entry.Value.ToString().ToLowerInvariant()
+  $arguments += @('--env',$setting,'--build-env',$setting)
+}
+if ($EnableSubmission) { $arguments += @('--env',"MNML_TEST_CAMPAIGN_ID=$CampaignId",'--build-env',"MNML_TEST_CAMPAIGN_ID=$CampaignId") }
 if ($VerifyRuntime) { $arguments += @('--env','VN_VERIFY_RELEASE=1') }
+if ($VerifyProviders) { $arguments += @('--build-env','VN_PROBE_RELEASE_PROVIDERS=1') }
 & (Join-Path $PSScriptRoot 'vercel-vastunord.ps1') -CliArguments $arguments

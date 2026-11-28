@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { clearMayaDrafts } from "@/lib/maya-drafts";
 import type { Locale } from "@/lib/i18n";
@@ -309,13 +309,31 @@ export function ProjectsScreen({
 export function AccountScreen({
   locale,
   enabled,
+  googleLink,
 }: {
   locale: Locale;
   enabled: boolean;
+  googleLink?: "linked" | "available";
 }) {
   const en = locale === "en";
   const router = useRouter();
   const [message, setMessage] = useState("");
+  const [linking, setLinking] = useState(false);
+  const linkFailed = useSearchParams().get("google") === "incomplete";
+  async function connectGoogle() {
+    setLinking(true);
+    setMessage("");
+    try {
+      const result = await authClient.linkSocial({
+        provider: "google", callbackURL: "/app/settings", errorCallbackURL: "/app/settings?google=incomplete",
+      });
+      if (result.error) throw new Error();
+    } catch {
+      setMessage(en ? "Google could not be connected. Sign in again and retry." : "Google kunne ikke kobles til. Logg inn igjen og prøv på nytt.");
+    } finally {
+      setLinking(false);
+    }
+  }
   async function updateName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const name = String(
@@ -334,7 +352,8 @@ export function AccountScreen({
   }
   async function changePassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const result = await authClient.changePassword({
       currentPassword: String(data.get("currentPassword")),
       newPassword: String(data.get("newPassword")),
@@ -349,7 +368,7 @@ export function AccountScreen({
           ? "Password changed; other sessions were revoked."
           : "Passordet er endret; andre økter ble avsluttet.",
     );
-    if (!result.error) event.currentTarget.reset();
+    if (!result.error) form.reset();
   }
   async function requestDeletion() {
     const response = await fetch("/api/account/deletion-request", {
@@ -383,6 +402,15 @@ export function AccountScreen({
                 ? "Your account and projects are private."
                 : "Kontoen og prosjektene dine er private."}
             </p>
+            {googleLink === "linked" && <p>{en ? "Google is connected." : "Google er tilkoblet."}</p>}
+            {googleLink === "available" && (
+              <>
+                <button type="button" className="button" disabled={linking} onClick={connectGoogle}>
+                  {en ? "Connect Google" : "Koble til Google"}
+                </button>
+                {linkFailed && <p role="alert">{en ? "Google was not connected. Use the same verified email as your Studio account." : "Google ble ikke tilkoblet. Bruk samme bekreftede e-post som Studio-kontoen."}</p>}
+              </>
+            )}
             <form className="auth-form" onSubmit={updateName}>
               <label>
                 {en ? "Display name" : "Visningsnavn"}

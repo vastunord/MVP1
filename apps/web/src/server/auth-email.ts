@@ -1,5 +1,6 @@
 import "server-only";
 import { sendTransactionalEmail } from "./resend-delivery";
+import { acceptanceEmailAllowed } from "./auth-readiness";
 import {
   authEmailCopy,
   authEmailLocale,
@@ -12,6 +13,7 @@ export async function sendAuthEmail(
   link: string,
   request?: Request,
 ): Promise<void> {
+  if (!acceptanceEmailAllowed(to)) throw new Error("Invited recipient required");
   const { subject, text } = authEmailCopy(kind, authEmailLocale(request), link);
   await sendTransactionalEmail(to, subject, text);
 }

@@ -114,3 +114,27 @@ test("Studio uses the same provider and requests a brief rewrite preserving visi
   );
   assert.equal(result.answer, "Keep the oak floor and warm light.");
 });
+
+test("controlled Production consultation requires the canonical origin and explicit switches", () => {
+  const release = {
+    ...development, APP_ENV: "production", VERCEL_ENV: "production", PRANA_ENABLED: "true",
+    AUTH_ENABLED: "true", BETTER_AUTH_URL: "https://vastunord-web.vercel.app",
+  };
+  assert.equal(pranaSettings(release)?.origin, release.BETTER_AUTH_URL);
+  for (const changed of [{ PRANA_ENABLED: "false" }, { PRANA_ENABLED: undefined }, { AUTH_ENABLED: "false" },
+    { BETTER_AUTH_URL: "https://other.vercel.app" }, { VERCEL_ENV: "preview" }, { GroqAPI: "xai-fixture" }])
+    assert.equal(pranaSettings({ ...release, ...changed }), null);
+});
+
+test("Groq rate limit and timeout never automatically resend the question", async () => {
+  for (const fail of [async () => new Response(null, { status: 429 }), async () => { throw new DOMException("Timed out", "TimeoutError"); }]) {
+    let requests = 0;
+    await assert.rejects(askPrana(consultation, async (_url, init) => {
+      requests++;
+      assert.equal(init?.redirect, "error");
+      assert.ok(init?.signal instanceof AbortSignal);
+      return fail();
+    }));
+    assert.equal(requests, 1);
+  }
+});

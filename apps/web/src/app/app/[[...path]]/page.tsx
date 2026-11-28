@@ -24,7 +24,7 @@ import { savedLocale } from "@/lib/locale-server";
 import { publicHref } from "@/lib/i18n";
 import { findTool } from "@vastunord/contracts/tools";
 
-import { authReadiness, verifiedSessionUserId } from "@/server/auth-readiness";
+import { authReadiness, controlledAcceptance, verifiedSessionUserId } from "@/server/auth-readiness";
 import { createDatabase } from "@/server/db";
 import { ProjectsScreen, AccountScreen } from "@/components/project-screens";
 import { readServerConfig } from "@/server/config";
@@ -49,7 +49,8 @@ export default async function Page({
   const en = locale === "en";
   const pref = (await cookies()).get("vn-theme")?.value;
   const theme = pref === "light" || pref === "dark" ? pref : "system";
-  const authEnabled = authReadiness().ready;
+  const authState = authReadiness();
+  const authEnabled = authState.ready;
   const isDashboard =
     path.length === 0 || (path.length === 1 && path[0] === "dashboard");
   let recentProjects: { id: string; name: string }[] = [];
@@ -70,6 +71,7 @@ export default async function Page({
   let editorUserId: string | undefined;
   let renderReady = false;
   let testerMaySubmit = false;
+  let googleLink: "linked" | "available" | undefined;
   if (authEnabled) {
     const requestHeaders = await headers();
     let userId: string | null = null;
@@ -85,7 +87,8 @@ export default async function Page({
       redirect(publicHref("/login" + loginIntent, locale));
     if (userId) {
       const db = createDatabase();
-      const [personal, canRender, hasAllowance] = await Promise.all([
+      const showGoogleLink = path[0] === "settings" && controlledAcceptance() && authState.providers.includes("google");
+      const [personal, canRender, hasAllowance, googleAccount] = await Promise.all([
         db.workspace.findUnique({
           where: { personalOwnerId: userId },
           select: {
@@ -102,7 +105,11 @@ export default async function Page({
           ? studioPersistenceReady(db)
           : false,
         tool && mnmlConfig() ? controlledRenderingAllowanceReady(db, userId) : false,
+        showGoogleLink ? db.account.findFirst({
+          where: { userId, providerId: "google" }, select: { id: true },
+        }) : null,
       ]).finally(() => db.$disconnect());
+      if (showGoogleLink) googleLink = googleAccount ? "linked" : "available";
       renderReady = canRender;
       testerMaySubmit = hasAllowance;
       if (!personal && !sample && !tool)
@@ -227,7 +234,7 @@ export default async function Page({
   )
     content = (
       <>
-        <AccountScreen locale={locale} enabled={authEnabled} />
+        <AccountScreen locale={locale} enabled={authEnabled} googleLink={googleLink} />
         <SettingsLinks locale={locale} />
         {path[1] === "notifications" || path[1] === "exports" ? (
           <p>

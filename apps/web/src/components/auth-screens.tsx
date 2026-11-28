@@ -109,11 +109,12 @@ export function AuthScreen({
         router.push(workspaceEntry);
         router.refresh();
       } else if (mode === "forgot-password") {
-        await authClient.requestPasswordReset({
+        const result = await authClient.requestPasswordReset({
           email: address,
           redirectTo: window.location.origin + href("/reset-password"),
           fetchOptions: { headers: { "x-vn-locale": locale } },
         });
+        if (result.error) throw new Error(result.error.message);
         setMessage(
           en
             ? "Request received. If the account exists and delivery succeeds, check your inbox for a recovery link."
@@ -216,16 +217,21 @@ export function AuthScreen({
               : "Kontotjenester er ikke koblet til ennå. Ingen informasjon samles inn."}
           </p>
         )}
-        {query.get("verified") === "1" && mode === "login" && (
+        {query.get("verified") === "1" && !query.has("error") && mode === "login" && (
           <p role="status">
             {en
               ? "If you verified your email, you can now try signing in."
               : "Hvis du har bekreftet e-posten, kan du nå prøve å logge inn."}
           </p>
         )}
+        {query.get("verified") === "1" && query.has("error") && mode === "login" && (
+          <p role="alert">{en ? "This verification link is invalid or expired." : "Bekreftelseslenken er ugyldig eller utløpt."} <Link href={href("/verify-email")}>{en ? "Request a new link" : "Be om en ny lenke"}</Link></p>
+        )}
         {mode === "login" && query.get("oauth") === "incomplete" && (
           <p role="alert">
-            {en
+            {["account_not_linked", "verify_email_then_link_google"].includes(query.get("error") ?? "")
+              ? (en ? "Sign in with your verified email first, then connect Google in Account settings." : "Logg inn med bekreftet e-post først, og koble til Google i kontoinnstillingene.")
+              : en
               ? "Sign-in was not completed. Try again or sign in with your email."
               : "Innloggingen ble ikke fullført. Prøv igjen eller logg inn med e-post."}
           </p>

@@ -211,10 +211,12 @@ test("authentication is closed without database, secret and email delivery", () 
 });
 
 test("production authentication stays closed until explicitly enabled", () => {
-  const production={APP_ENV:'production',VERCEL_ENV:'production',DATABASE_URL:'postgresql://test',BETTER_AUTH_SECRET:'x'.repeat(32),BETTER_AUTH_URL:'https://example.vercel.app',AUTH_EMAIL_PROVIDER:'resend',RESEND_API_KEY:'test',AUTH_EMAIL_FROM:'test@example.test'};
+  const production={APP_ENV:'production',VERCEL_ENV:'production',DATABASE_URL:'postgresql://vastunord_prod_runtime:fixture@ep-shiny-block-bhmlplzm-pooler.c-10.eu-central-1.aws.neon.tech/neondb?sslmode=require',BETTER_AUTH_SECRET:'x'.repeat(32),BETTER_AUTH_URL:'https://vastunord-web.vercel.app',AUTH_EMAIL_PROVIDER:'resend',RESEND_API_KEY:'test',AUTH_EMAIL_FROM:'test@example.test'};
   assert.equal(authReadiness(production).ready,false);
   assert.equal(authReadiness({...production,AUTH_ENABLED:'false'}).ready,false);
   assert.equal(authReadiness({...production,AUTH_ENABLED:'true'}).ready,true);
+  assert.equal(authReadiness({...production,AUTH_ENABLED:'true',DATABASE_URL:'postgresql://fixture.invalid/dev'}).ready,false);
+  assert.equal(authReadiness({...production,AUTH_ENABLED:'true',BETTER_AUTH_URL:'https://unrelated.example.invalid'}).ready,false);
   assert.equal(authReadiness({...production,APP_ENV:undefined}).ready,false);
 });
 

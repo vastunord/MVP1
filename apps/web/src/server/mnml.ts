@@ -1,5 +1,5 @@
 import { isPreviewDatabase, previewStore } from "./preview-target.ts";
-import { isProductionDatabase } from "./production-target.ts";
+import { isProductionDatabase, productionStore } from "./production-target.ts";
 import { createHash } from "node:crypto";
 import { findTool, visibleControls } from "@vastunord/contracts/tools";
 import {
@@ -40,7 +40,7 @@ export function mnmlConfig(
     isPreviewDatabase(env.DATABASE_URL);
   const production = env.APP_ENV === "production" && env.VERCEL_ENV === "production" &&
     env.MNML_RENDERING_ENABLED === "true" && isProductionDatabase(env.DATABASE_URL) &&
-    env.BLOB_STORE_ID === "store_qKLXl0wUzpDw4kP2";
+    env.BLOB_STORE_ID === productionStore;
   if (
     !key ||
     (!development && !preview && !production) ||

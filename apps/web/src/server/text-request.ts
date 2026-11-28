@@ -1,5 +1,5 @@
-import { isTrustedMutationOrigin } from "./auth-readiness";
-import { requestBody } from "./request-auth";
+import { controlledAcceptance, isTrustedMutationOrigin } from "./auth-readiness";
+import { requestBody, requestContext } from "./request-auth";
 import {
   askPrana,
   GroqLimitReached,
@@ -43,6 +43,10 @@ export async function answerTextRequest(
   )
     return reply({ status: "invalid" }, 400);
   try {
+    if (controlledAcceptance()) {
+      const context = await requestContext(request);
+      if (context.response) return context.response;
+    }
     const result = obviousMisuse(question)
       ? pranaRedirect("abuse", language)
       : await askPrana({

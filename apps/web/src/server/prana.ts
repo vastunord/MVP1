@@ -4,18 +4,19 @@ type Environment = Record<string, string | undefined>;
 export type PranaLanguage = "en" | "nb-NO";
 type Decision = "home" | "outside" | "abuse" | "unsafe";
 type Consultation = { kind: Decision; answer: string };
+export const pranaModel = "openai/gpt-oss-20b";
 
 export function pranaSettings(env: Environment) {
   const stage = env.APP_ENV;
   const key = (env.GroqAPI || env.GROQ_API_KEY)?.trim();
   if (
-    !key ||
+    !key || key.startsWith("xai-") || env.PRANA_ENABLED === "false" ||
     !["development", "preview", "production"].includes(stage || "") ||
     (env.VERCEL_ENV && env.VERCEL_ENV !== stage) ||
     (stage === "preview" && env.VERCEL_ENV !== "preview") ||
     (stage === "production" &&
-      (env.AUTH_ENABLED !== "true" ||
-        env.COMMERCIAL_LAUNCH_APPROVED !== "true"))
+      (env.VERCEL_ENV !== "production" || env.AUTH_ENABLED !== "true" ||
+        env.PRANA_ENABLED !== "true"))
   )
     return null;
   try {
@@ -153,7 +154,7 @@ export async function askPrana(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-20b",
+        model: pranaModel,
         reasoning_effort: "low",
         max_completion_tokens: 900,
         messages: [

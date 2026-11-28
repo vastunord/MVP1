@@ -4,6 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createDatabase } from "./db";
 import { sendAuthEmail } from "./auth-email";
 import { authBaseUrl, oauthConfiguration } from "./auth-readiness";
+import { acceptanceIdentityPolicy } from "./auth-acceptance";
 
 const baseURL = authBaseUrl();
 
@@ -27,15 +28,8 @@ export const auth = betterAuth({
       sendAuthEmail(user.email, "verification", url, request),
   },
   ...oauthConfiguration(process.env),
-  user: { modelName: "User" },
+  ...acceptanceIdentityPolicy(process.env),
   session: { modelName: "Session" },
-  account: {
-    modelName: "Account",
-    encryptOAuthTokens: true,
-    accountLinking: { enabled: false },
-    storeStateStrategy: "database",
-    skipStateCookieCheck: false,
-  },
   verification: { modelName: "Verification" },
   rateLimit: {
     enabled: true,

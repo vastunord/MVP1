@@ -7,6 +7,9 @@ for (const example of [
   test(`${example.locale} verification and cancelled OAuth returns are honest and localized`, async ({ page }) => {
     await page.goto(`${example.route}?verified=1`);
     await expect(page.getByRole("status").filter({ hasText: example.guidance })).toBeVisible();
+    await page.goto(`${example.route}?verified=1&error=TOKEN_EXPIRED`);
+    await expect(page.locator(".auth-panel").getByRole("alert")).toContainText(example.locale === "en" ? "invalid or expired" : "ugyldig eller utløpt");
+    await expect(page.getByText(example.guidance)).toHaveCount(0);
     await page.goto(`${example.route}?oauth=incomplete&error=access_denied`);
     await expect(page.locator(".auth-panel").getByRole("alert")).toHaveText(example.incomplete);
   });

@@ -1,8 +1,19 @@
 import { isIP } from "node:net";
 import { isPreviewDatabase } from "./preview-target.ts";
+import { isProductionDatabase } from "./production-target.ts";
 
 export type OAuthProvider = "google" | "github" | "apple";
 type Environment = Record<string, string | undefined>;
+export const productionAuthOrigin = "https://vastunord-web.vercel.app";
+export const productionGoogleClientId = "745141072579-kh9ba73n80se22h308bgsn8bs1dlbt2d.apps.googleusercontent.com";
+export function controlledAcceptance(env: Environment = process.env) {
+  return env.APP_ENV === "production" || env.VERCEL_ENV === "production";
+}
+
+export function acceptanceEmailAllowed(email: unknown, env: Environment = process.env) {
+  return !controlledAcceptance(env) ||
+    (typeof email === "string" && email.trim().toLowerCase() === "contact@vastu.no");
+}
 export type AuthReadiness = {
   ready: boolean;
   missing: string[];
@@ -23,6 +34,7 @@ export function authBaseUrl(
   }
   try {
     const url = new URL(env.BETTER_AUTH_URL ?? "");
+    if (controlledAcceptance(env) && url.origin !== productionAuthOrigin) return undefined;
     const localHttp =
       env.APP_ENV !== "production" &&
       env.VERCEL_ENV !== "production" &&
@@ -97,9 +109,11 @@ export function oauthConfiguration(
     >
   > = {};
   for (const provider of ["google", "github", "apple"] as const) {
+    if (controlledAcceptance(env) && provider !== "google") continue;
     const prefix = provider.toUpperCase();
     const clientId = env[prefix + "_CLIENT_ID"]?.trim();
     const clientSecret = (env[prefix + "_CLIENT_SECRET"] || (provider === "google" ? env.GoogleOauth : undefined))?.trim();
+    if (controlledAcceptance(env) && clientId !== productionGoogleClientId) continue;
     if (
       env[prefix + "_OAUTH_ENABLED"] !== "true" ||
       !clientId ||
@@ -166,6 +180,8 @@ export function authReadiness(
   )
     missing.push("AUTH_ENABLED");
   if (!env.DATABASE_URL) missing.push("DATABASE_URL");
+  else if (controlledAcceptance(env) && !isProductionDatabase(env.DATABASE_URL))
+    missing.push("Production DATABASE_URL");
   if (!env.BETTER_AUTH_SECRET || env.BETTER_AUTH_SECRET.length < 32)
     missing.push("BETTER_AUTH_SECRET");
   if (env.AUTH_EMAIL_PROVIDER !== "resend") missing.push("AUTH_EMAIL_PROVIDER");
@@ -181,7 +197,7 @@ export function authReadiness(
   return { ready: missing.length === 0, missing, providers };
 }
 
-export function verifiedSessionUserId(session: unknown): string | null {
+export function verifiedSessionUserId(session: unknown, env: Environment = process.env): string | null {
   if (!session || typeof session !== "object" || !("user" in session))
     return null;
   const user = session.user;
@@ -194,7 +210,7 @@ export function verifiedSessionUserId(session: unknown): string | null {
     return null;
   return typeof user.id === "string" &&
     user.id.length > 0 &&
-    user.emailVerified === true
+    user.emailVerified === true && acceptanceEmailAllowed("email" in user ? user.email : undefined, env)
     ? user.id
     : null;
 }

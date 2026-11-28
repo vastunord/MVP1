@@ -1,5 +1,20 @@
 # Environment variable inventory
 
+## Controlled acceptance release
+
+The staging script archives the selected Git HEAD and deploys to the linked Production project with domain assignment held back. The following flags default to false. They are supplied to both the build and server runtime.
+
+| Flag | Protected acceptance requirement |
+| --- | --- |
+| `AUTH_ENABLED` | Pinned runtime database and expected permissions, canonical origin, Better Auth secret and approved Resend sender. Verified sessions are limited to the invited account. |
+| `MEDIA_UPLOADS_ENABLED` | Authentication, Production private Blob store, server identity and asset permissions. |
+| `MNML_RENDERING_ENABLED` | Private media, server-side MNML credential and render persistence permissions. |
+| `MNML_SUBMISSION_ENABLED`, `MNML_TEST_CAMPAIGN_ID` | Verified tester and active existing funded campaign. Every new paid attempt also requires a current catalog quote and atomic reservation. |
+| `PRANA_ENABLED` | Authentication and configured GroqCloud service. Production consultation and prompt improvement require the invited account's verified session. |
+| `GOOGLE_OAUTH_ENABLED` | The approved Google client, protected client secret and canonical callback origin. Real consent and returning sign-in require separate evidence. |
+
+The optional staging switch `-VerifyProviders` sets `VN_PROBE_RELEASE_PROVIDERS=1` only in the build. It checks the authenticated MNML catalog and prepaid balance for one v4.5-fast image at US$0.099, and lists Groq models for `openai/gpt-oss-20b`. It also checks Google configuration, Resend sender configuration and the pinned Blob binding. Logs contain booleans. These checks generate no images or text and send no email. Production behavior and actual consumption belong in the [release evidence](GO_LIVE_EXECUTION.md).
+
 ## 28 November · Corrected Production runtime binding
 
 The corrected Production-only `DATABASE_URL` passed all eleven protected predicates and connected to the pinned Frankfurt Production branch as `vastunord_prod_runtime`. Production auth, email and Blob operations await schema activation. No migration secret is required in the web runtime.

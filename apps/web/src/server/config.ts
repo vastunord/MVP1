@@ -1,4 +1,5 @@
 import { isPreviewDatabase, previewStore } from "./preview-target.ts";
+import { isProductionDatabase, productionStore } from "./production-target.ts";
 
 export type AppEnvironment = "development" | "preview" | "production";
 
@@ -74,6 +75,10 @@ export function readServerConfig(
     (!isPreviewDatabase(databaseUrl) || env.BLOB_STORE_ID !== previewStore)
   )
     throw new Error("Preview private media target is unverified");
+  if (uploadsEnabled && environment === "production" &&
+      (env.VERCEL_ENV !== "production" || env.AUTH_ENABLED !== "true" ||
+       !isProductionDatabase(databaseUrl) || env.BLOB_STORE_ID !== productionStore))
+    throw new Error("Production private media target is unverified");
   return {
     environment: environment as AppEnvironment,
     databaseUrl,
