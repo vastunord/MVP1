@@ -118,6 +118,18 @@ test("All 17 editors select an appropriate provider operation", () => {
     "enhance",
   );
 });
+
+test("Pool and garden submissions respect contextual options", () => {
+  const pool = { ...input, toolId: "pool-redesign" };
+  const spa = { mode: "Pool + Spa", "spa-option-0": "Spillover spa" };
+  assert.match(String(parseRender({ ...pool, values: spa }).fields.prompt), /Spa type: Spillover spa/);
+  assert.throws(() => parseRender({ ...pool, values: { ...spa, mode: "Spa" } }), /Invalid selection/);
+  const garden = parseRender({ ...input, toolId: "garden-design", values: { tidy: true, style: "Formal", scope: "Terrace" } });
+  assert.equal(garden.snapshot.requested.values.scope, "Terrace");
+  assert.equal(garden.snapshot.resolved.values.scope, undefined);
+  assert.equal(garden.snapshot.resolved.values.style, undefined);
+  assert.doesNotMatch(String(garden.fields.prompt), /Outdoor style|Garden area/);
+});
 test("Only tool-compatible workflows are accepted", () => {
   assert.equal(parseRender({ ...input, workflow: "design" }).fields.mode, "interior");
   assert.equal(

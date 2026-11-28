@@ -2,6 +2,17 @@ import { expect, test } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
+test("pool mode change clears a spillover selection that is no longer available", async ({ page, context }) => {
+  await context.addCookies([{ name: "vn-locale", value: "en", url: "http://127.0.0.1:3100" }]);
+  await page.goto("/app/tools/pool-redesign");
+  await page.getByRole("radio", { name: "Pool + Spa", exact: true }).check();
+  await page.getByRole("radio", { name: "Spillover spa", exact: true }).check();
+  await page.getByRole("radio", { name: "Pool", exact: true }).check();
+  await page.getByRole("radio", { name: "Spa", exact: true }).check();
+  await expect(page.getByRole("radio", { name: "Hot tub (above ground)", exact: true })).toBeChecked();
+  await expect(page.getByRole("radio", { name: "Spillover spa", exact: true })).toHaveCount(0);
+});
+
 for (const width of [390, 768, 1280, 1440]) {
   test(`Maya room controls remain usable at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });

@@ -64,6 +64,7 @@ export default async function Page({
   let signedIn = false;
   let editorUserId: string | undefined;
   let renderReady = false;
+  let testerMaySubmit = false;
   if (authEnabled) {
     const requestHeaders = await headers();
     let userId: string | null = null;
@@ -79,7 +80,7 @@ export default async function Page({
       redirect(publicHref("/login" + loginIntent, locale));
     if (userId) {
       const db = createDatabase();
-      const [personal, canRender] = await Promise.all([
+      const [personal, canRender, hasAllowance] = await Promise.all([
         db.workspace.findUnique({
           where: { personalOwnerId: userId },
           select: {
@@ -95,8 +96,10 @@ export default async function Page({
         tool && readServerConfig().uploadsEnabled
           ? studioPersistenceReady(db)
           : false,
+        tool && mnmlConfig() ? controlledRenderingAllowanceReady(db, userId) : false,
       ]).finally(() => db.$disconnect());
       renderReady = canRender;
+      testerMaySubmit = hasAllowance;
       if (!personal && !sample && !tool)
         redirect(publicHref("/onboarding" + loginIntent, locale));
       if (isDashboard && personal) recentProjects = personal.projects;
@@ -114,7 +117,7 @@ export default async function Page({
         sample={sample}
         uploadsEnabled={signedIn && readServerConfig().uploadsEnabled}
         renderEnabled={signedIn && renderReady}
-        submissionEnabled={process.env.MNML_SUBMISSION_ENABLED === "true" && controlledRenderingAllowanceReady() && Boolean(mnmlConfig())}
+        submissionEnabled={renderReady && testerMaySubmit}
         improveEnabled={Boolean(pranaSettings(process.env))}
       />
     );

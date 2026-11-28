@@ -245,6 +245,12 @@ export function Editor({
   const unavailable = configured.filter(
     (control) => control.kind === "unknown",
   );
+  const changedSettings = configured.filter((control) => {
+    const value = values[control.id];
+    if (value === undefined || value === control.defaultValue) return false;
+    if (tool.id === "garden-design" && values.tidy && ["style", "scope"].includes(control.id)) return false;
+    return ["select", "range", "integer", "toggle"].includes(control.kind);
+  });
 
   const settings = room && (
     <RoomSettings
@@ -514,8 +520,17 @@ export function Editor({
                 settings
               ) : (
                 <details className="inspector-group room-drawer" open>
-                  <summary>{t.controls}</summary>
+                  <summary>{t.controls}{changedSettings.length > 0 && ` (${changedSettings.length})`}</summary>
                   <div>
+                    {changedSettings.length > 0 && (
+                      <p className="inspector-help">
+                        {changedSettings.map((control) => {
+                          const value = values[control.id];
+                          const label = typeof value === "boolean" ? (value ? "On" : "Off") : String(value);
+                          return `${roomLabel(control.label, locale)}: ${roomLabel(label, locale)}${control.unit ?? ""}`;
+                        }).join(" · ")}
+                      </p>
+                    )}
                     {configured
                       .filter((control) => control.kind !== "unknown" && control.id !== "palette")
                       .map((c) => (
@@ -532,9 +547,19 @@ export function Editor({
                             toolId={tool.id}
                             value={values[c.id]}
                             locale={locale}
-                            onChange={(v) =>
-                              setValues((prev) => ({ ...prev, [c.id]: v }))
-                            }
+                            onChange={(v) => setValues((previous) => {
+                              const next = { ...previous, [c.id]: v };
+                              // A mode switch can remove a previously offered selection.
+                              const visible = visibleControls(tool, next);
+                              for (const base of tool.controls) {
+                                const field = visible.find((option) => option.id === base.id) ?? base;
+                                if (field.kind === "select" && next[field.id] !== undefined && !field.options?.includes(String(next[field.id]))) {
+                                  if (field.defaultValue === undefined) delete next[field.id];
+                                  else next[field.id] = field.defaultValue;
+                                }
+                              }
+                              return next;
+                            })}
                           />
                         </fieldset>
                       ))}

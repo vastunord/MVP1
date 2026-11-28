@@ -1,4 +1,4 @@
-import type { ToolDefinition } from "@vastunord/contracts/tools";
+import { visibleControls, type ToolDefinition } from "@vastunord/contracts/tools";
 import { renderEngines, supportedWorkflows, unsupportedStudioOption, type BriefValues, type RenderEngine, type StudioWorkflow } from "./studio-render.ts";
 
 export type MayaDraft = { version: 1; values: BriefValues; prompt: string; avoid: string; engine: RenderEngine; workflow: StudioWorkflow };
@@ -10,8 +10,9 @@ export function readMayaDraft(raw: string, tool: ToolDefinition): MayaDraft | nu
     const data = JSON.parse(raw);
     if (data?.version !== 1 || !data.values || typeof data.values !== "object" || Array.isArray(data.values) || typeof data.prompt !== "string" || data.prompt.length > 4000 || typeof data.avoid !== "string" || data.avoid.length > 1000 || !renderEngines.some((e) => e.id === data.engine && e.verified) || !supportedWorkflows(tool.id, tool.reference).includes(data.workflow)) return null;
     const values: BriefValues = {};
+    const activeFields = visibleControls(tool, data.values);
     for (const [id, value] of Object.entries(data.values)) {
-      const field = tool.controls.find((item) => item.id === id);
+      const field = activeFields.find((item) => item.id === id) ?? tool.controls.find((item) => item.id === id);
       if (!field || !["string", "number", "boolean"].includes(typeof value)) return null;
       if (typeof value === "string" && unsupportedStudioOption(tool.id, id, value)) return null;
       if (field.kind === "select" && (typeof value !== "string" || !field.options?.includes(value))) return null;

@@ -14,6 +14,7 @@ import {
   syncJob,
   projectJobs,
   reconcileStudioOutput,
+  reconcileRenderStatement,
 } from "../src/server/studio-jobs.ts";
 import { isStudioMp4 } from "../src/server/studio-video.ts";
 import { authorizeAsset, createPrivateMedia } from "../src/server/media.ts";
@@ -194,7 +195,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
         return {
           id: "12",
           status: "succeeded",
-          charged_usd: 0.2475,
+          charged_usd: 0.099,
           refunded_usd: 0,
           outputs: [
             {
@@ -415,9 +416,11 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     // Provider-reported cancellation is terminal; subsequent reads must not
     // query the provider or attach a result. There is no user cancel API.
     const cancelledBrief = parseRender({ ...input, id: randomUUID(), prompt: "Provider cancellation fixture" });
-    const cancellationIo = { ...io, async submit() { return { id: "cancel-provider", status: "queued" }; },
+    const cancellationIo = { ...io, async submit() { return { id: "cancel-provider", status: "queued", charged_usd: 0.09900001 }; },
       async check() { return { id: "cancel-provider", status: "canceled" }; } };
     await startJob(db, config, actor, cancelledBrief, cancellationIo);
+    assert.equal((await db.renderJob.findUniqueOrThrow({where:{id:cancelledBrief.id}})).providerJobId, "cancel-provider");
+    assert.equal((await db.testRenderAttempt.findUniqueOrThrow({where:{id:cancelledBrief.id}})).state, "UNCERTAIN", "sub-microdollar price cannot be rounded down to the approved cap");
     assert.equal((await syncJob(db, "fixture", actor, "pa", cancelledBrief.id, cancellationIo)).state, "CANCELLED");
     const noRepoll = { ...cancellationIo, async check() { throw new Error("terminal job was polled again"); } };
     assert.equal((await syncJob(db, "fixture", actor, "pa", cancelledBrief.id, noRepoll)).state, "CANCELLED");
@@ -427,7 +430,7 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     let failedSubmissions = 0, failedChecks = 0;
     const providerFailureIo = { ...io,
       async submit() { failedSubmissions++; return { id: "failed-provider", status: "queued" }; },
-      async check() { failedChecks++; return { id: "failed-provider", status: "failed", charged_usd: 0.2, refunded_usd: 0.2 }; },
+      async check() { failedChecks++; return { id: "failed-provider", status: "failed", charged_usd: 0.099 }; },
       async fetchFile() { throw new Error("failed job fetched output"); },
       async writeOutput() { throw new Error("failed job stored output"); },
     };
@@ -438,6 +441,23 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal((await startJob(db, config, actor, providerFailure, providerFailureIo)).state, "FAILED");
     assert.equal(failedChecks, 1, "terminal failure is not polled again");
     assert.equal(failedSubmissions, 1, "terminal failure is not resubmitted");
+    for (const [statement, expectedNet] of [
+      [{refunded_usd:0.025}, 74000],
+      [{refunded_usd:0.099}, 0],
+      [{refunded_usd:0.099}, 0],
+      [{charged_usd:0.099, refunded_usd:0}, 0],
+    ]) {
+      await reconcileRenderStatement(db, "fixture", providerFailure.id, {
+        ...providerFailureIo,
+        async check() { return {id:"failed-provider", status:"failed", ...statement}; },
+      });
+      const attempt = await db.testRenderAttempt.findUniqueOrThrow({where:{id:providerFailure.id}});
+      assert.equal(attempt.state, "REFUNDED");
+      assert.equal(attempt.settledMicrousd, expectedNet);
+      assert.equal(attempt.reservedMicrousd, 99000);
+    }
+    assert.equal((await db.renderJob.findUniqueOrThrow({where:{id:providerFailure.id}})).state, "FAILED");
+    assert.equal(failedSubmissions, 1, "settlement only reads the accepted provider job");
     assert.equal(await db.asset.count({ where: { id: (await db.renderJob.findUniqueOrThrow({ where: { id: providerFailure.id } })).outputAssetId } }), 0);
 
     // An ambiguous timeout retains the reservation and cannot be dispatched again.
@@ -466,6 +486,32 @@ test("disposable PostgreSQL verifies owned inputs, replay and private result per
     assert.equal(rejectedAttempt.state, "SETTLED");
     assert.equal(rejectedAttempt.settledMicrousd, 0);
     assert.equal(rejectedAttempt.reservedMicrousd, 99000, "rejection does not replenish attempts");
+    for (const stop of ["disabled", "expired", "tester-revoked"]) {
+      const campaignId = "claim-" + stop;
+      await db.testRenderCampaign.create({ data: {
+        id: campaignId, model: "v4.5-fast", active: true,
+        startsAt: new Date(Date.now() - 60000), expiresAt: new Date(Date.now() + 60000),
+        maxAttempts: 1, maxMicrousd: 99000, perAttemptMicrousd: 99000,
+      } });
+      await db.testRenderTester.create({data:{campaignId,userId:actor.userId,maxAttempts:1,maxMicrousd:99000}});
+      const brief = parseRender({ ...input, id: randomUUID(), prompt: "Closed during source read " + stop });
+      let posts = 0;
+      await assert.rejects(startJob(db, {...config, campaignId}, actor, brief, {
+        ...io,
+        async readSource(...args) {
+          if (stop === "tester-revoked") {
+            await db.testRenderTester.delete({where:{campaignId_userId:{campaignId,userId:actor.userId}}});
+          } else {
+            const data = stop === "disabled" ? {active:false} : {expiresAt:new Date(Date.now()-1000)};
+            await db.testRenderCampaign.update({where:{id:campaignId}, data});
+          }
+          return io.readSource(...args);
+        },
+        async submit() { posts++; throw Error("Unexpected paid dispatch"); },
+      }), /reconciliation/);
+      assert.equal(posts, 0);
+      assert.equal((await db.testRenderAttempt.findUniqueOrThrow({where:{id:brief.id}})).state, "RESERVED");
+    }
     await assert.rejects(startJob(db, { ...config, campaignId: "rejection-campaign" }, actor, parseRender({ ...input, id: randomUUID(), prompt: "Another rejection" }), rejectIo), /exhausted/);
     // Structural fixture for trusted provider file intake. Actual codec playback requires a live job.
     function box(type, bytes) {

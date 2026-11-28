@@ -1,4 +1,5 @@
 import { isPreviewDatabase, previewStore } from "./preview-target.ts";
+import { isProductionDatabase } from "./production-target.ts";
 import { createHash } from "node:crypto";
 import { findTool, visibleControls } from "@vastunord/contracts/tools";
 import {
@@ -37,9 +38,12 @@ export function mnmlConfig(
     env.VERCEL_ENV === "preview" &&
     env.BLOB_STORE_ID === previewStore &&
     isPreviewDatabase(env.DATABASE_URL);
+  const production = env.APP_ENV === "production" && env.VERCEL_ENV === "production" &&
+    env.MNML_RENDERING_ENABLED === "true" && isProductionDatabase(env.DATABASE_URL) &&
+    env.BLOB_STORE_ID === "store_qKLXl0wUzpDw4kP2";
   if (
     !key ||
-    (!development && !preview) ||
+    (!development && !preview && !production) ||
     env.MNML_RENDERING_ENABLED === "false"
   )
     return null;
@@ -103,7 +107,9 @@ export function parseRender(input: Record<string, unknown>) {
   // A hidden field can retain a previous value when a mode changes. Reject
   // unsupported adjustments even while hidden instead of silently ignoring
   // a forged precision request.
-  for (const field of tool.controls) {
+  const options = visibleControls(tool, values);
+  for (const base of tool.controls) {
+    const field = options.find((option) => option.id === base.id) ?? base;
     const value = values[field.id];
     if (value === undefined) continue;
     if (field.kind === "unknown" || field.kind === "action")
@@ -120,12 +126,13 @@ export function parseRender(input: Record<string, unknown>) {
     if (tool.id === "resolution-enhancement" && field.when?.id === "mode" && field.when.values.includes("Manual controls"))
       throw new RenderError(400, "Manual enhancement is unavailable");
   }
-  const options = visibleControls(tool, values);
   if (values.furnishing === "Empty" && /(?:\b(?:add|place|introduce)\b.{0,45}\b(?:furniture|sofa|bed|chairs?)\b|(?:legg til|plasser).{0,45}(?:møbler|sofa|seng|stol))/i.test(prompt))
     throw new RenderError(400, "Furnishing: Empty conflicts with adding furniture in the description");
   const details = [];
   const resolved: BriefValues = {};
   for (const field of options) {
+    if (tool.id === "garden-design" && values.tidy === true && ["style", "scope"].includes(field.id))
+      continue;
     const v = values[field.id] ?? field.defaultValue;
     if (["preview", "guides"].includes(field.id)) {
       if (v !== undefined && v !== field.defaultValue)

@@ -9,8 +9,8 @@ import {
   reconcilePrivateMedia,
 } from "@/server/media-reconciliation";
 import { list } from "@vercel/blob";
-import { mnmlConfig } from "@/server/mnml";
-import { reconcileStudioOutput } from "@/server/studio-jobs";
+import { jobIdPattern, mnmlConfig } from "@/server/mnml";
+import { reconcileRenderStatement, reconcileStudioOutput } from "@/server/studio-jobs";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -50,6 +50,12 @@ export async function GET(request: Request) {
           status: 404,
           headers: { "Cache-Control": "no-store" },
         });
+      const statement = new URL(request.url).searchParams.get("settle");
+      if (statement !== null) {
+        if (!jobIdPattern.test(statement)) return new Response(null, { status: 400 });
+        await reconcileRenderStatement(client, provider.key, statement);
+        return new Response(null, { status: 204, headers: { "Cache-Control": "no-store" } });
+      }
       const progress = await reconcileStudioOutput(client, provider.key);
       return Response.json(progress, {
         headers: { "Cache-Control": "no-store" },

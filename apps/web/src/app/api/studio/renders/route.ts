@@ -9,6 +9,7 @@ import {
 } from "@/server/mnml";
 import { startJob, syncJob, projectJobs } from "@/server/studio-jobs";
 import { controlledRenderingAllowanceReady } from "@/lib/studio-test-access";
+import { verifyTestRenderQuote } from "@/server/mnml-test-quote";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -56,12 +57,11 @@ async function handle(request: Request, write: boolean) {
         { headers: privateHeaders },
       );
     }
-    if (process.env.MNML_SUBMISSION_ENABLED !== "true" || !controlledRenderingAllowanceReady())
+    if (!(await controlledRenderingAllowanceReady(ctx.db, ctx.userId)))
       throw new RenderError(503, "New rendering is unavailable");
     const brief = parseRender(input);
-    // Zero is deliberately rejected by the reservation layer. A verified
-    // server-side provider quote must replace it before enabling submission.
-    return Response.json(await startJob(ctx.db, { ...provider!, campaignId: process.env.MNML_TEST_CAMPAIGN_ID ?? "", quoteMicrousd: 0 }, actor, brief), {
+    const quoteMicrousd = await verifyTestRenderQuote(provider!.key);
+    return Response.json(await startJob(ctx.db, { ...provider!, campaignId: process.env.MNML_TEST_CAMPAIGN_ID!, quoteMicrousd }, actor, brief), {
       status: 202,
       headers: privateHeaders,
     });

@@ -14,6 +14,7 @@ import {
 } from "./mnml.ts";
 import { isStudioMp4 } from "./studio-video.ts";
 import { reserveTestRender } from "./test-render-budget.ts";
+import { applyRenderStatement } from "./render-settlement.ts";
 
 type Config = { key: string; campaignId: string; quoteMicrousd: number };
 type Actor = { userId: string; workspaceId: string };
@@ -181,7 +182,11 @@ export async function startJob(
   // Claim before the network call. A crash or ambiguous response leaves the
   // reservation uncertain and prevents an automatic second paid submission.
   const claim = await db.testRenderAttempt.updateMany({
-    where: { id: job.id, state: "RESERVED" },
+    where: {
+      id: job.id, state: "RESERVED",
+      campaign: { active: true, startsAt: { lte: new Date() }, expiresAt: { gt: new Date() },
+        testers: { some: { userId: actor.userId } } },
+    },
     data: { state: "UNCERTAIN" },
   });
   if (claim.count !== 1)
@@ -212,17 +217,11 @@ export async function startJob(
   await db.$transaction(async (tx) => {
     await tx.renderJob.updateMany({
       where: { id: job.id, providerJobId: null, state: "QUEUED" },
-      data: { providerJobId: accepted.id, state: "RUNNING", chargedUsd: accepted.charged_usd },
+      data: { providerJobId: accepted.id, state: "RUNNING" },
     });
     // Only settle a reported, bounded charge. Missing or inconsistent prices
     // remain uncertain and consume the full reservation pending reconciliation.
-    const micros = Math.round(Number(accepted.charged_usd) * 1_000_000);
-    if (accepted.charged_usd != null && Number.isFinite(micros) && micros >= 0 && micros <= 99000) {
-      await tx.testRenderAttempt.updateMany({
-        where: { id: job.id, state: "UNCERTAIN" },
-        data: { state: "SETTLED", settledMicrousd: micros },
-      });
-    }
+    await applyRenderStatement(tx, job.id, accepted);
   });
   return status(
     await db.renderJob.findUniqueOrThrow({ where: { id: job.id } }),
@@ -253,6 +252,20 @@ export async function projectJobs(
     take: 12,
   });
   return rows.map(status);
+}
+
+// An operator may refresh accounting for a known accepted job, including a
+// terminal failure whose refund was reported after normal editor polling ended.
+export async function reconcileRenderStatement(
+  db: PrismaClient,
+  key: string,
+  jobId: string,
+  io = services,
+) {
+  const row = await db.renderJob.findUnique({ where: { id: jobId }, select: { providerJobId: true } });
+  if (!row?.providerJobId) throw new RenderError(404, "Accepted render unavailable");
+  const remote = await io.check(key, row.providerJobId);
+  await db.$transaction(tx => applyRenderStatement(tx, jobId, remote));
 }
 
 // Finish an accepted job after its editor closes, without initiating a paid submission.
@@ -332,13 +345,12 @@ export async function syncJob(
   )
     return status(row);
   const job = await io.check(key, row.providerJobId);
+  await db.$transaction(tx => applyRenderStatement(tx, id, job));
   if (job.status === "failed" || job.status === "canceled") {
     await db.renderJob.updateMany({
         where: { id, state: "RUNNING", providerJobId: row.providerJobId },
         data: {
           state: job.status === "failed" ? "FAILED" : "CANCELLED",
-          refundedUsd: job.refunded_usd,
-          chargedUsd: job.charged_usd,
         },
       });
     return status(await db.renderJob.findUniqueOrThrow({ where: { id } }));
@@ -402,8 +414,6 @@ export async function syncJob(
           where: { id },
           data: {
             state: "SUCCEEDED",
-            chargedUsd: job.charged_usd,
-            refundedUsd: job.refunded_usd,
           },
         }),
       );

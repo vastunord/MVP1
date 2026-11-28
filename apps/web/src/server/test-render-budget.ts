@@ -12,6 +12,11 @@ export async function reserveTestRender(
   const campaigns = await tx.$queryRaw<Array<{ id: string; active: boolean; startsAt: Date; expiresAt: Date; model: string; maxAttempts: number; maxMicrousd: number; perAttemptMicrousd: number }>>`
     SELECT * FROM "TestRenderCampaign" WHERE "id"=${input.campaignId} FOR UPDATE`;
   const campaign = campaigns[0];
+  // Until historical job 674349 is attributed, the release may authorize at
+  // most five further attempts. Recheck under the campaign lock at reservation.
+  if (process.env.VERCEL_ENV === "production" &&
+      (campaign?.maxAttempts > 5 || campaign?.maxMicrousd > 495000))
+    throw new RenderError(403, "Campaign exceeds the remaining release allowance");
   if (!campaign || !campaign.active || campaign.model !== "v4.5-fast" || campaign.startsAt > new Date() || campaign.expiresAt <= new Date() || campaign.maxAttempts > 6 || campaign.maxMicrousd > 594000 || campaign.perAttemptMicrousd !== 99000)
     throw new RenderError(403, "Test campaign is unavailable");
   const tester = await tx.testRenderTester.findUnique({ where: { campaignId_userId: { campaignId: input.campaignId, userId: input.userId } } });

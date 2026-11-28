@@ -23,3 +23,10 @@ test("sign-out cleanup removes only Maya draft keys", () => {
   clearMayaDrafts(storage);
   assert.deepEqual([...map.entries()], [["other", "keep"]]);
 });
+
+test("pool drafts restore the spa option offered by the selected mode", () => {
+  const tool = findTool("pool-redesign")!;
+  const draft = { version: 1, values: { mode: "Pool + Spa", "spa-option-0": "Spillover spa" }, prompt: "", avoid: "", engine: "fast", workflow: "design" };
+  assert.deepEqual(readMayaDraft(JSON.stringify(draft), tool), draft);
+  assert.equal(readMayaDraft(JSON.stringify({ ...draft, values: { ...draft.values, mode: "Spa" } }), tool), null);
+});

@@ -1,5 +1,7 @@
 # Maya 7 verification — 27 November 2026
 
+28 November release continuation. Seventeen focused Maya draft and provider-contract tests passed across the 17 tool definitions. The Pool + Spa editor, draft reader and server now agree on the conditional Spillover spa selection. Switching to a mode that removes that choice resets the selection. Garden tidy mode now omits inactive style and area settings from the effective provider request while preserving the original user choices in the submission snapshot. Targeted ESLint passed. These results cover local settings and request construction. Release-origin rendering, post-login recovery and private download require independent verification.
+
 These results use synthetic local data and controlled provider responses. They do not establish live Preview behavior or provider image quality.
 
 | ID | Status | Evidence and remaining work |
